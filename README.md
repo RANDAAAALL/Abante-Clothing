@@ -19,7 +19,7 @@ The website integrates **SEO best practices**, **Open Graph metadata**, and resp
 
 ## Tech Stack as of now
 
-- **NextJS:**
+- **NextJS**
 - **Javascript**
 - **Typescript**
 - **TaildwindCSS**
@@ -27,4 +27,3 @@ The website integrates **SEO best practices**, **Open Graph metadata**, and resp
 - **MySQL**
 - **PRIMSA**
 - **Bun**
-
