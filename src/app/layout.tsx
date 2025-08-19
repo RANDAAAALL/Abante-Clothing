@@ -1,7 +1,7 @@
 // import { Geist, Geist_Mono } from "next/font/google";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { metrapolis } from "./utils/custom-font";
+import { metrapolis } from "./lib/custom-font";
 import "./globals.css";
 
 // SEO
