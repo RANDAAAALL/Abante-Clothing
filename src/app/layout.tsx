@@ -1,10 +1,9 @@
-// import { Geist, Geist_Mono } from "next/font/google";
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
-import { metrapolis } from "./lib/custom-font";
-import "./globals.css";
+import { metrapolis } from "../lib/custom-font";
+import "../styles/globals.css";
 
-// SEO
+// SEO Config
 export const metadata: Metadata = {
  metadataBase: new URL("https://yourproject.vercel.app"),
   title:{
@@ -15,8 +14,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Abante Clothing",        // Title shown when shared
     description: "Discover fashion trends at Abante Clothing.", // Short description
-    url: "https://abanteclothing.com", // Canonical URL
-    siteName: "Abante Clothing",     // Your brand/site name
+    url: "https://abanteclothing.com", // URL
+    siteName: "Abante Clothing",     // brand/site name
     images: [                       
       {
         url: "/images/png/abante-clothing-logo.png",    // Image shown on FB
@@ -36,7 +35,6 @@ export const metadata: Metadata = {
     description: "Discover fashion trends at Abante Clothing.",
     images: ["/images/png/abante-clothing-logo.png"]
   }
-  
 
 };
 
