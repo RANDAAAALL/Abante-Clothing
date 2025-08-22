@@ -3,12 +3,14 @@
 :root {
   --white-background: #f2f2f2;
   --black-background: #000000;
+  --t-shirt-background: #F9F9F9;
 }
 
 @theme inline {
   --color-white-background: var(--white-background);
   --color-black-background: var(--black-background);
   --color-red-background: var(--red-background);
+  --color-t-shirt-background: var(--t-shirt-background);
   --font-metrapolis: var(--font-metrapolis);
 }
 

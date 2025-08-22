@@ -1,7 +1,7 @@
 // protected routes as of now
 export const config = {
     matcher: [
-      "/(auth)/:path*",
+      "/(protected)/:path*",
       "/api/:path*",  
     ],
   };
