@@ -6,7 +6,7 @@ export default function NavbarButtons(){
         <>
         {ButtonsPath.map((btn, i) => (
             <Link key={i} href={btn.path} title={btn.name}
-            className={`${btn.name === "Sign Up" ? "bg-black-background rounded-lg p-2 text-white" : null}`}>
+            className={`${btn.name === "Sign Up" ? "bg-black-background rounded-lg py-2 px-4 text-white" : null}`}>
             {btn.name}
             </Link>
         ))}
