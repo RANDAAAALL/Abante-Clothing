@@ -45,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${metrapolis.variable}`}>
+      <body className={`${metrapolis.variable} font-metrapolis`}>
         {children}
         <Analytics />
       </body>
