@@ -1,4 +1,5 @@
 import HeroBanner from "@/components/ui/main-section/hero-banner";
+import WeekendOffers from "@/components/ui/main-section/weekend-offers";
 import NavbarContent from "@/components/ui/nav-bar/nav-bar-content";
 
 export default function Home() {
@@ -8,15 +9,14 @@ export default function Home() {
     {/* nav-bar section */}
     <header className="font-metrapolis font-medium text-md flex justify-evenly p-4 space-x-10 items-center"><NavbarContent /></header>
    
-    {/* main-section */}
-
     {/* hero banner */}
-    <main className="flex flex-col justify-center items-center">
-
     <section><HeroBanner /></section>
 
+    {/* main-section */}
+    <main className="flex flex-col justify-center items-center p-4">
+
     {/* weekend offers content */}
-    <section></section>
+    <section className="flex flex-col justify-center items-center"><WeekendOffers /></section>
     
     {/* customers feedback content */}
     <section></section>
