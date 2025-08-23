@@ -6,11 +6,11 @@ export default function TshirtsImageDescContent(){
         <>
         {TshirtValue.map((Tshirt, i) => (
             <div key={i} className="relative flex flex-col font-bold items-center bg-t-shirt-background p-4 rounded-lg">
-                <p className="p-2 absolute right-1 top-0">{Tshirt.discount}</p>
+                <p className="p-2 absolute right-1 top-0 md:top-1 text-lg">{Tshirt.discount}</p>
                 <Image src={Tshirt.path} width={250} height={250} alt={Tshirt.alt}/>
                 <div className="flex flex-col items-center mt-2"> 
-                <p>{Tshirt.name} - {Tshirt.size}</p>
-                <p>₱ {Tshirt.price}</p>  
+                <p className="text-lg">{Tshirt.name} - {Tshirt.size}</p>
+                <p className="text-lg">₱ {Tshirt.price}</p>  
                 </div>
             </div>
         ))}

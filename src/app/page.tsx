@@ -4,16 +4,16 @@ import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
 
 export default function Home() {
   return (
-    <div className="text-black min-h-screen ">
+    <div className="text-black min-h-screen w-full">
 
     {/* nav-bar section */}
     <header className="font-metrapolis font-medium text-md flex justify-evenly p-4 space-x-10 items-center"><NavbarContent /></header>
    
     {/* hero banner */}
-    <section><HeroBanner /></section>
+    <section className="relative w-full h-[50vh] md:h-[70vh] lg:h-[90vh]"><HeroBanner /></section>
 
     {/* main-section */}
-    <main className="flex flex-col justify-center items-center p-4">
+    <main className="flex flex-col justify-center items-center p-4 md:p-6">
 
     {/* weekend offers content */}
     <section className="flex flex-col justify-center items-center"><WeekendOffers /></section>
