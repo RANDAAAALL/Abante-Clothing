@@ -11,13 +11,13 @@ export default function HeroBanner() {
         priority
         className="object-cover"
       />
-      <p className="font-black text-white text-7xl md:text-9xl leading-tight absolute top-20 px-8 md:px-16 lg:px-24">
+      <p className="font-black text-white text-6xl md:text-9xl absolute top-6 md:top-20 px-8 md:px-16 lg:px-24">
         Build to <br /> Hustle.
       </p>
       <Link
         href="/products"
         title="Shop Now"
-        className="font-bold mt-6 absolute bottom-10 right-10 px-10 py-3 border border-white text-white rounded-xl text-sm hover:bg-white hover:text-black transition-all border-4"
+        className="font-bold absolute bottom-7 right-5 px-10 md:bottom-10 md:right-10 py-3 border border-white text-white rounded-xl text-sm hover:bg-white hover:text-black transition-all border-4"
       >
         Shop Now
       </Link>
