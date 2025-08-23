@@ -11,7 +11,7 @@ export default function HeroBanner() {
         priority
         className="object-cover"
       />
-      <p className="font-black text-white text-5xl md:text-7xl leading-tight max-w-xl absolute top-20 px-8 md:px-16 lg:px-24">
+      <p className="font-black text-white text-7xl md:text-9xl leading-tight absolute top-20 px-8 md:px-16 lg:px-24">
         Build to <br /> Hustle.
       </p>
       <Link
