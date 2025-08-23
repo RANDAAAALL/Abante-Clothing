@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function NavbarLinks(){
     return (
-        <ul className="flex space-x-4">
+        <div className="flex space-x-4 ml-45">
         {LinksPath.map((link, i) => (
             <Link
             key={i} href={`${link.path}`}
@@ -11,6 +11,6 @@ export default function NavbarLinks(){
             className="font-metrapolis metrapolis font-medium text-sl">
             {link.name}
             </Link>))}
-        </ul>
+        </div>
     );
 }
