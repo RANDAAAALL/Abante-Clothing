@@ -1,19 +1,35 @@
 import { TshirtValue } from "@/lib/values-type/t-shirt-value";
 import Image from "next/image";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "./carousel";
+import { Card, CardContent, CardFooter } from "@/components/ui/main-section/card"
 
 export default function TshirtsImageDescContent(){
     return (
-        <>
-        {TshirtValue.map((Tshirt, i) => (
-            <div key={i} className="relative flex flex-col font-bold items-center bg-t-shirt-background p-4 rounded-lg">
-                <p className="p-2 absolute right-1 top-0 md:top-1 text-lg">{Tshirt.discount}</p>
-                <Image src={Tshirt.path} width={250} height={250} alt={Tshirt.alt}/>
-                <div className="flex flex-col items-center mt-2"> 
-                <p className="text-lg">{Tshirt.name} - {Tshirt.size}</p>
-                <p className="text-lg">₱ {Tshirt.price}</p>  
-                </div>
+    <>
+    <Carousel className="w-full max-w-sm md:max-w-xl lg:max-w-4xl xl:max-w-none" opts={{
+        align: "start",
+        loop: true,
+    }}>
+      <CarouselContent>
+        {TshirtValue.map((tshirt, index) => (
+          <CarouselItem key={index}>
+            <div className="p-0">
+              <Card>
+                <CardContent className="flex aspect-square items-center justify-center">
+                <Image src={tshirt.path} width={250} height={250} className="" alt={tshirt.alt}/>
+                </CardContent>
+                <CardFooter className="font-bold justify-between">
+                    <div>{tshirt.name} - {tshirt.size}</div>
+                    <div>P{tshirt.price}</div>
+                </CardFooter>
+              </Card>
             </div>
+          </CarouselItem>
         ))}
-        </>
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+    </>
     );
 }
