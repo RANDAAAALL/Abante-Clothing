@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: "Abante Clothing",     // brand/site name
     images: [                       
       {
-        url: "/images/png/abante-clothing-logo.png",    // Image shown on FB
+        url: "https://abante-clothing.vercel.app/images/png/abante-clothing-logo.png",    // Image shown on FB
         width: 1200,
         height: 630,
         alt: "Abante Clothing Hero Banner",
