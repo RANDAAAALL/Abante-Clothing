@@ -9,6 +9,7 @@ export default function HeroBanner() {
         alt="abante-clothing-hero-image"
         fill
         priority
+        unoptimized={true}
         className="object-cover"
       />
       <p className="font-black text-white text-6xl md:text-9xl absolute top-6 md:top-20 px-8 md:px-16 lg:px-24">
