@@ -3,7 +3,8 @@ import Link from "next/link";
 
 export default function NavbarLinks(){
     return (
-        <div className="flex space-x-4 ml-45">
+        // flex space-x-4 ml-45"
+        <div className="flex flex-col space-y-6 md:space-y-0 md:space-x-6 md:mr-10 [@media(min-width:767px)_and_(max-width:900px)]:mr-0 [@media(min-width:767px)_and_(max-width:900px)]:ml-20 md:flex md:flex-row">
         {LinksPath.map((link, i) => (
             <Link
             key={i} href={`${link.path}`}

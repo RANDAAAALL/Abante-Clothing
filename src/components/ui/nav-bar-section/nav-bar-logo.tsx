@@ -7,7 +7,8 @@ export default function NavbarLogo() {
             src="/images/svg/abante-clothing-logo.svg"
             height={65}
             width={65}
-            alt="Abante Clothing Logo" />
+            alt="Abante Clothing Logo"
+            className="ml-1"/>
         </>
     );
 }

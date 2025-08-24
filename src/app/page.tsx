@@ -7,7 +7,7 @@ export default function Home() {
     <div className="text-black min-h-screen w-full">
 
     {/* nav-bar section */}
-    <header className="font-metrapolis font-medium text-md flex justify-evenly p-4 items-center"><NavbarContent /></header>
+    <header className="font-medium gap-10 flex md:justify-evenly md:items-center p-4"><NavbarContent /></header>
    
     {/* hero banner */}
     <section className="relative w-full h-[50vh] md:h-[70vh] lg:h-[90vh]"><HeroBanner /></section>
