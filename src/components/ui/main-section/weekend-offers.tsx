@@ -9,7 +9,7 @@ export default function WeekendOffers(){
     
     {/* t-shirts image and description */}
     {/* className="flex flex-col gap-10 md:flex-row md:gap-10 lg:gap-30 xl:gap-40" */}
-    <div className=""><TshirtsImageDescContent /></div>
+    <div><TshirtsImageDescContent /></div>
 
     {/* navigate to products page */}
     <Link href="/products" className="font-medium mt-20 text-lg">View All Products</Link>
