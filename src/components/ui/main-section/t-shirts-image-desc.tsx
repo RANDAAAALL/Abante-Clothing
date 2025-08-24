@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/main-section/card
 export default function TshirtsImageDescContent(){
     return (
     <>
-    <Carousel className="w-full max-w-sm md:max-w-xl lg:max-w-4xl xl:max-w-none" opts={{
+    <Carousel className="w-full max-w-xs md:max-w-xl lg:max-w-4xl xl:max-w-none" opts={{
         align: "start",
         loop: true,
     }}>
