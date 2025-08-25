@@ -20,7 +20,7 @@ export default function Home() {
     <section className="flex flex-col justify-center items-center"><WeekendOffers /></section>
     
     {/* customers feedback content */}
-    <section className="flex flex-col items-center text-center md:text-none"><CustomerFeedbacks /></section>
+    <section className="flex flex-col items-center prose text-justify hyphens-auto md:text-none"><CustomerFeedbacks /></section>
 
     {/* footer section */}
     <section className=""></section>
