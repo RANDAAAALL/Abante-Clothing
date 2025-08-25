@@ -6,6 +6,7 @@
 :root {
   --white-background: #f2f2f2;
   --black-background: #000000;
+  --slight-gray-background: #E4E4E4;
   --t-shirt-background: #F9F9F9;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -45,6 +46,7 @@
   --color-white-background: var(--white-background);
   --color-black-background: var(--black-background);
   --color-red-background: var(--red-background);
+  --color-slight-gray-background: var(--slight-gray-background);
   --color-t-shirt-background: var(--t-shirt-background);
   --font-metrapolis: var(--font-metrapolis);
   --color-sidebar-ring: var(--sidebar-ring);

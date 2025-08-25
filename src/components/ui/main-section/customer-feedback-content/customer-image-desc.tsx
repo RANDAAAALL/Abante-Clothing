@@ -23,7 +23,7 @@ export default function CustomerImageDescContent(){
         {CustomerFeedbackValue.map((customer, index) => (
           <CarouselItem key={index}>
             <div className="p-0 h-full">
-              <Card className="relative h-full flex flex-col justify-between">
+              <Card className="relative h-full flex flex-col justify-between bg-slight-gray-background">
 
                 {/* customer image and name*/}
                 <CardHeader>
@@ -40,10 +40,10 @@ export default function CustomerImageDescContent(){
 
                  {/* customer feedback */}
                 {/*  <Image src={customer.path} width={250} height={250} className="" alt={tshirt.alt}/> */}
-                <CardContent className="font-normal text-center py-3 my-4">
-                <div className="p-0">
+                <CardContent className="font-normal py-3 my-4">
+                <p className="text-sm">
                 {customer.feedback}
-                </div>
+                </p>
                 <Image
                 className="absolute top-55 left-5"
                 src={customer.quoteUpIconPath}
