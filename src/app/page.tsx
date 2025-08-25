@@ -1,5 +1,5 @@
-import HeroBanner from "@/components/ui/main-section/hero-banner";
-import WeekendOffers from "@/components/ui/main-section/weekend-offers";
+import HeroBanner from "@/components/ui/main-section/hero-banner-content/hero-banner";
+import WeekendOffers from "@/components/ui/main-section/weekend-offers-content/weekend-offers";
 import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
 
 export default function Home() {

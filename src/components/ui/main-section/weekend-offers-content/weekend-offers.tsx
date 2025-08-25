@@ -5,14 +5,13 @@ export default function WeekendOffers(){
     return (
     <>
     {/* title  */}
-    <p className="font-black text-4xl sm:text-5xl py-20">Weekend Offers</p>
+    <p className="font-black text-4xl sm:text-5xl py-15">Weekend Offers</p>
     
     {/* t-shirts image and description */}
-    {/* className="flex flex-col gap-10 md:flex-row md:gap-10 lg:gap-30 xl:gap-40" */}
-    <div><TshirtsImageDescContent /></div>
+     <TshirtsImageDescContent />
 
     {/* navigate to products page */}
-    <Link href="/products" className="font-medium mt-20 text-lg">View All Products</Link>
+    <Link href="/products" className="font-medium mt-15 text-md">View All Products</Link>
     </>
     );
 }
