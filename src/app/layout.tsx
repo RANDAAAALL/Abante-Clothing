@@ -35,7 +35,6 @@ export const metadata: Metadata = {
     description: "Discover fashion trends at Abante Clothing.",
     images: ["/images/png/abante-clothing-logo.png"]
   }
-
 };
 
 export default function RootLayout({
