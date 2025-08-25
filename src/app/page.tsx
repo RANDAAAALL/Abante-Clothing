@@ -1,10 +1,11 @@
+import CustomerFeedbacks from "@/components/ui/main-section/customer-feedback-content/customer-feedbacks";
 import HeroBanner from "@/components/ui/main-section/hero-banner-content/hero-banner";
 import WeekendOffers from "@/components/ui/main-section/weekend-offers-content/weekend-offers";
 import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
 
 export default function Home() {
   return (
-    <div className="text-black min-h-screen w-full">
+    <div className="text-black min-h-screen">
 
     {/* nav-bar section */}
     <header className="font-medium gap-10 flex md:justify-evenly md:items-center p-4"><NavbarContent /></header>
@@ -19,10 +20,10 @@ export default function Home() {
     <section className="flex flex-col justify-center items-center"><WeekendOffers /></section>
     
     {/* customers feedback content */}
-    <section></section>
+    <section className="flex flex-col items-center text-center md:text-none"><CustomerFeedbacks /></section>
 
     {/* footer section */}
-    <section></section>
+    <section className=""></section>
 
     </main>
 

@@ -1,5 +1,6 @@
 
 type TshirtType = {
+    id?: number,
     path: string,
     name: string,
     color: string,

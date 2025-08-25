@@ -5,7 +5,7 @@ export default function WeekendOffers(){
     return (
     <>
     {/* title  */}
-    <p className="font-black text-4xl sm:text-5xl py-15">Weekend Offers</p>
+    <p className="font-black text-4xl sm:text-5xl py-10">Weekend Offers</p>
     
     {/* t-shirts image and description */}
      <TshirtsImageDescContent />
