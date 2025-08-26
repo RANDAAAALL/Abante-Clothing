@@ -80,8 +80,8 @@ export default function CustomerImageDescContent(){
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious  className="hidden md:flex " />
-      <CarouselNext  className="hidden md:flex"/>
+      <CarouselPrevious  className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent" />
+      <CarouselNext  className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent"/>
     </Carousel>
         </>
     );

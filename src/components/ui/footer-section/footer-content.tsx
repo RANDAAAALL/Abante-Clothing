@@ -6,14 +6,14 @@ export default function FooterSectionContent(){
     return (
        <>
         {/* footer logo and socmed icons */}
-        <hr className="border-t1 border-black mt-30 pb-4 sm:pb-0"/>
-        <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-between sm:gap-0 sm:py-5 sm:mx-20">
+        <hr className="border-t1 border-black mt-30 pb-4 md:pb-0"/>
+        <div className="flex flex-col items-center gap-2 md:flex-row md:justify-between md:gap-0 sm:py-5 md:mx-20">
         <NavbarLogo />
         <FooterSocmedIcons />
         </div>
 
         {/* footer pptc */}
-        <hr className="border-t-1 border-black hidden sm:block"/>
+        <hr className="border-t-1 border-black hidden md:block"/>
         <FooterPPC />
        </>
     );

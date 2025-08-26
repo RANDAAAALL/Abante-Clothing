@@ -6,8 +6,8 @@ import Image from "next/image";
 export default function FooterSocmedIcons(){
 
     return (
-        <div className="flex flex-col items-center text-center w-full sm:w-auto sm:gap-0 sm:items-end">
-        <div className="flex space-x-3 pb-5 sm:flex-none sm:space-x-2 sm:pb-2">
+        <div className="flex flex-col items-center text-center w-full md:w-auto md:gap-0 md:items-end">
+        <div className="flex space-x-3 pb-5 md:flex-none md:space-x-2 md:pb-2">
         {SocmedIconsValue.map((socmed, i) => (
             <Image
             className="cursor-pointer"
@@ -19,10 +19,10 @@ export default function FooterSocmedIcons(){
             ))}
         </div>
 
-        <div className="w-full sm:w-auto">
-        <hr className="border-t-1 border-black sm:hidden"/>
-        <p className="p-4 sm:text-right sm:p-0 sm:mt-2">
-        Abante Clothing. Trasing <br className="hidden sm:block"/> Roxas Boulevard, <br className="sm:hidden"/> Davao <br className="hidden sm:block"/>City, Philippines 8000
+        <div className="w-full md:w-auto">
+        <hr className="border-t-1 border-black md:hidden"/>
+        <p className="p-4 md:text-right md:p-0 md:mt-2">
+        Abante Clothing. Trasing <br className="hidden md:block"/> Roxas Boulevard, <br className="md:hidden"/> Davao <br className="hidden md:block"/>City, Philippines 8000
         </p>
         </div>
         </div>
