@@ -8,7 +8,7 @@ export default function NavbarLogo() {
             height={65}
             width={65}
             alt="Abante Clothing Logo"
-            className="ml-1"/>
+            className=""/>
         </>
     );
 }

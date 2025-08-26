@@ -1,3 +1,4 @@
+import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import CustomerFeedbacks from "@/components/ui/main-section/customer-feedback-content/customer-feedbacks";
 import HeroBanner from "@/components/ui/main-section/hero-banner-content/hero-banner";
 import WeekendOffers from "@/components/ui/main-section/weekend-offers-content/weekend-offers";
@@ -23,7 +24,7 @@ export default function Home() {
     <section className="flex flex-col items-center prose text-justify hyphens-auto md:text-none"><CustomerFeedbacks /></section>
 
     {/* footer section */}
-    <section className=""></section>
+    <section className="font-medium text-sm w-full"><FooterSectionContent /></section>
 
     </main>
 
