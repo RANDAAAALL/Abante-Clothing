@@ -2,8 +2,8 @@
 
 import { TshirtValue } from "@/lib/values-type/t-shirt-value";
 import Image from "next/image";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../carousel";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/main-section/card"
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "../../carousel/carousel";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/carousel/card"
 import useAutoPlayCarousel from "@/hooks/useAutoPlayCarousel";
 
 export default function TshirtsImageDescContent(){
@@ -21,7 +21,7 @@ export default function TshirtsImageDescContent(){
         {TshirtValue.map((tshirt, index) => (
           <CarouselItem key={index}>
             <div className="p-0">
-              <Card>
+              <Card className="dark:">
                 <CardHeader>
                   <CardTitle className="text-right">{tshirt.discount}</CardTitle>
                 </CardHeader>
@@ -37,8 +37,8 @@ export default function TshirtsImageDescContent(){
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious  className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent" />
-      <CarouselNext  className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent"/>
+      <CarouselPrevious variant={"ghost"} className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent" />
+      <CarouselNext variant={"ghost"}  className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent"/>
     </Carousel>
     </>
     );
