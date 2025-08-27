@@ -1,6 +1,6 @@
 import { SocmedIconType } from "../types/socmed-icons-types";
 
 export const SocmedIconsValue: SocmedIconType[] = [
-    {src: "/icons/svg/facebook-black.svg", path: "facebook", alt: "facebook icon"},
-    {src: "/icons/svg/instagram-black.svg", path: "instagram", alt: "instagram icon"},
+    {srcBlack: "/icons/svg/facebook-black.svg", srcWhite: "/icons/svg/facebook-white.svg" ,path: "facebook", alt: "facebook icon"},
+    {srcBlack: "/icons/svg/instagram-black.svg", srcWhite: "/icons/svg/instagram-white.svg" ,path: "instagram", alt: "instagram icon"},
 ]

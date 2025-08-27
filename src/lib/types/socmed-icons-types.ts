@@ -1,7 +1,8 @@
 import { UrlObject } from "url"
 
 type SocmedIconType = {
-    src: string,
+    srcBlack: string,
+    srcWhite: string,
     path: string | UrlObject,
     alt: string,
 }
