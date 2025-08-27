@@ -1,9 +1,15 @@
 "use client"
 
+import { useMounted } from "@/hooks/useMounted";
 import { SocmedIconsValue } from "@/lib/values-type/socmed-icons-value";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 
 export default function FooterSocmedIcons(){
+    const { theme } = useTheme();
+    const mounted = useMounted();
+    
+    if (!mounted) return null;
 
     return (
         <div className="flex flex-col items-center text-center w-full md:w-auto md:gap-0 md:items-end">
@@ -12,7 +18,7 @@ export default function FooterSocmedIcons(){
             <Image
             className="cursor-pointer"
             key={i}
-            src={socmed.src}
+            src={`${theme === "light" ? socmed.srcBlack : socmed.srcWhite}`}
             alt={socmed.alt}
             width={25}
             height={25}/>
