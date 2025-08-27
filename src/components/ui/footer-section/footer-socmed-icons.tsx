@@ -26,7 +26,7 @@ export default function FooterSocmedIcons(){
         </div>
 
         <div className="w-full md:w-auto">
-        <hr className="border-t-1 border-black md:hidden"/>
+        <hr className="dark:border-white border-t-1 border-black md:hidden"/>
         <p className="p-4 md:text-right md:p-0 md:mt-2">
         Abante Clothing. Trasing <br className="hidden md:block"/> Roxas Boulevard, <br className="md:hidden"/> Davao <br className="hidden md:block"/>City, Philippines 8000
         </p>
