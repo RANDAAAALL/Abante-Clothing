@@ -1,17 +1,21 @@
 "use client"
 
 import useAutoPlayCarousel from "@/hooks/useAutoPlayCarousel";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../carousel";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../carousel/carousel";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../../carousel/card";
 import Image from "next/image";
 import { CustomerFeedbackValue } from "@/lib/values-type/customer-feedback-value";
+import QuotesUpIcon from "./quotes-up-icon";
+import QuotesDownIcon from "./quotes-down-icon";
+import StartColorWithColor from "./star-with-color";
+import StartColorWithoutColor from "./star-without-color";
 
 export default function CustomerImageDescContent(){
     const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
 
     return (
     <>
-    <Carousel className=" font-bold w-full max-w-xs md:max-w-xl lg:max-w-4xl" opts={{
+    <Carousel className="font-bold w-full max-w-xs md:max-w-xl lg:max-w-4xl" opts={{
       align: "start",
       loop: true,
       skipSnaps: false,
@@ -23,7 +27,7 @@ export default function CustomerImageDescContent(){
         {CustomerFeedbackValue.map((customer, index) => (
           <CarouselItem key={index}>
             <div className="p-0 h-full">
-              <Card className="relative h-full flex flex-col justify-between bg-slight-gray-background">
+              <Card className="relative h-full flex flex-col justify-between dark:bg-card bg-slight-gray-background">
 
                 {/* customer image and name*/}
                 <CardHeader>
@@ -39,40 +43,19 @@ export default function CustomerImageDescContent(){
                 </CardHeader>
 
                  {/* customer feedback */}
-                {/*  <Image src={customer.path} width={250} height={250} className="" alt={tshirt.alt}/> */}
                 <CardContent className="font-normal py-3 my-4">
                 <p className="text-sm">
                 {customer.feedback}
                 </p>
-                <Image
-                className="absolute top-55 left-5"
-                src={customer.quoteUpIconPath}
-                width={15}
-                height={15}
-                alt={customer.quoteUpIconAlt}/>
-
-                <Image
-                className="absolute bottom-20 right-5"
-                src={customer.quoteDownIconPath}
-                width={15}
-                height={15}
-                alt={customer.quoteDownIconAlt}/>
+                <QuotesUpIcon />
+                <QuotesDownIcon />
               
                 </CardContent>
 
                  {/* customer rating */}
                 <CardFooter className="flex ">
-                <Image
-                src={customer.starRatingWithColorIconPath}
-                width={20}
-                height={20}
-                alt={customer.starRatingWithColorIconAlt}/>
-
-                <Image
-                src={customer.starRatingWithoutColorIconPath}
-                width={20}
-                height={20}
-                alt={customer.starRatingWithoutColorIconAlt}/>
+                <StartColorWithColor />
+                <StartColorWithoutColor />
                 </CardFooter>
 
               </Card>
@@ -80,8 +63,8 @@ export default function CustomerImageDescContent(){
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious  className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent" />
-      <CarouselNext  className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent"/>
+      <CarouselPrevious  variant={"ghost"} className="hidden md:flex bg-red border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent" />
+      <CarouselNext  variant={"ghost"} className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent"/>
     </Carousel>
         </>
     );

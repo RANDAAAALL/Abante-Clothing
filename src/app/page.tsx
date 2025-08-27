@@ -6,10 +6,10 @@ import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
 
 export default function Home() {
   return (
-    <div className="text-black min-h-screen">
+    <div className="dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
 
     {/* nav-bar section */}
-    <header className="font-medium gap-10 flex md:justify-evenly md:items-center p-4"><NavbarContent /></header>
+    <header className="w-full font-medium gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
    
     {/* hero banner */}
     <section className="relative w-full h-[50vh] md:h-[70vh] lg:h-[90vh]"><HeroBanner /></section>

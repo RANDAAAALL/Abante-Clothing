@@ -6,8 +6,9 @@ import useEmblaCarousel, {
 } from "embla-carousel-react"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/main-section/button"
-import Image from "next/image"
+import { Button } from "@/components/ui/carousel/button"
+import NextButtonIcon from "./next-button-icon"
+import PreviousButtonIcon from "./previous-button-icon"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -195,7 +196,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <Image src="/icons/svg/left-arrow.svg" alt="left-arrow icon" width={20} height={20}/>
+      <PreviousButtonIcon />
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -225,7 +226,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <Image src="/icons/svg/right-arrow.svg" alt="right arrow icon" width={20} height={20}/>
+      <NextButtonIcon />
       <span className="sr-only">Next slide</span>
     </Button>
   )
