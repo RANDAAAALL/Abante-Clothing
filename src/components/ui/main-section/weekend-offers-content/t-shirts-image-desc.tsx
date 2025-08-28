@@ -21,7 +21,7 @@ export default function TshirtsImageDescContent(){
         {TshirtValue.map((tshirt, index) => (
           <CarouselItem key={index}>
             <div className="p-0">
-              <Card className="dark:">
+              <Card className="dark:bg-card-background">
                 <CardHeader>
                   <CardTitle className="text-right">{tshirt.discount}</CardTitle>
                 </CardHeader>

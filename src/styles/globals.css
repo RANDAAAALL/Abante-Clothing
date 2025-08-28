@@ -5,7 +5,8 @@
 
 :root {
   --white-background: #f2f2f2;
-  --black-background: #000000;
+  --black-background: #1C1C1C;
+  --card-background: #252525;
   --slight-gray-background: #E4E4E4;
   --t-shirt-background: #F9F9F9;
   --radius: 0.625rem;
@@ -46,6 +47,7 @@
   --color-white-background: var(--white-background);
   --color-black-background: var(--black-background);
   --color-red-background: var(--red-background);
+  --color-card-background: var(--card-background);
   --color-slight-gray-background: var(--slight-gray-background);
   --color-t-shirt-background: var(--t-shirt-background);
   --font-metrapolis: var(--font-metrapolis);

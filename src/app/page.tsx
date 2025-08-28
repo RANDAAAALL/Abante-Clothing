@@ -6,7 +6,7 @@ import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
 
 export default function Home() {
   return (
-    <div className="bg-white dark:bg-black dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
+    <div className="bg-white dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
 
     {/* nav-bar section */}
     <header className="w-full font-medium gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
