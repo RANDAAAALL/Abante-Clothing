@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { metrapolis } from "../lib/custom-font";
 import "../styles/globals.css";
+import { ThemeProvider } from "next-themes";
 
 // SEO Config
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "Abante Clothing",     // brand/site name
     images: [                       
       {
-        url: "/images/png/abante-clothing-logo.png",    // Image shown on FB
+        url: "https://abante-clothing.vercel.app/images/png/abante-clothing-logo.png",    // Image shown on FB
         width: 1200,
         height: 630,
         alt: "Abante Clothing Hero Banner",
@@ -35,7 +36,6 @@ export const metadata: Metadata = {
     description: "Discover fashion trends at Abante Clothing.",
     images: ["/images/png/abante-clothing-logo.png"]
   }
-
 };
 
 export default function RootLayout({
@@ -44,9 +44,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${metrapolis.variable}`}>
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
+          {children}
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>
