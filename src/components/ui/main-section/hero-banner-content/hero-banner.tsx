@@ -18,7 +18,7 @@ export default function HeroBanner() {
       <Link
         href="/products"
         title="Shop Now"
-        className="font-bold absolute bottom-7 right-5 px-10 md:bottom-10 md:right-10 py-3 border border-white text-white rounded-xl text-sm hover:bg-white hover:text-black transition-all border-4"
+        className="font-bold absolute bottom-7 right-5 px-15 md:bottom-20 md:right-20 py-3 border border-white text-white rounded-xl text-md hover:bg-white hover:text-black transition-all border-4"
       >
         Shop Now
       </Link>

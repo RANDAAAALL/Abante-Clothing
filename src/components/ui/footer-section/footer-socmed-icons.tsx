@@ -4,6 +4,7 @@ import { useMounted } from "@/hooks/useMounted";
 import { SocmedIconsValue } from "@/lib/values-type/socmed-icons-value";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function FooterSocmedIcons(){
     const { theme } = useTheme();
@@ -15,13 +16,14 @@ export default function FooterSocmedIcons(){
         <div className="flex flex-col items-center text-center w-full md:w-auto md:gap-0 md:items-end">
         <div className="flex space-x-3 pb-5 md:flex-none md:space-x-2 md:pb-2">
         {SocmedIconsValue.map((socmed, i) => (
-            <Image
-            className="cursor-pointer"
-            key={i}
-            src={`${theme === "light" ? socmed.srcBlack : socmed.srcWhite}`}
-            alt={socmed.alt}
-            width={25}
-            height={25}/>
+            <Link key={i} href={socmed.path} target="_blank">
+                <Image
+                className="cursor-pointer"
+                src={`${theme === "light" ? socmed.srcBlack : socmed.srcWhite}`}
+                alt={socmed.alt}
+                width={25}
+                height={25}/>
+            </Link>          
             ))}
         </div>
 
