@@ -45,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${metrapolis.variable}`}>
+      <body className={`${metrapolis.variable} dark:bg-black-background transition duration-500 ease-in-out`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
           {children}
         </ThemeProvider>
