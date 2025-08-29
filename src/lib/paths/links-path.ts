@@ -3,6 +3,6 @@ import { LinksType } from "../types/links-types";
 // this will defines the paths for the links for the nav-bar link lists
 export const LinksPath: LinksType[] = [
   {path: "/", name: "Home"},
-  {path: "/About", name: "About"},
-  {path: "/Products", name: "Products"},
+  {path: "/about", name: "About"},
+  {path: "/products", name: "Products"},
 ];

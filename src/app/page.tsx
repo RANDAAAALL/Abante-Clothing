@@ -24,7 +24,7 @@ export default function Home() {
     <section className="flex flex-col items-center prose text-justify hyphens-auto md:text-none"><CustomerFeedbacks /></section>
 
     {/* footer section */}
-    <section className="font-medium text-sm w-full"><FooterSectionContent /></section>
+    <footer className="text-sm w-full"><FooterSectionContent styleName="md:pt-6" /></footer>
 
     </main>
 
