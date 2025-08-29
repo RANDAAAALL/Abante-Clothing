@@ -25,5 +25,5 @@ The website integrates **SEO best practices**, **Open Graph metadata**, and resp
 - **TaildwindCSS**
 - **Shadcn**
 - **MySQL**
-- **PRIMSA**
+- **Prisma**
 - **Bun**
