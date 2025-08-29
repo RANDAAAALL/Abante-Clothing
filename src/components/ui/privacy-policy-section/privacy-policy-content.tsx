@@ -138,10 +138,10 @@ export default function PrivacyPolicyContent(){
                 <div className="mt-2">
                     <p className="font-bold text-md">Missing Items</p>
                     <div className="font-regular text-sm">
-                        <p>Claims of missing items? We got you. As long as you've got that 
+                        <p>Claims of missing items? We got you. As long as you have got that 
                         unboxing video to solidify your claim.</p>
                         <p className="mt-2">Without an unboxing video, redelivery and replacement will not be processed.</p>
-                        <p className="mt-2">Remember videos of opened packages won't be honored as a valid proof.</p>
+                        <p className="mt-2">Remember videos of opened packages wont be honored as a valid proof.</p>
                     </div>
                 </div>
             </div>
