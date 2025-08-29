@@ -49,7 +49,7 @@ export default function TermsAndConditionsContent(){
         </main>
 
         {/* footer section */}
-        <footer className="font-regular text-sm w-full"><FooterSectionContent styleName="pb-3 md:py-6"/></footer>
+        <footer className="font-regular text-sm w-full"><FooterSectionContent className="mt-55" styleName="pb-3 md:py-6"/></footer>
         </>
     );
 }
