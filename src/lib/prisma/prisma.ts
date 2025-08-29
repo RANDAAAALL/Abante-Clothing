@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 
 // Extend the global object to store the Prisma instance
 declare global {
-  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 
