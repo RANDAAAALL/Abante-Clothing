@@ -10,7 +10,7 @@ export default function MenuBar({ isOpen, setIsOpen }: MenuBarprops) {
       {isOpen ? (
         // close icon
         <svg
-          className="cursor-pointer w-6 h-6 absolute z-[10000] top-7 right-8 text-black dark:text-white transition-opacity duration-500 ease-in-out md:hidden"
+          className="cursor-pointer w-6 h-6 absolute z-[10000] top-7 right-8 text-black dark:text-white md:hidden"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 640 640"
           fill="currentColor"
@@ -21,7 +21,7 @@ export default function MenuBar({ isOpen, setIsOpen }: MenuBarprops) {
       ) : (
         // menu icon
         <svg
-          className="cursor-pointer w-6 h-6 absolute z-[10000] top-7 right-8 text-black dark:text-white transition-opacity duration-500 ease-in-out md:hidden"
+          className="cursor-pointer w-6 h-6 absolute z-[10000] top-7 right-8 text-black dark:text-white md:hidden"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 640 640"
           fill="currentColor"
