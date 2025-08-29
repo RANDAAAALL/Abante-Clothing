@@ -8,7 +8,7 @@ export default function TermsAndConditionsContent(){
         <header className="w-full font-regular gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
         
         {/* terms and conditions section */}
-        <main className="text-center w-full md:max-w-md md:mx-auto p-4 md:p-6">
+        <main className="text-center w-full md:max-w-2xl md:mx-auto p-4 md:p-6">
         
         <div>
             <p className="font-bold text-3xl">Terms of Service</p>
