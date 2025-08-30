@@ -8,9 +8,9 @@ export default function TermsAndConditionsContent(){
         <header className="w-full font-regular gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
         
         {/* terms and conditions section */}
-        <main className="text-center w-full md:max-w-2xl md:mx-auto p-4 md:p-6">
+        <main className="text-center w-full md:max-w-[1980px] md:mx-auto p-4 md:p-0 md:px-6">
         
-        <div>
+        <div className="max-w-2xl mx-auto mt-10">
             <p className="font-bold text-3xl">Terms of Service</p>
             
             <div className="font-medium text-sm text-justify mt-3">
@@ -46,10 +46,10 @@ export default function TermsAndConditionsContent(){
             </div>  
         </div>
 
-        </main>
 
         {/* footer section */}
-        <footer className="font-regular text-sm w-full"><FooterSectionContent className="mt-55" styleName="pb-3 md:py-6"/></footer>
+        <footer className="font-regular text-sm w-full"><FooterSectionContent className="mt-55" styleName="md:py-6"/></footer>
+        </main>
         </>
     );
 }

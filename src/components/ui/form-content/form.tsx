@@ -21,8 +21,8 @@ export default function FormsContent<T extends FieldValues>({
   const { register, handleSubmit, formState: { errors } } = useForm<T>();
 
   return (
-    <>
-    <form onSubmit={handleSubmit(onSubmit)} className="text-white shadow-xl p-6 py-8 rounded-xl bg-card-background w-full ">
+    <div className="min-h-[700] md:min-h-screen flex items-center justify-center mx-auto md:max-w-lg ">
+    <form onSubmit={handleSubmit(onSubmit)} className="text-white shadow-xl p-9 py-8 rounded-xl bg-card-background w-full ">
     <span className="font-bold text-xl">Create An Account</span>
     <p className="font-regular text-sm mt-1 mb-5">Step up your drip, Join the Abante Fam</p>
       {fields.map((field, i) => (
@@ -42,6 +42,6 @@ export default function FormsContent<T extends FieldValues>({
       <button className="cursor-pointer font-bold bg-white text-black rounded-sm p-2 mt-2 mb-4 w-full" type="submit">Submit</button>
       <span className="font-regular text-sm">Already have an account?<Link href="/login"><span className="font-bold ml-1">Login</span></Link></span>
     </form>
-    </>
+    </div>
   );
 }

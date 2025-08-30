@@ -8,9 +8,9 @@ export default function PrivacyPolicyContent(){
         <header className="w-full font-regular gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
         
         {/* terms and conditions section */}
-        <main className="text-center w-full md:max-w-xl md:mx-auto p-4 md:p-6">
+        <main className="text-center md:max-w-[1980px] md:mx-auto p-4 md:p-0 md:px-6">
         
-        <div>
+        <div className="max-w-2xl mx-auto mt-15">
         <p className="font-bold text-3xl">Privacy Policy</p>
         <p className="font-regular text-md">Effective Date: April 1, 2025</p>
         <p className="font-regular text-sm text-justify mt-2">Welcome to Abante Clothing. Your privacy is important to us, and we are committed to
@@ -18,7 +18,7 @@ export default function PrivacyPolicyContent(){
         how we collect, use, store, and protect your information when you use our services.</p>
         </div>
 
-        <div className="mt-5 max-w-sm text-left mx-auto">
+        <div className="mt-5 max-w-2xl text-left mx-auto">
 
             <div>
                 <p className="font-bold text-xl text-center">Information We Collect</p>
@@ -146,10 +146,10 @@ export default function PrivacyPolicyContent(){
                 </div>
             </div>
         </div>
-        </main>
 
         {/* footer section */}
-        <footer className="font-regular text-sm w-full"><FooterSectionContent className="mt-55" styleName="pb-3 md:py-6"/></footer>
+        <footer className="font-regular text-sm w-full"><FooterSectionContent className="mt-55" styleName="md:py-6"/></footer>
+        </main>
         </>
     );
 }
