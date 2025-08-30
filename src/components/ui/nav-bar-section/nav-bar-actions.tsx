@@ -7,7 +7,7 @@ export default function NavbarActionsContainer(){
         <>
             <div className="flex flex-col items-center space-y-6 mt-2 md:mt-0 md:space-x-4 md:flex md:flex-row md:space-y-0">
             <NavbarThemeToggle/>
-            <NavbarCart/>
+            <NavbarCart/> 
             <NavbarButtons />
             </div>
         </>
