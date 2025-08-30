@@ -9,7 +9,7 @@ export default function NavbarLinks(){
             <Link
             key={i} href={`${link.path}`}
             title={link.name}
-            className="font-metrapolis metrapolis font-medium text-sl">
+            className="font-medium text-sl">
             {link.name}
             </Link>))}
         </div>
