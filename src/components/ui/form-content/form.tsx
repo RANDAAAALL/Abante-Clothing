@@ -42,13 +42,15 @@ export default function FormsContent<T extends FieldValues>({
   }, [reset, onResetRef]);
 
   return (
-    <div className="min-h-[700]  md:min-h-screen flex items-center justify-center mx-auto md:max-w-lg ">
-    <form onSubmit={handleSubmit(onSubmit)} className="text-white shadow-xl p-9 py-8 rounded-xl bg-card-background w-full ">
+    <div className="min-h-[600] md:min-h-screen flex items-center justify-center mx-auto md:max-w-lg ">
+    <form onSubmit={handleSubmit(onSubmit)} className="text-white shadow-xl p-6 md:p-9 py-8 rounded-xl bg-card-background w-full ">
     <span className="font-bold text-xl">{title}</span>
     <p className="font-regular text-sm mt-1 mb-5">{description}</p>
       {fields.map((field, i) => (
         <div key={i} className="font-regular flex flex-col">
-          <label htmlFor={field.fieldName.toString()} className="text-left text-md ml-1 mb-1 capitalize font-bold">{field.fieldName.toString()}</label>
+          <label htmlFor={field.fieldName.toString()} className="text-left text-md ml-1 mb-1 capitalize font-bold">{
+          field.fieldName === "confirmPassword" ? field.fieldName.split(/(?=[A-Z])/).join(" ").toString() : field.fieldName.toString()}
+          </label>
           <input
             className="text-sm border border-t-1 border-input-background focus:outline-none mb-4 rounded-sm p-3 px-4"
             {...register(field.fieldName as Path<T>, { required: true })}
@@ -59,7 +61,7 @@ export default function FormsContent<T extends FieldValues>({
         </div>
       ))}
       {labelForm && (
-        <div className="text-md mb-1">
+        <div className="text-sm mb-1">
         {labelForm === "Forgot Password?" ? (
           <Link href="/forgot-password">
           <span className={`float-left ml-1`}>{labelForm}</span>
