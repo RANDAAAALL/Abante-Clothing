@@ -4,6 +4,7 @@ import { RegisterFormType } from "@/lib/types/form-data-types";
 import FormsContent from "./form";
 import { registerFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
+import { registerationSchema } from "@/lib/data-access-layer/validations/auth-schema";
 
 export default function RegisterFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
@@ -16,10 +17,11 @@ export default function RegisterFormContent(){
     }
 
     return (
-        <FormsContent<RegisterFormType>
+        <FormsContent<typeof registerationSchema>
         title="Create your account"
         description="Step up your drip, Join the Abante Fam"
         fields={registerFields}
+        schema={registerationSchema}
         onSubmit={handleRegisterClick}
         buttonText="Sign Up"
         footerDescription="Already have an account?"
