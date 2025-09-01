@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Abante Clothing",
     description: "Discover fashion trends at Abante Clothing.",
-    images: ["/images/png/abante-clothing-logo.png"]
+    images: ["/images/svg/abante-clothing-logo-white.svg"]
   }
 };
 
