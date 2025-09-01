@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Abante Clothing",        // Title shown when shared
     description: "Discover fashion trends at Abante Clothing.", // Short description
-    url: "https://abanteclothing.com", // URL
+    url: "https://abante-clothing.vercel.app/", // URL
     siteName: "Abante Clothing",     // brand/site name
     images: [                       
       {
