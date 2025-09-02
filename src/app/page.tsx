@@ -2,6 +2,7 @@ import FooterSectionContent from "@/components/ui/footer-section/footer-content"
 import CustomerFeedbacks from "@/components/ui/main-section/customer-feedback-content/customer-feedbacks";
 import HeroBanner from "@/components/ui/main-section/hero-banner-content/hero-banner";
 import WeekendOffers from "@/components/ui/main-section/weekend-offers-content/weekend-offers";
+// import WeekendOffers from "@/components/ui/main-section/weekend-offers-content/weekend-offers";
 import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
 
 export default function Home() {
@@ -18,7 +19,7 @@ export default function Home() {
     <main className="flex flex-col justify-center items-center p-4 md:p-6">
 
     {/* weekend offers content */}
-    <section className="flex flex-col justify-center items-center"><WeekendOffers /></section>
+    <section className="flex flex-col justify-center items-center"><WeekendOffers/></section>
     
     {/* customers feedback content */}
     <section className="flex flex-col items-center prose text-justify hyphens-auto md:text-none"><CustomerFeedbacks /></section>

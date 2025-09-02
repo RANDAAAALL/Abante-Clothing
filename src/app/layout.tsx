@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { metrapolis } from "../lib/custom-font";
 import "../styles/globals.css";
-import { ThemeProvider } from "next-themes";
+import ClientProvider from "@/context/client-providers";
 
 // SEO Config
 export const metadata: Metadata = {
@@ -46,9 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${metrapolis.variable} dark:bg-black-background`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
-          {children}
-        </ThemeProvider>
+        <ClientProvider>{children}</ClientProvider>
         <Analytics />
       </body>
     </html>
