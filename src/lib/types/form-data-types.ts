@@ -1,9 +1,9 @@
-import { z } from 'zod'
-import { forgotPasswordSchema, loginSchema, registerationSchema } from '../data-access-layer/validations/auth-schema'
+// import { z } from 'zod'
+// import { forgotPasswordSchema, loginSchema, registerationSchema } from '../data-access-layer/validations/auth-schema'
 
-export type RegisterFormType = z.infer<typeof registerationSchema>
-export type LoginFormType = z.infer<typeof loginSchema>
-export type ForgotPasswordFormType = z.infer<typeof forgotPasswordSchema>
+// export type RegisterFormType = z.infer<typeof registerationSchema>
+// export type LoginFormType = z.infer<typeof loginSchema>
+// export type ForgotPasswordFormType = z.infer<typeof forgotPasswordSchema>
 
 // form-types.ts
 // type RegisterFormType = {
