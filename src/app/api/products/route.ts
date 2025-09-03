@@ -31,5 +31,7 @@ export async function GET(){
     return NextResponse.json({
         message: "fetched successfully",
         products: tShirtsPropsData
+    }, {
+        headers: {  "Access-Control-Allow-Origin": "*", }
     })
 };
