@@ -1,5 +1,6 @@
 // src/app/products/[slug]/page.tsx
 import prisma from "@/lib/prisma/prisma";
+import { ProductsNameProps } from "@/lib/types/product-types";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -35,7 +36,7 @@ export async function generateStaticParams() {
     select: { product_item_name: true },
   });
 
-  return products.map((p) => ({
+  return products.map((p: ProductsNameProps) => ({
     slug: p.product_item_name,
   }));
 }

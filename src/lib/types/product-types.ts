@@ -1,7 +1,7 @@
 import { TshirtType } from "./t-shirt-types"
 
-type ProductsName = {
-    product_item_name: string
+type ProductsNameProps = {
+    product_item_name: string | null
 }
 
 
@@ -13,4 +13,4 @@ type ProductType = {
     product: TshirtType
 }
 
-export type { ProductsProps, ProductType };
+export type { ProductsProps, ProductType, ProductsNameProps};
