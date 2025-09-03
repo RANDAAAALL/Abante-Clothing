@@ -1,15 +1,14 @@
 "use client";
 
-import { ForgotPasswordFormType } from "@/lib/types/form-data-types";
 import FormsContent from "./form";
 import { forgotPasswordFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
-import { forgotPasswordSchema } from "@/lib/data-access-layer/validations/auth-schema";
+import { forgotPasswordSchema, forgotPasswordFormType } from "@/lib/data-access-layer/validations/auth-schema";
 
 export default function ForgotPasswordContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
 
-    const handleForgotPasswordClick = (data: ForgotPasswordFormType) => {
+    const handleForgotPasswordClick = (data: forgotPasswordFormType) => {
         alert("Still in development");
 
         // reset the fields

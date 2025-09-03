@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-// this is re-usable authentications form client side or server side
+// this is re-usable validations form client side or server side
 const passwordSchema = z.string()
     .min(8, { message: "Password must be at least 8 characters long." })
     .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
@@ -10,7 +10,7 @@ const passwordSchema = z.string()
 
 export const registerationSchema = z.object({
     username: z.string()
-    .min(2, { message: "Username must be at least 3 characters long"})
+    .min(2, { message: "Username is required"})
     .regex(/^[A-Za-z0-9]+$/, { message: "Username must not contain special characters"}),
     email: z
     .string()
@@ -40,7 +40,13 @@ export const forgotPasswordSchema = z.object({
     .trim()
     .min(1, "Email is required")
     .email("Invalid Email"),
-}) 
+})
+
+// types
+export type registerFormType = z.infer<typeof registerationSchema>
+export type loginFormType = z.infer<typeof loginSchema>
+export type forgotPasswordFormType = z.infer<typeof forgotPasswordSchema>
+
 
 
 

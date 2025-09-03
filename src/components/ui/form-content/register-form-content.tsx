@@ -1,15 +1,15 @@
 "use client";
 
-import { RegisterFormType } from "@/lib/types/form-data-types";
+// import { RegisterFormType } from "@/lib/types/form-data-types";
 import FormsContent from "./form";
 import { registerFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
-import { registerationSchema } from "@/lib/data-access-layer/validations/auth-schema";
+import { registerationSchema, registerFormType } from "@/lib/data-access-layer/validations/auth-schema";
 
 export default function RegisterFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
 
-    const handleRegisterClick = (data: RegisterFormType) => {
+    const handleRegisterClick = (data: registerFormType) => {
         alert("Still in development");
         
         // reset the fields

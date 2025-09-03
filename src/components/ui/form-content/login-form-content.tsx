@@ -1,15 +1,15 @@
 "use client";
 
-import { LoginFormType } from "@/lib/types/form-data-types";
+// import { LoginFormType } from "@/lib/types/form-data-types";
 import FormsContent from "./form";
 import { loginFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
-import { loginSchema } from "@/lib/data-access-layer/validations/auth-schema";
+import { loginSchema, loginFormType } from "@/lib/data-access-layer/validations/auth-schema";
 
 export default function LoginFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
 
-    const handleLoginClick = (data: LoginFormType) => {
+    const handleLoginClick = (data: loginFormType) => {
         alert("Still in development");
 
         // reset the fields
