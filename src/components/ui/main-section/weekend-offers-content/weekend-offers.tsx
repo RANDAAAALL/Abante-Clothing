@@ -26,7 +26,7 @@ export default function WeekendOffers(){
     <p className="font-black text-4xl sm:text-5xl py-10">Weekend Offers</p>
     
     {/* t-shirts image and description */}
-    <TshirtsImageDescContent tshirt={data?.products}/>
+    <TshirtsImageDescContent tshirt={data?.tShirtsPropsData}/>
 
     {/* navigate to products page */}
     <ViewAllProducts/>
