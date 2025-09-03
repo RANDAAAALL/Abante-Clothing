@@ -3,10 +3,9 @@ import prisma from "@/lib/prisma/prisma";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const id = parseInt(slug, 10);
 
   const product = await prisma.product_items.findFirst({
-    where: { product_item_ID: id },
+    where: { product_item_name: slug },
     select: {
       product_item_ID: true,
       product_item_name: true,
@@ -25,18 +24,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <h1>
         {product.product_item_name} - {product.product_item_ID}
       </h1>
-      <p>Price: {!product.product_item_price}</p>
-      <p>Size: {product.product_item_size}</p>
+      <p>Price: {product.product_item_price?.toString()}</p>
+      <p>Size: {product.product_item_size!.split(/\s+/)[0]}</p>
     </>
   );
 }
 
 export async function generateStaticParams() {
   const products = await prisma.product_items.findMany({
-    select: { product_item_ID: true },
+    select: { product_item_name: true },
   });
 
   return products.map((p) => ({
-    slug: p.product_item_ID.toString(),
+    slug: p.product_item_name,
   }));
 }

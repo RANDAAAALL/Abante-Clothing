@@ -25,7 +25,7 @@ export async function GET(){
         product_item_size: p.product_item_size,
         product_item_price: p.product_item_price,
         alt: p.product_item_name,
-        discount: p.product_item_price,
+        discount: 30,
     }))
 
     return NextResponse.json({

@@ -6,7 +6,6 @@ import ViewAllProducts from "./view-all-products-";
 import { useQuery } from "@tanstack/react-query";
 
 export default function WeekendOffers(){
-
       const { data } = useQuery({
       queryKey: ['products'],
       queryFn: async () => {
@@ -18,7 +17,7 @@ export default function WeekendOffers(){
       refetchOnMount: false,
       refetchOnWindowFocus: false, 
     }
-    )
+  )
     
 
     return (

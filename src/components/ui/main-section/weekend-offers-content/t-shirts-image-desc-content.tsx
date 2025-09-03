@@ -21,10 +21,10 @@ export default function TshirtsImageDescContent({ tshirt }:{ tshirt?: TshirtType
       <CarouselContent>
         {tshirt && tshirt.map(( tshirt , _ ) => (
           <CarouselItem key={tshirt.product_item_ID}>
-            <Link href={`products/${tshirt.product_item_ID}`} onClick={() => console.log("CLICKED: ", tshirt)} className="p-0">
+            <Link href={`products/${tshirt.product_item_name}`} onClick={() => console.log("CLICKED: ", tshirt)} className="p-0">
               <Card className="dark:bg-card-background">
                 <CardHeader>
-                  <CardTitle className="text-right">{tshirt.discount as number}</CardTitle>
+                  <CardTitle className="text-right">-{tshirt.discount as number}%</CardTitle>
                 </CardHeader>
                 <CardContent className="flex aspect-square items-center justify-center">
                 <Image
@@ -34,7 +34,7 @@ export default function TshirtsImageDescContent({ tshirt }:{ tshirt?: TshirtType
                 alt={`${tshirt.product_item_name}-${tshirt.product_item_ID}`}/>
                 </CardContent>
                 <CardFooter className="justify-between">
-                    <div>{tshirt.product_item_name} - {tshirt.product_item_size}</div>
+                    <div>{tshirt.product_item_name?.toUpperCase()} - {tshirt.product_item_size!.split(/\s+/)[0]}</div>
                     <div>{tshirt.product_item_price as number}</div>
                 </CardFooter>
               </Card>
