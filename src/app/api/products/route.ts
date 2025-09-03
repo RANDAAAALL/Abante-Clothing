@@ -17,7 +17,7 @@ export async function GET(){
         }
     })
 
-    const tShirtsPropsData: TshirtType[] = products.map((p)=> ({
+    const tShirtsPropsData: TshirtType[] = products.map((p: TshirtType)=> ({
         product_item_ID: p.product_item_ID,
         product_item_image: p.product_item_image,
         product_item_name: p.product_item_name,
