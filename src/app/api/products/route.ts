@@ -3,16 +3,6 @@ import prisma from "@/lib/prisma/prisma";
 import { TshirtType } from "@/lib/types/t-shirt-types";
 
 // src/app/api/products/route.ts
-export async function OPTIONS() {
-  return NextResponse.json({}, { 
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    }
-  });
-}
-
 export async function GET() {
   const products = await prisma.product_items.findMany({
     select: {
@@ -40,9 +30,6 @@ export async function GET() {
     {
       message: "fetched successfully",
       tShirtsPropsData
-    },
-    {
-      headers: { "Access-Control-Allow-Origin": "*" }
     }
   );
 }
