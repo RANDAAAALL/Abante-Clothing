@@ -2,7 +2,7 @@
 import prisma from "@/lib/prisma/prisma";
 import { ProductsNameProps } from "@/lib/types/product-types";
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({ params }: { params: Promise<{ slug: string | null }> }) {
   const { slug } = await params;
 
   const product = await prisma.product_items.findFirst({
