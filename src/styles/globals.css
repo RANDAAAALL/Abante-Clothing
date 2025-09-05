@@ -4,9 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --white-background: #f2f2f2;
+  --white-background: #F2F2F2;
   --black-background: #1C1C1C;
-  --card-background: #252525;
+  --card-dark-background: #252525;
+  --card-white-background: #f8f7f7;
   --slight-gray-background: #E4E4E4;
   --input-background: #5B5959;
   --t-shirt-background: #F9F9F9;
@@ -49,7 +50,8 @@
   --color-black-background: var(--black-background);
   --color-red-background: var(--red-background);
   --color-input-background: var(--input-background);
-  --color-card-background: var(--card-background);
+  --color-card-black-background: var(--card-dark-background);
+  --color-card-white-background: var(--card-white-background);
   --color-slight-gray-background: var(--slight-gray-background);
   --color-t-shirt-background: var(--t-shirt-background);
   --font-metrapolis: var(--font-metrapolis);
@@ -143,4 +145,30 @@ body {
     @apply bg-background text-foreground;
   }
 }
+@layer utilities {
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-gray-200 dark:bg-card-black-background;
+  }
 
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    height: 100%;
+    width: 150%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(192, 190, 190, 0.6),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
