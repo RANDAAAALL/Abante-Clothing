@@ -27,7 +27,7 @@ export default function CustomerImageDescContent(){
         {CustomerFeedbackValue.map((customer, index) => (
           <CarouselItem key={index}>
             <div className="p-0 h-full">
-              <Card className="relative h-full flex flex-col justify-between dark:bg-card-background bg-slight-gray-background">
+              <Card className="relative h-full flex flex-col justify-between dark:bg-card-black-background">
 
                 {/* customer image and name*/}
                 <CardHeader>

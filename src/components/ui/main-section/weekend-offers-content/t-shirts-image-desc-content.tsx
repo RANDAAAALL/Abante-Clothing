@@ -19,10 +19,10 @@ export default function TshirtsImageDescContent({ tshirt }:{ tshirt?: TshirtType
       onMouseEnter={pluginStop}
       onMouseLeave={pluginReset}>
       <CarouselContent>
-        {tshirt && tshirt.map(( tshirt , _ ) => (
+        {tshirt?.map(( tshirt , _ ) => (
           <CarouselItem key={tshirt.product_item_ID}>
             <Link href={`products/${tshirt.product_item_name}`} onClick={() => console.log("CLICKED: ", tshirt)} className="p-0">
-              <Card className="dark:bg-card-background">
+              <Card className=" dark:bg-card-black-background">
                 <CardHeader>
                   <CardTitle className="text-right">-{tshirt.discount as number}%</CardTitle>
                 </CardHeader>
@@ -38,6 +38,7 @@ export default function TshirtsImageDescContent({ tshirt }:{ tshirt?: TshirtType
                     <div>{tshirt.product_item_price as number}</div>
                 </CardFooter>
               </Card>
+            
             </Link>
           </CarouselItem>
         ))}
