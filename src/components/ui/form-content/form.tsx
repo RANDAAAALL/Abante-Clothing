@@ -28,12 +28,12 @@ type FormsContentProps<TSchema extends AnyZodObject> = {
   title: string;
   description?: string;
   fields: FieldProps<RHFValues<TSchema>>[];
-  onSubmit: SubmitHandler<RHFValues<TSchema>>;
+  onSubmitAction: SubmitHandler<RHFValues<TSchema>>;
   buttonText: string;
   labelForm?: string;
   footerDescription?: string;
   footerHref?: string;
-  onResetRef?: (reset: () => void) => void;
+  onResetRefAction?: (reset: () => void) => void;
   schema: TSchema;
 };
 
@@ -41,12 +41,12 @@ export default function FormsContent<TSchema extends AnyZodObject>({
   title,
   description,
   fields,
-  onSubmit,
+  onSubmitAction,
   buttonText,
   labelForm,
   footerDescription,
   footerHref,
-  onResetRef,
+  onResetRefAction,
   schema,
 }: FormsContentProps<TSchema>) {
   const {
@@ -59,13 +59,13 @@ export default function FormsContent<TSchema extends AnyZodObject>({
   });
 
   useEffect(() => {
-    onResetRef?.(() => reset());
-  }, [reset, onResetRef]);
+    onResetRefAction?.(() => reset());
+  }, [reset, onResetRefAction]);
 
   return (
     <div className="min-h-[600] md:min-h-screen flex items-center justify-center mx-auto md:max-w-lg">
-      <form onSubmit={handleSubmit(onSubmit)}
-        className="text-white shadow-xl p-6 md:p-9 py-8 rounded-xl bg-card-background w-full ">
+      <form onSubmit={handleSubmit(onSubmitAction)}
+        className="text-black shadow-md p-6 md:p-9 py-8 rounded-xl bg-card-white-background w-full ">
 
         {/* title and description  */}
         <span className="font-bold text-xl">{title}</span>
@@ -86,7 +86,7 @@ export default function FormsContent<TSchema extends AnyZodObject>({
 
             {/* error messages  */}
             {errors[field.fieldName]?.message && (
-              <span className="text-red-500 text-sm text-left -mt-3 ml-1 mb-2">
+              <span className="text-red-600 text-sm text-left -mt-3 ml-1 mb-2">
                 {errors[field.fieldName]?.message as string ??
                   "This field is required"}
               </span>
@@ -108,7 +108,7 @@ export default function FormsContent<TSchema extends AnyZodObject>({
         )}
 
         {/* submit button */}
-        <button className="cursor-pointer font-bold bg-white text-black rounded-sm p-2 mt-2 mb-3 w-full"
+        <button className="cursor-pointer font-bold bg-card-black-background text-white rounded-sm p-2 mt-2 mb-3 w-full"
           type="submit">{buttonText}</button>
 
         {/* form footer description */}

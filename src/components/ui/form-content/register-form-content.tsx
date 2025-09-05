@@ -22,10 +22,10 @@ export default function RegisterFormContent(){
         description="Step up your drip, Join the Abante Fam"
         fields={registerFields}
         schema={registerationSchema}
-        onSubmit={handleRegisterClick}
+        onSubmitAction={handleRegisterClick}
         buttonText="Sign Up"
         footerDescription="Already have an account?"
         footerHref="login"
-        onResetRef={(reset) => (resetFormRef.current = reset)}/>
+        onResetRefAction={(reset) => (resetFormRef.current = reset)}/>
     );
 }
