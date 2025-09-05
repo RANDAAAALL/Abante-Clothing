@@ -21,9 +21,9 @@ export default function ForgotPasswordContent(){
         schema={forgotPasswordSchema}
         description="We will send you an email link to reset your password"
         fields={forgotPasswordFields}
-        onSubmit={handleForgotPasswordClick}
+        onSubmitAction={handleForgotPasswordClick}
         buttonText="Submit"
         labelForm="Check your email"
-        onResetRef={(reset) => (resetFormRef.current = reset)}/>
+        onResetRefAction={(reset) => (resetFormRef.current = reset)}/>
     );
 }

@@ -13,10 +13,10 @@ export const experimental_ppr = true;
 
 export default function Home() {
   return (
-    <div className="transition duration-500 ease-in-out bg-card-white-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
+    <div className="transition duration-500 ease-in-out bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
 
     {/* nav-bar section */}
-    <header className="shadow-md rounded-b-xl z-100000 dark:bg-black-background sticky top-0 w-full font-medium gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
+    <header className="shadow-md rounded-xl z-100000 dark:bg-black-background sticky top-0 w-full font-medium gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
   
     {/* hero banner */}
     <section className="relative w-full h-[50vh] md:h-[70vh] lg:h-[90vh]"><HeroBanner /></section>

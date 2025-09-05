@@ -21,12 +21,12 @@ export default function LoginFormContent(){
         title="Welcome"
         fields={loginFields}
         schema={loginSchema}
-        onSubmit={handleLoginClick}
+        onSubmitAction={handleLoginClick}
         labelForm="Forgot Password?"
         buttonText="Sign In"
         footerDescription="Doesn't have an account?"
         footerHref="register"
-        onResetRef={(reset) => (resetFormRef.current = reset)
+        onResetRefAction={(reset) => (resetFormRef.current = reset)
         }/>
     );
 }
