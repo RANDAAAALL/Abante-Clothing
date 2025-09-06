@@ -53,7 +53,10 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
                 </CardContent>
 
                  {/* customer rating */}
-                <CardFooter className="flex ">
+                <CardFooter className="flex gap-1">
+                <StartColorWithColor />
+                <StartColorWithColor />
+                <StartColorWithColor />
                 <StartColorWithColor />
                 <StartColorWithoutColor />
                 </CardFooter>
