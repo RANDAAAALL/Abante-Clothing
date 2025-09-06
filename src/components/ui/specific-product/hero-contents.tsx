@@ -1,0 +1,62 @@
+import { TshirtType } from "@/lib/types/t-shirt-types";
+import Image from "next/image";
+import MinusAddButtons from "./minus-add-buttons";
+import AddToCartAndBuyNowButtons from "./atc-and-bn-buttons";
+
+export default function HeroContents( {props} : { props: Partial<TshirtType>} ){
+    return (
+        <>
+        {props && props.product_item_image && props.product_item_back_image ? (
+        <> 
+        <div className="flex flex-col md:flex-row px-4 gap-4">
+
+        {/* main container */}
+
+
+            {/* container */}
+            <div className={`flex gap-1`}>
+
+                {/* images */}
+                <div className="flex flex-col gap-1">
+                <Image src={props.product_item_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_image}`}/>
+                <Image src={props.product_item_back_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_back_image}`}/>
+                <Image src={props.product_item_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_image}`}/>
+                </div>
+            
+                <div><Image src={props.product_item_image} width={378} height={378} alt={`${props.product_item_ID}-${props.product_item_image}`}/></div>
+            </div>
+        
+            {/* container */}
+            <div className="flex flex-col gap-2.5 md:gap-2 px-4">
+                
+                {/* t-shirt title and price*/}
+                <div className="flex flex-row justify-between items-center md:items-start md:flex-col capitalize font-bold px-.5">
+                <span className="text-2xl md:text-3xl">{props.product_item_name}</span>
+                <span className="text-2xl md:text-5xl" >P{props.product_item_price?.toString()}</span>
+                </div>
+
+                {/* t-shirt sizes */}
+                <div className="">
+                    <span className="font-bold text-md">Size</span>
+                    <div className="flex gap-3">
+                    {
+                    ["XS", "S", "M", "L", "XL", "OS"].map((size, i) => (
+                    <button key={i} className="font-regular text-xs mt-1 cursor-pointer rounded-sm w-10 py-2 bg-card-black-background text-white dark:bg-card-white-background dark:text-black">{size}</button>
+                    ))}
+                    </div>
+                </div>
+
+                {/* minus and add buttons */}
+                <div className="flex sm:justify-center md:justify-start gap-1"><MinusAddButtons style="text-center font-regular text-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black py-1 w-full md:w-auto md:px-6 rounded-sm"/></div>
+
+                {/* add-to-card and buy now buttons */}
+                <div className="flex sm:justify-center md:justify-start gap-1"><AddToCartAndBuyNowButtons/></div>
+            </div>
+        </div>
+        </>
+        ) : (
+            <span>Loading...</span>
+        )}
+        </>
+    );
+}

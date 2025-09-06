@@ -120,6 +120,7 @@ model product_items {
   product_item_stock           Int?
   product_item_displayDate     DateTime?       @db.DateTime(0)
   product_item_status          String?         @db.VarChar(255)
+  product_item_back_image      String?         @db.VarChar(255)
   cart_items                   cart_items[]
   order_details                order_details[]
   users                        users?          @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "product_items_ibfk_1")
