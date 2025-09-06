@@ -4,13 +4,13 @@ import useAutoPlayCarousel from "@/hooks/useAutoPlayCarousel";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../carousel/carousel";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../../carousel/card";
 import Image from "next/image";
-import { CustomerFeedbackValue } from "@/lib/values-type/customer-feedback-value";
 import QuotesUpIcon from "./quotes-up-icon";
 import QuotesDownIcon from "./quotes-down-icon";
 import StartColorWithColor from "./star-with-color";
 import StartColorWithoutColor from "./star-without-color";
+import { CustomerFeedbackType } from "@/lib/types/customer-feedback-types";
 
-export default function CustomerImageDescContent(){
+export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback?: CustomerFeedbackType[]}){
     const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
 
     return (
@@ -24,7 +24,7 @@ export default function CustomerImageDescContent(){
       onMouseEnter={pluginStop}
       onMouseLeave={pluginReset}>
       <CarouselContent>
-        {CustomerFeedbackValue.map((customer, index) => (
+        {customerFeedback && customerFeedback.map((customer, index) => (
           <CarouselItem key={index}>
             <div className="p-0 h-full">
               <Card className="relative h-full flex flex-col justify-between dark:bg-card-black-background">
