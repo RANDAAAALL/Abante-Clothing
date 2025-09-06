@@ -9,6 +9,8 @@ export default function NavbarContent(){
     const [ isOpen, setIsOpen ] = useState<boolean>(false);
     useEffect(() => { document.body.style.overflow = `${isOpen ? "hidden" : "auto"}`; }, [isOpen]);
 
+
+
     return (
         <>
            <NavbarLogo LogoHeight={65} LogoWidth={65} flag={true}/>

@@ -92,13 +92,6 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
-
 body {
   font-family: var(--font-metrapolis), sans-serif;
 }
@@ -146,11 +139,63 @@ body {
   }
 }
 @layer utilities {
-  .skeleton {
+  .t-shirt-skeleton {
     @apply relative overflow-hidden rounded-md bg-gray-200 dark:bg-card-black-background;
   }
 
-  .skeleton::after {
+  .t-shirt-skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    height: 100%;
+    width: 150%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(192, 190, 190, 0.6),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+
+  .customer-feedback-skeleton {
+    @apply relative overflow-hidden bg-gray-200 dark:bg-card-black-background;
+  }
+
+  .customer-feedback-skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    height: 100%;
+    width: 150%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(192, 190, 190, 0.6),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+
+  .star-skeleton {
+    @apply relative overflow-hidden bg-gray-200 dark:bg-card-black-background;
+    clip-path: polygon(
+      50% 0%,
+      61% 35%,
+      98% 35%,
+      68% 57%,
+      79% 91%,
+      50% 70%,
+      21% 91%,
+      32% 57%,
+      2% 35%,
+      39% 35%
+    );
+  }
+
+  .star-skeleton::after {
     content: "";
     position: absolute;
     top: 0;
