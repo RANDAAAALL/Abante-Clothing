@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       {/* nav-bar section */}
       <header className="rounded-b-lg sticky top-0 z-50 bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md w-full font-medium gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
 
-      <main className="flex flex-col items-center md:items-start min-h-screen md:max-w-4xl w-full mx-auto py-13">
+      <main className=" flex flex-col items-center md:items-start min-h-screen md:max-w-4xl w-full mx-auto py-11 sm:py-13">
       {/* product path title */}
       <section className="sm:px-6"><ProductPathTitle productPathTitle={product.product_item_name} /></section>
 
