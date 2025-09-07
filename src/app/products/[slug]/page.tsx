@@ -2,6 +2,7 @@
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
 import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
+import CustomerProductPreview from "@/components/ui/specific-product/customer-product-preview";
 import HeroContents from "@/components/ui/specific-product/hero-contents";
 import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
 import ProductSpecifications from "@/components/ui/specific-product/product-specifications";
@@ -68,11 +69,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <section className="mt-9"><ProductSpecifications props={product} /></section>
 
       {/* related products */}
-      <span className="mt-9 px-6 font-bold text-lg">Related Products</span>
+      <span className="mt-9 px-5 font-bold text-lg">Related Products</span>
       <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} tshirt={safeAllProducts} /></section>
 
       {/* customer product preview */}
-      <section className="mt-9"></section>
+      <section className="mt-9"><CustomerProductPreview /></section>
       </main>
 
       {/* footer section */}
