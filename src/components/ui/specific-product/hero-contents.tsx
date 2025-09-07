@@ -11,10 +11,10 @@ export default function HeroContents( {props} : { props: Partial<TshirtType>} ){
         <div className="flex flex-col items-center md:flex-row md:px-4 gap-4">
 
             {/* container */}
-            <div className={`flex gap-6 px-4 md:px-0`}>
+            <div className="flex gap-6 px-4 md:px-0">
 
                 {/* images */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col justify-center gap-1">
                 <Image src={props.product_item_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_image}`}/>
                 <Image src={props.product_item_back_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_back_image}`}/>
                 <Image src={props.product_item_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_image}`}/>
