@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <main className=" flex flex-col sm:items-start min-h-screen md:max-w-4xl w-full mx-auto py-11 sm:py-13">
      
       {/* product path title */}
-      <section className="px-5 sm:px-6"><ProductPathTitle productPathTitle={product.product_item_name} /></section>
+      <section className="sm:px-6"><ProductPathTitle productPathTitle={product.product_item_name} /></section>
 
       {/* hero contents */}
       <section className="mt-9 sm:mt-15"><HeroContents props={product}/></section>
