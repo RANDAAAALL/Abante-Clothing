@@ -8,7 +8,7 @@ export default function HeroContents( {props} : { props: Partial<TshirtType>} ){
         <>
         {props && props.product_item_image && props.product_item_back_image ? (
         <> 
-        <div className="flex flex-col items-center md:flex-row md:px-4 gap-4">
+        <div className="flex flex-col w-full md:flex-row md:px-4 justify-center gap-4">
 
             {/* container */}
             <div className="flex gap-6 px-4 md:px-0">
@@ -24,7 +24,7 @@ export default function HeroContents( {props} : { props: Partial<TshirtType>} ){
             </div>
         
             {/* container */}
-            <div className="flex flex-col gap-3 px-5 w-full sm:px-9 md:px-4 md:w-md">
+            <div className="flex flex-col gap-3 px-5 w-full md:px-4 md:w-md">
                 
                 {/* t-shirt title and price*/}
                 <div className="flex flex-row justify-between items-center md:items-start md:flex-col capitalize md:gap-1 font-bold md:mb-6">
