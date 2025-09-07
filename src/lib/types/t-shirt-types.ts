@@ -5,7 +5,7 @@ type TshirtType = {
     product_item_image: string | null,
     product_item_back_image?: string | null,
     product_item_name: string | null,
-    product_item_color: string | null,
+    product_item_color?: string | null,
     product_item_size: string | null,
     product_item_price: string | Decimal | number | null,
     product_item_material?: string | null,

@@ -2,7 +2,7 @@ import { TshirtType } from "@/lib/types/t-shirt-types";
 
 export default function ProductSpecifications({ props }: { props: Partial<TshirtType> }) {
   return (
-    <div className="w-full max-w-xl md:max-w-none mx-auto px-5 sm:px-7">
+    <div className="w-full md:max-w-none mx-auto px-5 sm:px-7">
       {/* Title */}
       <span className="font-bold text-lg">Product Specifications</span>
 

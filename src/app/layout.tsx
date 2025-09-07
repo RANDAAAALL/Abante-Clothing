@@ -45,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${metrapolis.variable} dark:bg-black-background`}>
+      <body className={`${metrapolis.variable} "dark:bg-black-background`} >
         <ClientProvider>{children}</ClientProvider>
         <Analytics />
       </body>
