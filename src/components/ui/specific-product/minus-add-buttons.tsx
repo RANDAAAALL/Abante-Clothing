@@ -24,9 +24,9 @@ export default function MinusAddButtons({style}: {style?: string}){
 
     return (
         <>
-        <button className={clsx(style)} onClick={ handleClickDecreaseQuantity}>-</button>
-        <span className={clsx(style)}>{value}</span>
-        <button className={clsx(style)} onClick={handleClickIncreaseQuantity}>+</button>
+        <button className={clsx(style, "cursor-pointer")} onClick={ handleClickDecreaseQuantity}>-</button>
+        <span className={clsx(style, "cursor-default")}>{value}</span>
+        <button className={clsx(style, "cursor-pointer")} onClick={handleClickIncreaseQuantity}>+</button>
         </>
     );
 }
