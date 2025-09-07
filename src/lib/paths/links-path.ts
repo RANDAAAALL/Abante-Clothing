@@ -4,5 +4,5 @@ import { LinksType } from "../types/links-types";
 export const LinksPath: LinksType[] = [
   {path: "/", name: "Home"},
   {path: "/about", name: "About"},
-  {path: "/products", name: "Products"},
+  {path: "/view-all-products", name: "Products"},
 ];
