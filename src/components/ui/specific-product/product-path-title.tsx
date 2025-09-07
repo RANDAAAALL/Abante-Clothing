@@ -6,7 +6,7 @@ export default function ProductPathTitle({ productPathTitle }: { productPathTitl
         <span className="font-bold">&gt;</span>
         <span>Products</span>
         <span className="font-bold">&gt;</span>
-        <span>{productPathTitle}</span>
+        <span className="capitalize">{productPathTitle}</span>
         </div></>
     );
 }
