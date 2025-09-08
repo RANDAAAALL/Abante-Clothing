@@ -42,9 +42,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     return <h1>Product not found</h1>;
   }
 
-  // <p>Price: {product.product_item_price?.toString()}</p>
-  // <p>Size: {product.product_item_size!.split(/\s+/)[0]}</p>
-
   const safeAllProducts = allProducts.map((p) => ({
     ...p,
     product_item_price: p.product_item_price?.toString()
@@ -73,12 +70,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} tshirt={safeAllProducts} /></section>
 
       {/* customer product preview */}
-      <section className="mt-9"><CustomerProductPreview /></section>
+      <section className="mt-9 px-5"><CustomerProductPreview /></section>
       </main>
 
       {/* footer section */}
-      <footer className="text-sm w-full p-4 md:p-6"><FooterSectionContent className="mt-55" styleName="md:pt-6" /></footer>
-
+      <footer className="text-sm w-full p-4 md:p-6"><FooterSectionContent className="" styleName="md:pt-6" /></footer>
       </div>
     </>
   );

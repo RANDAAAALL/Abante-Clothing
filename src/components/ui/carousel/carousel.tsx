@@ -6,9 +6,9 @@ import useEmblaCarousel, {
 } from "embla-carousel-react"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/carousel/button"
 import NextButtonIcon from "./next-button-icon"
 import PreviousButtonIcon from "./previous-button-icon"
+import { Button } from "../button"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -174,7 +174,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
 
 function CarouselPrevious({
   className,
-  variant = "outline",
+  variant = "pagination",
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
@@ -183,7 +183,7 @@ function CarouselPrevious({
   return (
     <Button
       data-slot="carousel-previous"
-      variant={variant}
+      variant="pagination"
       size={size}
       className={cn(
         "absolute size-8 rounded-full",
@@ -196,7 +196,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <PreviousButtonIcon />
+      <PreviousButtonIcon width={20} height={20}/>
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -204,7 +204,7 @@ function CarouselPrevious({
 
 function CarouselNext({
   className,
-  variant = "outline",
+  variant = "pagination",
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
@@ -213,7 +213,7 @@ function CarouselNext({
   return (
     <Button
       data-slot="carousel-next"
-      variant={variant}
+      variant={"pagination"}
       size={size}
       className={cn(
         "absolute size-8 rounded-full",
@@ -226,7 +226,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <NextButtonIcon />
+      <NextButtonIcon width={20} height={20} />
       <span className="sr-only">Next slide</span>
     </Button>
   )
