@@ -66,8 +66,8 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious  variant={"ghost"} className="hidden md:flex bg-red border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent" />
-      <CarouselNext  variant={"ghost"} className="hidden md:flex bg-transparent border-0 shadow-none focus:outline-none focus:ring-0 hover:bg-transparent"/>
+      <CarouselPrevious className="hidden md:flex" />
+      <CarouselNext className="hidden md:flex "/>
     </Carousel>
         </>
     );

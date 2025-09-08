@@ -4,7 +4,7 @@ import { useMounted } from "@/hooks/useMounted";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
-export default function PreviousButtonIcon() {
+export default function PreviousButtonIcon({ height, width }: { height: number, width: number}) {
   const { theme } = useTheme();
   const mounted = useMounted();
   
@@ -13,8 +13,8 @@ export default function PreviousButtonIcon() {
   return (
       <Image
         src={theme === "light" ? "/icons/svg/left-arrow-black.svg" : "/icons/svg/left-arrow-white.svg"}
-        height={20}
-        width={20}
+        height={height}
+        width={width}
         alt="next button icon"
       />
   );
