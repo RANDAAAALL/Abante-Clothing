@@ -3,7 +3,7 @@
 import { CustomerFeedbackURL } from "@/lib/config";
 import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "../pagination";
+import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "../pagination/pagination";
 import { Card } from "../carousel/card";
 import Image from "next/image";
 import { CustomerFeedbackType } from "@/lib/types/customer-feedback-types";
