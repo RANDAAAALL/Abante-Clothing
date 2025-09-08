@@ -1,9 +1,9 @@
 "use client"
 
 import { CustomerFeedbackURL } from "@/lib/config";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationEllipsis, PaginationNext } from "../pagination";
+import { useQuery } from "@tanstack/react-query";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "../pagination";
 import { Card } from "../carousel/card";
 import Image from "next/image";
 import { CustomerFeedbackType } from "@/lib/types/customer-feedback-types";
@@ -89,7 +89,7 @@ interface PaginationSelectionProps {
     totalItems: number;
     itemsPerPage: number;
     currentPage: number;
-    setCurrentPage: any;
+    setCurrentPage: Dispatch<SetStateAction<number>>;
 }
 
 function PaginationSelection({
@@ -99,7 +99,7 @@ function PaginationSelection({
     setCurrentPage,
     }: PaginationSelectionProps){
 
-    let pages: any = [];
+    const pages: number[] = [];
     for(let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++){
         pages.push(i);
     }
