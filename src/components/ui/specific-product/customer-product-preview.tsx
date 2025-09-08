@@ -40,9 +40,8 @@ export default function CustomerProductPreview(){
         <><span>Loading....</span></>
         ) : (
         <>
-        <div className="grid grid-cols-1 gap-2 sm:gap-1">
             {currentItems.map(( item, i ) => (
-                <Card key={i} className="mt-3 flex items-center flex-col sm:flex-row w-full px-6">
+                <Card key={i} className="dark:bg-card-black-background mt-3 flex items-center flex-col sm:flex-row w-full px-6  min-h-32">
                 
                 {/* customer image */}
                 <Image  
@@ -53,18 +52,20 @@ export default function CustomerProductPreview(){
                 className="rounded-full"/>
 
                 {/* customer name, rating, feedback */}
-                <div className="space-y-4 text-sm flex-1 shrink-1">
-                <div className="font-bold text-center sm:text-start"><span>{item.name}</span></div>
-                
-                <div className="-mt-3 sm:-mt-3 flex justify-center sm:justify-start gap-1 ">
-                <StartColorWithColor />
-                <StartColorWithColor />
-                <StartColorWithColor />
-                <StartColorWithColor />
-                <StartColorWithoutColor />
-                </div>
+                <div className="space-y-6 sm:space-y-3 text-sm flex-1 shrink-1">
+                    <div className="font-bold text-center sm:text-start"><span>{item.name}</span></div>
+                    
+                    <div className="-mt-4 sm:-mt-2 flex justify-center sm:justify-start gap-1 ">
+                    <StartColorWithColor />
+                    <StartColorWithColor />
+                    <StartColorWithColor />
+                    <StartColorWithColor />
+                    <StartColorWithoutColor />
+                    </div>
 
-                <span className="font-normal">{item.feedback}</span>
+                    <div className="text-justify hyphens-auto">
+                    <span className="font-normal">{item.feedback}</span>
+                    </div>
 
                 </div>
 
@@ -72,13 +73,11 @@ export default function CustomerProductPreview(){
                 <span className="text-right text-xs font-medium ">{item.feedbackDate}</span>
                 </Card>
             ))}
-        </div>
-        <PaginationSelection 
-        totalItems={data.length}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        />
+            <PaginationSelection 
+            totalItems={data.length}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}/>
         </>
         )}
         </>
@@ -124,8 +123,7 @@ function PaginationSelection({
             </PaginationItem>
             {currentPage}
             <PaginationItem>
-            <PaginationNext
-            onClick={() => handleNextItem()}/>
+            <PaginationNext onClick={() => handleNextItem()}/>
             </PaginationItem>
         </PaginationContent>
     </Pagination>
