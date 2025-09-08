@@ -15,6 +15,7 @@ type CustomerFeedbackType = {
     starRatingWithoutColorIconAlt: string,
     starRatingWithColorIconPath: string,
     starRatingWithColorIconAlt: string,
+    feedbackDate?: string,
 }
 
 export type { CustomerFeedbackType };
