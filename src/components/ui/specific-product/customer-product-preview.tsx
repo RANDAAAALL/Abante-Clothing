@@ -119,11 +119,18 @@ function PaginationSelection({
     <Pagination  className="mt-4 font-medium">
         <PaginationContent>
             <PaginationItem>
-            <PaginationPrevious onClick={() => handlePrevItem()}/>
+            <PaginationPrevious onClick={(e) => {
+                e.preventDefault();
+                handlePrevItem()
+            }}/>
             </PaginationItem>
             {currentPage}
             <PaginationItem>
-            <PaginationNext onClick={() => handleNextItem()}/>
+            <PaginationNext onClick={(e) => {
+                e.preventDefault();
+                handleNextItem();
+            }
+            }/>
             </PaginationItem>
         </PaginationContent>
     </Pagination>
