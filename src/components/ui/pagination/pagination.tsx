@@ -7,8 +7,8 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
-import PreviousButtonIcon from "./carousel/previous-button-icon"
-import NextButtonIcon from "./carousel/next-button-icon"
+import PreviousButtonIcon from "../carousel/previous-button-icon"
+import NextButtonIcon from "../carousel/next-button-icon"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
