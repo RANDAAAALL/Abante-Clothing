@@ -45,11 +45,10 @@ export default function TermsAndConditionsContent(){
             
             </div>  
         </div>
-
-
-        {/* footer section */}
-        <footer className="font-regular text-sm w-full"><FooterSectionContent className="mt-55" styleName="md:py-6"/></footer>
         </main>
+        
+         {/* footer section */}
+         <footer className="text-sm w-full p-4"><FooterSectionContent className="mt-55"  styleName="md:pt-6" /></footer>
         </>
     );
 }
