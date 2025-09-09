@@ -6,8 +6,8 @@ export function AboutContent(){
     return (
         <>
           {/* nav-bar section */}
-          <header className="w-full font-regular gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
-
+          <section className="z-50 sticky top-0"><NavbarContent /></section>
+          
           {/* main section */}
           <main className="flex flex-col text-center w-full md:max-w-[1980] md:mx-auto p-4 md:p-0 md:px-6">
             <div className="min-h-[500] md:min-h-screen max-w-2xl flex justify-center items-center flex-col mx-auto mt-0">

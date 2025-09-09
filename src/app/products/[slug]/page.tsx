@@ -8,7 +8,7 @@ import ProductPathTitle from "@/components/ui/specific-product/product-path-titl
 import ProductSpecifications from "@/components/ui/specific-product/product-specifications";
 import prisma from "@/lib/prisma/prisma";
 import { ProductsNameProps } from "@/lib/types/product-types";
-import { TshirtType } from "@/lib/types/t-shirt-types";
+
 
 export default async function Page({ params }: { params: Promise<{ slug: string | null }> }) {
   const { slug } = await params;
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     <div className="transition duration-500 ease-in-out bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
 
       {/* nav-bar section */}
-      <header className="rounded-b-lg sticky top-0 z-50 bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md w-full font-medium gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
+      <section className="z-50 sticky top-0"><NavbarContent /></section>
 
       <main className=" flex flex-col sm:items-start min-h-screen md:max-w-4xl w-full mx-auto py-11 sm:py-13">
      

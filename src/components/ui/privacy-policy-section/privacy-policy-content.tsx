@@ -5,7 +5,7 @@ export default function PrivacyPolicyContent(){
     return (
         <>
         {/* nav-bar section */}
-        <header className="w-full font-regular gap-10 flex p-4 max-w-screen-xl md:justify-evenly md:items-center md:mx-auto"><NavbarContent /></header>
+        <section className="z-50 sticky top-0"><NavbarContent /></section>
         
         {/* terms and conditions section */}
         <main className="text-center md:max-w-[1980px] md:mx-auto p-4 md:p-0 md:px-6">
