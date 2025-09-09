@@ -10,7 +10,7 @@ import StartColorWithColor from "./star-with-color";
 import StartColorWithoutColor from "./star-without-color";
 import { CustomerFeedbackType } from "@/lib/types/customer-feedback-types";
 
-export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback?: CustomerFeedbackType[]}){
+export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback: Partial<CustomerFeedbackType[]>}){
     const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
 
     return (
@@ -33,19 +33,19 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
                 <CardHeader>
                 <CardTitle className="flex flex-col items-center gap-4">
                 <Image className="rounded-full border-white shadow-lg "
-                src={customer.imagePath}
+                src={customer?.users?.user_image ?? "/images/png/default_avatar.png"}
                 width={120}
                 height={50}
-                alt={customer.imageAlt}/>
+                alt="customer-feedback-alt"/>
                 
-                <p className="font-bold mt-2">{customer.name}</p>
+                <p className="font-bold mt-2">{customer?.users?.username ?? "Anonymous"}</p>
                 </CardTitle>
                 </CardHeader>
 
                  {/* customer feedback */}
                 <CardContent className="font-normal py-3 my-4">
                 <p className="text-sm">
-                {customer.feedback}
+                {customer?.feedback_comment}
                 </p>
                 <QuotesUpIcon />
                 <QuotesDownIcon />

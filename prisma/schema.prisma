@@ -141,13 +141,14 @@ model returns {
 }
 
 model users {
-  user_ID         Int               @id
+  user_ID         Int               @id @default(autoincrement())
   user_image      String?           @db.VarChar(255)
   username        String?           @db.VarChar(255)
   email           String?           @db.VarChar(255)
   password        String?           @db.VarChar(255)
   role            String?           @db.VarChar(50)
-  createdAt       DateTime?         @db.DateTime(0)
+  createdAt       DateTime          @default(now()) @db.DateTime(0)
+
   address         address[]
   cart_items      cart_items[]
   deleted         deleted[]
@@ -157,6 +158,7 @@ model users {
   returns         returns[]
   users_feedback  users_feedback[]
 }
+
 
 model users_feedback {
   feedback_ID      Int            @id

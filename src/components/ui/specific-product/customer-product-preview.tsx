@@ -1,7 +1,5 @@
 "use client"
 
-import { CustomerFeedbackURL } from "@/lib/config";
-import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "../pagination/pagination";
 import { Card } from "../carousel/card";
@@ -9,51 +7,35 @@ import Image from "next/image";
 import { CustomerFeedbackType } from "@/lib/types/customer-feedback-types";
 import StartColorWithColor from "../main-section/customer-feedback-content/star-with-color";
 import StartColorWithoutColor from "../main-section/customer-feedback-content/star-without-color";
+import { DateFormatter } from "@/lib/date-formatter";
 
-export default function CustomerProductPreview(){
+export default function CustomerProductPreview( { props }: { props: CustomerFeedbackType[]} ){
     const [ currentPage, setCurrentPage ] = useState(1);
     const [ itemsPerPage, setItemsPerPage ] = useState(3);
     
-    const { data, isPending, isError, error } = useQuery({
-        queryKey: ["customer-feedbacks"],
-        queryFn: async () => {
-            const res = await fetch(`${CustomerFeedbackURL}`);
-            const data = await res.json();
-            return data.customerFeedbackMockData;
-        },
-        networkMode: "online"
-    });
-
-    
-    if(isError) return <span>Error: {error.message}</span>;
-
     const lastItemIndex = currentPage * itemsPerPage;
     const firstItemIndex = lastItemIndex - itemsPerPage;
-    console.log("All Datas: ", data);
-    const currentItems:CustomerFeedbackType[] = data?.slice(firstItemIndex, lastItemIndex);
-    console.log("Current Sliced Datas: ", currentItems);
+    // console.log("All Datas: ", data);
+    const currentCustomer = props?.slice(firstItemIndex, lastItemIndex);
+    // console.log("Current Sliced Datas: ", currentItems);
 
     return (
         <>
         <div className="mx-auto md:mx-0"><span className="mt-9 font-bold text-lg">Product Preview</span></div>
-        {isPending ? (
-        <><span>Loading....</span></>
-        ) : (
-        <>
-            {currentItems.map(( item, i ) => (
+            {currentCustomer.map(( customer, i ) => (
                 <Card key={i} className="dark:bg-card-black-background mt-3 flex items-center flex-col sm:flex-row w-full px-6  min-h-32">
                 
                 {/* customer image */}
                 <Image  
-                src={item.imagePath}
+                src={customer?.users?.user_image ?? "/images/png/default_avatar.pg"}
                 width={71}
                 height={71}
-                alt={item.imageAlt}
+                alt="customer-feedback-alt"
                 className="rounded-full"/>
 
                 {/* customer name, rating, feedback */}
                 <div className="space-y-6 sm:space-y-3 text-sm flex-1 shrink-1">
-                    <div className="font-bold text-center sm:text-start"><span>{item.name}</span></div>
+                    <div className="font-bold text-center sm:text-start"><span>{customer?.users?.username ?? "Anonymous"}</span></div>
                     
                     <div className="-mt-4 sm:-mt-2 flex justify-center sm:justify-start gap-1 ">
                     <StartColorWithColor />
@@ -64,22 +46,21 @@ export default function CustomerProductPreview(){
                     </div>
 
                     <div className="text-justify hyphens-auto">
-                    <span className="font-normal">{item.feedback}</span>
+                    <span className="font-normal">{customer?.feedback_comment}</span>
                     </div>
 
                 </div>
 
                 {/* feedback date */}
-                <span className="text-right text-xs font-medium ">{item.feedbackDate}</span>
+                <span className="text-right text-xs font-medium ">{DateFormatter(customer.feedback_date?.toString() ?? "N/A")}</span>
                 </Card>
             ))}
+
             <PaginationSelection 
-            totalItems={data.length}
+            totalItems={props.length}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}/>
-        </>
-        )}
         </>
     );
 }

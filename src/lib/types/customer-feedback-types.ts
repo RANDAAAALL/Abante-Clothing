@@ -2,20 +2,14 @@
 
 // this will define the type for the customer feedback content
 type CustomerFeedbackType = {
-    id?: number,
-    name: string,
-    imagePath: string,
-    imageAlt: string
-    feedback: string,
-    quoteUpIconPath: string,
-    quoteUpIconAlt: string,
-    quoteDownIconPath: string,
-    quoteDownIconAlt: string,
-    starRatingWithoutColorIconPath: string,
-    starRatingWithoutColorIconAlt: string,
-    starRatingWithColorIconPath: string,
-    starRatingWithColorIconAlt: string,
-    feedbackDate?: string,
-}
+    feedback_ID: number,
+    feedback_comment: string | null,
+    feedback_rating: number | null,
+    feedback_date: string | Date | null,
+    users: {
+        username: string | null,
+        user_image: string | null,
+    } | null
+};
 
 export type { CustomerFeedbackType };
