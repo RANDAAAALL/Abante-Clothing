@@ -9,7 +9,7 @@ export default async function CustomerFeedbacks(){
     return (
         <>
         {/* customers feedback image, description and rating */}
-        <CustomerImageDescContent customerFeedback={data?.customerFeedbackMockData}/>
+        <CustomerImageDescContent customerFeedback={data?.customerFeedbacks}/>
         </>
     );
 }

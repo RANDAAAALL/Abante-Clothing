@@ -16,7 +16,7 @@ export default function HeroBanner() {
         Build to <br /> Hustle.
       </p>
       <Link
-        href="/products"
+        href="/view-all-products"
         title="Shop Now"
         className="font-bold absolute bottom-7 right-5 px-15 md:bottom-20 md:right-20 py-3 border border-white text-white rounded-xl text-md hover:bg-white hover:text-black transition-all border-4"
       >

@@ -6,46 +6,28 @@ import CustomerProductPreview from "@/components/ui/specific-product/customer-pr
 import HeroContents from "@/components/ui/specific-product/hero-contents";
 import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
 import ProductSpecifications from "@/components/ui/specific-product/product-specifications";
-import prisma from "@/lib/prisma/prisma";
+import { getAllProducts } from "@/lib/db/get-all-products";
+import { getSingleProduct } from "@/lib/db/get-single-product";
+import { getAllProductsName } from "@/lib/db/get-all-products-name";
+import { ParamsProps } from "@/lib/types/params-types";
 import { ProductsNameProps } from "@/lib/types/product-types";
+import { getRelatedCustomerProductReview } from "@/lib/db/get-customer-product-review.";
 
+// export const revalidate = 60;
 
-export default async function Page({ params }: { params: Promise<{ slug: string | null }> }) {
+export default async function Page({ params }: ParamsProps ) {
   const { slug } = await params;
+  const [ SingleProduct, AllProducts, RelatedCustomerFeedbacks ] = await Promise.all([
+    getSingleProduct({slug}),
+    getAllProducts({slug}),
+    getRelatedCustomerProductReview()
+  ]);
 
-  const product = await prisma.product_items.findFirst({
-    where: { product_item_name: slug },
-    select: {
-      product_item_ID: true,
-      product_item_name: true,
-      product_item_price: true,
-      product_item_image: true,
-      product_item_back_image: true,
-      product_item_size: true,
-      product_item_material: true,
-      product_item_construction: true,
-      product_item_design_features: true,
-    },
-  });
+  if(!SingleProduct || !AllProducts || !RelatedCustomerFeedbacks ) return <h1>Erro! something wrong on fetching on db</h1>
 
-  const allProducts = await prisma.product_items.findMany({
-    select: {
-      product_item_ID: true,
-      product_item_name: true,
-      product_item_price: true,
-      product_item_image: true,
-      product_item_size: true,
-    },
-  });
-
-  if (!product || !allProducts) {
-    return <h1>Product not found</h1>;
-  }
-
-  const safeAllProducts = allProducts.map((p) => ({
-    ...p,
-    product_item_price: p.product_item_price?.toString()
-  }))
+  console.log("Single Product: ",SingleProduct);
+  console.log("All Products: ",AllProducts);
+  console.log("RelatedCustomerProductReview: ", RelatedCustomerFeedbacks);
 
   return (
     <>
@@ -57,20 +39,20 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <main className=" flex flex-col sm:items-start min-h-screen md:max-w-4xl w-full mx-auto py-11 sm:py-13">
      
       {/* product path title */}
-      <section className="sm:px-6"><ProductPathTitle productPathTitle={product.product_item_name} /></section>
+      <section className="sm:px-6"><ProductPathTitle productPathTitle={SingleProduct.product_item_name} /></section>
 
       {/* hero contents */}
-      <section className="mt-9 sm:mt-15"><HeroContents props={product}/></section>
+      <section className="mt-9 sm:mt-15"><HeroContents props={SingleProduct}/></section>
 
       {/* product specifications */}
-      <section className="mt-9"><ProductSpecifications props={product} /></section>
+      <section className="mt-9"><ProductSpecifications props={SingleProduct} /></section>
 
       {/* related products */}
       <span className="mt-9 px-5 font-bold text-lg">Related Products</span>
-      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} tshirt={safeAllProducts} /></section>
+      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} tshirt={AllProducts} /></section>
 
       {/* customer product preview */}
-      <section className="mt-9 px-5"><CustomerProductPreview /></section>
+      <section className="mt-9 px-5"><CustomerProductPreview props={RelatedCustomerFeedbacks}/></section>
       </main>
 
       {/* footer section */}
@@ -81,11 +63,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 }
 
 export async function generateStaticParams() {
-  const products = await prisma.product_items.findMany({
-    select: { product_item_name: true },
-  });
+  const ProductsName = await getAllProductsName();
+  // console.log("All Products Name:", ProductsName);
 
-  return products.map((p: ProductsNameProps) => ({
+  return ProductsName.map((p: ProductsNameProps) => ({
     slug: p.product_item_name,
   }));
 }

@@ -17,7 +17,7 @@ export default async function TshirtCarouselSkeletonCard() {
 
               {/* Content (image placeholder) */}
               <CardContent className="flex aspect-square items-center justify-center">
-                <div className="t-shirt-skeleton h-[250px] w-[250px] rounded-xl"></div>
+                <div className="t-shirt-skeleton h-[200] w-[150] rounded-xl"></div>
               </CardContent>
 
               {/* Footer */}
