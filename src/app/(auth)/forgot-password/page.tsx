@@ -12,11 +12,10 @@ export default function ForgotPassword(){
         {/* main section */}
         <main className=" text-center w-full md:mx-auto p-4 md:p-0 md:px-6 ">
         <ForgotPasswordContent />
+        </main>
 
         {/* footer section */}
-        <footer className="font-regular text-sm w-full"><FooterSectionContent className="mt-15" styleName=" md:py-6"/></footer>
-        
-        </main>
+        <footer className="text-sm w-full p-4"><FooterSectionContent styleName="md:pt-6" /></footer>
     </div>
     );
 }

@@ -20,9 +20,9 @@ export function AboutContent(){
             all while staying true to its mission of creating meaningful apparel.</p>
             </div>
 
-          {/* footer section */}
-          <footer className="font-regular text-sm w-full"><FooterSectionContent styleName="md:py-6"/></footer>
           </main>
+          {/* footer section */}
+          <footer className="text-sm w-full p-4"><FooterSectionContent styleName="md:pt-6" /></footer>
         </>
     );
 }
