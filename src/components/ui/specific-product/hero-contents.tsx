@@ -2,8 +2,9 @@ import { TshirtType } from "@/lib/types/t-shirt-types";
 import Image from "next/image";
 import MinusAddButtons from "./minus-add-buttons";
 import AddToCartAndBuyNowButtons from "./atc-and-bn-buttons";
+import { ProductProps } from "@/lib/types/product-types";
 
-export default function HeroContents( {props} : { props: Partial<TshirtType>} ){
+export default function HeroContents( {props} : { props: ProductProps<Partial<TshirtType>>} ){
     return (
         <>
         {props && props.product_item_image && props.product_item_back_image ? (

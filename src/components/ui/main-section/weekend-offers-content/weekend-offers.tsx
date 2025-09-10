@@ -8,7 +8,7 @@ export default async function WeekendOffers(){
     return (
     <>
     {/* t-shirts image and description */}
-    <TshirtsImageDescContent tshirt={data?.tShirtsPropsData} flag={false}/>
+    <TshirtsImageDescContent props={data?.tShirtsPropsData} flag={false}/>
     </>
     );
 }
