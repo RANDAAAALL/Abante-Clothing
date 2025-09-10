@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma/prisma";
 import { SlugProps } from "../types/slug-types";
+import { TshirtType } from "../types/t-shirt-types";
 
 export const getAllProducts = async ( {slug}: SlugProps) => {
     const temp = await prisma.product_items.findMany({
@@ -14,10 +15,12 @@ export const getAllProducts = async ( {slug}: SlugProps) => {
   
     if(!temp) console.error("All Products Not Found!");
   
-    const AllProducts = temp.map((p) => ({
+    const AllProducts: TshirtType[] = temp.map((p) => ({
       ...p,
-      product_item_price: p.product_item_price?.toString()
+      product_item_price: p.product_item_price?.toNumber(),
+      alt: `${p.product_item_ID}-${p.product_item_name} alt`,
+      discount: 30,
     }));
-  
+
     return AllProducts;
 }
