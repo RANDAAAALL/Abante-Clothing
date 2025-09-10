@@ -15,14 +15,9 @@ export async function GET() {
     }
   });
 
-  const tShirtsPropsData: TshirtType[] = products.map((p: TshirtType) => ({
-    product_item_ID: p.product_item_ID,
-    product_item_image: p.product_item_image,
-    product_item_name: p.product_item_name,
-    product_item_color: p.product_item_color,
-    product_item_size: p.product_item_size,
-    product_item_price: p.product_item_price,
-    alt: p.product_item_name,
+  const tShirtsPropsData = products.map((p) => ({
+    ...p,
+    alt: `${p.product_item_ID}-${p.product_item_name} alt`,
     discount: 30,
 }))
 

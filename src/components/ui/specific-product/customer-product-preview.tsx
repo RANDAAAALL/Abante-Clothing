@@ -4,12 +4,12 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "../pagination/pagination";
 import { Card } from "../carousel/card";
 import Image from "next/image";
-import { CustomerFeedbackType } from "@/lib/types/customer-feedback-types";
+import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import StartColorWithColor from "../main-section/customer-feedback-content/star-with-color";
 import StartColorWithoutColor from "../main-section/customer-feedback-content/star-without-color";
 import { DateFormatter } from "@/lib/date-formatter";
 
-export default function CustomerProductPreview( { props }: { props: CustomerFeedbackType[]} ){
+export default function CustomerProductPreview( { props }: { props: CustomerFeedbackProps[]} ){
     const [ currentPage, setCurrentPage ] = useState(1);
     const [ itemsPerPage, setItemsPerPage ] = useState(3);
     

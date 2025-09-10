@@ -8,9 +8,9 @@ import QuotesUpIcon from "./quotes-up-icon";
 import QuotesDownIcon from "./quotes-down-icon";
 import StartColorWithColor from "./star-with-color";
 import StartColorWithoutColor from "./star-without-color";
-import { CustomerFeedbackType } from "@/lib/types/customer-feedback-types";
+import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 
-export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback: Partial<CustomerFeedbackType[]>}){
+export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback: CustomerFeedbackProps[]}){
     const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
 
     return (

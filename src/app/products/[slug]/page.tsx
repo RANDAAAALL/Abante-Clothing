@@ -10,8 +10,8 @@ import { getAllProducts } from "@/lib/db/get-all-products";
 import { getSingleProduct } from "@/lib/db/get-single-product";
 import { getAllProductsName } from "@/lib/db/get-all-products-name";
 import { ParamsProps } from "@/lib/types/params-types";
-import { ProductsNameProps } from "@/lib/types/product-types";
 import { getRelatedCustomerProductReview } from "@/lib/db/get-customer-product-review.";
+import { TshirtType } from "@/lib/types/t-shirt-types";
 
 // export const revalidate = 60;
 
@@ -23,11 +23,11 @@ export default async function Page({ params }: ParamsProps ) {
     getRelatedCustomerProductReview()
   ]);
 
-  if(!SingleProduct || !AllProducts || !RelatedCustomerFeedbacks ) return <h1>Erro! something wrong on fetching on db</h1>
+  if(!SingleProduct || !AllProducts || !RelatedCustomerFeedbacks ) return <h1>Error! something wrong on fetching on db</h1>
 
-  console.log("Single Product: ",SingleProduct);
-  console.log("All Products: ",AllProducts);
-  console.log("RelatedCustomerProductReview: ", RelatedCustomerFeedbacks);
+  // console.log("Single Product: ",SingleProduct);
+  // console.log("All Products: ",AllProducts);
+  // console.log("RelatedCustomerProductReview: ", RelatedCustomerFeedbacks);
 
   return (
     <>
@@ -39,7 +39,7 @@ export default async function Page({ params }: ParamsProps ) {
       <main className=" flex flex-col sm:items-start min-h-screen md:max-w-4xl w-full mx-auto py-11 sm:py-13">
      
       {/* product path title */}
-      <section className="sm:px-6"><ProductPathTitle productPathTitle={SingleProduct.product_item_name} /></section>
+      <section className="sm:px-6"><ProductPathTitle  productPathTitle={SingleProduct?.product_item_name as string} /></section>
 
       {/* hero contents */}
       <section className="mt-9 sm:mt-15"><HeroContents props={SingleProduct}/></section>
@@ -49,7 +49,7 @@ export default async function Page({ params }: ParamsProps ) {
 
       {/* related products */}
       <span className="mt-9 px-5 font-bold text-lg">Related Products</span>
-      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} tshirt={AllProducts} /></section>
+      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllProducts} /></section>
 
       {/* customer product preview */}
       <section className="mt-9 px-5"><CustomerProductPreview props={RelatedCustomerFeedbacks}/></section>
@@ -66,7 +66,7 @@ export async function generateStaticParams() {
   const ProductsName = await getAllProductsName();
   // console.log("All Products Name:", ProductsName);
 
-  return ProductsName.map((p: ProductsNameProps) => ({
+  return ProductsName.map((p) => ({
     slug: p.product_item_name,
   }));
 }

@@ -1,8 +1,9 @@
 import prisma from "@/lib/prisma/prisma";
 import { SlugProps } from "../types/slug-types";
+import { TshirtType } from "../types/t-shirt-types";
 
 export const getSingleProduct = async ( {slug}: SlugProps) => {
-    const SingleProduct = await prisma.product_items.findFirst({
+    const temp = await prisma.product_items.findFirst({
       where: { product_item_name: slug },
       select: {
         product_item_ID: true,
@@ -16,9 +17,15 @@ export const getSingleProduct = async ( {slug}: SlugProps) => {
         product_item_design_features: true,
       },
     });
-  
-    if(!SingleProduct) console.error("Single Product Not Found!");
-  
+
+    if(!temp) console.error("Single Product Not Found!");
+    
+    const SingleProduct: Partial<TshirtType> = {
+      ...temp,
+      product_item_price: temp?.product_item_price?.toNumber(),
+    };
+
+
     return SingleProduct;
 }
 

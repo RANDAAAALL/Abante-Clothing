@@ -1,7 +1,6 @@
 
-
 // this will define the type for the customer feedback content
-type CustomerFeedbackType = {
+type CustomerFeedbackProps = {
     feedback_ID: number,
     feedback_comment: string | null,
     feedback_rating: number | null,
@@ -12,4 +11,4 @@ type CustomerFeedbackType = {
     } | null
 };
 
-export type { CustomerFeedbackType };
+export type { CustomerFeedbackProps };

@@ -6,15 +6,16 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import useAutoPlayCarousel from "@/hooks/useAutoPlayCarousel";
 import { TshirtType } from "@/lib/types/t-shirt-types";
 import Link from "next/link";
+import { ProductProps } from "@/lib/types/product-types";
 
 // flag: means to determined which kind of component is being used
 // flag = true -> it used for src/app/components/ui/weekend-offer-content/weekend-offers.tsx
 // flag = false -> it used for src/app/components/ui/specific-product/customer-product-preview.tsx
-export default function TshirtsImageDescContent({ tshirt, flag = false }:{ 
-  tshirt?: (TshirtType | Partial<TshirtType>)[],
-  flag: boolean
-}){
+export default function TshirtsImageDescContent<T extends TshirtType | TshirtType[]>(
+    { props, flag} : { props: ProductProps<T>, flag: boolean } 
+    ){
     const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
+    const list: TshirtType | TshirtType[] = Array.isArray(props) ? props : [props]; 
 
     return (
     <>
@@ -25,43 +26,43 @@ export default function TshirtsImageDescContent({ tshirt, flag = false }:{
       onMouseEnter={pluginStop}
       onMouseLeave={pluginReset}>
       <CarouselContent>
-        {tshirt && tshirt.map(( tshirt , _ ) => (
+        {list.map(( tshirt , _ ) => (
           <CarouselItem key={tshirt?.product_item_ID}>
 
             {!flag ? ( 
-            <Link href={`products/${tshirt?.product_item_name?.toString()}`} onClick={() => console.log("CLICKED: ", tshirt)} className="p-0">
+            <Link href={`products/${tshirt?.product_item_name}`} onClick={() => console.log("CLICKED: ", tshirt)} className="p-0">
               <Card className=" dark:bg-card-black-background">
                 <CardHeader>
                   {!flag && <CardTitle className="text-right">-{tshirt?.discount?.toString()}%</CardTitle>}
                 </CardHeader>
                 <CardContent className="flex aspect-square items-center justify-center">
                 <Image
-                src={tshirt?.product_item_image ?? ""}
+                src={tshirt?.product_item_image ?? "t-shirt not found"}
                 width={250}
                 height={250}
-                alt={`${tshirt?.product_item_name?.toString()}-${tshirt?.product_item_ID}`}/>
+                alt={tshirt?.alt ?? "t-shirt alt"}/>
                 </CardContent>
                 <CardFooter className="justify-between">
-                    <div>{tshirt?.product_item_name?.toUpperCase().toString()}</div>
-                    <div>P{tshirt?.product_item_price?.toString()}</div>
+                    <div>{tshirt?.product_item_name?.toUpperCase()}</div>
+                    <div>P{tshirt?.product_item_price}</div>
                 </CardFooter>
               </Card>
             </Link>
             ) : (
               <Card className=" dark:bg-card-black-background">
                 <CardHeader>
-                  {!flag && <CardTitle className="text-right">-{tshirt?.discount?.toString()}%</CardTitle>}
+                  {!flag && <CardTitle className="text-right">-{tshirt?.discount}%</CardTitle>}
                 </CardHeader>
                 <CardContent className="flex aspect-square items-center justify-center">
                 <Image
                 src={tshirt?.product_item_image ?? ""}
                 width={250}
                 height={250}
-                alt={`${tshirt?.product_item_name?.toString()}-${tshirt?.product_item_ID}`}/>
+                alt={tshirt.alt ?? "t-shirt not found"}/>
                 </CardContent>
                 <CardFooter className="justify-between">
-                    <div>{tshirt?.product_item_name?.toUpperCase().toString()}</div>
-                    <div>P{tshirt?.product_item_price?.toString()}</div>
+                    <div>{tshirt?.product_item_name?.toUpperCase()}</div>
+                    <div>P{tshirt?.product_item_price}</div>
                 </CardFooter>
               </Card>
             )}
