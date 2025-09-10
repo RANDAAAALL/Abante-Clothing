@@ -1,7 +1,7 @@
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import CustomerFeedbacks from "@/components/ui/main-section/customer-feedback-content/customer-feedbacks";
 import HeroBanner from "@/components/ui/main-section/hero-banner-content/hero-banner";
-import ViewAllProducts from "@/components/ui/main-section/weekend-offers-content/view-all-products-";
+import ViewAllProductsLink from "@/components/ui/main-section/weekend-offers-content/view-all-products-link";
 import WeekendOffers from "@/components/ui/main-section/weekend-offers-content/weekend-offers";
 import WeekedOffersTitle from "@/components/ui/main-section/weekend-offers-content/weekend-offers-title";
 import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
@@ -19,10 +19,10 @@ export default function Home() {
     <section className="z-50 sticky top-0"><NavbarContent /></section>
   
     {/* hero banner */}
-    <section className="relative w-full h-[50vh] md:h-[70vh] lg:h-[90vh]"><HeroBanner /></section>
+    <section className="relative w-full h-[50vh] md:h-[70vh]"><HeroBanner /></section>
 
     {/* main-section */}
-    <main className="flex flex-col justify-center items-center p-4 md:p-6">
+    <main className="flex flex-col justify-center items-center mx-auto p-4 sm:p-10">
 
     {/* weekend offers content */}
     <section className="flex flex-col justify-center items-center">
@@ -32,7 +32,7 @@ export default function Home() {
     <Suspense fallback={<TshirtCarouselSkeletonCard />}><WeekendOffers/></Suspense>
 
     {/* navigate to products page */}
-    <ViewAllProducts/>
+    <ViewAllProductsLink/>
     </section>
     
     {/* customers feedback content */}
@@ -46,8 +46,7 @@ export default function Home() {
     </main>
 
     {/* footer section */}
-    <footer className="text-sm w-full p-4"><FooterSectionContent className="mt-55" styleName="md:pt-6" /></footer>
-
+    <footer className="text-sm w-full p-4 md:p-6"><FooterSectionContent className="mt-55" styleName="md:pt-6" /></footer>
     </div>
   );
 }

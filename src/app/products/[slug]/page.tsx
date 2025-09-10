@@ -11,7 +11,6 @@ import { getSingleProduct } from "@/lib/db/get-single-product";
 import { getAllProductsName } from "@/lib/db/get-all-products-name";
 import { ParamsProps } from "@/lib/types/params-types";
 import { getRelatedCustomerProductReview } from "@/lib/db/get-customer-product-review.";
-import { TshirtType } from "@/lib/types/t-shirt-types";
 
 // export const revalidate = 60;
 
@@ -36,23 +35,23 @@ export default async function Page({ params }: ParamsProps ) {
       {/* nav-bar section */}
       <section className="z-50 sticky top-0"><NavbarContent /></section>
 
-      <main className=" flex flex-col sm:items-start min-h-screen md:max-w-4xl w-full mx-auto py-11 sm:py-13">
+      <main className=" flex flex-col sm:items-start min-h-screen sm:max-w-4xl w-full mx-auto p-4 sm:p-10">
      
       {/* product path title */}
-      <section className="sm:px-6"><ProductPathTitle  productPathTitle={SingleProduct?.product_item_name as string} /></section>
+      <section className="mx-auto md:mx-0"><ProductPathTitle  productPathTitle={SingleProduct?.product_item_name as string} /></section>
 
       {/* hero contents */}
-      <section className="mt-9 sm:mt-15"><HeroContents props={SingleProduct}/></section>
+      <section className="mt-9 sm:w-full"><HeroContents props={SingleProduct}/></section>
 
       {/* product specifications */}
       <section className="mt-9"><ProductSpecifications props={SingleProduct} /></section>
 
       {/* related products */}
-      <span className="mt-9 px-5 font-bold text-lg">Related Products</span>
-      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllProducts} /></section>
+      <span className="mt-9 font-bold text-lg">Related Products</span>
+      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllProducts}/></section>
 
       {/* customer product preview */}
-      <section className="mt-9 px-5"><CustomerProductPreview props={RelatedCustomerFeedbacks}/></section>
+      <section className="mt-9"><CustomerProductPreview props={RelatedCustomerFeedbacks}/></section>
       </main>
 
       {/* footer section */}
