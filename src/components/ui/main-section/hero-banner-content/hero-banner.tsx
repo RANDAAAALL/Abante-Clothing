@@ -10,16 +10,14 @@ export default function HeroBanner() {
         fill
         priority
         unoptimized={true}
-        className="object-cover"
-      />
+        className="object-cover"/>
       <p className="font-black text-white text-6xl md:text-9xl absolute top-6 md:top-20 px-8 md:px-16 lg:px-24">
         Build to <br /> Hustle.
       </p>
       <Link
         href="/view-all-products"
         title="Shop Now"
-        className="font-bold absolute bottom-7 right-5 px-15 md:bottom-20 md:right-20 py-3 border border-white text-white rounded-xl text-md hover:bg-white hover:text-black transition-all border-4"
-      >
+        className="font-bold absolute bottom-7 right-5 px-15 md:bottom-20 md:right-20 py-3 border border-white text-white rounded-xl text-md hover:bg-white hover:text-black transition-all border-4">
         Shop Now
       </Link>
     </>

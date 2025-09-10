@@ -9,13 +9,13 @@ export default function HeroContents( {props} : { props: ProductProps<Partial<Ts
         <>
         {props && props.product_item_image && props.product_item_back_image ? (
         <> 
-        <div className="flex flex-col md:flex-row md:px-4 gap-4">
+        <div className="flex flex-col md:flex-row gap-5">
 
             {/* container */}
-            <div className="flex gap-6 px-4 md:px-0 ">
+            <div className="flex gap-6 justify-center items-center">
 
                 {/* images */}
-                <div className="flex flex-col justify-center gap-1">
+                <div className="flex flex-col justify-center gap-3">
                 <Image src={props.product_item_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_image}`}/>
                 <Image src={props.product_item_back_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_back_image}`}/>
                 <Image src={props.product_item_image} width={120} height={120} alt={`${props.product_item_ID}-${props.product_item_image}`}/>
@@ -25,7 +25,7 @@ export default function HeroContents( {props} : { props: ProductProps<Partial<Ts
             </div>
         
             {/* container */}
-            <div className="flex flex-col gap-3 px-5 w-full md:px-4 md:w-md">
+            <div className="flex flex-col gap-3 md:w-md">
                 
                 {/* t-shirt title and price*/}
                 <div className="flex flex-row justify-between items-center md:items-start md:flex-col capitalize md:gap-1 font-bold md:mb-6">
@@ -45,10 +45,10 @@ export default function HeroContents( {props} : { props: ProductProps<Partial<Ts
                 </div>
 
                 {/* minus and add buttons */}
-                <div className="flex sm:justify-center md:justify-start gap-1"><MinusAddButtons style="text-center font-regular text-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black py-1 w-full md:w-auto md:px-6 rounded-sm"/></div>
+                <div className="flex w-full sm:justify-center md:justify-start gap-1"><MinusAddButtons style="text-center font-regular text-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black py-1 w-full md:w-auto md:px-6 rounded-sm"/></div>
 
                 {/* add-to-cart and buy now buttons */}
-                <div className="flex sm:justify-center md:justify-start gap-1"><AddToCartAndBuyNowButtons/></div>
+                <div className="flex w-full sm:justify-center md:justify-start gap-1"><AddToCartAndBuyNowButtons/></div>
             </div>
         </div>
         </>
