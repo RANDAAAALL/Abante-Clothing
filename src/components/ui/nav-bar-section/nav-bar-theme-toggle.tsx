@@ -13,12 +13,11 @@ export default function NavbarThemeToggle() {
     <button
       className="cursor-pointer"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      aria-label="Toggle Theme"
-    >
+      aria-label="Toggle Theme">
       <Image
         src={theme === "light" ? "/icons/svg/dark-mode.svg" : "/icons/svg/light-mode.svg"}
-        height={25}
-        width={25}
+        height={0}
+        width={22}
         alt={`${theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}`}
       />
     </button>

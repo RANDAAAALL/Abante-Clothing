@@ -3,7 +3,7 @@
 import FormsContent from "./form";
 import { forgotPasswordFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
-import { forgotPasswordSchema, forgotPasswordFormType } from "@/lib/data-access-layer/validations/auth-schema";
+import { forgotPasswordSchema, forgotPasswordFormType } from "@/lib/validations/auth-schema";
 
 export default function ForgotPasswordContent(){
     const resetFormRef = useRef<(() => void) | null>(null);

@@ -1,10 +1,10 @@
 import { LinksPath } from "@/lib/paths/links-path";
+import clsx from "clsx";
 import Link from "next/link";
 
-export default function NavbarLinks(){
+export default function NavbarLinks({ style }: { style: string}){
     return (
-        // flex space-x-4 ml-45"
-        <div className="flex flex-col space-y-6 md:space-y-0 md:space-x-6 md:flex md:flex-row">
+        <div className={clsx( style)}>
         {LinksPath.map((link, i) => (
             <Link
             key={i} href={`${link.path}`}

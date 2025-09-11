@@ -5,12 +5,12 @@ import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
 import CustomerProductPreview from "@/components/ui/specific-product/customer-product-preview";
 import HeroContents from "@/components/ui/specific-product/hero-contents";
 import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
-import ProductSpecifications from "@/components/ui/specific-product/product-specifications";
-import { getAllProducts } from "@/lib/db/get-all-products";
-import { getSingleProduct } from "@/lib/db/get-single-product";
-import { getAllProductsName } from "@/lib/db/get-all-products-name";
+import ProductSpecifications from "@/components/ui/specific-product/product-specifications-content";
+import { getAllProducts } from "@/data-access-layer/get-all-products";
+import { getSingleProduct } from "@/data-access-layer/get-single-product";
+import { getAllProductsName } from "@/data-access-layer/get-all-products-name";
 import { ParamsProps } from "@/lib/types/params-types";
-import { getRelatedCustomerProductReview } from "@/lib/db/get-customer-product-review.";
+import { getRelatedCustomerProductReview } from "@/data-access-layer/get-customer-product-review.";
 
 // export const revalidate = 60;
 
@@ -30,15 +30,15 @@ export default async function Page({ params }: ParamsProps ) {
 
   return (
     <>
-    <div className="transition duration-500 ease-in-out bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
+    <div className=" transition duration-500 ease-in-out bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
 
       {/* nav-bar section */}
       <section className="z-50 sticky top-0"><NavbarContent /></section>
 
-      <main className=" flex flex-col sm:items-start min-h-screen sm:max-w-4xl w-full mx-auto p-4 sm:p-10">
+      <main className="mt-10 flex flex-col sm:items-start min-h-screen sm:max-w-3xl w-full mx-auto p-4 md:p-0">
      
       {/* product path title */}
-      <section className="mx-auto md:mx-0"><ProductPathTitle  productPathTitle={SingleProduct?.product_item_name as string} /></section>
+      <section className="mx-auto md:mx-0"><ProductPathTitle productPathTitle={SingleProduct?.product_item_name as string} /></section>
 
       {/* hero contents */}
       <section className="mt-9 sm:w-full"><HeroContents props={SingleProduct}/></section>
