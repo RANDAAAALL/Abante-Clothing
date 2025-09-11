@@ -1,7 +1,7 @@
 import { ProductProps } from "@/lib/types/product-types";
 import { TshirtType } from "@/lib/types/t-shirt-types";
 
-export default function ProductSpecifications({ props }: { props: ProductProps<Partial<TshirtType>> }) {
+export default function ProductSpecificationsContent({ props }: { props: ProductProps<Partial<TshirtType>> }) {
   return (
     <div className="w-full md:max-w-none mx-auto">
       {/* Title */}

@@ -11,7 +11,7 @@ export default function ViewAllProductsContent(){
         <section className="z-50 sticky top-0"><NavbarContent /></section>
 
         {/* main section */}
-        <main className="w-full md:max-w-4xl mx-auto min-h-screen p-4 sm:p-10">
+        <main className="mt-10 w-full md:max-w-3xl mx-auto min-h-screen p-4 sm:p-0">
 
             {/* title  */}
             <ViewAllProductsPathTitle />

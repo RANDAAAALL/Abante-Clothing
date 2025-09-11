@@ -11,7 +11,7 @@ export default function HeroBanner() {
         priority
         unoptimized={true}
         className="object-cover"/>
-      <p className="font-black text-white text-6xl md:text-9xl absolute top-6 md:top-20 px-8 md:px-16 lg:px-24">
+      <p className="rounded-full font-black text-white text-6xl md:text-9xl absolute top-6 md:top-20 px-8 md:px-16 lg:px-24">
         Build to <br /> Hustle.
       </p>
       <Link

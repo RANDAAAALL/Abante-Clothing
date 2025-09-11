@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma/prisma";
-import { SlugProps } from "../types/slug-types";
-import { TshirtType } from "../types/t-shirt-types";
+import { SlugProps } from "../lib/types/slug-types";
+import { TshirtType } from "../lib/types/t-shirt-types";
 
 export const getSingleProduct = async ( {slug}: SlugProps) => {
     const temp = await prisma.product_items.findFirst({
