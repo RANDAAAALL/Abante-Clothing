@@ -18,7 +18,7 @@ export default async function Page({ params }: ParamsProps ) {
   const { slug } = await params;
   const [ SingleProduct, AllProducts, RelatedCustomerFeedbacks ] = await Promise.all([
     getSingleProduct({slug}),
-    getAllProducts({slug}),
+    getAllProducts(),
     getRelatedCustomerProductReview()
   ]);
 

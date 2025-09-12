@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma/prisma";
-// import { SlugProps } from "../lib/types/slug-types";
 import { TshirtType } from "../lib/types/t-shirt-types";
 
 export const getAllProducts = async () => {
