@@ -47,7 +47,7 @@ export default function Home() {
     </main>
 
     {/* footer section */}
-    <footer className="text-sm w-full p-4 md:p-6"><FooterSectionContent className="mt-55" styleName="md:pt-6" /></footer>
+    <footer className="text-sm w-full p-4"><FooterSectionContent className="mt-25" styleName="md:pt-6" /></footer>
     </div>
   );
 }
