@@ -6,6 +6,7 @@
 :root {
   --white-background: #F2F2F2;
   --black-background: #1C1C1C;
+  --input-dark-background: #6D6D6D;
   --card-dark-background: #252525;
   --card-white-background: #f8f7f7;
   --slight-gray-background: #E4E4E4;
@@ -50,6 +51,7 @@
   --color-black-background: var(--black-background);
   --color-red-background: var(--red-background);
   --color-input-background: var(--input-background);
+  --color-input-dark-background: var(--input-dark-background);
   --color-card-black-background: var(--card-dark-background);
   --color-card-white-background: var(--card-white-background);
   --color-slight-gray-background: var(--slight-gray-background);
