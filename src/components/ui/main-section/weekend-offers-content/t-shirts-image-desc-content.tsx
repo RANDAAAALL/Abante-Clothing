@@ -46,10 +46,10 @@ export default function TshirtsImageDescContent<T extends TshirtType | TshirtTyp
                   {/* card body content */}
                   <CardContent className="flex aspect-square items-center justify-center">
                     <Image
-                    src={tshirt?.product_item_image ?? "t-shirt not found"}
+                    src={tshirt?.product_item_image ?? "t-shirt-not-found"}
                     width={250}
                     height={250}
-                    alt={tshirt?.alt ?? "t-shirt alt"}/>
+                    alt={tshirt?.alt ?? "t-shirt-alt"}/>
                   </CardContent>
                 
                   {/* card footer  */}

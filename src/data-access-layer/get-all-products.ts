@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma/prisma";
 import { SlugProps } from "../lib/types/slug-types";
 import { TshirtType } from "../lib/types/t-shirt-types";
 
-export const getAllProducts = async ( {slug}: SlugProps) => {
+export const getAllProducts = async () => {
     const temp = await prisma.product_items.findMany({
       select: {
         product_item_ID: true,
