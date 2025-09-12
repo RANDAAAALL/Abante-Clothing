@@ -38,7 +38,7 @@ export default function NavbarContent() {
       <div className="hidden md:flex items-center space-x-3">
         <NavbarCart />
         <NavbarThemeToggle />
-        <NavbarButtons style={"space-x-2"} />
+        <NavbarButtons style={"space-x-1"} />
       </div>
 
       {/* Mobile menu button */}
@@ -50,9 +50,9 @@ export default function NavbarContent() {
 
       {/* Mobile overlay */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-white-background dark:bg-black-background">
-          <NavbarLinks style={"flex flex-col text-center space-y-3"} />
-          <NavbarButtons style={"flex flex-col text-center space-y-3"} />
+        <div className="fixed inset-0 z-50 flex flex-col items-center h-screen justify-center gap-2 bg-white-background dark:bg-black-background">
+          <NavbarLinks style={"flex flex-col text-center space-y-2"} />
+          <NavbarButtons style={"flex flex-col text-center space-y-2"} />
         </div>
       )}
     </header>
