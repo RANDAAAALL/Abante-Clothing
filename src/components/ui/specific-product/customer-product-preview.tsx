@@ -7,11 +7,14 @@ import Image from "next/image";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import { DateFormatter } from "@/lib/date-formatter";
 import CustomerFeedbackRating from "../customer-feedback-rating";
+import { useMediaQuery } from "react-responsive";
 
 export default function CustomerProductPreview( { props }: { props: CustomerFeedbackProps[]} ){
+    const isMobile = useMediaQuery({ maxWidth: 639 });
+
+    const itemsPerPage = isMobile ? 1 : 3;
     const [ currentPage, setCurrentPage ] = useState(1);
-    const [ itemsPerPage, setItemsPerPage ] = useState(3);
-    
+
     const lastItemIndex = currentPage * itemsPerPage;
     const firstItemIndex = lastItemIndex - itemsPerPage;
     // console.log("All Datas: ", data);
@@ -22,7 +25,7 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
         <>
         <div className="mx-auto md:mx-0"><span className="mt-9 font-bold text-lg">Product Preview</span></div>
             {currentCustomer.map(( customer, i ) => (
-                <Card key={i} className="dark:bg-card-black-background mt-3 flex items-center flex-col sm:flex-row w-full px-6 min-h-32">
+                <Card key={i} className={`dark:bg-card-black-background mt-3 flex items-center flex-col sm:flex-row px-6 min-h-32`}>
                 
                 {/* customer image */}
                 <Image  

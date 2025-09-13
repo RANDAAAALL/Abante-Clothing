@@ -51,7 +51,7 @@ export default async function Page({ params }: ParamsProps ) {
       <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllProducts}/></section>
 
       {/* customer product preview */}
-      <section className="mt-9"><CustomerProductPreview props={RelatedCustomerFeedbacks}/></section>
+      <section className="mt-9 w-full"><CustomerProductPreview props={RelatedCustomerFeedbacks}/></section>
       </main>
 
       {/* footer section */}
