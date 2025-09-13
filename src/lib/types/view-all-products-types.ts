@@ -1,6 +1,6 @@
 
-type ViewAllProductsContentProps = {
+type AllProductsContentProps = {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export type { ViewAllProductsContentProps }
+export type { AllProductsContentProps }

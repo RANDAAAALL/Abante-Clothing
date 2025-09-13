@@ -1,7 +1,7 @@
 "use client"
 
 import { FormEvent } from "react";
-import ViewAllProductsSearchbarIcon from "./view-all-products-search-icon";
+import ViewAllProductsSearchbarIcon from "./all-products-search-icon";
 import { usePathname,useRouter, useSearchParams } from "next/navigation";
 
 
@@ -22,10 +22,11 @@ export default function ViewAllProductsSearchbar(){
 
         router.replace(`${pathName}?${params.toString()}`);
     }
+    console.log("Search Rendered!");
 
     return (
         <>
-        <form onSubmit={handleSearch} className="p-3 px-4 shadow-lg bg-card-black-background rounded-sm">
+        <form onSubmit={handleSearch} className="rounded-sm">
 
         {/* container */}
         <div className="flex gap-1.5 items-center">
@@ -34,13 +35,13 @@ export default function ViewAllProductsSearchbar(){
         <ViewAllProductsSearchbarIcon />
 
         {/* searchbar field */}
-        <input className="rounded-sm outline-none text-white w-full text-sm py-1"
+        <input className="rounded-sm outline-none text-black dark:text-white w-full font-medium text-sm py-1"
         name="search"
         defaultValue={initialQuery}
         title="searchbar-input"/>
         </div>
 
-        <hr className="w-full border border-t-2 bg-input-background rounded-xl"/>
+        <hr className="w-full border border-t-2 border-black dark:border-white rounded-xl"/>
         </form>
         </>
     );

@@ -30,7 +30,7 @@ export default function Home() {
     {/* title  */}
     <WeekedOffersTitle/>
 
-    <Suspense fallback={<TshirtCarouselSkeletonCard />}><WeekendOffers/></Suspense>
+    <Suspense fallback={<TshirtCarouselSkeletonCard/>}><WeekendOffers/></Suspense>
 
     {/* navigate to products page */}
     </section>

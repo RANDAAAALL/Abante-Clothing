@@ -1,12 +1,14 @@
-import { ViewAllProductsContentProps } from "@/lib/types/view-all-products-types";
+import { AllProductsContentProps } from "@/lib/types/view-all-products-types";
 import FooterSectionContent from "../footer-section/footer-content";
 import NavbarContent from "../nav-bar-section/nav-bar-content";
-import AllProductItems from "./all-product-items";
-import ViewAllProductsPathTitle from "./view-all-products-path-title";
-import ViewAllProductsSearchbar from "./view-all-products-searchbar";
-import ViewAllProductsTitle from "./view-all-products-title";
+import ViewAllProductsPathTitle from "./all-products-path-title";
+import ViewAllProductsSearchbar from "./all-products-searchbar";
+import ViewAllProductsTitle from "./all-products-title";
+import { Suspense } from "react";
+import TshirtProductsSkeletonCard from "../skeletons/t-shirt-products-card";
+import AllFilteredProducts from "./filtered-products";
 
-export default async function ViewAllProductsContent({ searchParams }: ViewAllProductsContentProps){
+export default async function ViewAllProductsContent({ searchParams }: AllProductsContentProps){
     const query = (await searchParams).q as string ;
     return (
      <div className="transition duration-500 ease-in-out bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto"> 
@@ -27,7 +29,9 @@ export default async function ViewAllProductsContent({ searchParams }: ViewAllPr
             <section className="mt-10 text-center mb-5"><ViewAllProductsTitle /></section>
 
             {/* product items */}
-            <section className=""><AllProductItems query={query}/></section>
+            <Suspense fallback={<TshirtProductsSkeletonCard/>}>
+            <section className="font-bold grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5"><AllFilteredProducts query={query}/></section>
+            </Suspense>
 
         </main>
 
