@@ -2,7 +2,7 @@
 
 import { useMounted } from "@/hooks/useMounted";
 
-export default function StartColorWithColor() {
+export default function StarColorWithColor() {
   const mounted = useMounted();
   if (!mounted) return null;
 
