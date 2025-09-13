@@ -4,7 +4,7 @@ import { useMounted } from "@/hooks/useMounted";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
-export default function StartColorWithoutColor() {
+export default function StarColorWithoutColor() {
   const { theme } = useTheme();
   const mounted = useMounted();
   

@@ -5,9 +5,8 @@ import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, Pagi
 import { Card } from "../carousel/card";
 import Image from "next/image";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
-import StartColorWithColor from "../main-section/customer-feedback-content/star-with-color";
-import StartColorWithoutColor from "../main-section/customer-feedback-content/star-without-color";
 import { DateFormatter } from "@/lib/date-formatter";
+import CustomerFeedbackRating from "../customer-feedback-rating";
 
 export default function CustomerProductPreview( { props }: { props: CustomerFeedbackProps[]} ){
     const [ currentPage, setCurrentPage ] = useState(1);
@@ -37,13 +36,7 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
                 <div className="space-y-6 sm:space-y-3 text-sm flex-1 shrink-1">
                     <div className="font-bold text-center sm:text-start"><span>{customer?.users?.username ?? "Anonymous"}</span></div>
                     
-                    <div className="-mt-4 sm:-mt-2 flex justify-center sm:justify-start gap-1 ">
-                    <StartColorWithColor />
-                    <StartColorWithColor />
-                    <StartColorWithColor />
-                    <StartColorWithColor />
-                    <StartColorWithoutColor />
-                    </div>
+                    <CustomerFeedbackRating rating={customer?.feedback_rating} />
 
                     <div className="text-justify hyphens-auto">
                     <span className="font-normal">{customer?.feedback_comment}</span>
