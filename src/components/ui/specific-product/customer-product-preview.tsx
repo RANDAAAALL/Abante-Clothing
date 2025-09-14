@@ -1,24 +1,24 @@
 "use client"
 
-import { Dispatch, SetStateAction, useState } from "react";
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "../pagination/pagination";
+import { useState } from "react";
 import { Card } from "../carousel/card";
 import Image from "next/image";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import { DateFormatter } from "@/lib/date-formatter";
 import CustomerFeedbackRating from "../customer-feedback-rating";
 import { useMediaQuery } from "react-responsive";
+import { SlicedPaginatedData } from "@/lib/sliced-paginated-date";
+import PaginationSelection from "../pagination/paginated-selection";
 
 export default function CustomerProductPreview( { props }: { props: CustomerFeedbackProps[]} ){
     const isMobile = useMediaQuery({ maxWidth: 639 });
 
     const itemsPerPage = isMobile ? 1 : 3;
     const [ currentPage, setCurrentPage ] = useState(1);
-
     const lastItemIndex = currentPage * itemsPerPage;
     const firstItemIndex = lastItemIndex - itemsPerPage;
     // console.log("All Datas: ", data);
-    const currentCustomer = props?.slice(firstItemIndex, lastItemIndex);
+    const currentCustomer = SlicedPaginatedData({props, firstItemIndex, lastItemIndex});
     // console.log("Current Sliced Datas: ", currentItems);
 
     return (
@@ -59,57 +59,4 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
             setCurrentPage={setCurrentPage}/>
         </>
     );
-}
-
-interface PaginationSelectionProps {
-    totalItems: number;
-    itemsPerPage: number;
-    currentPage: number;
-    setCurrentPage: Dispatch<SetStateAction<number>>;
-}
-
-function PaginationSelection({
-    totalItems,
-    itemsPerPage,
-    currentPage,
-    setCurrentPage,
-    }: PaginationSelectionProps){
-
-    const pages: number[] = [];
-    for(let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++){
-        pages.push(i);
-    }
-
-    const handlePrevItem = () => {
-        if(currentPage > 1){
-            setCurrentPage(currentPage - 1);
-        }
-    }
-
-    const handleNextItem = () => {
-        if(currentPage < pages.length){
-            setCurrentPage(currentPage + 1);
-        }
-    }
-    
-    return (
-    <Pagination  className="mt-4 font-medium">
-        <PaginationContent>
-            <PaginationItem>
-            <PaginationPrevious onClick={(e) => {
-                e.preventDefault();
-                handlePrevItem()
-            }}/>
-            </PaginationItem>
-            {currentPage}
-            <PaginationItem>
-            <PaginationNext onClick={(e) => {
-                e.preventDefault();
-                handleNextItem();
-            }
-            }/>
-            </PaginationItem>
-        </PaginationContent>
-    </Pagination>
-    );    
 }

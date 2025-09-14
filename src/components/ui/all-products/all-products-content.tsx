@@ -7,9 +7,13 @@ import ViewAllProductsTitle from "./all-products-title";
 import { Suspense } from "react";
 import TshirtProductsSkeletonCard from "../skeletons/t-shirt-products-card";
 import AllFilteredProducts from "./filtered-products";
+import { filteredProductItems } from "@/lib/filtered-product-items";
+import AllProductsWithPaginationContent from "./all-products-with-pagination-content";
 
 export default async function ViewAllProductsContent({ searchParams }: AllProductsContentProps){
     const query = (await searchParams).q as string ;
+    const data = await filteredProductItems({query});
+
     return (
      <div className="transition duration-500 ease-in-out bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto"> 
 
@@ -30,7 +34,7 @@ export default async function ViewAllProductsContent({ searchParams }: AllProduc
 
             {/* product items */}
             <Suspense fallback={<TshirtProductsSkeletonCard/>}>
-            <section className="font-bold grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5"><AllFilteredProducts query={query}/></section>
+            <section><AllProductsWithPaginationContent props={data}/></section>
             </Suspense>
 
         </main>
