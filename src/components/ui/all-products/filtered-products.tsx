@@ -1,14 +1,24 @@
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "../carousel/card";
 import Image from "next/image";
-import { filteredProductItems } from "@/lib/filtered-product-items";
-import { SearchQuerytypes } from "@/lib/types/search-query-types";
+import { SlicedPaginatedData } from "@/lib/sliced-paginated-date";
+import { TshirtType } from "@/lib/types/t-shirt-types";
 
-export default async function AllFilteredProducts({query}: SearchQuerytypes){
-    const filteredItems = await filteredProductItems({query});
+export default function AllFilteredProducts({
+    props,
+    currentPage,
+    itemsPerPage,
+    }: {
+    props: TshirtType[];
+    currentPage: number;
+    itemsPerPage: number;
+}){
+    const lastItemIndex = currentPage * itemsPerPage;
+    const firstItemIndex = lastItemIndex - itemsPerPage;
+    const data = SlicedPaginatedData({props, firstItemIndex, lastItemIndex});
     return (
         <>
-            {filteredItems.map((item, _ ) => (
+            {data.map((item, _ ) => (
                 <Link key={item.product_item_ID} href={`/products/${item.product_item_name}`}>
 
                     {/* card container */}
