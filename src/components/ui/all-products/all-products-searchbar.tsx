@@ -1,15 +1,17 @@
 "use client"
 
-import { FormEvent } from "react";
+import { FormEvent, useMemo } from "react";
 import ViewAllProductsSearchbarIcon from "./all-products-search-icon";
 import { usePathname,useRouter, useSearchParams } from "next/navigation";
-
 
 export default function ViewAllProductsSearchbar(){
     const router = useRouter();
     const pathName = usePathname();
     const searchParams = useSearchParams();
-    const initialQuery = searchParams.get("q")?.toString() || "";
+
+    const initialQuery = useMemo(() => {
+        return searchParams.get("q")?.toString() || "";
+    }, [searchParams]);
 
     const handleSearch = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();

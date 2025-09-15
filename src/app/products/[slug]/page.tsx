@@ -6,23 +6,23 @@ import CustomerProductPreview from "@/components/ui/specific-product/customer-pr
 import HeroContents from "@/components/ui/specific-product/hero-contents";
 import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
 import ProductSpecifications from "@/components/ui/specific-product/product-specifications-content";
-import { getAllProducts } from "@/data-access-layer/get-all-products";
+import { getAllRelatedProducts } from "@/data-access-layer/get-all-products";
 import { getSingleProduct } from "@/data-access-layer/get-single-product";
 import { getAllProductsName } from "@/data-access-layer/get-all-products-name";
 import { ParamsProps } from "@/lib/types/params-types";
-import { getRelatedCustomerProductReview } from "@/data-access-layer/get-customer-product-review.";
+import { getAllRelatedCustomerProductReview } from "@/data-access-layer/get-all-related-customer-product-review";
 
 // export const revalidate = 60;
 
 export default async function Page({ params }: ParamsProps ) {
   const { slug } = await params;
-  const [ SingleProduct, AllProducts, RelatedCustomerFeedbacks ] = await Promise.all([
+  const [ SingleProduct, AllRelatedProducts, AllRelatedCustomerFeedbacks ] = await Promise.all([
     getSingleProduct({slug}),
-    getAllProducts(),
-    getRelatedCustomerProductReview()
+    getAllRelatedProducts(),
+    getAllRelatedCustomerProductReview()
   ]);
 
-  if(!SingleProduct || !AllProducts || !RelatedCustomerFeedbacks ) return <h1>Error! something wrong on fetching on db</h1>
+  if(!SingleProduct || !AllRelatedProducts || !AllRelatedCustomerFeedbacks ) return <h1>Error! something wrong on fetching on db</h1>
 
   // console.log("Single Product: ",SingleProduct);
   // console.log("All Products: ",AllProducts);
@@ -48,10 +48,10 @@ export default async function Page({ params }: ParamsProps ) {
 
       {/* related products */}
       <span className="mt-9 font-bold text-lg">Related Products</span>
-      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllProducts}/></section>
+      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllRelatedProducts}/></section>
 
       {/* customer product preview */}
-      <section className="mt-9 w-full"><CustomerProductPreview props={RelatedCustomerFeedbacks}/></section>
+      <section className="mt-9 w-full"><CustomerProductPreview props={AllRelatedCustomerFeedbacks}/></section>
       </main>
 
       {/* footer section */}
