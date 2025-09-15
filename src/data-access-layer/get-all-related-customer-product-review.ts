@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma/prisma";
 
 
-export const getRelatedCustomerProductReview =  async () => {
+export const getAllRelatedCustomerProductReview =  async () => {
     const customerFeedbacks = await prisma.users_feedback.findMany({
         select: {
           feedback_ID: true,
