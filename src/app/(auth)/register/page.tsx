@@ -1,6 +1,6 @@
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import RegisterFormContent from "@/components/ui/form-content/register-form-content";
-import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
+import NavbarContent from "@/components/ui/navbar-section/navbar-content";
 
 export default function Register(){
     return (
