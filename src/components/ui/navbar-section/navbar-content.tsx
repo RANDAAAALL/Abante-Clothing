@@ -1,11 +1,11 @@
 "use client"
-import NavbarCart from "./nav-bar-cart";
-import NavbarLinks from "./nav-bar-links";
-import NavbarLogo from "./nav-bar-logo";
-import MenuBar from "./nav-bar-menu";
+import NavbarCart from "./navbar-cart";
+import NavbarLinks from "./navbar-links";
+import NavbarLogo from "./navbar-logo";
+import MenuBar from "./navbar-menu";
 import { useEffect, useState } from "react";
-import NavbarThemeToggle from "./nav-bar-theme-toggle";
-import NavbarButtons from "./nav-bar-buttons";
+import NavbarThemeToggle from "./navbar-theme-toggle";
+import NavbarButtons from "./navbar-buttons";
 
 export default function NavbarContent() {
   const [isOpen, setIsOpen] = useState(false);

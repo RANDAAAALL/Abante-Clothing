@@ -1,5 +1,5 @@
 import FooterSectionContent from "../footer-section/footer-content";
-import NavbarContent from "../nav-bar-section/nav-bar-content";
+import NavbarContent from "../navbar-section/navbar-content";
 
 
 export function AboutContent(){

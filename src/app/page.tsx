@@ -5,7 +5,7 @@ import HeroBanner from "@/components/ui/main-section/hero-banner-content/hero-ba
 import ViewAllProductsLink from "@/components/ui/main-section/weekend-offers-content/view-all-products-link";
 import WeekendOffers from "@/components/ui/main-section/weekend-offers-content/weekend-offers";
 import WeekedOffersTitle from "@/components/ui/main-section/weekend-offers-content/weekend-offers-title";
-import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
+import NavbarContent from "@/components/ui/navbar-section/navbar-content";
 import CustomerFeedbackCarouselSkeleton from "@/components/ui/skeletons/customer-feedback-carousel-card";
 import TshirtCarouselSkeletonCard from "@/components/ui/skeletons/t-shirt-carousel-card";
 import { Suspense } from "react";

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import NavbarLogo from "../nav-bar-section/nav-bar-logo";
+import NavbarLogo from "../navbar-section/navbar-logo";
 import FooterPPC from "./footer-pptc";
 import FooterSocmedIcons from "./footer-socmed-icons";
 

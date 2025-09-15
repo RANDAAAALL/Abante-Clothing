@@ -1,6 +1,6 @@
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import ForgotPasswordContent from "@/components/ui/form-content/forgot-password-form-content";
-import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
+import NavbarContent from "@/components/ui/navbar-section/navbar-content";
 
 export default function ForgotPassword(){
     return (

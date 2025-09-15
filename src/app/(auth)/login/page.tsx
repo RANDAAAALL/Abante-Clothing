@@ -1,6 +1,6 @@
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import LoginFormContent from "@/components/ui/form-content/login-form-content";
-import NavbarContent from "@/components/ui/nav-bar-section/nav-bar-content";
+import NavbarContent from "@/components/ui/navbar-section/navbar-content";
 
 export default function Login(){
 

@@ -16,7 +16,7 @@ export const getAllRelatedProducts = async () => {
     if(!temp) console.error("All Products Not Found!");
   
     const AllRelatedProducts: TshirtType[] = temp.map((p) => ({
-      ...p,
+      ...p, 
       product_item_price: p.product_item_price?.toNumber(),
       alt: `${p.product_item_ID}-${p.product_item_name} alt`,
       discount: 30,
