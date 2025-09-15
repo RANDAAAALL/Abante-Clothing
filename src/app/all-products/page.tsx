@@ -4,10 +4,8 @@ import ViewAllProductsTitle from "@/components/ui/all-products/all-products-titl
 import AllProductsWithPagination from "@/components/ui/all-products/all-products-with-pagination";
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import NavbarContent from "@/components/ui/navbar-section/navbar-content";
-import TshirtProductsSkeletonCard from "@/components/ui/skeletons/t-shirt-products-card";
 import { filteredProductItems } from "@/lib/filtered-product-items";
 import { AllProductsContentProps } from "@/lib/types/view-all-products-types";
-import { Suspense } from "react";
 
 export default async function ViewAllProducts({searchParams}: AllProductsContentProps){
     const query = (await searchParams).q as string ;
@@ -32,11 +30,7 @@ export default async function ViewAllProducts({searchParams}: AllProductsContent
             <section className="mt-10 text-center mb-5"><ViewAllProductsTitle /></section>
 
             {/* product items */}
-            <Suspense fallback={<TshirtProductsSkeletonCard/>}>
-                <section>
-                    <AllProductsWithPagination props={data}/>
-                </section>
-            </Suspense>
+            <section><AllProductsWithPagination props={data}/></section>
 
         </main>
 
