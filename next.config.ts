@@ -1,16 +1,19 @@
 // next.config.ts
 import type { NextConfig } from "next";
+import withBundleAnalyzer from "@next/bundle-analyzer";
 
+// your base config
 const nextConfig: NextConfig = {
   experimental: {
     ppr: "incremental",
   },
-
-  // 👇 must be at top level, not inside experimental
   allowedDevOrigins: [
-    process.env.LOCAL_LAN_IP_ADDRESS ??  "http://localhost:3000",
+    process.env.LOCAL_LAN_IP_ADDRESS ?? "http://localhost:3000",
     "https://abante-clothing.vercel.app/",
   ],
 };
 
-export default nextConfig;
+// wrap it with bundle analyzer
+export default withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+})(nextConfig);
