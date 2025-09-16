@@ -14,7 +14,7 @@ export const experimental_ppr = true;
 
 export default function Home() {
   return (
-    <div className="relative transition duration-500 ease-in-out bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
+    <div className="relative bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
 
     {/* nav-bar section */}
     <section className="z-50 sticky top-0"><NavbarContent /></section>
