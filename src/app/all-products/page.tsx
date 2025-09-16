@@ -1,15 +1,15 @@
 import ViewAllProductsPathTitle from "@/components/ui/all-products/all-products-path-title";
 import ViewAllProductsSearchbar from "@/components/ui/all-products/all-products-searchbar";
 import ViewAllProductsTitle from "@/components/ui/all-products/all-products-title";
-import AllProductsWithPagination from "@/components/ui/all-products/all-products-with-pagination";
+import AllProductsWithPaginationContent from "@/components/ui/all-products/all-products-with-pagination-content";
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import NavbarContent from "@/components/ui/navbar-section/navbar-content";
-import { filteredProductItems } from "@/lib/filtered-product-items";
+import TshirtProductsSkeletonCard from "@/components/ui/skeletons/t-shirt-products-card";
 import { AllProductsContentProps } from "@/lib/types/view-all-products-types";
+import { Suspense } from "react";
 
 export default async function ViewAllProducts({searchParams}: AllProductsContentProps){
     const query = (await searchParams).q as string ;
-    const data = await filteredProductItems({query});
 
     return (
      <div className="transition duration-500 ease-in-out bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto"> 
@@ -30,7 +30,11 @@ export default async function ViewAllProducts({searchParams}: AllProductsContent
             <section className="mt-10 text-center mb-5"><ViewAllProductsTitle /></section>
 
             {/* product items */}
-            <section><AllProductsWithPagination props={data}/></section>
+            <Suspense fallback={<TshirtProductsSkeletonCard />}>
+                <section>
+                    <AllProductsWithPaginationContent query={query}/>
+                </section>
+            </Suspense>
 
         </main>
 

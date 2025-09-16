@@ -40,7 +40,8 @@ export default function ViewAllProductsSearchbar(){
         <input className="rounded-sm outline-none text-black dark:text-white w-full font-medium text-sm py-1"
         name="search"
         defaultValue={initialQuery}
-        title="searchbar-input"/>
+        title="searchbar-input"
+        placeholder="Search by name, color or price..."/>
         </div>
 
         <hr className="w-full border border-t-2 border-black dark:border-white rounded-xl"/>
