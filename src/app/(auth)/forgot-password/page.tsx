@@ -4,7 +4,7 @@ import NavbarContent from "@/components/ui/navbar-section/navbar-content";
 
 export default function ForgotPassword(){
     return (
-        <div className="transition duration-500 ease-in-out bg-white dark:bg-black-background dark:text-white text-black w-full max-w-[1980] mx-auto">
+        <div className="bg-white dark:bg-black-background dark:text-white text-black w-full max-w-[1980] mx-auto">
         
         {/* nav-bar section */}
         <section className="z-50 sticky top-0"><NavbarContent /></section>
