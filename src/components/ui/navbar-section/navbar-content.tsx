@@ -36,14 +36,14 @@ export default function NavbarContent() {
 
       {/* Desktop actions */}
       <div className="hidden md:flex items-center space-x-3">
-        <NavbarCart />
+        <NavbarCart flag={false} width={25} height={25}/>
         <NavbarThemeToggle />
         <NavbarButtons style={"space-x-1"} />
       </div>
 
       {/* Mobile menu button */}
       <div className="md:hidden ml-auto flex items-center space-x-3 mr-4.5">
-        <NavbarCart />
+        <NavbarCart flag={false} width={25} height={25}/>
         <NavbarThemeToggle />
         <MenuBar isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>

@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function NavbarCart() {
+export default function NavbarCart({flag, width, height}: {flag: boolean, width: number, height: number}) {
   const { theme } = useTheme(); 
   const mounted = useMounted();
   
@@ -16,15 +16,25 @@ export default function NavbarCart() {
 
   return (
     <>
+      {!flag ? (
       <Link href="/cart-modal">
         <Image
           suppressHydrationWarning
           src={iconPath}
-          height={25}
-          width={25}
+          height={height}
+          width={width}
           alt="grocery-store-icon"
-        />
+        />  
       </Link>
+      ): (
+        <Image
+        suppressHydrationWarning
+        src={iconPath}
+        height={height}
+        width={width}
+        alt="grocery-store-icon"
+      />  
+      )}
     </>
   );
 }
