@@ -59,7 +59,7 @@ export default function CartModal() {
 
                         <div className="mt-8 mx-auto text-sm text-center space-y-3.5">
                             <p className="font-bold"> Total: P{selectedItem.reduce((acc, item) => acc + (item.product.product_item_price ?? 0) * item.selectedSizeAndQty.qty, 0)}</p>
-                            {/* <button onClick={() => router.replace("/login")} className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-sm py-3 px-7">Checkout</button> */}
+                            <Link href="#" className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-sm py-3 px-7">Checkout</Link>
                         </div>
                         </>
                     ) : ( 
