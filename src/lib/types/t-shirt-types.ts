@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
 
 type TshirtType = {
     product_item_ID: number | null,

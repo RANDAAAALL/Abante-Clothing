@@ -1,25 +1,73 @@
 "use client";
 
+import PreviousButtonIcon from "@/components/ui/carousel/previous-button-icon";
 import NavbarCart from "@/components/ui/navbar-section/navbar-cart";
+import { useCartItems } from "@/lib/store/cart-items";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import React from "react";
+import { useEffect } from "react";
 
 export default function CartModal() {
+  const { selectedItem } = useCartItems();
+
   const router = useRouter();
+
+  useEffect(() => {
+    document.documentElement.style.overflow = "hidden"; 
+    return () => {
+      document.documentElement.style.overflow = ""; 
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40">
-        <div className="bg-card-white-background dark:bg-card-black-background rounded-lg shadow-lg w-[400px] max-w-[90%] p-6">
-            <div className="flex justify-between items-center">    
+        <div className="bg-card-white-background dark:bg-card-black-background rounded-lg shadow-lg w-[600px] max-w-[90%] p-7 py-8">
+           
+            <div className="flex justify-between items-center mb-4">    
                 <div className="flex space-x-1">
-                    <p className="font-medium text-md">Cart</p>
-                    <NavbarCart flag={true} width={18} height={18}/>
+                    <p className="font-medium text-xl">Cart</p>
+                    <NavbarCart flag={true} width={22} height={22}/>
                 </div>
-                <button className="text-black dark:text-white font-bold cursor-pointer" onClick={() => router.back()}>X</button>
+                <button className="text-black dark:text-white font-bold cursor-pointer" onClick={() => router.back()}>
+                    <PreviousButtonIcon width={15} height={15}/>
+                </button>
             </div>
 
-                <div className="h-50 flex justify-center items-center">
-                    <p className="text-sm text-center text-black dark:text-white">Your cart is currently empty.</p>
-                </div>
+                    {selectedItem.length >= 1 ? (
+                            <>
+                        <div className="w-full flex flex-col p-2 max-h-75 overflow-y-auto snap-y">      
+                        {selectedItem.map((item, i ) => (
+                            <React.Fragment key={i}>
+                            <div className="relative flex items-center w-full justify-between px-2 snap-center">
+
+                                <Image className="mt-5 mb-4" src={item.product.product_item_image ?? "t-shirt not found"} width={100} height={100} alt={`${item.product.product_item_ID}-${item.product.product_item_back_image}`} />        
+                               
+                                <div className="flex flex-1 ml-5 flex-col font-medium text-sm md:text-md">
+                                    <p className="capitalize">{item.product.product_item_name} - {item.selectedSizeAndQty.size}</p>
+                                    <p>{item.selectedSizeAndQty.qty} x P{item.product.product_item_price}</p>
+                                </div>
+                                
+                                <button className="text-black dark:text-white font-bold cursor-pointer">x</button>
+                                
+                            </div>
+                            <hr className="border-black dark:border-white border-t-2"/>
+                            </React.Fragment>
+                        ))}
+                        </div>
+
+                        <div className="mt-8 mx-auto text-sm text-center space-y-3.5">
+                            <p className="font-bold"> Total: P{selectedItem.reduce((acc, item) => acc + (item.product.product_item_price ?? 0) * item.selectedSizeAndQty.qty, 0)}</p>
+                            {/* <button onClick={() => router.replace("/login")} className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-sm py-3 px-7">Checkout</button> */}
+                        </div>
+                        </>
+                    ) : ( 
+                    <>
+                         <p className="text-sm text-black dark:text-white h-50 flex items-center justify-center">Your cart is currently empty.</p>
+                    </>
+                    )}
+
         </div>
     </div>
   );
