@@ -15,7 +15,7 @@ export default function TshirtSizesButtons(){
             key={i}
             className={`font-regular text-xs mt-1 cursor-pointer rounded-sm w-10 py-2
             ${selectedSize === size
-            ? "bg-gray-400 text-white"
+            ? "bg-[#666666] text-white"
             : "bg-card-black-background text-white dark:bg-card-white-background dark:text-black"}`}>
             {size}
             </button>
