@@ -26,7 +26,7 @@ export default function NavbarContent() {
   return (
     <header
       className={`${isScrolled ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md" : ""} 
-        w-full font-medium flex items-center max-w-5xl mx-auto p-4`}>
+        w-full font-medium flex  items-center max-w-5xl mx-auto p-4`}>
 
       {/* Logo always visible */}
       <NavbarLogo LogoHeight={65} LogoWidth={65} flag={true} />
