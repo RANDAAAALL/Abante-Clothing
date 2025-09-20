@@ -16,6 +16,8 @@ type CartItemsPropsState = {
     selectedSize: string | null;
     quantity: number;
     selectedItem: SelectedItemProps[];
+
+    isOpen: boolean,
 }
 
 type CartItemsPropsActions = {
@@ -30,6 +32,9 @@ type CartItemsPropsActions = {
 
     setSelectedItems: (item: ProductProps<Partial<TshirtType>>) => void;
     clearSelectedItem: () => void; 
+
+    OpenModal: () => void,
+    CloseModal: () => void,
 }
 
 export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>((set) => ({
@@ -98,5 +103,9 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
     }),  
 
     clearSelectedItem: () => set({ selectedItem: [] }),
+
+    isOpen: false,
+    OpenModal: () => set({ isOpen: true }),
+    CloseModal: () => set({ isOpen: false }),
 }));
 

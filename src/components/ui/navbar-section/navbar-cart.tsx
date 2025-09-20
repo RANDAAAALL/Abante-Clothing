@@ -4,16 +4,14 @@ import { useMounted } from "@/hooks/useMounted";
 import { useCartItems } from "@/lib/store/cart-items";
 import { useTheme } from "next-themes"; 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React from "react";
 
 // flag - true means: icon itself isn't clickable inside the cart modal
 // flag - false means: icon is clickable in the navbar
 export default function NavbarCart({flag, width, height}: {flag: boolean, width: number, height: number}) {
   const { theme } = useTheme(); 
   const mounted = useMounted();
-  const router = useRouter();
-  const { selectedItem } = useCartItems();
+  const { selectedItem, OpenModal } = useCartItems();
+  // console.log(OpenModal);
 
   if (!mounted) return null;
 
@@ -28,7 +26,7 @@ export default function NavbarCart({flag, width, height}: {flag: boolean, width:
         </span>
       )}
       {!flag ? (
-        <button className="cursor-pointer" onClick={() => router.push("/cart-items", {scroll: false})}>
+        <button className="cursor-pointer" onClick={OpenModal}>
             <Image
             suppressHydrationWarning
             src={iconPath}

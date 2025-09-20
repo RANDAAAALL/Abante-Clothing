@@ -20,7 +20,7 @@ export default function TshirtsImageDescContent<T extends TshirtType | TshirtTyp
 
     return (
     <>
-    <Carousel className={`${flag && "mt-3 mx-auto md:flex-start md:justify-start"} font-bold w-full max-w-xs md:max-w-xl lg:max-w-4xl xl:max-w-none'}`} opts={{
+    <Carousel className={`${flag ? "mt-3 mx-auto md:flex-start md:justify-start lg:max-w-[865px]" : "lg:max-w-4xl"}  font-bold w-full max-w-xs md:max-w-xl xl:max-w-none'}`} opts={{
       align: "start",
       loop: true }}
       plugins={[plugin.current]}

@@ -6,11 +6,9 @@ import PreviousButtonIcon from "../carousel/previous-button-icon";
 import NavbarCart from "../navbar-section/navbar-cart";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export default function CartModal(){
     const { selectedItem, CloseModal, isOpen } = useCartItems();
-    const pathName = usePathname();
 
     useEffect(() => { document.body.style.overflow = isOpen ? "hidden" : ""; },[isOpen]);
 
