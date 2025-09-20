@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { metrapolis } from "../lib/custom-font";
 import "../styles/globals.css";
 import ClientProvider from "@/context/client-providers";
+import CartModal from "@/components/ui/modal/cart-modal";
 
 // SEO Config
 export const metadata: Metadata = {
@@ -40,16 +41,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
+  // modal,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
+  // modal: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${metrapolis.variable} "dark:bg-black-background relative`} >
         <ClientProvider>
-          {modal}
+          {/* {modal} */}
+          <CartModal />
           {children}
           </ClientProvider>
         <Analytics />

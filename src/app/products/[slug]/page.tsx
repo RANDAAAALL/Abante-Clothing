@@ -35,7 +35,7 @@ export default async function Page({ params }: ParamsProps ) {
       {/* nav-bar section */}
       <section className="z-50 sticky top-0"><NavbarContent /></section>
 
-      <main className="mt-10 flex flex-col sm:items-start min-h-screen sm:max-w-3xl w-full mx-auto p-4 md:p-0">
+      <main className="mt-10 flex flex-col sm:items-start min-h-screen sm:max-w-4xl w-full mx-auto p-4">
      
       {/* product path title */}
       <section className="mx-auto md:mx-0"><ProductPathTitle productPathTitle={SingleProduct?.product_item_name as string} /></section>
