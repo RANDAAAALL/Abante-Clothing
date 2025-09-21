@@ -11,14 +11,18 @@ export default function PhotoPage({
   const { slug, photoSlug } = use(params);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-black">
+    <div className="relative h-screen bg-black">
       <Image
         src={photoSlug === "back" ? 
         `${`/images/png/abante-t-shirt-${slug}-back-image.png`}` :
+        photoSlug === "size-chart" ?
+        `${`/images/png/abante-t-shirt-size-chart-image.png`}` :
         `${`/images/png/abante-t-shirt-${slug}.png`}`}
         alt={`${slug}-${photoSlug}`}
-        width={500}
-        height={500}/>
+        style={{ objectFit: 'contain', padding: '50px'}}
+        sizes="auto"
+        fill
+        priority={true}/>
     </div>
   );
 }
