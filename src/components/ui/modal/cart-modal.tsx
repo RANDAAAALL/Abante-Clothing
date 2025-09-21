@@ -20,12 +20,12 @@ export default function CartModal(){
           <div className="flex justify-between items-center mb-4">
             <div className="flex space-x-1">
               <p className="font-medium text-xl">Cart</p>
-              <NavbarCart flag={true} width={22} height={22} />
+              <NavbarCart flag={true}/>
             </div>
             <button
               className="text-black dark:text-white font-bold cursor-pointer"
               onClick={CloseModal}>
-              <PreviousButtonIcon width={15} height={15} />
+              <PreviousButtonIcon/>
             </button>
           </div>
   

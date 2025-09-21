@@ -7,7 +7,7 @@ import Image from "next/image";
 
 // flag - true means: icon itself isn't clickable inside the cart modal
 // flag - false means: icon is clickable in the navbar
-export default function NavbarCart({flag, width, height}: {flag: boolean, width: number, height: number}) {
+export default function NavbarCart({flag}: {flag: boolean}) {
   const { theme } = useTheme(); 
   const mounted = useMounted();
   const { selectedItem, OpenModal } = useCartItems();
@@ -19,28 +19,34 @@ export default function NavbarCart({flag, width, height}: {flag: boolean, width:
     theme === "light" ? "/icons/svg/grocery-store-black.svg" : "/icons/svg/grocery-store-white.svg";
 
   return (
-    <div className="relative flex">
+    <div className="relative flex items-center">
       {selectedItem.length >= 1 && !flag && (
         <span className="absolute -top-2 -right-1.5 bg-red-600 text-white text-[13px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">
         {selectedItem.length}
         </span>
       )}
       {!flag ? (
-        <button className="cursor-pointer" onClick={OpenModal}>
+        <button className="relative w-[25] h-[25] cursor-pointer" onClick={OpenModal}>
             <Image
             suppressHydrationWarning
             src={iconPath}
-            height={height}
-            width={width}
+            style={{ objectFit: 'contain'}}
+            sizes="auto"
+            fill
+            priority={true}
             alt="grocery-store-icon"/>  
         </button>
       ): (
+        <div className="relative w-[22] h-[22]"> 
         <Image
-        suppressHydrationWarning
-        src={iconPath}
-        height={height}
-        width={width}
-        alt="grocery-store-icon"/>  
+          suppressHydrationWarning
+          src={iconPath}
+          style={{ objectFit: 'contain'}}
+          sizes="auto"
+          fill
+          priority={true}
+          alt="grocery-store-icon"/>  
+          </div>
         )}
     </div>
   );

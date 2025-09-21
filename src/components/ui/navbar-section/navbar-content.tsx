@@ -29,21 +29,21 @@ export default function NavbarContent() {
         w-full font-medium flex  items-center max-w-5xl mx-auto p-4`}>
 
       {/* Logo always visible */}
-      <NavbarLogo LogoHeight={65} LogoWidth={65} flag={true} />
+      <NavbarLogo flag={true} />
 
       {/* Desktop links */}
       <div className="hidden md:flex flex-1 justify-center md:ml-30"><NavbarLinks style={"space-x-6"} /> </div>
 
       {/* Desktop actions */}
       <div className="hidden md:flex items-center space-x-3">
-        <NavbarCart flag={false} width={25} height={25}/>
+        <NavbarCart flag={false}/>
         <NavbarThemeToggle />
         <NavbarButtons style={"space-x-1"} />
       </div>
 
       {/* Mobile menu button */}
       <div className="md:hidden ml-auto flex items-center space-x-3 mr-4.5">
-        <NavbarCart flag={false} width={25} height={25}/>
+        <NavbarCart flag={false}/>
         <NavbarThemeToggle />
         <MenuBar isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
