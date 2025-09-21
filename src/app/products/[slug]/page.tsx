@@ -41,7 +41,7 @@ export default async function Page({ params }: ParamsProps ) {
       <section className="mx-auto md:mx-0"><ProductPathTitle productPathTitle={SingleProduct?.product_item_name as string} /></section>
 
       {/* hero contents */}
-      <section className="mt-9 sm:w-full"><HeroContents props={SingleProduct}/></section>
+      <section className="mt-9 sm:w-full"><HeroContents slug={slug!} props={SingleProduct}/></section>
 
       {/* product specifications */}
       <section className="mt-9"><ProductSpecifications props={SingleProduct} /></section>
