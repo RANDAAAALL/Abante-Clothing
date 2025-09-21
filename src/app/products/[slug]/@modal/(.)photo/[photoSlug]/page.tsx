@@ -19,7 +19,7 @@ export default function PhotoModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 p-4 md:p-0">
       <div className="relative">
           <Image
             src={photoSlug === "back" ? 
@@ -30,7 +30,7 @@ export default function PhotoModal({
             alt={`${slug}-${photoSlug}`}
             width={400}
             height={400}/>
-          <button className="cursor-pointer absolute -top-3 right-0 text-white font-bold text-xl"
+          <button className="cursor-pointer absolute -top-3 right-3 md:right-0 text-white font-bold text-xl"
             onClick={() => { 
               closePhotoModal();
               history.back();
