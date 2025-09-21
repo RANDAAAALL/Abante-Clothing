@@ -16,7 +16,7 @@ export default function NavbarThemeToggle() {
       aria-label="Toggle Theme">
       <Image
         src={theme === "light" ? "/icons/svg/dark-mode.svg" : "/icons/svg/light-mode.svg"}
-        height={0}
+        height={22}
         width={22}
         alt={`${theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}`}
       />

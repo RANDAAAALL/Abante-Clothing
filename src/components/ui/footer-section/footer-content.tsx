@@ -9,7 +9,7 @@ export default function FooterSectionContent({styleName, className}: {className?
         {/* footer logo and socmed icons */}
         <hr className={clsx("dark:border-white border-t1 border-black pb-4 md:pb-0", className)}/>
         <div className="font-medium flex flex-col items-center gap-2 md:flex-row md:justify-between md:gap-0 sm:py-5 md:mx-20">
-        <NavbarLogo LogoHeight={120} LogoWidth={120} flag={false}/>
+        <NavbarLogo flag={false}/>
         <FooterSocmedIcons />
         </div>
 

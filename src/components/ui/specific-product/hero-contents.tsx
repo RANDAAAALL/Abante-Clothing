@@ -33,30 +33,26 @@ export default function HeroContents({
                     src: props.product_item_image,
                     type: "front",
                     alt: `${props.product_item_ID}-${props.product_item_image}`,
-                    width: 120,
-                    height: 120,
                   },
                   {
                     src: props.product_item_back_image,
                     type: "back",
                     alt: `${props.product_item_ID}-${props.product_item_back_image}`,
-                    width: 120,
-                    height: 120,
                   },
                   {
                     src: "/images/png/abante-t-shirt-size-chart-image.png",
                     type: "size-chart",
                     alt: `abante-t-shirt-size-chart alt`,
-                    width: 120,
-                    height: 120,
                   },
                 ].map((photoLinks, index) => (
-                  <Link scroll={false} key={index} href={`/products/${slug}/photo/${photoLinks.type}`}
+                  <Link className="relative w-[120] h-[120]" scroll={false} key={index} href={`/products/${slug}/photo/${photoLinks.type}`}
                   onClick={() => openPhotoModal()}>
                     <Image
                       src={photoLinks.src}
-                      width={photoLinks.width}
-                      height={photoLinks.height}
+                      style={{ objectFit: 'contain'}}
+                      sizes="auto"
+                      fill
+                      priority={true}
                       alt={photoLinks.alt}
                     />
                   </Link>
@@ -65,11 +61,13 @@ export default function HeroContents({
 
               {/* main photo */}
               <button onClick={() => { router.push(`/products/${slug}/photo/main`, { scroll: false}); openPhotoModal()}}
-                  className="cursor-pointer">
+                  className="cursor-pointer relative w-[378] h-[378]">
                   <Image
                   src={props.product_item_image}
-                  width={378}
-                  height={378}
+                  style={{ objectFit: 'contain'}}
+                  sizes="auto"
+                  fill
+                  priority={true}
                   alt={`${props.product_item_ID}-${props.product_item_image}`}/>
               </button>
             </div>

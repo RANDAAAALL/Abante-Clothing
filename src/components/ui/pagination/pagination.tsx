@@ -78,7 +78,7 @@ function PaginationPrevious({
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
       {...props}
     >
-      <PreviousButtonIcon width={11} height={10}/>
+      <PreviousButtonIcon/>
       <span className="hidden sm:block"></span>
     </PaginationLink>
   )
@@ -96,7 +96,7 @@ function PaginationNext({
       {...props}
     >
       <span className="hidden sm:block"></span>
-      <NextButtonIcon width={11} height={10}/>
+      <NextButtonIcon/>
     </PaginationLink>
   )
 }

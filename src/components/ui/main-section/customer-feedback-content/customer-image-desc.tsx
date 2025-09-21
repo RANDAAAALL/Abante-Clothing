@@ -34,7 +34,8 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
                       <Image className="rounded-full border-white shadow-lg "
                       src={customer?.users?.user_image ?? "/images/png/default_avatar.png"}
                       width={120}
-                      height={50}
+                      height={120}
+                      priority={true}
                       alt="customer-feedback-alt"/>
                       
                       <p className="font-bold mt-2">{customer?.users?.username ?? "Anonymous"}</p>

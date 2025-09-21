@@ -20,16 +20,18 @@ export default function PhotoModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50 p-4 md:p-0">
-      <div className="relative">
+      <div className="relative w-[400] h-[400]">
           <Image
             src={photoSlug === "back" ? 
             `${`/images/png/abante-t-shirt-${slug}-back-image.png`}` :
             photoSlug === "size-chart" ?
             `${`/images/png/abante-t-shirt-size-chart-image.png`}` :
             `${`/images/png/abante-t-shirt-${slug}.png`}`}
-            alt={`${slug}-${photoSlug}`}
-            width={400}
-            height={400}/>
+            style={{ objectFit: 'contain'}}
+            sizes="auto"
+            fill
+            priority={true}
+            alt={`${slug}-${photoSlug}`}/>
           <button className="cursor-pointer absolute -top-3 right-3 md:right-0 text-white font-bold text-xl"
             onClick={() => { 
               closePhotoModal();

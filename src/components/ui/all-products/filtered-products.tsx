@@ -14,11 +14,13 @@ export default function AllFilteredProducts({ props }: { props: TshirtType[]}){
                     <Card className="w-full items-center">
 
                         {/* card body content */}
-                        <CardContent className="flex aspect-square items-center">
+                        <CardContent className="relative w-[200] h-[200] flex aspect-square items-center">
                             <Image 
                             src={item.product_item_image ?? "t-shirt-not-found"}
-                            height={200}
-                            width={200}
+                            style={{ objectFit: 'contain'}}
+                            sizes="auto"
+                            fill
+                            priority={true}
                             alt={item.alt ?? "tshirt-alt"}/>
                         </CardContent>
                     

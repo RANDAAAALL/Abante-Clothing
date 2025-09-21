@@ -44,14 +44,17 @@ export default function TshirtsImageDescContent<T extends TshirtType | TshirtTyp
                   </CardHeader>
                   
                   {/* card body content */}
-                  <CardContent className="flex aspect-square items-center justify-center">
-                    <Image
+                  <CardContent className="relative flex aspect-square items-center justify-center">
+                  <Image
                     src={tshirt?.product_item_image ?? "t-shirt-not-found"}
-                    width={250}
-                    height={250}
-                    alt={tshirt?.alt ?? "t-shirt-alt"}/>
-                  </CardContent>
-                
+                    fill
+                    style={{ objectFit: 'contain', padding: 15 }}
+                    sizes="auto"
+                    alt={tshirt?.alt ?? "t-shirt-alt"}
+                    priority={true}
+                  />
+                </CardContent>
+
                   {/* card footer  */}
                   <CardFooter className="justify-between">
                     <div>{tshirt?.product_item_name?.toUpperCase()}</div>

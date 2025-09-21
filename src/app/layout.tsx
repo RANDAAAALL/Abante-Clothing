@@ -48,7 +48,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${metrapolis.variable} "dark:bg-black-background relative`} >
+      <body className={`${metrapolis.variable} "bg-white-background dark:bg-black-background relative`} >
         <ClientProvider>
           {/* {modal} */}
           <CartModal />

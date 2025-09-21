@@ -1,9 +1,7 @@
 
 
 type NavbarLogoDimensionalType = {
-    LogoHeight: number;
-    LogoWidth: number;
-    flag?: boolean;
+    flag: boolean;
 }
 
 export type { NavbarLogoDimensionalType };
