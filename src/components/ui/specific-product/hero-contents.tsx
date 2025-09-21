@@ -8,6 +8,7 @@ import { ProductProps } from "@/lib/types/product-types";
 import TshirtSizesButtons from "./sizes-buttons";
 import Link from "next/link";
 import { usePhotoModal } from "@/lib/store/product-photos";
+import { useRouter } from "next/navigation";
 
 export default function HeroContents({
   props,
@@ -16,6 +17,7 @@ export default function HeroContents({
   props: ProductProps<Partial<TshirtType>>,
   slug: string}) {
     const { openPhotoModal } = usePhotoModal();
+    const router = useRouter();
 
   return (
     <>
@@ -62,14 +64,14 @@ export default function HeroContents({
               </div>
 
               {/* main photo */}
-              <Link scroll={false} href={`/products/${slug}/photo/main`}
-                  onClick={() => openPhotoModal()}>
+              <button onClick={() => { router.push(`/products/${slug}/photo/main`, { scroll: false}); openPhotoModal()}}
+                  className="cursor-pointer">
                   <Image
                   src={props.product_item_image}
                   width={378}
                   height={378}
                   alt={`${props.product_item_ID}-${props.product_item_image}`}/>
-              </Link>
+              </button>
             </div>
 
             {/* container */}
