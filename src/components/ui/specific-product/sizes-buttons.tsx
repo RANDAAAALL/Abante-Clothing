@@ -13,7 +13,7 @@ export default function TshirtSizesButtons(){
         {["XS", "S", "M", "L", "XL", "OS"].map((size, i) => (
             <button onClick={() => setSelectedSize(size)}
             key={i}
-            className={`font-regular text-xs mt-1 cursor-pointer rounded-sm w-9.5 py-2
+            className={`font-regular text-xs mt-1 cursor-pointer rounded-sm w-full py-2
             ${selectedSize === size
             ? "bg-[#666666] text-white"
             : "bg-card-black-background text-white dark:bg-card-white-background dark:text-black"}`}>

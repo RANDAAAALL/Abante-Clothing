@@ -22,10 +22,10 @@ export default function HeroContents({
     <>
       {props && props.product_item_image && props.product_item_back_image ? (
         <>
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col md:flex-row gap-5">
             
               {/* container */}
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center gap-5">
               
                 {/* photos */}
                 <div className="flex flex-col justify-center space-y-5">
@@ -61,7 +61,7 @@ export default function HeroContents({
 
                 {/* main photo */}
                 <button onClick={() => { router.push(`/products/${slug}/photo/main`, { scroll: false}); openPhotoModal()}}
-                    className="cursor-pointer flex relative w-[350] h-[350] row size-14">
+                    className="cursor-pointer flex relative w-[350] h-[350]">
                     <Image
                     src={props.product_item_image}
                     style={{ objectFit: 'contain'}}
@@ -72,8 +72,8 @@ export default function HeroContents({
                 </button>
               </div>
 
-              {/* container */}
-              <div className="flex flex-col justify-center gap-3 md:w-md mt-1 md:mt-0">
+              {/* tshirt title, price and buttons container */}
+              <div className="flex flex-col justify-center w-full gap-3 md:w-md mt-1 md:mt-0">
                 {/* t-shirt title and price */}
                 <div className="flex flex-row justify-between items-center md:items-start md:flex-col capitalize md:gap-1 font-bold md:mb-6">
                   <span className="text-2xl md:text-3xl">{props.product_item_name}</span>
