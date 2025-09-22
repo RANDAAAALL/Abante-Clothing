@@ -6,11 +6,14 @@ import PreviousButtonIcon from "../carousel/previous-button-icon";
 import NavbarCart from "../navbar-section/navbar-cart";
 import Image from "next/image";
 import Link from "next/link";
+import { ProductProps } from "@/lib/types/product-types";
+import { TshirtType } from "@/lib/types/t-shirt-types";
 
 export default function CartModal(){
-    const { selectedItem, CloseModal, isOpen } = useCartItems();
+    const { selectedItem, removeSelectedItem ,CloseModal, isOpen } = useCartItems();
 
     useEffect(() => { document.body.style.overflow = isOpen ? "hidden" : ""; },[isOpen]);
+    console.log("Selected Items:" ,selectedItem);
 
     if(!isOpen) return null;
 
@@ -53,9 +56,8 @@ export default function CartModal(){
                         </p>
                       </div>
   
-                      <button className="text-black dark:text-white font-bold cursor-pointer">
-                        x
-                      </button>
+                      <button className="text-black dark:text-white font-bold cursor-pointer"
+                      onClick={() => removeSelectedItem(i)}>x</button>
                     </div>
                     <hr className="border-black dark:border-white border-t-2" />
                   </React.Fragment>

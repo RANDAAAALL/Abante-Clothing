@@ -22,7 +22,7 @@ type CartItemsPropsState = {
 
 type CartItemsPropsActions = {
     setSelectedSize: (size: string | null) => void;
-    clearSelectedSize: () => void;
+    resetSelectedSize: () => void;
 
     setIncreaseQuantity: (qty: number) => void;
     setDecreaseQuantity: (qty: number) => void;
@@ -31,7 +31,8 @@ type CartItemsPropsActions = {
     selectedSizeAndQty: selectedSizeAndQtyProps;
 
     setSelectedItems: (item: ProductProps<Partial<TshirtType>>) => void;
-    clearSelectedItem: () => void; 
+    removeSelectedItem: (item: number) => void;
+    resetSelectedItem: () => void; 
 
     OpenModal: () => void,
     CloseModal: () => void,
@@ -46,7 +47,7 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
             ...state.selectedSizeAndQty, size,
         }
     })),
-    clearSelectedSize: () => set({ selectedSize: null }),
+    resetSelectedSize: () => set({ selectedSize: null }),
 
     quantity: 1,
     setIncreaseQuantity: () =>
@@ -102,8 +103,17 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
       };
     }),  
 
-    clearSelectedItem: () => set({ selectedItem: [] }),
+    removeSelectedItem: (index) =>
+    set((state) => ({
+      selectedItem: state.selectedItem.filter((_, i) => i !== index)
+    })),
 
+    resetSelectedItem: () => set({ 
+      selectedSize: null, 
+      quantity: 1, 
+      selectedSizeAndQty: { size: null, qty: 1 } 
+    }),
+    
     isOpen: false,
     OpenModal: () => set({ isOpen: true }),
     CloseModal: () => set({ isOpen: false }),
