@@ -6,14 +6,14 @@ export default function TshirtSizesButtons(){
     return (
         <>
         <div>
-            <span className="font-bold text-md">Size</span>
+            <span className="font-bold text-lg">Size</span>
         </div>
         
-        <div className="flex gap-2">      
+        <div className="flex gap-2 -mt-3">      
         {["XS", "S", "M", "L", "XL", "OS"].map((size, i) => (
             <button onClick={() => setSelectedSize(size)}
             key={i}
-            className={`font-regular text-xs mt-1 cursor-pointer rounded-sm w-10 py-2
+            className={`font-regular text-xs mt-1 cursor-pointer rounded-sm w-9.5 py-2
             ${selectedSize === size
             ? "bg-[#666666] text-white"
             : "bg-card-black-background text-white dark:bg-card-white-background dark:text-black"}`}>
