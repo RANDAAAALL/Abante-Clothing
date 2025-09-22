@@ -22,13 +22,13 @@ export default function HeroContents({
     <>
       {props && props.product_item_image && props.product_item_back_image ? (
         <>
-          <div className="flex flex-col md:flex-row gap-5">
+          <div className="flex flex-col md:flex-row gap-0 sm:gap-5">
             
               {/* container */}
-              <div className="flex justify-center items-center gap-5">
+              <div className="flex justify-center items-center gap-0 sm:gap-5">
               
                 {/* photos */}
-                <div className="flex flex-col justify-center space-y-5">
+                <div className="flex flex-col justify-center space-y-2 sm:space-y-5">
                   {[
                     {
                       src: props.product_item_image,
@@ -73,7 +73,7 @@ export default function HeroContents({
               </div>
 
               {/* tshirt title, price and buttons container */}
-              <div className="flex flex-col justify-center w-full gap-3 md:w-md mt-1 md:mt-0">
+              <div className="flex flex-col justify-center w-full gap-3 md:w-md">
                 {/* t-shirt title and price */}
                 <div className="flex flex-row justify-between items-center md:items-start md:flex-col capitalize md:gap-1 font-bold md:mb-6">
                   <span className="text-2xl md:text-3xl">{props.product_item_name}</span>
