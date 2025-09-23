@@ -1,5 +1,6 @@
 import { registerationSchema } from "@/lib/validations/auth-schema";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma/prisma";
 
 export async function POST(req: Request) {
   try {
@@ -17,7 +18,7 @@ export async function POST(req: Request) {
     }
     
     // check if the users email already exists in the database
-    const userEmailExists = await prisma?.users.findUnique({
+    const userEmailExists = await prisma.users.findUnique({
       where: { email: parseData.data.email }
     });
 
