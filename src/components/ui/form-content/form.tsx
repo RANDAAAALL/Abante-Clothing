@@ -53,7 +53,7 @@ export default function FormsContent<TSchema extends AnyZodObject>({
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useForm<RHFValues<TSchema>>({
     resolver: zodResolver(schema) as unknown as Resolver<RHFValues<TSchema>>,
   });
@@ -82,7 +82,8 @@ export default function FormsContent<TSchema extends AnyZodObject>({
               className="text-sm border border-t-1 border-input-background focus:outline-none mb-4 rounded-sm p-3 px-4"
               {...register(field.fieldName)}
               placeholder={field.fieldPlaceholder}
-              type={field.fieldType || "text"}/>
+              type={field.fieldType || "text"}
+              name={field.fieldName}/>
 
             {/* error messages  */}
             {errors[field.fieldName]?.message && (
@@ -109,7 +110,8 @@ export default function FormsContent<TSchema extends AnyZodObject>({
 
         {/* submit button */}
         <button className="cursor-pointer font-bold bg-card-black-background text-white rounded-sm p-2 mt-2 mb-3 w-full"
-          type="submit">{buttonText}</button>
+        type="submit"
+        disabled={isSubmitting}>{isSubmitting ? "Loading..." : buttonText}</button>
 
         {/* form footer description */}
         <span className="font-regular text-sm">

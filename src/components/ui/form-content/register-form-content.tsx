@@ -5,13 +5,28 @@ import FormsContent from "./form";
 import { registerFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
 import { registerationSchema, registerFormType } from "@/lib/validations/auth-schema";
+import { RegisterURL } from "@/lib/config";
+import { useRouter } from "next/navigation";
 
 export default function RegisterFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
+    const router = useRouter();
 
-    const handleRegisterClick = (data: registerFormType) => {
-        alert("Still in development");
+    const handleRegisterClick = async (formData: registerFormType) => {
+        const res = await fetch(`${RegisterURL}`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json",},
+            body: JSON.stringify(formData),
+        });
+
+        const data = await res.json();
         
+        if(!res.ok){
+            alert(`${data.errorMessage || data.parsedErrors}`);
+            return;
+        }
+
+        router.push("/login");
         // reset the fields
         resetFormRef.current?.();
     }

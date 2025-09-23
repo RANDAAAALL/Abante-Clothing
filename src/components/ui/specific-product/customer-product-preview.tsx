@@ -19,7 +19,7 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
                 
                 {/* customer image */}
                 <Image  
-                src={customer?.users?.user_image ?? "/images/png/default_avatar.pg"}
+                src={customer?.users?.user_image ?? "/images/png/default_avatar.png"}
                 width={71}
                 height={71}
                 alt="customer-feedback-alt"
