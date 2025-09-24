@@ -85,7 +85,7 @@ export default function FormsContent<TSchema extends AnyZodObject>({
             {/* input and toggle password visibility container */}
             <div className="relative flex">
             <input disabled={isSubmitting}
-              className="w-full text-sm border border-t-1 border-input-background focus:outline-none mb-4 rounded-sm p-3 px-4"
+              className={"w-full text-sm border border-t-1 border-input-background focus:outline-none mb-4 rounded-sm p-3 px-4 pr-10"}
               {...register(field.fieldName)}
               placeholder={field.fieldPlaceholder}
               type={buttonText === "Sign Up" && field.fieldName === "password" ?
