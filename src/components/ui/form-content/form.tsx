@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useForm,
   SubmitHandler,
@@ -11,6 +11,8 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import EyeOpen from "@/components/icons/svg/eye-open";
+import EyeClosed from "@/components/icons/svg/eye-closed";
 
 // Limit schemas to a Zod object (record of fields)
 type AnyZodObject = z.ZodObject<Record<string, z.ZodTypeAny>>;
@@ -58,6 +60,8 @@ export default function FormsContent<TSchema extends AnyZodObject>({
     resolver: zodResolver(schema) as unknown as Resolver<RHFValues<TSchema>>,
   });
 
+  const [ showPassword, setShowPassword] = useState<boolean>(false);
+  
   useEffect(() => {
     onResetRefAction?.(() => reset());
   }, [reset, onResetRefAction]);
@@ -78,12 +82,25 @@ export default function FormsContent<TSchema extends AnyZodObject>({
             {String(field.fieldName).replace(/([A-Z])/g, " $1")}
             </label>
 
-            <input
-              className="text-sm border border-t-1 border-input-background focus:outline-none mb-4 rounded-sm p-3 px-4"
+            {/* input and toggle password visibility container */}
+            <div className="relative flex">
+            <input disabled={isSubmitting}
+              className="w-full text-sm border border-t-1 border-input-background focus:outline-none mb-4 rounded-sm p-3 px-4"
               {...register(field.fieldName)}
               placeholder={field.fieldPlaceholder}
-              type={field.fieldType || "text"}
+              type={buttonText === "Sign Up" && field.fieldName === "password" ?
+                   (showPassword ? "text" : "password") :
+                   (field.fieldType || "text")}
               name={field.fieldName}/>
+
+              {/* toggle password visibility */}
+              {buttonText === "Sign Up" && field.fieldName === "password" && (
+                <div className="absolute right-3 top-3 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <EyeOpen/> : <EyeClosed/>}
+                </div>
+              )}
+              </div>
 
             {/* error messages  */}
             {errors[field.fieldName]?.message && (
@@ -122,3 +139,4 @@ export default function FormsContent<TSchema extends AnyZodObject>({
     </div>
   );
 }
+
