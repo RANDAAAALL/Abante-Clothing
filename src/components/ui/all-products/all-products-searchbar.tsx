@@ -1,7 +1,7 @@
 "use client"
 
 import { FormEvent, useMemo } from "react";
-import ViewAllProductsSearchbarIcon from "./all-products-search-icon";
+import ViewAllProductsSearchbarIcon from "../../icons/svg/search-bar";
 import { usePathname,useRouter, useSearchParams } from "next/navigation";
 
 export default function ViewAllProductsSearchbar(){

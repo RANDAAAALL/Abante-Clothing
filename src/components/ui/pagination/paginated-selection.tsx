@@ -33,7 +33,7 @@ export default function PaginationSelection({
     }
     
     return (
-    <Pagination  className="mt-4 font-medium">
+    <Pagination className="mt-4 font-medium">
         <PaginationContent>
             <PaginationItem>
             <PaginationPrevious onClick={(e) => {

@@ -1,7 +1,7 @@
 
 
-type NavbarLogoDimensionalType = {
-    flag: boolean;
+type AbanteLogoPropsType = {
+    flag: boolean,
 }
 
-export type { NavbarLogoDimensionalType };
+export type { AbanteLogoPropsType };
