@@ -1,13 +1,12 @@
 "use client"
 
+import FacebookLogoSVG from "@/components/icons/svg/facebook-logo";
+import InstagramLogoSVG from "@/components/icons/svg/instagram-logo";
 import { useMounted } from "@/hooks/useMounted";
-import { SocmedIconsValue } from "@/lib/values-type/socmed-icons-value";
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function FooterSocmedIcons(){
-    const { theme } = useTheme();
     const mounted = useMounted();
     
     if (!mounted) return null;
@@ -15,16 +14,8 @@ export default function FooterSocmedIcons(){
     return (
         <div className="flex flex-col items-center text-center w-full md:w-auto md:gap-0 md:items-end">
         <div className="flex space-x-3 pb-5 md:flex-none md:space-x-2 md:pb-2">
-        {SocmedIconsValue.map((socmed, i) => (
-            <Link key={i} href={socmed.path} target="_blank">
-                <Image
-                className="cursor-pointer"
-                src={`${theme === "light" ? socmed.srcBlack : socmed.srcWhite}`}
-                alt={socmed.alt}
-                width={25}
-                height={25}/>
-            </Link>          
-            ))}
+        <Link href="https://www.facebook.com/Abante.geo" target="_blank"><FacebookLogoSVG className="w-[22px] h-[22px]"/></Link>
+        <Link href="https://www.facebook.com/Abante.geo" target="_blank"><InstagramLogoSVG className="w-[22px] h-[22px]"/></Link>
         </div>
 
         <div className="w-full md:w-auto">

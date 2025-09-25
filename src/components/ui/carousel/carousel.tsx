@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils"
 import NextButtonIcon from "./next-button-icon"
 import PreviousButtonIcon from "./previous-button-icon"
 import { Button } from "../button"
+import NextButtonSVG from "@/components/icons/svg/next-button"
+import PreviousButtonSVG from "@/components/icons/svg/previous-button"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -196,7 +198,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <PreviousButtonIcon/>
+      <PreviousButtonSVG/>
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -226,7 +228,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <NextButtonIcon/>
+      <NextButtonSVG/>
       <span className="sr-only">Next slide</span>
     </Button>
   )

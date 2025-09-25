@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 import PreviousButtonIcon from "../carousel/previous-button-icon"
 import NextButtonIcon from "../carousel/next-button-icon"
+import PreviousButtonSVG from "@/components/icons/svg/previous-button"
+import NextButtonSVG from "@/components/icons/svg/next-button"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -78,7 +80,7 @@ function PaginationPrevious({
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
       {...props}
     >
-      <PreviousButtonIcon/>
+      <PreviousButtonSVG/>
       <span className="hidden sm:block"></span>
     </PaginationLink>
   )
@@ -95,8 +97,8 @@ function PaginationNext({
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
+      <NextButtonSVG/>
       <span className="hidden sm:block"></span>
-      <NextButtonIcon/>
     </PaginationLink>
   )
 }

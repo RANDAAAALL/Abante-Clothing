@@ -1,7 +1,7 @@
 "use client"
 import NavbarCart from "./navbar-cart";
 import NavbarLinks from "./navbar-links";
-import NavbarLogo from "./navbar-logo";
+import AbanteClothingLogo from "@/components/icons/svg/abante-clothing-logo";
 import MenuBar from "./navbar-menu";
 import { useEffect, useState } from "react";
 import NavbarThemeToggle from "./navbar-theme-toggle";
@@ -29,7 +29,7 @@ export default function NavbarContent() {
         w-full font-medium flex  items-center max-w-5xl mx-auto p-4`}>
 
       {/* Logo always visible */}
-      <NavbarLogo flag={true} />
+      <AbanteClothingLogo flag={true}/>
 
       {/* Desktop links */}
       <div className="hidden md:flex flex-1 justify-center md:ml-30"><NavbarLinks style={"space-x-6"} /> </div>

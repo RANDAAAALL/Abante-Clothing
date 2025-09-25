@@ -8,6 +8,8 @@ import QuotesUpIcon from "./quotes-up-icon";
 import QuotesDownIcon from "./quotes-down-icon";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import CustomerFeedbackRating from "../../customer-feedback-rating";
+import DoubleQuotesDownSVG from "@/components/icons/svg/double-quotes-down";
+import DoubleQuotesUpSVG from "@/components/icons/svg/double-quotes-up";
 
 export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback: CustomerFeedbackProps[]}){
     const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
@@ -47,8 +49,8 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
                     <p className="text-sm">
                     {customer?.feedback_comment}
                     </p>
-                    <QuotesUpIcon />
-                    <QuotesDownIcon />
+                    <DoubleQuotesUpSVG/>
+                    <DoubleQuotesDownSVG/>
                 
                   </CardContent>
 
