@@ -2,10 +2,10 @@
 import { useCartItems } from "@/lib/store/cart-items";
 import React from "react";
 import { useEffect } from "react";
-import PreviousButtonIcon from "../carousel/previous-button-icon";
 import NavbarCart from "../navbar-section/navbar-cart";
 import Image from "next/image";
 import Link from "next/link";
+import PreviousButtonSVG from "@/components/icons/svg/previous-button";
 export default function CartModal(){
     const { selectedItem, removeSelectedItem ,CloseModal, isOpen } = useCartItems();
 
@@ -24,7 +24,7 @@ export default function CartModal(){
             <button
               className="text-black dark:text-white font-bold cursor-pointer"
               onClick={CloseModal}>
-              <PreviousButtonIcon/>
+              <PreviousButtonSVG/>
             </button>
           </div>
   
