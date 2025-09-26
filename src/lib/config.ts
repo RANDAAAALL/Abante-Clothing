@@ -18,3 +18,8 @@ export const RegisterURL = process.env.NODE_ENV === "production"
 export const CustomerFeedbackURL = process.env.NODE_ENV === "production" 
             ? process.env.NEXT_PUBLIC_PROD_CUSTOMER_FEEDBACKS_URL
             : process.env.NEXT_PUBLIC_LOCAL_CUSTOMER_FEEDBACKS_URL
+
+// this will be the designated environment mode for logout api endpoint
+export const LogoutURL = process.env.NODE_ENV === "production" 
+            ? process.env.NEXT_PUBLIC_PROD_LOGOUT_URL
+            : process.env.NEXT_PUBLIC_LOCAL_LOGOUT_URL

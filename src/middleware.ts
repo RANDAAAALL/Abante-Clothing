@@ -1,21 +1,43 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
-// This function runs on every matched route
-export function middleware(request: NextRequest) {
-  // Example: block access if not logged in
-  // (for now, just let all requests pass through)
-  console.log("Middleware is running on: ", request.nextUrl.pathname)
-  return NextResponse.next();
+import { VerifyAuthToken } from "./lib/security/jwt";
+interface JWTError extends Error {
+  code?: string;
 }
 
-// protected routes as of now
+export async function middleware(request: NextRequest) {
+  const token =
+    request.cookies.get("access_token")?.value ||
+    request.headers.get("authorization")?.replace("Bearer ", "");
+
+  // if no token, redirect to login page
+  if (!token) return NextResponse.redirect(new URL("/login", request.url));
+
+  try {
+    await VerifyAuthToken(token);
+    return NextResponse.next();
+  } catch (err) {
+    const error = err as JWTError;
+    
+    if (error.code === "ERR_JWT_EXPIRED") {
+      console.warn("Token expired");
+      return NextResponse.redirect(new URL("/login?reason=expired", request.url));
+    }
+
+    if (error.code === "ERR_JWS_SIGNATURE_VERIFICATION_FAILED") {
+      console.error("Invalid signature — possible tampering");
+      return NextResponse.redirect(new URL("/login?reason=invalid", request.url));
+    }
+
+    console.error("JWT error:", err);
+    return NextResponse.redirect(new URL("/login?reason=unknown", request.url));
+  }
+}
+
+// protected routes
 export const config = {
-    matcher: [
-      "/(protected)/:path*",
-      "/api/:path*",  
-    ],
-  };
-
-
-  
+  matcher: [
+    "/dashboard/:path*",
+    "/api/protected/:path*",
+  ],
+};
