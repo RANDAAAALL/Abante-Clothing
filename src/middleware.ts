@@ -15,7 +15,14 @@ export async function middleware(request: NextRequest) {
 
   try {
     await VerifyAuthToken(token);
-    return NextResponse.next();
+    return NextResponse.next({
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0",
+        "Surrogate-Control": "no-store",
+      },
+    });
   } catch (err) {
     const error = err as JWTError;
     
