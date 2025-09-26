@@ -6,9 +6,11 @@ import { loginFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
 import { loginSchema, loginFormType } from "@/lib/validations/auth-schema";
 import { LoginsURL } from "@/lib/config";
+import { useRouter } from "next/navigation";
 
 export default function LoginFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
+    const router = useRouter();
 
     const handleLoginClick = async (formData: loginFormType) => {
         const res = await fetch(`${LoginsURL}`, {
@@ -23,7 +25,8 @@ export default function LoginFormContent(){
             return;
         }
 
-        alert(data.successMessage + " Still on development....");
+        // if login is successfull redirect to dashboard
+        router.push("/dashboard");
         // reset the fields
         resetFormRef.current?.();
     }

@@ -59,12 +59,12 @@ export default function FormsContent<TSchema extends AnyZodObject>({
   } = useForm<RHFValues<TSchema>>({
     resolver: zodResolver(schema) as unknown as Resolver<RHFValues<TSchema>>,
   });
-
   const [ showPassword, setShowPassword] = useState<boolean>(false);
-  
+
   useEffect(() => {
     onResetRefAction?.(() => reset());
   }, [reset, onResetRefAction]);
+
 
   return (
     <div className="min-h-[600] md:min-h-screen flex items-center justify-center mx-auto md:max-w-lg">

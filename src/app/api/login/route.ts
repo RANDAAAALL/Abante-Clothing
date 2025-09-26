@@ -1,6 +1,8 @@
 import { loginSchema } from "@/lib/validations/auth-schema";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
+import { GenerateAuthToken } from "@/lib/security/jwt";
+import { setAuthCookie } from "@/lib/security/cookies";
 
 export async function POST(req: Request) {
   try {
@@ -45,6 +47,16 @@ export async function POST(req: Request) {
         {status: 401}
       )
     }
+
+    // generate auth token
+    const authToken = await GenerateAuthToken({
+      user_ID: usersDetails.user_ID,
+      username: usersDetails.username,
+      email: usersDetails.email,
+    });    
+
+    // set the token in the cookie
+    await setAuthCookie(authToken);
 
     // return a success response
     return NextResponse.json(
