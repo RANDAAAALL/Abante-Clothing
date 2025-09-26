@@ -32,7 +32,11 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
                     <CustomerFeedbackRating rating={customer?.feedback_rating} />
 
                     <div className="text-justify hyphens-auto">
-                    <span className="font-normal">{customer?.feedback_comment}</span>
+                    <span className="font-normal">
+                    <span className="font-black text-xl">&ldquo; </span>
+                    {customer?.feedback_comment}
+                    <span className="font-black text-xl"> &rdquo;</span>
+                    </span>
                     </div>
 
                 </div>
