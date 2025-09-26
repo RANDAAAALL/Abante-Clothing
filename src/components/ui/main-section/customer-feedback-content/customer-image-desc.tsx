@@ -4,12 +4,8 @@ import useAutoPlayCarousel from "@/hooks/useAutoPlayCarousel";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../carousel/carousel";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../../carousel/card";
 import Image from "next/image";
-import QuotesUpIcon from "./quotes-up-icon";
-import QuotesDownIcon from "./quotes-down-icon";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import CustomerFeedbackRating from "../../customer-feedback-rating";
-import DoubleQuotesDownSVG from "@/components/icons/svg/double-quotes-down";
-import DoubleQuotesUpSVG from "@/components/icons/svg/double-quotes-up";
 
 export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback: CustomerFeedbackProps[]}){
     const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
@@ -32,7 +28,7 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
 
                 {/* customer image and name*/}
                  <CardHeader>
-                    <CardTitle className="flex flex-col items-center gap-4">
+                    <CardTitle className="flex flex-col items-center gap-6">
                       <Image className="rounded-full border-white shadow-lg "
                       src={customer?.users?.user_image ?? "/images/png/default_avatar.png"}
                       width={120}
@@ -40,17 +36,17 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
                       priority={true}
                       alt="customer-feedback-alt"/>
                       
-                      <p className="font-bold mt-2">{customer?.users?.username ?? "Anonymous"}</p>
+                      <p className="font-bold">{customer?.users?.username ?? "Anonymous"}</p>
                     </CardTitle>
                   </CardHeader>
 
                   {/* customer feedback */}
-                  <CardContent className="font-normal py-3 my-4">
+                  <CardContent className="font-normal  min-h-40">
                     <p className="text-sm">
+                    <span className="font-black text-lg">" </span>
                     {customer?.feedback_comment}
+                    <span className="font-black text-lg"> "</span>
                     </p>
-                    <DoubleQuotesUpSVG/>
-                    <DoubleQuotesDownSVG/>
                 
                   </CardContent>
 
