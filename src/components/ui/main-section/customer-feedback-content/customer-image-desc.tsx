@@ -41,12 +41,13 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
                   </CardHeader>
 
                   {/* customer feedback */}
-                  <CardContent className="font-normal  min-h-40">
+                  <CardContent className="mx-auto font-normal min-h-40">
                     <p className="text-sm">
                     <span className="font-black text-xl">&ldquo; </span>
                     {customer?.feedback_comment}
                     <span className="font-black text-xl"> &rdquo;</span>
                     </p>
+
                   </CardContent>
 
                   {/* customer rating */}
