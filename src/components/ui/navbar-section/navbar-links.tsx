@@ -3,7 +3,6 @@ import clsx from "clsx";
 import Link from "next/link";
 
 export default function NavbarLinks({ style }: { style: string}){
-
     return (
         <div className={clsx( style)}>
         {LinksPath.map((link, i ) => (
