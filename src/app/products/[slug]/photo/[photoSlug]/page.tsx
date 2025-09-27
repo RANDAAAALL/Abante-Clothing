@@ -11,7 +11,7 @@ export default function PhotoPage({
   const { slug, photoSlug } = use(params);
 
   return (
-    <div className="relative h-screen bg-black">
+    <div className="relative h-screen">
       <Image
         src={photoSlug === "back" ? 
         `${`/images/png/abante-t-shirt-${slug}-back-image.png`}` :

@@ -1,50 +1,54 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { VerifyAuthToken } from "./lib/security/jwt";
-interface JWTError extends Error {
-  code?: string;
-}
+import { JWTExpired, JWTInvalid } from "jose/errors";
 
 export async function middleware(request: NextRequest) {
   const token =
     request.cookies.get("access_token")?.value ||
     request.headers.get("authorization")?.replace("Bearer ", "");
 
-  // if no token, redirect to login page
-  if (!token) return NextResponse.redirect(new URL("/login", request.url));
+  const url = request.nextUrl.clone();
 
-  try {
-    await VerifyAuthToken(token);
-    return NextResponse.next({
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-        "Pragma": "no-cache",
-        "Expires": "0",
-        "Surrogate-Control": "no-store",
-      },
-    });
-  } catch (err) {
-    const error = err as JWTError;
-    
-    if (error.code === "ERR_JWT_EXPIRED") {
-      console.warn("Token expired");
-      return NextResponse.redirect(new URL("/login?reason=expired", request.url));
-    }
-
-    if (error.code === "ERR_JWS_SIGNATURE_VERIFICATION_FAILED") {
-      console.error("Invalid signature — possible tampering");
-      return NextResponse.redirect(new URL("/login?reason=invalid", request.url));
-    }
-
-    console.error("JWT error:", err);
-    return NextResponse.redirect(new URL("/login?reason=unknown", request.url));
+  // if user is trying to access login/register and it is already logged in
+  if (token && ["/login", "/register", "/forgot-password"].includes(request.nextUrl.pathname)) {
+    url.pathname = "/";
+    return NextResponse.redirect(url);
   }
+
+  // if no token and trying to access protected routes, redirect to login
+  if (!token && request.nextUrl.pathname.startsWith("/profile")) {
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  // verify token for protected routes
+  if (token) {
+    try {
+      await VerifyAuthToken(token);
+      return NextResponse.next({
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0",
+          "Surrogate-Control": "no-store",
+        },
+      });
+    } catch (err) {
+      if (err instanceof JWTExpired) return NextResponse.redirect(new URL("/login?reason=expired", request.url));
+      if (err instanceof JWTInvalid) return NextResponse.redirect(new URL("/login?reason=invalid", request.url));
+      return NextResponse.redirect(new URL("/login?reason=unknown", request.url));
+    }
+  }
+  return NextResponse.next();
 }
 
-// protected routes
 export const config = {
   matcher: [
-    "/dashboard/:path*",
+    "/profile",
     "/api/protected/:path*",
+    "/login",
+    "/register",
+    "/forgot-password",
   ],
 };

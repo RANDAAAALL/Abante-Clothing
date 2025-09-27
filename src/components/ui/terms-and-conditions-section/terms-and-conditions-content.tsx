@@ -1,12 +1,7 @@
-import FooterSectionContent from "../footer-section/footer-content";
-import NavbarContent from "../navbar-section/navbar-content";
 
 export default function TermsAndConditionsContent(){
     return (
         <>
-        {/* nav-bar section */}
-        <section className="z-50 sticky top-0"><NavbarContent /></section>
-        
         {/* terms and conditions section */}
         <main className="text-center w-full md:max-w-[1980px] md:mx-auto p-4 md:p-0 md:px-6">
         
@@ -46,9 +41,6 @@ export default function TermsAndConditionsContent(){
             </div>  
         </div>
         </main>
-        
-         {/* footer section */}
-         <footer className="text-sm w-full p-4"><FooterSectionContent className="mt-25"  styleName="md:pt-6" /></footer>
         </>
     );
 }

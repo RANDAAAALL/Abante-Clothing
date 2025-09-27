@@ -1,13 +1,6 @@
-import FooterSectionContent from "../footer-section/footer-content";
-import NavbarContent from "../navbar-section/navbar-content";
-
-
 export function AboutContent(){
     return (
         <>
-          {/* nav-bar section */}
-          <section className="z-50 sticky top-0"><NavbarContent /></section>
-          
           {/* main section */}
           <main className="flex flex-col text-center w-full md:max-w-[1980] md:mx-auto p-4 md:p-0 md:px-6">
             <div className="min-h-[500] md:min-h-screen max-w-2xl flex justify-center items-center flex-col mx-auto mt-0">
@@ -19,10 +12,7 @@ export function AboutContent(){
             Looking ahead, Abante Clothing aims to expand its reach, open new branches, and extend its delivery services nationwide,
             all while staying true to its mission of creating meaningful apparel.</p>
             </div>
-
           </main>
-          {/* footer section */}
-          <footer className="text-sm w-full p-4"><FooterSectionContent styleName="md:pt-6" /></footer>
         </>
     );
 }
