@@ -1,9 +1,11 @@
 "use client"
-
 import { useMounted } from "@/hooks/useMounted";
 import { AbanteLogoPropsType } from "@/lib/types/nav-bar-logo-types";
 import Link from "next/link";
 
+// flag determine which kind of component is being used
+// flag = true: it used for navbar section and it is clickable
+// flag = false it used for footer section and it is not clickable
 export default function AbanteClothingLogo({flag}: AbanteLogoPropsType ) {
   const mounted = useMounted();
   if (!mounted) return null;

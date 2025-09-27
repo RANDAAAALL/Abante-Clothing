@@ -3,7 +3,7 @@ import ViewAllProductsSearchbar from "@/components/ui/all-products/all-products-
 import ViewAllProductsTitle from "@/components/ui/all-products/all-products-title";
 import AllProductsWithPaginationContent from "@/components/ui/all-products/all-products-with-pagination-content";
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
-import NavbarContent from "@/components/ui/navbar-section/navbar-content";
+import NavbarContent from "@/components/ui/navbar-section/navbar-client";
 import TshirtProductsSkeletonCard from "@/components/ui/skeletons/t-shirt-products-card";
 import { AllProductsContentProps } from "@/lib/types/view-all-products-types";
 import { Suspense } from "react";
@@ -13,9 +13,6 @@ export default async function ViewAllProducts({searchParams}: AllProductsContent
 
     return (
      <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto"> 
-
-        {/* nav-bar section */}
-        <section className="z-50 sticky top-0"><NavbarContent /></section>
 
         {/* main section */}
         <main className="mt-10 w-full md:max-w-3xl mx-auto min-h-screen p-4 md:p-0">
@@ -37,10 +34,6 @@ export default async function ViewAllProducts({searchParams}: AllProductsContent
             </Suspense>
 
         </main>
-
-        {/* footer section */}
-        <footer className="text-sm w-full p-4"><FooterSectionContent className="mt-25" styleName="md:pt-6" /></footer>
-
      </div>
     );
 }

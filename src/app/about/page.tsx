@@ -1,5 +1,7 @@
 import { AboutContent } from "@/components/ui/about-section/about-content";
 
+export const dynamic = 'force-static';
+
 export default function AboutPage(){
     return (
         <div className="bg-white dark:bg-black-background dark:text-white text-black w-full max-w-[1980] mx-auto">

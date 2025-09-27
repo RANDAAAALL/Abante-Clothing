@@ -36,7 +36,7 @@ export default function TshirtsImageDescContent<T extends TshirtType | TshirtTyp
                 onClick={(e) => { if(pathname === `/products/${tshirt?.product_item_name}`) e.preventDefault()}}>
                
                 {/* card container */}
-                <Card className=" dark:bg-card-black-background"> 
+                <Card> 
 
                   {/* card header */}
                   <CardHeader>

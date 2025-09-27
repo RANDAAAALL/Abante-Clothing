@@ -4,6 +4,8 @@ import { metrapolis } from "../lib/custom-font";
 import "../styles/globals.css";
 import ClientProvider from "@/context/client-providers";
 import CartModal from "@/components/ui/modal/cart-modal";
+import FooterSectionContent from "@/components/ui/footer-section/footer-content";
+import NavbarContent from "@/components/ui/navbar-section/navbar-content";
 
 // SEO Config
 export const metadata: Metadata = {
@@ -41,19 +43,25 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  // modal,
 }: Readonly<{
   children: React.ReactNode;
-  // modal: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${metrapolis.variable} "bg-white-background dark:bg-black-background relative`} >
+      <body className={`${metrapolis.variable} dark:bg-black-background relative`} > 
+        
         <ClientProvider>
+          {/* nav-bar section */}
+          <section className="z-50 sticky top-0"><NavbarContent /></section>
+
           {/* {modal} */}
           <CartModal />
           {children}
-          </ClientProvider>
+
+          {/* footer section */}
+          <footer className="text-sm w-full p-4"><FooterSectionContent className="mt-25" styleName="md:pt-6" /></footer>  
+        </ClientProvider>
         <Analytics />
       </body>
     </html>

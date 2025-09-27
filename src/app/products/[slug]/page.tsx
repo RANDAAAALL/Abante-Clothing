@@ -1,7 +1,7 @@
 // src/app/products/[slug]/page.tsx
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
-import NavbarContent from "@/components/ui/navbar-section/navbar-content";
+import NavbarContent from "@/components/ui/navbar-section/navbar-client";
 import CustomerProductPreview from "@/components/ui/specific-product/customer-product-preview";
 import HeroContents from "@/components/ui/specific-product/hero-contents";
 import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
@@ -31,10 +31,6 @@ export default async function Page({ params }: ParamsProps ) {
   return (
     <>
     <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
-
-      {/* nav-bar section */}
-      <section className="z-50 sticky top-0"><NavbarContent /></section>
-
       <main className="mt-10 flex flex-col sm:items-start min-h-screen sm:max-w-4xl w-full mx-auto p-4">
      
       {/* product path title */}
@@ -53,9 +49,6 @@ export default async function Page({ params }: ParamsProps ) {
       {/* customer product preview */}
       <section className="mt-9 w-full"><CustomerProductPreview props={AllRelatedCustomerFeedbacks}/></section>
       </main>
-
-      {/* footer section */}
-      <footer className="text-sm w-full p-4"><FooterSectionContent className="mt-25" styleName="md:pt-6" /></footer>
       </div>
     </>
   );
