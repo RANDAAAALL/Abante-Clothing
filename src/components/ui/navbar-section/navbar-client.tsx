@@ -10,10 +10,12 @@ import UserProfileContent from "@/components/user-profile/user-profile-content";
 import LogoutButton from "@/components/user-profile/logout-button";
 import { UserPayloadProps } from "@/lib/interface/user-payload";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
+import { useRouter } from "next/navigation";
 
 export default function NavbarClient({ user }: UserPayloadProps) {
-  const { isOpen } = useMenuBarStore();
+  const { isOpen, setIsOpen } = useMenuBarStore();
   const [isScrolled, setIsScrolled] = useState(false);
+  const router = useRouter();
 
   // track scroll for styling
   useEffect(() => {
@@ -21,6 +23,19 @@ export default function NavbarClient({ user }: UserPayloadProps) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // listen for logout event from other tabs
+  useEffect(() => {
+    const bc = new BroadcastChannel("auth");
+    bc.onmessage = (event) => {
+      if (event.data?.type === "LOGOUT") {
+        router.push("/login");
+        router.refresh();
+        setIsOpen(false);
+      }
+    };
+    return () => bc.close();
+  }, [router]);
 
   // to prevent background scroll when menu is open
   useEffect(() => {
