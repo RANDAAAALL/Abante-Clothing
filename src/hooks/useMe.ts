@@ -37,7 +37,7 @@ export default function useMe(){
         }
         };
         return () => bc.close();
-    }, [router, setIsOpen]);
+    }, [router, setIsOpen, queryClient]);
 
     return {
         data,

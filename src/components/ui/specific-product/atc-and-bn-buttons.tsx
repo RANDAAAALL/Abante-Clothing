@@ -25,7 +25,7 @@ export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<
         // right now, we are just redirecting to login page as of now
         setSelectedItems(props);
         resetSelectedItem();
-        router.push("/login");
+        // router.push("/login");
     }
 
     return (
