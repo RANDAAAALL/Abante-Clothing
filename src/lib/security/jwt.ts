@@ -15,6 +15,3 @@ export const GenerateAuthToken = async (payload: JWTPayload) => {
 export const VerifyAuthToken = async (token: string) => {
     return await jwtVerify(token, secret);
 }
-
-
-

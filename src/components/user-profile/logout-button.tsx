@@ -1,13 +1,19 @@
 "use client"
 
 import { useMenuBarStore } from "@/lib/store/menu-bar";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export default function LogoutButton(){
     const { setIsOpen } = useMenuBarStore();
     const router = useRouter();
+    const queryClient = useQueryClient();
+
     const handleLogoutClick = async () => {
         await fetch(`/api/logout`, { method: "POST"});
+
+        // clear user data from react query cache
+        queryClient.removeQueries({ queryKey: ["me"] });
 
         // listen for logout event in other tabs
         const bc = new BroadcastChannel("auth");

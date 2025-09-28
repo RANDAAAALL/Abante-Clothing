@@ -23,3 +23,8 @@ export const CustomerFeedbackURL = process.env.NODE_ENV === "production"
 export const LogoutURL = process.env.NODE_ENV === "production" 
             ? process.env.NEXT_PUBLIC_PROD_LOGOUT_URL
             : process.env.NEXT_PUBLIC_LOCAL_LOGOUT_URL
+
+// this will be the designated environment mode for me api endpoint
+export const MeURL = process.env.NODE_ENV === "production" 
+            ? process.env.NEXT_PUBLIC_PROD_ME_URL
+            : process.env.NEXT_PUBLIC_LOCAL_ME_URL
