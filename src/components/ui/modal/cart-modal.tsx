@@ -73,7 +73,9 @@ export default function CartModal(){
                     )
                     .toLocaleString("en-PH")}
                 </p>
-                <Link href="/login" onClick={CloseModal}
+                <Link href="#" onClick={() => {
+                  CloseModal()
+                  alert("Checkout feature coming soon!")}}
                   className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-sm py-3 px-7">
                   Checkout
                 </Link>
