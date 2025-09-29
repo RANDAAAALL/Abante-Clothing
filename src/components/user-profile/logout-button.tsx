@@ -1,11 +1,9 @@
 "use client"
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 export default function LogoutButton(){
     const { setIsOpen } = useMenuBarStore();
-    const router = useRouter();
     const queryClient = useQueryClient();
 
     const handleLogoutClick = async () => {
@@ -21,9 +19,6 @@ export default function LogoutButton(){
         const bc = new BroadcastChannel("auth");
         bc.postMessage({ type: "LOGOUT" });
         bc.close();    
-
-        router.push("/login");
-        router.refresh();
         setIsOpen(false);
     }
     return (
