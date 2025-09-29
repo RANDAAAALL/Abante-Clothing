@@ -11,16 +11,11 @@ export default function NavbarCart({flag}: {flag: boolean}) {
   const mounted = useMounted();
   const { data } = useGetCart();
   const { selectedItem} = useCartItems();
-  const { isOpen, OpenModal } = useCartItemModal();
+  const { OpenModal } = useCartItemModal();
 
   if (!mounted) return null;
   return (
     <div className="relative flex items-center">
-      {data?.length >= 1 && !flag && (
-        <span className="absolute -top-2 -right-1.5 z-100 bg-red-600 text-white text-[13px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">
-        {data?.length}
-        </span>
-      )}
 
       {!flag && (
         <>

@@ -39,9 +39,12 @@ export default function CartModalData() {
   });
   
   const totalPrice = useMemo(() => {
-    if (!data || !selectedItem) return 0;
-    return ComputeTotalPriceWithQty(data ? data : selectedItem);
+    const source = data && data.length > 0 ? data : selectedItem;
+    if (!source || source.length === 0) return 0;
+  
+    return ComputeTotalPriceWithQty(source);
   }, [data, selectedItem]);
+  
 
   // simulate loading 
   if(data && isLoading) return <p className="text-sm text-black dark:text-white h-50 flex items-center justify-center">Loading...</p>
@@ -75,7 +78,7 @@ export default function CartModalData() {
                         <p className="capitalize">
                           {isCartItem(item) ? 
                           `${item.cart_item_name} - ${item.cart_item_size}` :
-                          `${item.product.product_item_name} - ${item.product.product_item_price}`}
+                          `${item.product.product_item_name} - ${item.selectedSizeAndQty.size}`}
                         </p>
                         <p>
                           {isCartItem(item) ?
