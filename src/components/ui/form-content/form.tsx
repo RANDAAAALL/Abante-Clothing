@@ -67,7 +67,7 @@ export default function FormsContent<TSchema extends AnyZodObject>({
 
 
   return (
-    <div className="min-h-[600] md:min-h-screen flex items-center justify-center mx-auto md:max-w-lg">
+    <div className="min-h-[500] md:min-h-screen flex items-center justify-center mx-auto md:max-w-lg">
       <form onSubmit={handleSubmit(onSubmitAction)}
         className="text-black shadow-md p-6 md:p-9 py-8 rounded-xl bg-card-white-background w-full ">
 

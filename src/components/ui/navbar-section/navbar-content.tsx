@@ -62,7 +62,7 @@ export default function NavbarContent() {
 
       {/* Mobile overlay */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center h-screen justify-center gap-2 bg-white-background dark:bg-black-background">
+        <div className="fixed inset-0 z-100 flex flex-col items-center h-screen justify-center gap-2 bg-white-background dark:bg-black-background">
           <NavbarLinks style="flex flex-col text-center space-y-2" />
           {data ? (
             <LogoutButton />

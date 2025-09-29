@@ -7,9 +7,9 @@ export default function QuantityButtons({style}: {style?: string}){
 
     return (
         <>
-        <button className={clsx(style, "cursor-pointer")} onClick={() => setDecreaseQuantity(quantity)}>-</button>
+        <button className={clsx(style, "cursor-pointer")} onClick={() => setDecreaseQuantity()}>-</button>
         <span className={clsx(style, "cursor-default")}>{quantity}</span>
-        <button className={clsx(style, "cursor-pointer")} onClick={() => setIncreaseQuantity(quantity)}>+</button>
+        <button className={clsx(style, "cursor-pointer")} onClick={() => setIncreaseQuantity()}>+</button>
         </>
     );
 }

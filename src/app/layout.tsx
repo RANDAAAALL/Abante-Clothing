@@ -3,9 +3,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { metrapolis } from "../lib/custom-font";
 import "../styles/globals.css";
 import ClientProvider from "@/context/client-providers";
-import CartModal from "@/components/ui/modal/cart-modal";
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import NavbarContent from "@/components/ui/navbar-section/navbar-content";
+import CartModalContent from "@/components/ui/modal/cart-modal-content";
 
 // SEO Config
 export const metadata: Metadata = {
@@ -56,7 +56,7 @@ export default function RootLayout({
           <section className="z-50 sticky top-0"><NavbarContent /></section>
 
           {/* {modal} */}
-          <CartModal />
+          <CartModalContent />
           {children}
 
           {/* footer section */}

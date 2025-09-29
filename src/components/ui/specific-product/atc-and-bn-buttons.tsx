@@ -1,10 +1,20 @@
+import useAddToCart from "@/hooks/useAddToCart";
+import useMe from "@/hooks/useMe";
 import { useCartItems } from "@/lib/store/cart-items";
 import { ProductProps } from "@/lib/types/product-types";
 import { TshirtType } from "@/lib/types/t-shirt-types";
 import { useRouter } from "next/navigation";
 
 export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<Partial<TshirtType>>}){
-    const { setSelectedItems, selectedSize, resetSelectedItem } = useCartItems();    
+    const { setSelectedItems,
+            selectedSizeAndQty,
+            selectedSize,
+            resetSelectedItem 
+    } = useCartItems();
+    const { data } = useMe();    
+
+    const { mutate: addToCart } = useAddToCart();
+    
     const router = useRouter();
 
     const handleAddToCart = () => {
@@ -12,8 +22,11 @@ export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<
             alert("Please select a t-shirt size");
             return;
         } 
-        setSelectedItems(props);
-        resetSelectedItem();
+
+        if(data) addToCart({product: props,selectedSizeAndQty})            
+        else setSelectedItems(props);
+
+        // resetSelectedItem();
     }
 
     const handleBuyNow = () => {
@@ -21,11 +34,12 @@ export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<
             alert("Please select a t-shirt size");
             return;
         }
-    
-        // right now, we are just redirecting to login page as of now
-        setSelectedItems(props);
-        resetSelectedItem();
-        // router.push("/login");
+
+        if(data) addToCart({product: props,selectedSizeAndQty})            
+        else setSelectedItems(props);
+
+        // resetSelectedItem();
+        router.push("/checkout");
     }
 
     return (

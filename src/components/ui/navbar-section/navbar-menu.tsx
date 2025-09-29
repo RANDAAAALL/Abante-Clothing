@@ -1,6 +1,5 @@
 import { useMounted } from "@/hooks/useMounted";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
-import { MenuBarprops } from "@/lib/types/toggle-types";
 
 export default function MenuBar() {
   const { isOpen, setIsOpen } = useMenuBarStore();
