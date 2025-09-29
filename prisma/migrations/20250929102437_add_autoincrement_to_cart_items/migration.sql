@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `cart_items` MODIFY `cart_item_ID` INTEGER NOT NULL AUTO_INCREMENT;
