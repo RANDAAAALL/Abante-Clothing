@@ -28,3 +28,18 @@ export const LogoutURL = process.env.NODE_ENV === "production"
 export const MeURL = process.env.NODE_ENV === "production" 
             ? process.env.NEXT_PUBLIC_PROD_ME_URL
             : process.env.NEXT_PUBLIC_LOCAL_ME_URL
+
+// this will be the designated environment mode for get-cart api endpoint
+export const GetCartURL = process.env.NODE_ENV === "production" 
+            ? process.env.NEXT_PUBLIC_PROD_GetCart_URL
+            : process.env.NEXT_PUBLIC_LOCAL_GetCart_URL
+            
+// this will be the designated environment mode for add-to-cart api endpoint
+export const AddToCartURL = process.env.NODE_ENV === "production" 
+            ? process.env.NEXT_PUBLIC_PROD_AddToCart_URL
+            : process.env.NEXT_PUBLIC_LOCAL_AddToCart_URL
+
+            // this will be the designated environment mode for delete-cart api endpoint
+export const DeleteCartURL = process.env.NODE_ENV === "production" 
+            ? process.env.NEXT_PUBLIC_PROD_DeleteCart_URL
+            : process.env.NEXT_PUBLIC_LOCAL_DeleteCart_URL

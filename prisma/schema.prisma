@@ -28,7 +28,7 @@ model address {
 }
 
 model cart_items {
-  cart_item_ID    Int            @id
+  cart_item_ID    Int            @id @default(autoincrement())
   user_ID         Int?
   product_item_ID Int?
   cart_item_image String?        @db.VarChar(255)

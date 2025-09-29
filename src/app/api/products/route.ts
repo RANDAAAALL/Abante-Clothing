@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
-import { TshirtType } from "@/lib/types/t-shirt-types";
 
-// src/app/api/products/route.ts
+// get all tshirt product items
 export async function GET() {
   const products = await prisma.product_items.findMany({
     select: {

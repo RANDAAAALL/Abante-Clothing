@@ -27,7 +27,7 @@ export default function Home() {
     <WeekedOffersTitle/>
 
     <Suspense fallback={<TshirtCarouselSkeletonCard/>}><WeekendOffers/></Suspense>
-
+        
     {/* navigate to products page */}
     </section>
     <ViewAllProductsLink/>

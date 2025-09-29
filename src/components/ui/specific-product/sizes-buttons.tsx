@@ -1,13 +1,11 @@
 import { useCartItems } from "@/lib/store/cart-items";
 
-
 export default function TshirtSizesButtons(){
     const { selectedSize, setSelectedSize } = useCartItems();
+
     return (
         <>
-        <div>
-            <span className="font-bold text-lg">Size</span>
-        </div>
+        <div><span className="font-bold text-lg">Size</span></div>
         
         <div className="flex gap-2 -mt-3">      
         {["XS", "S", "M", "L", "XL", "OS"].map((size, i) => (

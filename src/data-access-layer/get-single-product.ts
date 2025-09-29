@@ -12,6 +12,7 @@ export const getSingleProduct = async ( {slug}: SlugProps) => {
         product_item_image: true,
         product_item_back_image: true,
         product_item_size: true,
+        product_item_color: true,
         product_item_material: true,
         product_item_construction: true,
         product_item_design_features: true,

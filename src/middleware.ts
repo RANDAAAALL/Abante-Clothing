@@ -17,7 +17,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // if no token and trying to access protected routes, redirect to login
-  if (!token && request.nextUrl.pathname.startsWith("/profile")) {
+  if (!token &&
+    (request.nextUrl.pathname.startsWith("/profile") ||
+    request.nextUrl.pathname.startsWith("/checkout"))
+    ){
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
@@ -46,9 +49,12 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/profile",
-    "/api/protected/:path*",
+    "/api/add-to-cart",
+    "/api/get-cart",
+    "/api/delete-cart",
     "/login",
     "/register",
+    "/checkout",
     "/forgot-password",
   ],
 };

@@ -1,13 +1,17 @@
 "use client";
-
 import FormsContent from "./form";
 import { loginFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
 import { loginSchema, loginFormType } from "@/lib/validations/auth-schema";
 import { LoginsURL } from "@/lib/config";
+import { useCartItems } from "@/lib/store/cart-items";
+import useAddToCart from "@/hooks/useAddToCart";
 
 export default function LoginFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
+    const { selectedItem} = useCartItems();
+    const { mutate: addData } = useAddToCart();
+
 
     const handleLoginClick = async (formData: loginFormType) => {
         const res = await fetch(`${LoginsURL}`, {
@@ -21,7 +25,21 @@ export default function LoginFormContent(){
             alert(`${data.errorMessage || data.parsedErrors}`);
             return;
         }
+
+        // passed an products argument on addData
+        selectedItem.forEach((item) => {
+            addData({
+                product: item.product,
+                selectedSizeAndQty: item.selectedSizeAndQty
+            });
+        });
+
+        // remove all the items on the storage
+        localStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`)
+
+        // full reload page
         window.location.reload();
+
         // reset the fields
         resetFormRef.current?.();
     }
