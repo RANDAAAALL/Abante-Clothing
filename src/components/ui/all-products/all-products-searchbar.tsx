@@ -24,7 +24,6 @@ export default function ViewAllProductsSearchbar(){
 
         router.replace(`${pathName}?${params.toString()}`);
     }
-    console.log("Search Rendered!");
 
     return (
         <>
