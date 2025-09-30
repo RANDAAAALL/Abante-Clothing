@@ -11,11 +11,17 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
 
   // if no token and trying to access protected routes, redirect to login
-  if(!token &&
+  if (!token &&
     (request.nextUrl.pathname.startsWith("/profile") ||
     request.nextUrl.pathname.startsWith("/checkout"))
     ){
-    url.pathname = "/login";
+      url.pathname = "/login";
+      return NextResponse.redirect(url);
+    }
+    
+  // if user is trying to access login/register and it is already logged in
+  if (token && ["/login", "/register", "/forgot-password"].includes(request.nextUrl.pathname)) {
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
@@ -23,11 +29,6 @@ export async function middleware(request: NextRequest) {
   if (token) {
     try {
       await VerifyAuthToken(token);
-
-      if (["/login", "/register", "/forgot-password"].includes(request.nextUrl.pathname)){
-        url.pathname = "/";
-        return NextResponse.redirect(url);
-      }
       return NextResponse.next({
         headers: {
           "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
