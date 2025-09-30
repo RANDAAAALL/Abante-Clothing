@@ -65,32 +65,32 @@ export default function CartModalData() {
                       <Image
                         className="mt-5 mb-4"
                         src= {`${isCartItem(item)
-                           ? item.cart_item_image ??"/images/png/tshirt_placeholder.png" :
-                          item.product.product_item_image ??
+                           ? item?.cart_item_image ??"/images/png/tshirt_placeholder.png" :
+                          item.product?.product_item_image ??
                           "/images/png/tshirt_placeholder.png"}`}
-                        width={100}
-                        height={100}
-                        alt={isCartItem(item) ?
-                           `${item.cart_item_ID}-${item.cart_item_name}` :
-                           `${item.product.product_item_ID}-${item.product.product_item_name}`}/>
+                          width={100}
+                          height={100}
+                          alt={isCartItem(item) ?
+                           `${item?.cart_item_ID}-${item?.cart_item_name}` :
+                           `${item.product?.product_item_ID}-${item.product?.product_item_name}`}/>
 
                       <div className="flex flex-1 ml-5 flex-col font-medium text-sm md:text-md">
                         <p className="capitalize">
                           {isCartItem(item) ? 
-                          `${item.cart_item_name} - ${item.cart_item_size}` :
-                          `${item.product.product_item_name} - ${item.selectedSizeAndQty.size}`}
+                          `${item?.cart_item_name} - ${item?.cart_item_size}` :
+                          `${item.product?.product_item_name} - ${item?.selectedSizeAndQty?.size}`}
                         </p>
                         <p>
                           {isCartItem(item) ?
-                          `${item.cart_item_qty} x P${item.cart_item_price}` : 
-                          `${item.selectedSizeAndQty.qty} x P${item.product.product_item_price}`}
+                          `${item?.cart_item_qty} x P${item?.cart_item_price}` : 
+                          `${item?.selectedSizeAndQty?.qty} x P${item.product?.product_item_price}`}
                         </p>
                       </div>
 
                       <button
                         className="text-black dark:text-white font-bold cursor-pointer"
                         onClick={() => {
-                        if(isCartItem(item)) deleteData(item.cart_item_ID.toString())
+                        if(isCartItem(item)) deleteData(item?.cart_item_ID.toString())
                         else removeSelectedItem(i)}}>
                         x
                       </button>
@@ -101,14 +101,13 @@ export default function CartModalData() {
               </div>
 
               <div className="mt-8 mx-auto text-sm text-center space-y-3.5">
-                <p className="font-bold">Total: P{totalPrice}</p>
+                <p className="font-bold">Total: P{totalPrice.toLocaleString("en-Ph")}</p>
                 <button
                   onClick={() => {
                     CloseModal();
                     router.push("/checkout");
                   }}
-                  className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-sm py-3 px-7"
-                >
+                  className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-sm py-3 px-7">
                   Checkout
                 </button>
               </div>

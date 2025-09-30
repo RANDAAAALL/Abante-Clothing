@@ -13,7 +13,6 @@ export default function useMe(){
     const { data, error, isError, isLoading } = useQuery({
         queryKey: ['me'],
         queryFn: async () =>  { 
-            console.log("Fetching user data...");
             const res = await fetch(`${MeURL}`, {credentials: "include"})
             if(!res.ok) throw new Error("Failed to fetch user data");
             return res.json();
