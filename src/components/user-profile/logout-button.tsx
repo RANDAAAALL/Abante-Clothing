@@ -20,6 +20,8 @@ export default function LogoutButton(){
         bc.postMessage({ type: "LOGOUT" });
         bc.close();    
         setIsOpen(false);
+
+        window.location.href = "/login"
     }
     return (
         <button 
