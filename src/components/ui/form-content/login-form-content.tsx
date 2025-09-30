@@ -35,7 +35,7 @@ export default function LoginFormContent(){
         });
 
         // remove all the items on the storage
-        localStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`)
+        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`)
 
         // full reload page
         window.location.reload();
