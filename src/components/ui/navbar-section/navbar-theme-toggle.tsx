@@ -4,16 +4,16 @@ import { useMounted } from "@/hooks/useMounted";
 import { useTheme } from "next-themes";
 
 export default function NavbarThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const mounted = useMounted();
   if (!mounted) return null;
 
   return (
     <button
       className="cursor-pointer"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
       aria-label="Toggle Theme">
-      {theme === "light" ? <DarkModeSVG className="w-[22] h-[22]"/> : <LightModeSVG className="w-[22] h-[22]"/>}
+      {resolvedTheme === "light" ? <DarkModeSVG className="w-[22] h-[22]"/> : <LightModeSVG className="w-[22] h-[22]"/>}
     </button>
   );
 }
