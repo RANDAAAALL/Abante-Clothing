@@ -1,14 +1,11 @@
 "use client";
 // src\app\products\[slug]\@modal\(..)photo\[imageId]\page.tsx
 import { usePhotoModal } from "@/lib/store/product-photos";
+import { PhotoParamsProps } from "@/lib/types/photo-params-types";
 import Image from "next/image";
 import { useEffect, use } from "react";
 
-export default function PhotoModal({
-  params,
-}: {
-  params: Promise<{ slug: string; photoSlug: string }>;
-}) {
+export default function PhotoModal({ params }: PhotoParamsProps) {
   const { slug, photoSlug } = use(params);
   const { isOpen, closePhotoModal } = usePhotoModal();
 
@@ -26,11 +23,11 @@ export default function PhotoModal({
     }}>
       <div className="relative w-[500] h-[500]">
           <Image
-            src={photoSlug === "back" ? 
-            `${`/images/png/abante-t-shirt-${slug}-back-image.png`}` :
-            photoSlug === "size-chart" ?
-            `${`/images/png/abante-t-shirt-size-chart-image.png`}` :
-            `${`/images/png/abante-t-shirt-${slug}.png`}`}
+          src={photoSlug === "back" ? 
+          `${`https://res.cloudinary.com/abante-clothing/image/upload/abante-tshirts/abante-t-shirt-${slug}-back-image.png`}` :
+          photoSlug === "size-chart" ?
+          `${`/images/png/abante-t-shirt-size-chart-image.png`}` :
+          `${`https://res.cloudinary.com/abante-clothing/image/upload/v1759378284/abante-tshirts/abante-t-shirt-${slug}.png`}`}
             style={{ objectFit: 'contain'}}
             sizes="auto"
             fill
