@@ -11,7 +11,17 @@ const nextConfig: NextConfig = {
     process.env.LOCAL_LAN_IP_ADDRESS ?? "http://localhost:3000",
     "https://abante-clothing.vercel.app/",
   ],
-};
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",      
+        pathname: "/**", 
+      },
+    ],
+  },
+}
 
 // wrap it with bundle analyzer
 export default withBundleAnalyzer({
