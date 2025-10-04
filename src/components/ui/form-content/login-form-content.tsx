@@ -6,11 +6,13 @@ import { loginSchema, loginFormType } from "@/lib/validations/auth-schema";
 import { LoginsURL } from "@/lib/config";
 import { useCartItems } from "@/lib/store/cart-items";
 import useAddToCart from "@/hooks/useAddToCart";
+import { usePathname } from "next/navigation";
 
 export default function LoginFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
     const { selectedItem} = useCartItems();
     const { mutate: addData } = useAddToCart();
+    const pathName = usePathname();
 
 
     const handleLoginClick = async (formData: loginFormType) => {
@@ -38,7 +40,7 @@ export default function LoginFormContent(){
         sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`)
 
         // full reload page
-        window.location.reload();
+        window.location.href = pathName
 
         // reset the fields
         resetFormRef.current?.();
