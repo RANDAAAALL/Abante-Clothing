@@ -1,5 +1,5 @@
 "use client";
-import { SlicedPaginatedData } from "@/lib/sliced-paginated-date";
+import { SlicedPaginatedData } from "@/lib/helper/sliced-paginated-date";
 import { useState, useEffect } from "react";
 
 export default function usePaginationAndFilteredProducts<T>(

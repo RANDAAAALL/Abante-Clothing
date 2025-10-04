@@ -1,6 +1,6 @@
 "use client"
 import AbanteClothingLogo from "@/components/icons/svg/abante-clothing-logo";
-import LogoutButton from "@/components/user-profile/logout-button";
+import LogoutButton from "@/components/ui/user-profile/logout-button";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useState, useEffect } from "react";
 import NavbarButtons from "./navbar-buttons";
@@ -8,7 +8,7 @@ import NavbarCart from "./navbar-cart";
 import NavbarLinks from "./navbar-links";
 import MenuBar from "./navbar-menu";
 import NavbarThemeToggle from "./navbar-theme-toggle";
-import UserProfileNavigator from "@/components/user-profile/user-profile-navigator";
+import UserProfileNavigator from "@/components/ui/user-profile/user-profile-navigator";
 import useGetCart from "@/hooks/useGetCart";
 
 export default function NavbarContent() {

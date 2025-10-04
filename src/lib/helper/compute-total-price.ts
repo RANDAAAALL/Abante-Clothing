@@ -1,5 +1,5 @@
 import isCartItem from "./isCartItem";
-import { SelectedItemProps } from "./store/cart-items";
+import { SelectedItemProps } from "../store/cart-items";
 
 export const ComputeTotalPriceWithQty = (cartItems: CartItemsProps[] | SelectedItemProps[]) => {
     return cartItems.reduce(
