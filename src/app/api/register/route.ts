@@ -1,6 +1,7 @@
 import { registerationSchema } from "@/lib/validations/auth-schema";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
+import { hashPassword } from "@/lib/hash/create-hash-password";
 
 export async function POST(req: Request) {
   try {
@@ -30,12 +31,15 @@ export async function POST(req: Request) {
       );
     }
 
+    // convert to a hash password
+    const convertToHash = await hashPassword(parseData.data.password);
+
     // create a new user in the database
     await prisma?.users.create({
       data: {
         username: parseData.data.username,
         email: parseData.data.email,
-        password: parseData.data.password,
+        password: convertToHash,
         role: "user",
       }
     })

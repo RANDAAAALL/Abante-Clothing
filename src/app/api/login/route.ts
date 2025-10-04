@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
 import { GenerateAuthToken } from "@/lib/security/jwt";
 import { setAuthCookie } from "@/lib/security/cookies";
+import { isValidHashedPassword } from "@/lib/hash/compare-hash-password";
 
 export async function POST(req: Request) {
   try {
@@ -40,13 +41,13 @@ export async function POST(req: Request) {
       )
     }
 
-    // check if the password matches
-    if(usersDetails.password !== parseData.data.password){
-      return NextResponse.json(
-        {errorMessage: "Invalid password"},
-        {status: 401}
-      )
-    }
+      // check if the password isn't matches
+      if(!await isValidHashedPassword(parseData.data.password, usersDetails.password ?? "")){
+        return NextResponse.json(
+          {errorMessage: "Invalid password"},
+          {status: 401}
+        )
+      }
 
     // generate auth token
     const authToken = await GenerateAuthToken({
