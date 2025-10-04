@@ -10,6 +10,6 @@ export default function useDeleteCart(
       const res = await fetch(`${DeleteCartURL}/${cart_item_id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete item");
     },
-    ...options, // spread in user-provided callbacks
+    ...options,
   });
 }

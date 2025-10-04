@@ -1,7 +1,7 @@
 "use client";
 
 import CartSVG from "@/components/icons/svg/cart";
-import useGetCart from "@/hooks/useGetCart.";
+import useGetCart from "@/hooks/useGetCart";
 import { useMounted } from "@/hooks/useMounted";
 import { useCartItemModal, useCartItems } from "@/lib/store/cart-items";
 
