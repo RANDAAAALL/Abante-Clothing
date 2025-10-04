@@ -3,11 +3,11 @@ import Link from "next/link";
 
 export default function HeroBanner() {
   return (
-    <div className="relative w-full h-[700px] md:h-[900px] xl:rounded-md overflow-hidden">
+    <div className="relative w-full  h-[450px] sm:h-[550px] md:h-[700px] 2xl:h-[900px] xl:rounded-md overflow-hidden">
     <Image
       src="/images/png/HeroBanner.png"
       fill
-      className="object-cover"
+      className="object-cover object-top"
       priority
       sizes="100vw"
       unoptimized={true}
