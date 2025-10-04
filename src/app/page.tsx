@@ -16,7 +16,7 @@ export default function Home() {
     <div className="relative bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
   
     {/* hero banner */}
-    <section className="relative mx-auto w-full h-[50vh] md:h-[70vh] lg:h-[90vh]"><HeroBanner /></section>
+    <section className="mx-auto"><HeroBanner /></section>
 
     {/* main-section */}
     <main className="flex flex-col justify-center items-center mx-auto p-4 sm:p-10">
