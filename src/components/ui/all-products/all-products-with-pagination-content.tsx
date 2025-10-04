@@ -1,4 +1,4 @@
-import { filteredProductItems } from "@/lib/filtered-product-items";
+import { filteredProductItems } from "@/lib/helper/filtered-product-items";
 import AllProductsWithPagination from "./all-products-with-pagination";
 
 export default async function AllProductsWithPaginationContent({ query }: { query: string }){

@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import UserRoundSVG from "../icons/svg/user-round";
+import UserRoundSVG from "../../icons/svg/user-round";
 
 export default function UserProfileNavigator(){
     const router = useRouter();

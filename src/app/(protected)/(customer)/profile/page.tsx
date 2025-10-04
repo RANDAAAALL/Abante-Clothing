@@ -1,4 +1,4 @@
-import UserProfileContent from "@/components/user-profile/user-profile-content";
+import UserProfileContent from "@/components/ui/user-profile/user-profile-content";
 
 export const experimental_ppr = true;
 

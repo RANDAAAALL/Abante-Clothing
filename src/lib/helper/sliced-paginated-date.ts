@@ -1,4 +1,4 @@
-import { SlicedPaginatedDataProps } from "./types/sliced-paginated-data-types";
+import { SlicedPaginatedDataProps } from "../types/sliced-paginated-data-types";
 
 export const SlicedPaginatedData = <T, > ({
     props,

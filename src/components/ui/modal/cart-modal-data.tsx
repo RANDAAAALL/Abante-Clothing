@@ -3,11 +3,11 @@ import { SelectedItemProps, useCartItemModal, useCartItems } from "@/lib/store/c
 import React, { useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ComputeTotalPriceWithQty } from "@/lib/compute-total-price";
+import { ComputeTotalPriceWithQty } from "@/lib/helper/compute-total-price";
 import useGetCart from "@/hooks/useGetCart";
 import useDeleteCart from "@/hooks/useDeleteCart";
 import { useQueryClient } from "@tanstack/react-query";
-import isCartItem from "@/lib/isCartItem";
+import isCartItem from "@/lib/helper/isCartItem";
 
 export default function CartModalData() {
   const { selectedItem, removeSelectedItem } = useCartItems();

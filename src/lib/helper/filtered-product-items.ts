@@ -1,5 +1,5 @@
 import { getAllRelatedProducts } from "@/data-access-layer/get-all-products";
-import { SearchQuerytypes } from "./types/search-query-types";
+import { SearchQuerytypes } from "../types/search-query-types";
 import Fuse from "fuse.js"
 
 export const filteredProductItems = async ({query}: SearchQuerytypes) =>{
