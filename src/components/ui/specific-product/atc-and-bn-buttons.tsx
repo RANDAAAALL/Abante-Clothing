@@ -9,7 +9,7 @@ export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<
     const { setSelectedItems,
             selectedSizeAndQty,
             selectedSize,
-            resetSelectedItem 
+            // resetSelectedItem 
     } = useCartItems();
     const { data } = useMe();    
 

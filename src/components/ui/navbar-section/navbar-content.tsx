@@ -8,11 +8,11 @@ import NavbarCart from "./navbar-cart";
 import NavbarLinks from "./navbar-links";
 import MenuBar from "./navbar-menu";
 import NavbarThemeToggle from "./navbar-theme-toggle";
-import useMe from "@/hooks/useMe";
 import UserProfileNavigator from "@/components/user-profile/user-profile-navigator";
+import useGetCart from "@/hooks/useGetCart";
 
 export default function NavbarContent() {
-  const { data } = useMe();
+  const { data } = useGetCart();
   const { isOpen } = useMenuBarStore();
   const [isScrolled, setIsScrolled] = useState(false);
 

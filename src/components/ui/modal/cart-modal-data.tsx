@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ComputeTotalPriceWithQty } from "@/lib/compute-total-price";
-import useGetCart from "@/hooks/useGetCart.";
+import useGetCart from "@/hooks/useGetCart";
 import useDeleteCart from "@/hooks/useDeleteCart";
 import { useQueryClient } from "@tanstack/react-query";
 import isCartItem from "@/lib/isCartItem";

@@ -6,45 +6,51 @@ import { loginSchema, loginFormType } from "@/lib/validations/auth-schema";
 import { LoginsURL } from "@/lib/config";
 import { useCartItems } from "@/lib/store/cart-items";
 import useAddToCart from "@/hooks/useAddToCart";
-import { usePathname } from "next/navigation";
+import useGetCart from "@/hooks/useGetCart";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+// import { usePathname } from "next/navigation";
 
 export default function LoginFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
     const { selectedItem} = useCartItems();
     const { mutate: addData } = useAddToCart();
-    const pathName = usePathname();
-
+    const  queryClient = useQueryClient();
+    const router = useRouter();
 
     const handleLoginClick = async (formData: loginFormType) => {
         const res = await fetch(`${LoginsURL}`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json",},
-            body: JSON.stringify(formData),
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
         });
-        
         const data = await res.json();
-        if(!res.ok){
-            alert(`${data.errorMessage || data.parsedErrors}`);
-            return;
+        if (!res.ok) {
+          alert(`${data.errorMessage || data.parsedErrors}`);
+          return;
         }
-
-        // passed an products argument on addData
-        selectedItem.forEach((item) => {
-            addData({
+      
+        // Merge guest cart items to server
+        if (selectedItem.length > 0) {
+          await Promise.all(
+            selectedItem.map(item =>
+              addData({
                 product: item.product,
-                selectedSizeAndQty: item.selectedSizeAndQty
-            });
-        });
-
-        // remove all the items on the storage
-        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`)
-
-        // full reload page
-        window.location.href = pathName
-
-        // reset the fields
-        resetFormRef.current?.();
-    }
+                selectedSizeAndQty: item.selectedSizeAndQty,
+              })
+            )
+          );
+        }
+      
+        // Clear guest cart in Zustand + sessionStorage
+        selectedItem.forEach((_, index) => selectedItem.splice(0, selectedItem.length));
+        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
+      
+        // Refetch the cart so navbar shows correct qty
+        router.refresh();
+        queryClient.invalidateQueries({ queryKey: ["get-cart"] });
+      };
+      
 
     return (
         <FormsContent<typeof loginSchema>

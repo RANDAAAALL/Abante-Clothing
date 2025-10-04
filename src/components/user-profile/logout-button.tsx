@@ -1,13 +1,16 @@
 "use client"
+import { LogoutURL } from "@/lib/config";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export default function LogoutButton(){
     const { setIsOpen } = useMenuBarStore();
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     const handleLogoutClick = async () => {
-        await fetch(`/api/logout`, { method: "POST"});
+        await fetch(`${LogoutURL}`, { method: "POST"});
 
         // clear user data from react query cache of "api/me"
         queryClient.removeQueries({ queryKey: ["me"] });
@@ -21,7 +24,7 @@ export default function LogoutButton(){
         bc.close();    
         setIsOpen(false);
 
-        window.location.href = "/login"
+        router.refresh();
     }
     return (
         <button 
