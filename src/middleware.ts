@@ -13,7 +13,10 @@ export async function middleware(request: NextRequest) {
   // if no token and trying to access protected routes, redirect to login
   if (!token &&
     (request.nextUrl.pathname.startsWith("/profile") ||
-    request.nextUrl.pathname.startsWith("/checkout"))
+    request.nextUrl.pathname.startsWith("/checkout") ||
+    request.nextUrl.pathname.startsWith("/profile/address") ||
+    request.nextUrl.pathname.startsWith("/prfile/billing") ||
+    request.nextUrl.pathname.startsWith("/profile/order-history"))
     ){
       url.pathname = "/login";
       return NextResponse.redirect(url);
@@ -49,9 +52,13 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/profile",
+    "/profile/billing",
+    "/profile/order-history",
+    "/profile/address",
     "/api/add-to-cart",
     "/api/get-cart",
     "/api/delete-cart",
+    "/api/uploaded-profile-picture",
     "/login",
     "/register",
     "/checkout",
