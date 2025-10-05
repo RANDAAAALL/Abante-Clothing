@@ -9,7 +9,7 @@
   --input-dark-background: #6D6D6D;
   --card-dark-background: #252525;
   --card-white-background: #f8f7f7;
-  --slight-gray-background: #E4E4E4;
+  --slight-gray-background: #e8e8e8;
   --input-background: #5B5959;
   --t-shirt-background: #F9F9F9;
   --radius: 0.625rem;
@@ -217,5 +217,47 @@ body {
     100% {
       transform: translateX(100%);
     }
+  }
+}
+
+@layer utilities {
+  .user-image-skeleton {
+    @apply relative overflow-hidden rounded-full bg-gray-200 dark:bg-card-black-background;
+  }
+
+  .user-image-skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    height: 100%;
+    width: 150%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(192, 190, 190, 0.6),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+
+  .username-skeleton {
+    @apply relative overflow-hidden rounded bg-gray-200 dark:bg-card-black-background;
+  }
+
+  .username-skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    height: 100%;
+    width: 150%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(192, 190, 190, 0.6),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
   }
 }
