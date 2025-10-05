@@ -9,6 +9,6 @@ export default function UserProfileNavigator(){
     const handleUserProfileClick = async () => router.push("/profile");
 
     return (
-        <><button onClick={handleUserProfileClick}><UserRoundSVG/></button></>
+        <><button onClick={handleUserProfileClick}><UserRoundSVG width={25} height={25}/></button></>
     );
 }

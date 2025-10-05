@@ -58,7 +58,6 @@ export default function RootLayout({
           {/* {modal} */}
           <CartModalContent />
           {children}
-
           {/* footer section */}
           <footer className="text-sm mx-auto max-w-[1980] p-4"><FooterSectionContent className="mt-25" styleName="md:pt-6" /></footer>  
         </ClientProvider>

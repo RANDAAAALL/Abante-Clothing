@@ -3,7 +3,6 @@
 import FacebookLogoSVG from "@/components/icons/svg/facebook-logo";
 import InstagramLogoSVG from "@/components/icons/svg/instagram-logo";
 import { useMounted } from "@/hooks/useMounted";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 
 export default function FooterSocmedIcons(){

@@ -1,8 +1,8 @@
 
 
-export default function UserRoundSVG(){
+export default function UserRoundSVG(props: React.SVGProps<SVGSVGElement>){
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"
+        <svg xmlns="http://www.w3.org/2000/svg" {...props} viewBox="0 0 24 24"
             fill="currentColor"
             stroke="currentColor" 
             className="-ml-1.5 md:-ml-0 cursor-pointer lucide lucide-user-round-icon lucide-user-round">

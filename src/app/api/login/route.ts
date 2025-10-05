@@ -27,11 +27,9 @@ export async function POST(req: Request) {
       },
       select: {
         user_ID: true,
-        username: true,
-        email: true,
         password: true,
       }
-    })
+    });
 
     // if user not found, return a 404 response
     if(!usersDetails){
@@ -52,8 +50,6 @@ export async function POST(req: Request) {
     // generate auth token
     const authToken = await GenerateAuthToken({
       user_ID: usersDetails.user_ID,
-      username: usersDetails.username,
-      email: usersDetails.email,
     });    
 
     // set the token in the cookie
