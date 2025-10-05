@@ -21,7 +21,7 @@ export const registerationSchema = z.object({
     confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: "Password do no match",
+        message: "Password do not match",
         path: ['confirmPassword']
     })
 
