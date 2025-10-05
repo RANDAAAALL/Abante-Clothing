@@ -5,7 +5,7 @@ import { UserPayload } from "@/lib/security/payloads/get-user-payload";
 
 export async function POST(req: Request) {
   // check if user is logged in
-  if(!await isAuthenticatedUser()) return NextResponse.json({ errorMessage: "Unauthorized" }, { status: 401 });
+  if(!await isAuthenticatedUser()) return NextResponse.redirect("/login");
 
   const payload = await UserPayload();
 

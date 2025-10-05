@@ -6,10 +6,8 @@ export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ cart_item_id: string }> }
 ) {
-  if (!await isAuthenticatedUser()) {
-    return NextResponse.json({ errorMessage: "Unauthorized" }, { status: 401 });
-  }
-
+  if (!await isAuthenticatedUser()) return NextResponse.redirect("/login");
+  
   const cart_item_id = (await params).cart_item_id
 
   const cartItemId = Number(cart_item_id);
