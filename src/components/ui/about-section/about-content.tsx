@@ -3,8 +3,7 @@ export function AboutContent(){
     return (
         <>
           {/* main section */}
-          <main className="flex flex-col text-center w-full md:max-w-[1980] md:mx-auto p-4 md:p-0 md:px-6">
-            <div className="min-h-[500] md:min-h-screen max-w-2xl flex justify-center items-center flex-col mx-auto mt-0">
+          <main className="min-h-[500] md:min-h-screen flex flex-col text-center items-center justify-center w-full md:max-w-2xl md:mx-auto p-4 md:p-0 md:px-6">
             <p className="font-bold text-3xl">Who we are?</p>
             <p className="mt-3 font-medium text-justify text-sm">Abante Clothing is a growing clothing brand that specializes in oversized T-shirts,
             a popular fashion trend. Established in 2022 and based in Davao City, the business
@@ -12,7 +11,6 @@ export function AboutContent(){
             It has successfully built a loyal customer base and gained industry knowledge while offering local delivery services.
             Looking ahead, Abante Clothing aims to expand its reach, open new branches, and extend its delivery services nationwide,
             all while staying true to its mission of creating meaningful apparel.</p>
-            </div>
           </main>
         </>
     );

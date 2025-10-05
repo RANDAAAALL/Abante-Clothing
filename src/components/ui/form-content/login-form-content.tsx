@@ -6,7 +6,6 @@ import { loginSchema, loginFormType } from "@/lib/validations/auth-schema";
 import { LoginsURL } from "@/lib/config";
 import { useCartItems } from "@/lib/store/cart-items";
 import useAddToCart from "@/hooks/useAddToCart";
-import useGetCart from "@/hooks/useGetCart";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 // import { usePathname } from "next/navigation";

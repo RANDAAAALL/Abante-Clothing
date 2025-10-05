@@ -3,11 +3,9 @@ import { VerifyAuthToken } from "../jwt";
 import { redirect } from "next/navigation";
 import { getAuthCookie } from "../cookies";
 
-interface UserPayload extends JWTPayload {
+export interface UserPayload extends JWTPayload {
     user_ID: string;
-    username: string;
-    email: string;
-}
+}   
 
 // retrieve user payload from token
 export const UserPayload = async (): Promise<UserPayload> => {

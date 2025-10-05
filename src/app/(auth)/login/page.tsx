@@ -9,7 +9,7 @@ export default function Login() {
       <div className="bg-white dark:bg-black-background dark:text-white text-black w-full max-w-[1980] mx-auto">
           {/* <LoginToast reason={reason} /> */}
             {/* main section */}
-            <main className=" text-center w-full md:mx-auto p-4 md:p-0 md:px-6 ">
+            <main className="text-center p-4 md:p-0 md:px-6 ">
               <LoginFormContent />
             </main>
           </div>
