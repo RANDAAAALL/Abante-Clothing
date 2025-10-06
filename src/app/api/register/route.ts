@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     // if validation fails, return a 400 response with error details
     if (!parseData.success) {
       return NextResponse.json(
-        { errorMessage: "Invalid data", parsedErrors: parseData.error.flatten().fieldErrors },
+        { errorMessage: "Please check your input and try again.", parsedErrors: parseData.error.flatten().fieldErrors },
         { status: 400 }
       );
     }
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
 
     // return a success response
     return NextResponse.json(
-      { successMessage: "User registered successfully"},
+      { successMessage: "Registered successfully"},
       { status: 201 }
     );
   } catch (error) {

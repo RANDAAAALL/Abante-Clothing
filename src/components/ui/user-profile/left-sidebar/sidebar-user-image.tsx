@@ -2,10 +2,13 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function SidebarUserImage({ user_image }:{user_image?: string;}) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [tempImage, setTempImage] = useState<string | null>(null);
+  const [ isUploading, setIsUploading ] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -13,26 +16,24 @@ export default function SidebarUserImage({ user_image }:{user_image?: string;}) 
       console.log("No file provided!");
       return;
     }
-    // display temporary uploaded pic right away
-    const url = URL.createObjectURL(file);
-    setTempImage(url);
+    const formData = new FormData();
+    formData.append("file", file);
 
-      try{
-          const formData = new FormData();
-          formData.append("file", file);
-          const res = await fetch("/api/upload-profile-picture", {
-            method: "POST",
-            body: formData,
-          });
-
-          const data = await res.json();
-
-          if(!res.ok) console.log("Error While Uploading: ", data?.errorMessage);
-          console.log("Message: ", data?.sucessMessage)
-          
-      }catch(err){
-        console.log("Error upload: ", err);
-      }
+    toast.promise(
+      (async () => {
+        setIsUploading(true);
+        const res = await fetch("/api/upload-profile-picture", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data?.errorMessage || "Something went wrong during upload");
+        router.refresh(); // to trigger the server revalidatePath
+      })(), {
+      loading: 'Uploading.....',
+      success: 'Uploaded successfully',
+      error: (e) => e?.message ||  'Upload failed'
+    }).finally(() => setIsUploading(false));
     };
 
   return (
@@ -42,19 +43,20 @@ export default function SidebarUserImage({ user_image }:{user_image?: string;}) 
         accept="image/*"
         onChange={handleChange}
         ref={fileInputRef}
+        disabled={isUploading}
         className="hidden"/>
 
       <Image
-        src={ tempImage || user_image || "/images/png/default_avatar.png"}
+        key={user_image}
+        src={ user_image || "/images/png/default_avatar.png"}
         fill
         alt="user-profile-avatar"
-        className="rounded-full object-cover"
-      />
+        className="rounded-full object-cover"/>
       <div onClick={() => fileInputRef.current?.click()}
         className="absolute inset-0 rounded-full bg-black/60 opacity-0
         group-hover:opacity-100 flex items-center justify-center 
         text-white text-sm font-medium transition-opacity duration-300 cursor-pointer">
-        Edit
+        Upload
       </div>
     </div>
   );

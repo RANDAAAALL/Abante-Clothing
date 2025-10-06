@@ -8,6 +8,7 @@ import { useCartItems } from "@/lib/store/cart-items";
 import useAddToCart from "@/hooks/useAddToCart";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 // import { usePathname } from "next/navigation";
 
 export default function LoginFormContent(){
@@ -25,7 +26,7 @@ export default function LoginFormContent(){
         });
         const data = await res.json();
         if (!res.ok) {
-          alert(`${data.errorMessage || data.parsedErrors}`);
+          toast.error(`${data.errorMessage || data.parsedErrors}`);
           return;
         }
       
@@ -45,7 +46,7 @@ export default function LoginFormContent(){
         selectedItem.forEach((_, index) => selectedItem.splice(0, selectedItem.length));
         sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
       
-        // Refetch the cart so navbar shows correct qty
+        // refetch the cart so navbar shows correct qty
         router.refresh();
         queryClient.invalidateQueries({ queryKey: ["get-cart"] });
       };

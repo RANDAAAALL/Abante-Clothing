@@ -7,6 +7,7 @@ import { useRef } from "react";
 import { registerationSchema, registerFormType } from "@/lib/validations/auth-schema";
 import { RegisterURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export default function RegisterFormContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
@@ -22,10 +23,11 @@ export default function RegisterFormContent(){
         const data = await res.json();
         
         if(!res.ok){
-            alert(`${data.errorMessage || data.parsedErrors}`);
+            toast(`${data.errorMessage || data.parsedErrors}`);
             return;
         }
 
+        toast("Registered Successfully!");
         router.push("/login");
         // reset the fields
         resetFormRef.current?.();

@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     // if validation fails, return a 400 response with error details
     if (!parseData.success) {
       return NextResponse.json(
-        { errorMessage: "Invalid data", parsedErrors: parseData.error.flatten().fieldErrors },
+        { errorMessage: "Please check your input and try again.", parsedErrors: parseData.error.flatten().fieldErrors },
         { status: 400 }
       );
     }
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     // if user not found, return a 404 response
     if(!usersDetails){
       return NextResponse.json(
-        {errorMessage: "User not found"},
+        {errorMessage: "Login failed. Please check your email or password."},
         {status: 404}
       )
     }

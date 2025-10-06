@@ -3,6 +3,7 @@ import cloudinary from "@/lib/cloudinary"
 import { isAuthenticatedUser } from "@/data-access-layer/verify-user";
 import prisma from "@/lib/prisma/prisma";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {
   if (!await isAuthenticatedUser()) return NextResponse.redirect("/login");
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 
-    if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    if (!file) return NextResponse.json({ errorMessage: "No file provided" }, { status: 400 });
     
     // Convert File to Base64
     const arrayBuffer = await file.arrayBuffer();
@@ -34,9 +35,12 @@ export async function POST(request: Request) {
       }
     });
 
+    // reload the page after user successfully uploaded an image
+    revalidatePath("/profile");
+
     return NextResponse.json({ successMessage: "uploaded sucessfully"}, { status: 200 });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ errorMessage: "Upload failed" }, { status: 500 });
+    return NextResponse.json({ errorMessage: err }, { status: 500 });
   }
 }

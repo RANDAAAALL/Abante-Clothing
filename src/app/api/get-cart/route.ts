@@ -11,6 +11,6 @@ export async function GET(){
         where: { user_ID: Number(payload.user_ID)},
         orderBy: { cart_item_date: "desc"}
     });
-
+    
     return NextResponse.json(cartItems);
 }
