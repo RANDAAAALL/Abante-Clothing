@@ -48,7 +48,7 @@ export default function SidebarUserImage({ user_image }:{user_image?: string;}) 
 
       <Image
         key={user_image}
-        src={ user_image || "/images/png/default_avatar.png"}
+        src={ user_image ?? "/images/png/default_avatar.png"}
         fill
         alt="user-profile-avatar"
         className="rounded-full object-cover"/>
