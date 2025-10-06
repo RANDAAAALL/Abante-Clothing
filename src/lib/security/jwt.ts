@@ -7,7 +7,8 @@ export const GenerateAuthToken = async (payload: JWTPayload) => {
     return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })   // algorithm
     .setIssuedAt()                          // iat
-    .setExpirationTime("15m")               // expires in 15 mins
+    .setExpirationTime("15min")               // expires in 15 mins
+    // .setExpirationTime("1hr")               // expires in 1hour
     .sign(secret);
 };
 

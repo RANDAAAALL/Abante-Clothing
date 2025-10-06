@@ -8,6 +8,7 @@ export const setAuthCookie = async (token: string) => {
         sameSite: "strict",
         path: "/",
         maxAge: 60 * 15, // expire in 15 minutes
+        // maxAge: 60 * 60, // expire in 1hr
     })
 }
 
