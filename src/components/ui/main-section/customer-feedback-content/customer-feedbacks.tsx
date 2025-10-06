@@ -5,6 +5,8 @@ export default async function CustomerFeedbacks(){
     await new Promise(res => setTimeout(res,1000));
     const res = await fetch(`${CustomerFeedbackURL}`, { cache: "no-store"});
     const data = await res.json();
+    console.log("CustomerFeedbackURL:", CustomerFeedbackURL);
+    console.log("Its Data: ", data);
 
     return (
         <>
