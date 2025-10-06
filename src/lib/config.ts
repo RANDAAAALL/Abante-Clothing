@@ -1,9 +1,4 @@
-const ENV =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
-    ? "production"
-    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
-    ? "preview"
-    : "development";
+const ENV = process.env.NEXT_PUBLIC_VERCEL_ENV ?? "development"
 
 
 // PRODUCTS API

@@ -6,7 +6,7 @@ export default async function CustomerFeedbacks(){
     const res = await fetch(`${CustomerFeedbackURL}`, { cache: "no-store"});
     if (!res.ok) {
         const text = await res.text();
-        console.error("Fetch failed:", text); // log actual HTML or error page
+        console.error("Fetch failed:", text); 
         return null;
       }
     const data = await res.json();
