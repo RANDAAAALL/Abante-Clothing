@@ -1,4 +1,4 @@
-import { getBaseUrl } from "@/lib/getBaseUrl";
+import { getBaseUrl } from "@/lib/helper/getBaseUrl";
 
 // dynamically builds URLs based on environment
 export const ProductsURL = `${getBaseUrl()}/api/products`;
