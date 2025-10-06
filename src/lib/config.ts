@@ -1,4 +1,10 @@
-const ENV = process.env.NEXT_PUBLIC_VERCEL_ENV ?? "development";
+const ENV =
+  process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
+    ? "production"
+    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
+    ? "preview"
+    : "development";
+
 
 // PRODUCTS API
 export const ProductsURL =
