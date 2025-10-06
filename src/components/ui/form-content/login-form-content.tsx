@@ -19,6 +19,7 @@ export default function LoginFormContent(){
     const router = useRouter();
 
     const handleLoginClick = async (formData: loginFormType) => {
+        console.log(`CURRENT ENV: `, LoginsURL);
         const res = await fetch(`${LoginsURL}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
