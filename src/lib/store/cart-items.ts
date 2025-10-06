@@ -127,7 +127,7 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
         }),
     }),
     {
-      name: `${process.env.NEXT_PUBLIC_STRG_NAME as string}`, 
+      name: `${process.env.STRG_NAME as string}`, 
       storage: createJSONStorage(() => sessionStorage),
     }
   )
