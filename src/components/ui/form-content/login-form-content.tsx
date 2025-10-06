@@ -19,6 +19,7 @@ export default function LoginFormContent(){
     const router = useRouter();
 
     const handleLoginClick = async (formData: loginFormType) => {
+        console.log(`CURRENT ENV: `, LoginsURL);
         const res = await fetch(`${LoginsURL}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -44,7 +45,7 @@ export default function LoginFormContent(){
       
         // Clear guest cart in Zustand + sessionStorage
         selectedItem.forEach((_, index) => selectedItem.splice(0, selectedItem.length));
-        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
+        sessionStorage.removeItem(`${process.env.STRG_NAME as string}`);
       
         // refetch the cart so navbar shows correct qty
         router.refresh();

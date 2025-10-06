@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: [
     process.env.LOCAL_LAN_IP_ADDRESS ?? "http://localhost:3000",
     "https://abante-clothing.vercel.app/",
+    "https://abante-clothing-git-feature-lstrndgs-projects.vercel.app/",
   ],
   images: {
     remotePatterns: [
