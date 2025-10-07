@@ -1,5 +1,5 @@
 // import SidebarContent from "@/components/ui/user-profile/left-sidebar/sidebar-content";
-import SidebarContent from "@/components/ui/user-profile/left-sidebar/sidebar-content";
+import SidebarContent from "@/components/ui/user-profile-content/left-sidebar/sidebar-content";
 
 export const experimental_ppr = true;
 

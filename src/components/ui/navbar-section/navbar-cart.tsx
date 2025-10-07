@@ -1,5 +1,4 @@
 "use client";
-
 import CartSVG from "@/components/icons/svg/cart";
 import useGetCart from "@/hooks/useGetCart";
 import { useMounted } from "@/hooks/useMounted";
