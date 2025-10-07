@@ -3,7 +3,7 @@ import { SelectedItemProps, useCartItemModal, useCartItems } from "@/lib/store/c
 import React, { useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ComputeTotalPriceWithQty } from "@/lib/helper/compute-total-price";
+import { computeItems } from "@/lib/helper/compute-items";
 import useGetCart from "@/hooks/useGetCart";
 import useDeleteCart from "@/hooks/useDeleteCart";
 import { useQueryClient } from "@tanstack/react-query";
@@ -38,11 +38,16 @@ export default function CartModalData() {
     }
   });
   
-  const totalPrice = useMemo(() => {
+  const res = useMemo(() => {
     const source = data && data.length > 0 ? data : selectedItem;
-    if (!source || source.length === 0) return 0;
-  
-    return ComputeTotalPriceWithQty(source);
+    if (!source || source.length === 0) {
+      return {
+        subTotalPriceResult: 0,
+        overallQtyResult: 0,
+        overallPriceResult: 0,
+      };
+    }
+    return computeItems(source);
   }, [data, selectedItem]);
   
 
@@ -101,7 +106,7 @@ export default function CartModalData() {
               </div>
 
               <div className="mt-8 mx-auto text-sm text-center space-y-3.5">
-                <p className="font-bold">Total: P{totalPrice.toLocaleString("en-Ph")}</p>
+                <p className="font-bold">Total: P{res?.subTotalPriceResult.toLocaleString("en-Ph")}</p>
                 <button
                   onClick={() => {
                     CloseModal();
@@ -114,7 +119,7 @@ export default function CartModalData() {
             </>
           ) : (
             <p className="text-sm text-black dark:text-white h-50 flex items-center justify-center">
-              Your cart is currently empty.
+              Your cart is currently empty
             </p>
         )}
       </>

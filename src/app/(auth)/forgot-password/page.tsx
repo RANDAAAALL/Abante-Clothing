@@ -1,4 +1,4 @@
-import ForgotPasswordContent from "@/components/ui/form-content/forgot-password-form-content";
+import ForgotPasswordContent from "@/components/ui/form/forgot-password-form-content";
 
 export default function ForgotPassword(){
     return (

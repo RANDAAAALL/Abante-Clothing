@@ -8,7 +8,7 @@ export default async function SidebarServerData() {
       <div className="relative group w-[110px] h-[110px]">
        <SidebarUserImage user_image={data?.user_image ?? "/images/png/default_avatar.png"} />
       </div>
-      <span className="text-lg font-medium mt-3">{data?.username ?? "Anonymous"}</span>
+      {/* <span className="text-lg font-medium mt-3">{data?.username ?? "Anonymous"}</span> */}
     </div>
   );
 }

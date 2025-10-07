@@ -1,4 +1,4 @@
-import LoginFormContent from "@/components/ui/form-content/login-form-content";
+import LoginFormContent from "@/components/ui/form/login-form-content";
 // import LoginToast from "@/components/ui/form-content/login-toast";
 // import { cookies } from "next/headers";
 

@@ -1,4 +1,4 @@
-import RegisterFormContent from "@/components/ui/form-content/register-form-content";
+import RegisterFormContent from "@/components/ui/form/register-form-content";
 
 
 

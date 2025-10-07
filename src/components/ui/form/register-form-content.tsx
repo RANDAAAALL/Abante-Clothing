@@ -1,7 +1,7 @@
 "use client";
 
 // import { RegisterFormType } from "@/lib/types/form-data-types";
-import FormsContent from "./form";
+import FormsContent from "./form-content";
 import { registerFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
 import { registerationSchema, registerFormType } from "@/lib/validations/auth-schema";

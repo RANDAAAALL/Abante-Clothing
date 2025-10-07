@@ -1,4 +1,4 @@
-import { FieldProps } from "@/components/ui/form-content/form";
+import { FieldProps } from "@/components/ui/form/form-content";
 import { forgotPasswordFormType, loginFormType, registerFormType } from "../validations/auth-schema";
 
 export const registerFields: FieldProps<registerFormType>[] = [

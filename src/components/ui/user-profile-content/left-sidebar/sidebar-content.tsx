@@ -13,7 +13,7 @@ export default function SidebarContent() {
 
     {/* card content container */}
     <Card className="dark:bg-card-black-background h-auto md:h-120 rounded-md">
-      
+        
       {/* images and username */}
       <CardHeader className="flex flex-col items-center cursor-default">
         <Suspense fallback={<UserImageAndUsernameSkeleton/>}><SidebarServerData /></Suspense>

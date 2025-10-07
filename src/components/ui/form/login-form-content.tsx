@@ -1,5 +1,5 @@
 "use client";
-import FormsContent from "./form";
+import FormsContent from "./form-content";
 import { loginFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
 import { loginSchema, loginFormType } from "@/lib/validations/auth-schema";

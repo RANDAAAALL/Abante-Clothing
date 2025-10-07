@@ -1,6 +1,6 @@
 "use client";
 
-import FormsContent from "./form";
+import FormsContent from "./form-content";
 import { forgotPasswordFields } from "@/lib/values-type/form-data-value";
 import { useRef } from "react";
 import { forgotPasswordSchema, forgotPasswordFormType } from "@/lib/validations/auth-schema";
