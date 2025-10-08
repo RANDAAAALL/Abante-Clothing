@@ -19,11 +19,17 @@ The website integrates **SEO best practices**, **Open Graph metadata**, and resp
 
 ## Tech Stack as of now
 
-- **NextJS**
-- **Javascript**
-- **Typescript**
-- **TaildwindCSS**
-- **Shadcn**
-- **MySQL**
-- **Prisma**
 - **Bun**
+- **Next.js**
+- **Typescript**
+- **Tanstack Query**
+- **TaildwindCSS**
+- **ShadcnUI**
+- **Prisma**
+- **MySQL**
+- **Cloudinary**
+- **Fuse.js**
+- **Zustand**
+- **REST API**
+- **Aiven**
+- **Vercel**
