@@ -82,10 +82,5 @@ export default function useAddToCart() {
         return [...old, serverItem];
       });
     },
-
-    // Optional: remove invalidateQueries to prevent flash
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-cart"] });
-    },
   });
 }
