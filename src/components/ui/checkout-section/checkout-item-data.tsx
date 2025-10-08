@@ -50,20 +50,22 @@ export default function CheckoutServerData(){
 
     return (
     <>
-        <Card className="h-auto rounded-md mt-6 gap-4 dark:bg-card-black-background px-8 py-5">
+        <Card className="h-auto rounded-md mt-6 gap-3 dark:bg-card-black-background px-8 py-5">
         {data?.length > 0 ? (
         <>
             {data.map((item: CartItemsProps, index: number) => (
                 <React.Fragment key={index}>
                     {/* tshirt image, name, qty, size and price container*/}
-                    <div className="flex items-center space-x-4 text-sm relative">
+                    <div className="flex flex-col md:flex-row items-center space-x-4 text-sm relative">
             
                         {/* tshirt image */}
-                        <Image src={item?.cart_item_image ?? "/images/png/tshirt_placeholder.png"} width={100} height={100} alt="checkout-tshirt-image"/>
+                        <div className="h-30 w-50 relative">
+                        <Image className="object-contain" src={item?.cart_item_image ?? "/images/png/tshirt_placeholder.png"} fill alt="checkout-tshirt-image"/>
+                        </div>
 
                         {/* name, qty and size */}
-                        <div className="flex justify-between w-full">
-                            <div>
+                        <div className="flex mt-2 md:mt-0 justify-between w-full">
+                            <div className="flex space-x-2 md:flex-col md:space-x-0">
                                 <div className="space-x-1">
                                     <span className="capitalize">{item?.cart_item_name}</span>
                                     <span>x{item?.cart_item_qty}</span>
@@ -78,8 +80,10 @@ export default function CheckoutServerData(){
                                 onClick={() => deleteData(item?.cart_item_ID.toString())}>x</button>
                                 </div>
                         </div>
+                            
 
                     </div>
+                    <hr className="border-black dark:border-white border-t-2"/>
                     
                 </React.Fragment>))}
                     { /* subtotal, shipping and total prices container */}
