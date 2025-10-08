@@ -10,7 +10,8 @@ export default function useGetCart(){
     const router = useRouter();
     const { setIsOpen } = useMenuBarStore();
 
-    const { data, isLoading, error, isError } = useQuery({queryKey: ["get-cart"],
+    const { data, isLoading, error, isError } = useQuery({
+    queryKey: ["get-cart"],
     queryFn: async () => {
         const res = await fetch(`${GetCartURL}`);
         if (!res.ok) throw new Error("Failed to fetch cart");
