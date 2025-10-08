@@ -1,7 +1,5 @@
 import RegisterFormContent from "@/components/ui/form/register-form-content";
 
-
-
 export default function Register(){
     return (
         <div className="bg-white dark:bg-black-background dark:text-white text-black w-full max-w-[1980] mx-auto">
