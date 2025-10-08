@@ -81,8 +81,6 @@ export default function useAddToCart() {
         // if not in old array "unlikely", just add it
         return [...old, serverItem];
       });
-
-      queryClient.invalidateQueries({ queryKey: ["get-cart"] });
     },
   });
 }
