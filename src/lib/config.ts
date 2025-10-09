@@ -10,3 +10,5 @@ export const MeURL = `${getBaseUrl()}/api/me`;
 export const GetCartURL = `${getBaseUrl()}/api/get-cart`;
 export const AddToCartURL = `${getBaseUrl()}/api/add-to-cart`;
 export const DeleteCartURL = `${getBaseUrl()}/api/delete-cart`;
+export const DeleteAllCartURL = `${getBaseUrl()}/api/delete-all-cart`;
+export const CheckoutURL = `${getBaseUrl()}/api/checkout`;

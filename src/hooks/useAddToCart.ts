@@ -19,13 +19,17 @@ export default function useAddToCart() {
         body: JSON.stringify({ product, selectedSizeAndQty }),
       });
 
+      
+      console.log("useAddToCart Triggered");
       if (!res.ok) throw new Error("Failed to add to cart");
 
       const data: CartItemsProps = await res.json();
+
+      queryClient.invalidateQueries({ queryKey: ["get-cart"] })
       return data;
     },
 
-    // optimistic update
+    // // optimistic update
     onMutate: async ({ product, selectedSizeAndQty }) => {
       await queryClient.cancelQueries({ queryKey: ["get-cart"] });
       const previousData = queryClient.getQueryData<CartItemsProps[]>(["get-cart"]);

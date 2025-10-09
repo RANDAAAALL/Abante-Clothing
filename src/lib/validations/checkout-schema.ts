@@ -27,8 +27,8 @@ export const CheckoutSchema = z.object({
   .regex(/^[A-Za-z\s]+$/, "City name must only contain letters"),
   regionName: z
   .string()
-  .min(2, "Region name is required")
-  .regex(/^[A-Za-z\s]+$/, "Region name must only contain letters"),
+  .min(1, "Region name is required")
+  .regex(/^[A-Za-z0-9\s]+$/, "Special characters are not allowed"),
   phoneNumber: z
   .string()
   .transform((val) => val.replace(/\s+/g, ""))

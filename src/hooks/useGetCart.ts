@@ -14,14 +14,15 @@ export default function useGetCart(){
     queryKey: ["get-cart"],
     queryFn: async () => {
         const res = await fetch(`${GetCartURL}`);
+        console.log("useGetCart Triggered");
         if (!res.ok) throw new Error("Failed to fetch cart");
         return res.json();
     },
     networkMode: "always",
     refetchOnWindowFocus: false,  
     refetchOnReconnect: false,   
-    retry: false,     
-    staleTime: 0, 
+    retry: false,    
+    staleTime: 1000 * 60 * 5, // 5mins the data will become old or stale
     });
 
     // listen for logout event from other tabs
