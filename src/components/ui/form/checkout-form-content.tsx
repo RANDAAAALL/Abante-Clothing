@@ -51,12 +51,13 @@ export default function CheckoutformContent(){
                     setCloseModal();
                 })(), {
                     loading: 'Payment processing...',
-                    success: 'Payment successful\nYour order is now being processed',
-                    error: (e) => e?.message || 'Payment failed' 
+                    // success: 'Payment successful\nYour order is now being processed',
+                    success: 'Payment successful\nAnd still under development...',
+                    error: (e) => e?.message || 'Payment failed',
+                }, {
+                    duration: 8000
                 }
             )
-
-            toast("Take note: checkout flow is still under development...", { duration: 4000 });
         };
     }, [isSuccessfullPay, submittedData]);
 
