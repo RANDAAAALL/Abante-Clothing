@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --gcash-background: #007AFF;
+  --paymaya-background: #36D399;
   --white-background: #F2F2F2;
   --black-background: #1C1C1C;
   --input-dark-background: #6D6D6D;
@@ -49,6 +51,8 @@
 @theme inline {
   --color-white-background: var(--white-background);
   --color-black-background: var(--black-background);
+  --color-gcash-background: var(--gcash-background);
+  --color-paymaya-background: var(--paymaya-background);
   --color-red-background: var(--red-background);
   --color-input-background: var(--input-background);
   --color-input-dark-background: var(--input-dark-background);
