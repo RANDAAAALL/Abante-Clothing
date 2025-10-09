@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     (request.nextUrl.pathname.startsWith("/profile") ||
     request.nextUrl.pathname.startsWith("/checkout") ||
     request.nextUrl.pathname.startsWith("/profile/address") ||
-    request.nextUrl.pathname.startsWith("/prfile/billing") ||
+    request.nextUrl.pathname.startsWith("/profile/billing") ||
     request.nextUrl.pathname.startsWith("/profile/order-history"))
     ){
       url.pathname = "/login";

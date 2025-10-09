@@ -23,7 +23,8 @@ export default function LogoutButton(){
         bc.postMessage({ type: "LOGOUT" });
         bc.close();    
         setIsOpen(false);
-
+        
+        router.push("/login");
         router.refresh();
     }
     return (
