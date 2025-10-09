@@ -8,7 +8,6 @@ type ComputeItemState = {
 
 type PaymentAndSaveInfoState = {
     paymentMethod: string | null;
-    saveInformation: boolean | null;
 }
 
 type CheckoutModalState = {
@@ -18,7 +17,7 @@ type CheckoutModalState = {
     computeItems: ComputeItemState,
     isSuccessfullPay: boolean,
 
-    PaymentAndSaveInfo: PaymentAndSaveInfoState
+    Payment: PaymentAndSaveInfoState
 }
 
 type CheckoutModalActionState = {
@@ -34,8 +33,8 @@ type CheckoutModalActionState = {
     setSuccessfullPay: () => void;
     setResetSuccessfullPay: () => void;
 
-    setPaymentAndSaveInfo: (setPaymentAndSaveInfo: PaymentAndSaveInfoState) => void;
-    setClearPaymentAndSaveInfo: () => void;
+    setPayment: (setPaymentAndSaveInfo: PaymentAndSaveInfoState) => void;
+    setClearPayment: () => void;
 }
 
 export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionState>((set) => ({
@@ -63,13 +62,11 @@ export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionS
     setSuccessfullPay: () => set({ isSuccessfullPay: true }),
     setResetSuccessfullPay: () => set({ isSuccessfullPay: false }),
 
-    PaymentAndSaveInfo: {
+    Payment: {
         paymentMethod: null,
-        saveInformation: null
     },
-    setPaymentAndSaveInfo: (PaymentAndSaveInfo) => set({ PaymentAndSaveInfo }),
-    setClearPaymentAndSaveInfo: () => set({ PaymentAndSaveInfo: {
+    setPayment: (Payment) => set({ Payment }),
+    setClearPayment: () => set({ Payment: {
         paymentMethod: null,
-        saveInformation: null
     }}),
 }));

@@ -8,7 +8,6 @@ import useGetCart from "@/hooks/useGetCart";
 import { useEffect, useState } from "react";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import useDeleteAllCart from "@/hooks/useDeleteAllCart";
-import { json } from "zod";
 import { CheckoutURL } from "@/lib/config";
 
 export default function CheckoutformContent(){
@@ -16,8 +15,8 @@ export default function CheckoutformContent(){
             setCloseModal,
             setResetCompleteOrderTrigger,
             setClearComputeItems,
-            setClearPaymentAndSaveInfo,
-            setPaymentAndSaveInfo, 
+            setClearPayment,
+            setPayment, 
             setOpenModal,
             setResetSuccessfullPay,
             setSuccessfullPay} = useCheckoutModal();
@@ -43,11 +42,11 @@ export default function CheckoutformContent(){
                     if(!res.ok) throw new Error( data?.errorMessage || "Something went wrong while processing your payment.");
 
                     // resets after user successfully purchased
+                    clearItems();
                     setResetCompleteOrderTrigger();
                     setClearComputeItems();
-                    setClearPaymentAndSaveInfo();
+                    setClearPayment();
                     setResetSuccessfullPay();
-                    clearItems();
                     reset();
                     setCloseModal();
                 })(), {
@@ -67,12 +66,9 @@ export default function CheckoutformContent(){
                 toast.error("Your cart is currently empty.")
                 return;
             }
-            console.log("Form Data: ", formData);
-            // const res = {
-            //     paymentMethod: formData.paymentMethod,
-            //     saveInformation: formData.saveInformation!
-            // };
-            // setPaymentAndSaveInfo(res);
+
+            const res = { paymentMethod: formData.paymentMethod };
+            setPayment(res);
             setSubmittedData(formData);
             setOpenModal();
         } catch (err) {
