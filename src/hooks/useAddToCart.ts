@@ -18,9 +18,6 @@ export default function useAddToCart() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product, selectedSizeAndQty }),
       });
-
-      
-      console.log("useAddToCart Triggered");
       if (!res.ok) throw new Error("Failed to add to cart");
 
       const data: CartItemsProps = await res.json();

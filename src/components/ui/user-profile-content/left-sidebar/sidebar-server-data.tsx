@@ -2,7 +2,7 @@ import SidebarUserImage from "./sidebar-user-image";
 import { getUserInfo } from "@/data-access-layer/get-user-info";
 
 export default async function SidebarServerData() {
-  const data = await getUserInfo(); 
+  const data = await getUserInfo();
   return (
     <div className="flex flex-col items-center">
       <div className="relative group w-[110px] h-[110px]">
