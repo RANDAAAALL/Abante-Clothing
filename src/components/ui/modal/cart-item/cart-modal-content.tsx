@@ -1,6 +1,6 @@
 "use client"
 import { useCartItemModal } from "@/lib/store/cart-items";
-import NavbarCart from "../navbar-section/navbar-cart";
+import NavbarCart from "../../navbar-section/navbar-cart";
 import PreviousButtonSVG from "@/components/icons/svg/previous-button";
 import CartModalData from "./cart-modal-data";
 export default function CartModalContent(){

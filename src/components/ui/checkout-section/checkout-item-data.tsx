@@ -3,13 +3,15 @@
 import Image from "next/image";
 import { Card } from "../carousel/card";
 import useGetCart from "@/hooks/useGetCart";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { computeItems } from "@/lib/helper/compute-items";
 import useDeleteCart from "@/hooks/useDeleteCart";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCheckoutModal } from "@/lib/store/checkout-items";
 
-export default function CheckoutServerData(){
+export default function CheckoutItemData(){
     const { data, isLoading } = useGetCart();
+    const { setComputeItems } = useCheckoutModal();
     const queryClient = useQueryClient();
     const shippingFee = "105"
 
@@ -21,9 +23,15 @@ export default function CheckoutServerData(){
             overallPriceResult: 0,
           };
         }
-      
+        
         return computeItems(data, shippingFee);
       }, [data, shippingFee]);
+      
+      useEffect(() => {
+        if(data && data.length > 0){
+          setComputeItems(res);
+        }
+      }, [data, res, setComputeItems]);
 
       const { mutate: deleteData } = useDeleteCart({
         onMutate: async (cart_item_id: string) => {
@@ -60,7 +68,8 @@ export default function CheckoutServerData(){
             
                         {/* tshirt image */}
                         <div className="h-30 w-50 relative">
-                        <Image className="object-contain" src={item?.cart_item_image ?? "/images/png/tshirt_placeholder.png"} fill alt="checkout-tshirt-image"/>
+                        <Image className="object-contain" src={item?.cart_item_image ?? "/images/png/tshirt_placeholder.png"}
+                        priority fill alt="checkout-tshirt-image"/>
                         </div>
 
                         {/* name, qty and size */}

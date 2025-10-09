@@ -58,10 +58,12 @@ export const config = {
     "/api/add-to-cart",
     "/api/get-cart",
     "/api/delete-cart",
+    "/api/delete-all-cart",
     "/api/uploaded-profile-picture",
     "/login",
     "/register",
     "/checkout",
+    "/api/checkout",
     "/forgot-password",
   ],
 };

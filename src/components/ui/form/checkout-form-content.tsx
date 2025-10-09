@@ -5,31 +5,84 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import useGetCart from "@/hooks/useGetCart";
+import { useEffect, useState } from "react";
+import { useCheckoutModal } from "@/lib/store/checkout-items";
+import useDeleteAllCart from "@/hooks/useDeleteAllCart";
+import { json } from "zod";
+import { CheckoutURL } from "@/lib/config";
 
 export default function CheckoutformContent(){
+    const { isSuccessfullPay,
+            setCloseModal,
+            setResetCompleteOrderTrigger,
+            setClearComputeItems,
+            setClearPaymentAndSaveInfo,
+            setPaymentAndSaveInfo, 
+            setOpenModal,
+            setResetSuccessfullPay,
+            setSuccessfullPay} = useCheckoutModal();
+    const { mutate: clearItems } = useDeleteAllCart();
     const { data } = useGetCart();
+    const [ submittedData, setSubmittedData ] = useState<CheckoutFormType | null>(null);
     const { register,
             handleSubmit,
             reset,
             formState: {errors, isSubmitting}
         } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
 
-        const handleClickSubmit = async (formData: CheckoutFormType) => {
-            try {
-                if(!data || data?.length <= 0){
-                    toast.error("Your cart is currently empty.")
-                    return;
+            useEffect(() => {
+                if(isSuccessfullPay && submittedData){
+                    toast.promise(
+                    (async () => {
+                        const res = await fetch(`${CheckoutURL}`, {
+                            method: 'POST',
+                            body: JSON.stringify(submittedData)
+                        });
+
+                    const data = await res.json();
+                    if(!res.ok) throw new Error( data?.errorMessage || "Something went wrong while processing your payment.");
+
+                    // resets after user successfully purchased
+                    setResetCompleteOrderTrigger();
+                    setClearComputeItems();
+                    setClearPaymentAndSaveInfo();
+                    setResetSuccessfullPay();
+                    clearItems();
+                    reset();
+                    setCloseModal();
+                })(), {
+                    loading: 'Payment processing...',
+                    success: 'Payment successful\nYour order is now being processed',
+                    error: (e) => e?.message || 'Payment failed' 
                 }
-              toast("Under Development....");
-              reset();
-            } catch (err) {
-              toast.error(`Error in submission: ${err}`);
+            )
+
+            toast("Take note: checkout flow is still under development...", { duration: 4000 });
+        };
+    }, [isSuccessfullPay, submittedData]);
+
+    const handleClickSubmit = async (formData: CheckoutFormType) => {
+        try {
+            if(!data || data?.length <= 0){
+                toast.error("Your cart is currently empty.")
+                return;
             }
-          };
+            console.log("Form Data: ", formData);
+            // const res = {
+            //     paymentMethod: formData.paymentMethod,
+            //     saveInformation: formData.saveInformation!
+            // };
+            // setPaymentAndSaveInfo(res);
+            setSubmittedData(formData);
+            setOpenModal();
+        } catch (err) {
+            toast.error(`Error in submission: ${err}`);
+        }
+        };
 
     return (
         <>
-        <Card className="h-auto rounded-md mt-6 gap-2  dark:bg-card-black-background p-5">
+        <Card className="h-auto rounded-md mt-6 gap-2 dark:bg-card-black-background p-5">
             <span className="font-medium text-lg">Delivery</span>
             <form onSubmit={handleSubmit(handleClickSubmit)} className="space-y-2.5">
 
@@ -109,7 +162,7 @@ export default function CheckoutformContent(){
                 <div className="flex flex-col border-2 rounded-sm border-gray w-full p-3 mt-1.5">
                     <div className="flex items-center space-x-2.5">
                         <input {...register("paymentMethod")} type="radio" className="w-3.5 h-3.5" name="paymentMethod" value="gcash"/>
-                        <span className="text-sm">Gcash / Online Transfer</span>
+                        <span className="text-sm">Gcash</span>
                     </div>
                 </div>
 

@@ -4,6 +4,7 @@ import { useCartItems } from "@/lib/store/cart-items";
 import { ProductProps } from "@/lib/types/product-types";
 import { TshirtType } from "@/lib/types/t-shirt-types";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<Partial<TshirtType>>}){
     const { setSelectedItems,
@@ -19,7 +20,7 @@ export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<
 
     const handleAddToCart = () => {
         if (!selectedSize) {
-            alert("Please select a t-shirt size");
+            toast.error("Please select a t-shirt size");
             return;
         } 
 
@@ -31,7 +32,7 @@ export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<
 
     const handleBuyNow = () => {
         if(!selectedSize){
-            alert("Please select a t-shirt size");
+            toast.error("Please select a t-shirt size");
             return;
         }
 

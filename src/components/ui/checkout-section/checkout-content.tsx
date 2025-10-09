@@ -1,5 +1,5 @@
 import CheckoutformContent from "../form/checkout-form-content";
-import CheckoutServerData from "./checkout-item-data";
+import CheckoutItemData from "./checkout-item-data";
 
 export default function CheckoutContent(){
   return (
@@ -13,9 +13,9 @@ export default function CheckoutContent(){
 
         {/* left content */}
         <div><CheckoutformContent /></div>
-
+        
         {/* right content */}
-        <div><CheckoutServerData /></div>
+        <div><CheckoutItemData /></div>
         </div>
       </>  
     );

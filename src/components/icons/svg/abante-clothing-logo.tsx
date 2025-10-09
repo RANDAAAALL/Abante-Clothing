@@ -19,7 +19,7 @@ export default function AbanteClothingLogo({flag}: AbanteLogoPropsType ) {
   );
 }
 
-function LogoSVG(props: React.SVGProps<SVGSVGElement>){
+export function LogoSVG(props: React.SVGProps<SVGSVGElement>){
     return (
       <svg xmlns="http://www.w3.org/2000/svg" {...props} xmlSpace="preserve" viewBox="0 0 514 480">      
       <path fill="none" stroke="currentColor" d="M256 142c-1 1 0 2 1 3 7 6 15 12 21 19 7 9 17 12 24 19 5 0 10 3 14 5 3 2 4 4 4 7l-1 22c0 4 3 7 6 8 5 0 11 2 17-2 2-1 3-3 3-6v-39c0-6 0-8-6-10-18-8-33-20-49-33-10-8-20-16-30-26-2-3-6-3-9 0a380 380 0 0 1-79 59c-4 2-6 4-6 9l1 173c0 2-1 4 1 6 6 0 9-5 13-8l6-6c4-6 9-7 16-7 9 0 18-2 24-9 4-4 6-9 6-15v-46c0-3-1-6-3-8"/>

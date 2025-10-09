@@ -47,11 +47,12 @@ export default function CartModalData() {
         overallPriceResult: 0,
       };
     }
+    console.log("useMemo Triggered: ", computeItems(source)); 
     return computeItems(source);
   }, [data, selectedItem]);
   
   // simulate loading 
-  if(isLoading) return <p className="text-sm text-black dark:text-white h-50 flex items-center justify-center">Loading...</p>
+  // if(isLoading) return <p className="text-sm text-black dark:text-white h-50 flex items-center justify-center">Loading...</p>
   
   // checks if user is logged in or not
   // if its logged in means: we will use the data from the api route

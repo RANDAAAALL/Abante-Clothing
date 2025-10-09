@@ -5,7 +5,7 @@ import "../styles/globals.css";
 import ClientProvider from "@/context/client-providers";
 import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import NavbarContent from "@/components/ui/navbar-section/navbar-content";
-import CartModalContent from "@/components/ui/modal/cart-modal-content";
+import CartModalContent from "@/components/ui/modal/cart-item/cart-modal-content";
 import ToasterClient from "@/components/ui/toast/toaster-client";
 
 // SEO Config

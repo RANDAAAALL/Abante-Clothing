@@ -8,7 +8,7 @@ datasource db {
 }
 
 model address {
-  address_ID                                                   Int               @id
+  address_ID                                                   Int               @id @default(autoincrement())
   user_ID                                                      Int?
   address_type                                                 String?           @db.VarChar(255)
   recipient_first_name                                         String?           @db.VarChar(255)
@@ -58,7 +58,7 @@ model deleted {
 }
 
 model order_details {
-  order_detail_ID    Int              @id
+  order_detail_ID    Int              @id @default(autoincrement())
   order_purchased_ID Int?
   product_item_ID    Int?
   order_detail_name  String?          @db.VarChar(255)
@@ -74,7 +74,7 @@ model order_details {
 }
 
 model order_purchased {
-  order_purchased_ID                                   Int             @id
+  order_purchased_ID                                   Int             @id @default(autoincrement())
   user_ID                                              Int?
   delivery_address_ID                                  Int?
   billing_address_ID                                   Int?
@@ -148,7 +148,6 @@ model users {
   password        String?           @db.VarChar(255)
   role            String?           @db.VarChar(50)
   createdAt       DateTime          @default(now()) @db.DateTime(0)
-
   address         address[]
   cart_items      cart_items[]
   deleted         deleted[]
@@ -158,7 +157,6 @@ model users {
   returns         returns[]
   users_feedback  users_feedback[]
 }
-
 
 model users_feedback {
   feedback_ID      Int            @id

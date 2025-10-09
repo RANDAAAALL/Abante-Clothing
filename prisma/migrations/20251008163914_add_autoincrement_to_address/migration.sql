@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `address` MODIFY `address_ID` INTEGER NOT NULL AUTO_INCREMENT;
