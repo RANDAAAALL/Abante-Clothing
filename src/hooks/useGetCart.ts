@@ -14,7 +14,6 @@ export default function useGetCart(){
     queryKey: ["get-cart"],
     queryFn: async () => {
         const res = await fetch(`${GetCartURL}`);
-        console.log("useGetCart Triggered");
         if (!res.ok) throw new Error("Failed to fetch cart");
         return res.json();
     },

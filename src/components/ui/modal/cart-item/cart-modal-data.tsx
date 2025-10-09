@@ -47,7 +47,6 @@ export default function CartModalData() {
         overallPriceResult: 0,
       };
     }
-    console.log("useMemo Triggered: ", computeItems(source)); 
     return computeItems(source);
   }, [data, selectedItem]);
   
