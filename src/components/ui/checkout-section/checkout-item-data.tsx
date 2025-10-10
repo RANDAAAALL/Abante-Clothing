@@ -37,7 +37,7 @@ export default function CheckoutItemData(){
     return (
     <>
         <Card className="h-auto rounded-md mt-6 gap-3 dark:bg-card-black-background px-8 py-5">
-        {data?.length! > 0 ? (
+        {data?.length > 0 ? (
         <>
             {data?.map((item: CartItemsProps, index: number) => (
                 <React.Fragment key={index}>

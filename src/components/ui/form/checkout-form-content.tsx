@@ -55,7 +55,11 @@ export default function CheckoutformContent(){
                 }
             )
         };
-    }, [isSuccessfullPay, submittedFormCheckoutFormData]);
+    }, [isSuccessfullPay,
+        submittedFormCheckoutFormData,
+        reset, setIsPaymentProcessingLoading,
+        setResetPaymentProcessingLoading]
+    );
 
     const handleClickSubmit = async (formData: CheckoutFormType) => {
         try {
