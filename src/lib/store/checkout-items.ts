@@ -1,4 +1,5 @@
 import { create } from "zustand"
+import { CheckoutFormType } from "../validations/checkout-schema";
 
 type ComputeItemState = {
     subTotalPriceResult: number;
@@ -11,13 +12,18 @@ type PaymentAndSaveInfoState = {
 }
 
 type CheckoutModalState = {
-    isOpen: boolean,
+    isOpen: boolean;
 
     isCompleteOrderTrigger: boolean,
-    computeItems: ComputeItemState,
-    isSuccessfullPay: boolean,
+    computeItems: ComputeItemState;
+    isSuccessfullPay: boolean;
 
-    Payment: PaymentAndSaveInfoState
+    Payment: PaymentAndSaveInfoState;
+
+    submittedFormCheckoutFormData: CheckoutFormType | null;
+
+    isCompleteOrderTriggerLoading: boolean;
+    isPaymentProcessingLoading: boolean,
 }
 
 type CheckoutModalActionState = {
@@ -35,6 +41,15 @@ type CheckoutModalActionState = {
 
     setPayment: (setPaymentAndSaveInfo: PaymentAndSaveInfoState) => void;
     setClearPayment: () => void;
+
+    setSubmittedFormCheckoutFormData: (SubmittedFormCheckoutFormData: CheckoutFormType) => void;
+    setCleaarSubmittedFormCheckoutFormData: () => void;
+
+    setIsCompleteOrderTriggerLoading: () => void;
+    setResetCompleteOrderTriggerLoading: () => void;
+
+    setIsPaymentProcessingLoading: () => void;
+    setResetPaymentProcessingLoading: () => void;
 }
 
 export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionState>((set) => ({
@@ -69,4 +84,16 @@ export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionS
     setClearPayment: () => set({ Payment: {
         paymentMethod: null,
     }}),
+
+    submittedFormCheckoutFormData: null,
+    setSubmittedFormCheckoutFormData: (submittedFormCheckoutFormData) => set({ submittedFormCheckoutFormData }),
+    setCleaarSubmittedFormCheckoutFormData: () => set({ submittedFormCheckoutFormData: null }),
+
+    isCompleteOrderTriggerLoading: false,
+    setIsCompleteOrderTriggerLoading: () => set({ isCompleteOrderTriggerLoading: true }),
+    setResetCompleteOrderTriggerLoading: () => set({ isCompleteOrderTriggerLoading: false }),
+
+    isPaymentProcessingLoading: false,
+    setIsPaymentProcessingLoading: () => set({ isPaymentProcessingLoading: true }),
+    setResetPaymentProcessingLoading: () => set({ isPaymentProcessingLoading: false }),
 }));

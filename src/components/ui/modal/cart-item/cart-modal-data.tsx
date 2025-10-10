@@ -6,37 +6,15 @@ import { useRouter } from "next/navigation";
 import { computeItems } from "@/lib/helper/compute-items";
 import useGetCart from "@/hooks/useGetCart";
 import useDeleteCart from "@/hooks/useDeleteCart";
-import { useQueryClient } from "@tanstack/react-query";
 import isCartItem from "@/lib/helper/isCartItem";
 
 export default function CartModalData() {
   const { selectedItem, removeSelectedItem } = useCartItems();
   const { CloseModal } = useCartItemModal();
-  const { data, isLoading } = useGetCart();
-  const queryClient = useQueryClient();
+  const { data } = useGetCart();
   const router = useRouter();
 
-  const { mutate: deleteData } = useDeleteCart({
-    onMutate: async (cart_item_id: string) => {
-      await queryClient.cancelQueries({ queryKey: ["get-cart"] });
-      const previousData = queryClient.getQueryData<CartItemsProps[]>(["get-cart"]);
-  
-      queryClient.setQueryData(
-        ["get-cart"],
-        previousData?.filter(item => item.cart_item_ID !== Number(cart_item_id))
-      );
-  
-      return { previousData };
-    },
-    onError: (err, cart_item_id, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(["get-cart"], context.previousData);
-      } 
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-cart"] });
-    }
-  });
+  const { mutate: deleteData } = useDeleteCart();
   
   const res = useMemo(() => {
     const source = data && data.length > 0 ? data : selectedItem;

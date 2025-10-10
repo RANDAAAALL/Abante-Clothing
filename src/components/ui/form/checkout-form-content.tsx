@@ -5,24 +5,20 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import useGetCart from "@/hooks/useGetCart";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
-import useDeleteAllCart from "@/hooks/useDeleteAllCart";
 import { CheckoutURL } from "@/lib/config";
 
 export default function CheckoutformContent(){
     const { isSuccessfullPay,
-            setCloseModal,
-            setResetCompleteOrderTrigger,
-            setClearComputeItems,
-            setClearPayment,
             setPayment, 
             setOpenModal,
-            setResetSuccessfullPay,
-            setSuccessfullPay} = useCheckoutModal();
-    const { mutate: clearItems } = useDeleteAllCart();
+            submittedFormCheckoutFormData,
+            setSubmittedFormCheckoutFormData,
+            setIsPaymentProcessingLoading,
+            setResetPaymentProcessingLoading } = useCheckoutModal();
     const { data } = useGetCart();
-    const [ submittedData, setSubmittedData ] = useState<CheckoutFormType | null>(null);
+
     const { register,
             handleSubmit,
             reset,
@@ -30,36 +26,40 @@ export default function CheckoutformContent(){
         } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
 
             useEffect(() => {
-                if(isSuccessfullPay && submittedData){
+                if(isSuccessfullPay && submittedFormCheckoutFormData){
                     toast.promise(
-                    (async () => {
+                    async () => {
+                        // simulate loading
+                        setIsPaymentProcessingLoading();
+                        await new Promise(res => setTimeout(res, 3000));
+
                         const res = await fetch(`${CheckoutURL}`, {
                             method: 'POST',
-                            body: JSON.stringify(submittedData)
+                            body: JSON.stringify(submittedFormCheckoutFormData)
                         });
 
                     const data = await res.json();
                     if(!res.ok) throw new Error( data?.errorMessage || "Something went wrong while processing your payment.");
 
-                    // resets after user successfully purchased
-                    clearItems();
-                    setResetCompleteOrderTrigger();
-                    setClearComputeItems();
-                    setClearPayment();
-                    setResetSuccessfullPay();
+                    // reset the form after user successfully purchased
                     reset();
-                    setCloseModal();
-                })(), {
+                    // reset loading state
+                    setResetPaymentProcessingLoading();
+                }, {
                     loading: 'Payment processing...',
                     // success: 'Payment successful\nYour order is now being processed',
-                    success: 'Payment successful\nAnd still under development...',
+                    success: 'Still under development...',
                     error: (e) => e?.message || 'Payment failed',
                 }, {
                     duration: 8000
                 }
             )
         };
-    }, [isSuccessfullPay, submittedData]);
+    }, [isSuccessfullPay,
+        submittedFormCheckoutFormData,
+        reset, setIsPaymentProcessingLoading,
+        setResetPaymentProcessingLoading]
+    );
 
     const handleClickSubmit = async (formData: CheckoutFormType) => {
         try {
@@ -70,7 +70,7 @@ export default function CheckoutformContent(){
 
             const res = { paymentMethod: formData.paymentMethod };
             setPayment(res);
-            setSubmittedData(formData);
+            setSubmittedFormCheckoutFormData(formData);
             setOpenModal();
         } catch (err) {
             toast.error(`Error in submission: ${err}`);

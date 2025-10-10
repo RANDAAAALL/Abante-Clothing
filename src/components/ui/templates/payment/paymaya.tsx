@@ -1,11 +1,10 @@
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import Image from "next/image";
 
-
 export default function PaymayaTemplate({overallPriceResult}: {
     overallPriceResult: number
 }){
-    const { setSuccessfullPay } = useCheckoutModal();
+    const { setSuccessfullPay, isPaymentProcessingLoading } = useCheckoutModal();
     const serviceFee = 20;
     return (
         <>
@@ -50,8 +49,9 @@ export default function PaymayaTemplate({overallPriceResult}: {
                 </div>
 
                 <button 
+                disabled={isPaymentProcessingLoading}
                 onClick={setSuccessfullPay}
-                className="bg-[#50B16B] text-[#F2F3F4] rounded-md mt-10 py-3 cursor-pointer text-sm font-regular">Pay now</button>
+                className={`${isPaymentProcessingLoading ? "cursort-not-allowed" : "cursor-pointer"} bg-[#50B16B] text-[#F2F3F4] rounded-md mt-10 py-3 cursor-pointer text-sm font-regular`}>Pay now</button>
             </div>
         </>
     );

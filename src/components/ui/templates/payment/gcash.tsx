@@ -1,4 +1,4 @@
-import AbanteClothingLogo, { LogoSVG } from "@/components/icons/svg/abante-clothing-logo";
+import { LogoSVG } from "@/components/icons/svg/abante-clothing-logo";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import { CircleCheck } from "lucide-react";
 import Image from "next/image";
@@ -6,11 +6,9 @@ import Image from "next/image";
 export default function GcashTemplate({overallPriceResult}: {
     overallPriceResult: number
 }){
-    const { setSuccessfullPay } = useCheckoutModal();
-
+    const { setSuccessfullPay, isPaymentProcessingLoading } = useCheckoutModal();
     return (
         <>
-        
         {/* container */}
         <div className="flex flex-col space-y-0 bg-slate-200 rounded-sm">
             
@@ -71,8 +69,9 @@ export default function GcashTemplate({overallPriceResult}: {
             <div className="flex flex-col items-center mt-5 space-y-3 mb-5">
                 <span className="text-center text-xs font-thin text-black">Please review to ensure that the details <br/>are correct before your proceed</span>
                 <button 
+                disabled={isPaymentProcessingLoading}
                 onClick={setSuccessfullPay}
-                className="cursor-pointer bg-gcash-background text-white rounded-full px-12 md:px-13 py-2 font-regular">Pay php{overallPriceResult.toLocaleString("en-Ph")}.00</button>
+                className={`${isPaymentProcessingLoading ? "cursor-not-allowed" : "cursor-pointer" } bg-gcash-background text-white rounded-full px-12 md:px-13 py-2 font-regular`}>Pay php{overallPriceResult.toLocaleString("en-Ph")}.00</button>
             </div>
         </div>
         </>
