@@ -6,13 +6,11 @@ import useGetCart from "@/hooks/useGetCart";
 import React, { useEffect, useMemo } from "react";
 import { computeItems } from "@/lib/helper/compute-items";
 import useDeleteCart from "@/hooks/useDeleteCart";
-import { useQueryClient } from "@tanstack/react-query";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 
 export default function CheckoutItemData(){
-    const { data, isLoading } = useGetCart();
-    const { setComputeItems } = useCheckoutModal();
-    const queryClient = useQueryClient();
+    const { data } = useGetCart();
+    const { setComputeItems,  } = useCheckoutModal();
     const shippingFee = "105"
 
     const res = useMemo(() => {
@@ -33,35 +31,15 @@ export default function CheckoutItemData(){
         }
       }, [data, res, setComputeItems]);
 
-      const { mutate: deleteData } = useDeleteCart({
-        onMutate: async (cart_item_id: string) => {
-          await queryClient.cancelQueries({ queryKey: ["get-cart"] });
-          const previousData = queryClient.getQueryData<CartItemsProps[]>(["get-cart"]);
-      
-          queryClient.setQueryData(
-            ["get-cart"],
-            previousData?.filter(item => item.cart_item_ID !== Number(cart_item_id))
-          );
-      
-          return { previousData };
-        },
-        onError: (err, cart_item_id, context) => {
-          if (context?.previousData) {
-            queryClient.setQueryData(["get-cart"], context.previousData);
-          } 
-        },
-        onSettled: () => {
-          queryClient.invalidateQueries({ queryKey: ["get-cart"] });
-        }
-      });
+      const { mutate: deleteData } = useDeleteCart();
       
 
     return (
     <>
         <Card className="h-auto rounded-md mt-6 gap-3 dark:bg-card-black-background px-8 py-5">
-        {data?.length > 0 ? (
+        {data?.length! > 0 ? (
         <>
-            {data.map((item: CartItemsProps, index: number) => (
+            {data?.map((item: CartItemsProps, index: number) => (
                 <React.Fragment key={index}>
                     {/* tshirt image, name, qty, size and price container*/}
                     <div className="flex flex-col md:flex-row items-center space-x-4 text-sm relative">
