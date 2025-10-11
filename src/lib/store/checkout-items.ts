@@ -12,55 +12,51 @@ type PaymentAndSaveInfoState = {
 }
 
 type CheckoutModalState = {
-    isOpen: boolean;
-
-    isCompleteOrderTrigger: boolean,
-    computeItems: ComputeItemState;
+    isOpenConfirmationModal: boolean;
     isSuccessfullPay: boolean;
-
-    Payment: PaymentAndSaveInfoState;
-
-    submittedFormCheckoutFormData: CheckoutFormType | null;
-
+    isOpenPaymentTemplateModal: boolean;
     isCompleteOrderTriggerLoading: boolean;
-    isPaymentProcessingLoading: boolean,
+    isGcashTemplateLoading: boolean;
+    isPaymayaTemplateLoading: boolean;
+    computeItems: ComputeItemState;
+    Payment: PaymentAndSaveInfoState;
+    submittedFormCheckoutFormData: CheckoutFormType | null;
 }
 
 type CheckoutModalActionState = {
-    setOpenModal: () => void,
-    setCloseModal: () => void,
-
-    setCompleteOrderTrigger: () => void,
-    setResetCompleteOrderTrigger: () => void
+    setOpenConfirmationModal: () => void,
+    setCloseConfirmationModal: () => void,
 
     setComputeItems: (computeItem: ComputeItemState) => void;
     setClearComputeItems: () => void;
+    
+    setPayment: (setPaymentAndSaveInfo: PaymentAndSaveInfoState) => void;
+    setClearPayment: () => void;
+    
+    setSubmittedFormCheckoutFormData: (SubmittedFormCheckoutFormData: CheckoutFormType) => void;
+    setClearSubmittedFormCheckoutFormData: () => void;
+
+    setOpenPaymentTemplateModal: () => void;
+    setClosePaymentTemplateModal: () => void;
 
     setSuccessfullPay: () => void;
     setResetSuccessfullPay: () => void;
-
-    setPayment: (setPaymentAndSaveInfo: PaymentAndSaveInfoState) => void;
-    setClearPayment: () => void;
-
-    setSubmittedFormCheckoutFormData: (SubmittedFormCheckoutFormData: CheckoutFormType) => void;
-    setCleaarSubmittedFormCheckoutFormData: () => void;
-
+    
     setIsCompleteOrderTriggerLoading: () => void;
     setResetCompleteOrderTriggerLoading: () => void;
 
-    setIsPaymentProcessingLoading: () => void;
-    setResetPaymentProcessingLoading: () => void;
+    setGcashTemplateLoading: () => void;
+    setResetGcashTemplateLoading: () => void;
+
+    setPaymayaTemplateLoading: () => void;
+    setResetPaymayaTemplateLoading: () => void;
 }
 
 export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionState>((set) => ({
-    isOpen: false,
-    setOpenModal: () => set({ isOpen: true}),
-    setCloseModal: () => set({ isOpen: false}),
-    
-    isCompleteOrderTrigger: false,
-    setCompleteOrderTrigger: () => set({ isCompleteOrderTrigger: true }),
-    setResetCompleteOrderTrigger: () => set({ isCompleteOrderTrigger: false }),
-    
+    isOpenConfirmationModal: false,
+    setOpenConfirmationModal: () => set({ isOpenConfirmationModal: true}),
+    setCloseConfirmationModal: () => set({ isOpenConfirmationModal: false}),
+
     computeItems: {
         subTotalPriceResult: 0,
         overallQtyResult: 0,
@@ -72,11 +68,7 @@ export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionS
         overallQtyResult: 0,
         overallPriceResult: 0,
     } }),
-
-    isSuccessfullPay: false,
-    setSuccessfullPay: () => set({ isSuccessfullPay: true }),
-    setResetSuccessfullPay: () => set({ isSuccessfullPay: false }),
-
+    
     Payment: {
         paymentMethod: null,
     },
@@ -84,16 +76,28 @@ export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionS
     setClearPayment: () => set({ Payment: {
         paymentMethod: null,
     }}),
-
+    
     submittedFormCheckoutFormData: null,
     setSubmittedFormCheckoutFormData: (submittedFormCheckoutFormData) => set({ submittedFormCheckoutFormData }),
-    setCleaarSubmittedFormCheckoutFormData: () => set({ submittedFormCheckoutFormData: null }),
+    setClearSubmittedFormCheckoutFormData: () => set({ submittedFormCheckoutFormData: null }),
+
+    isOpenPaymentTemplateModal: false,
+    setOpenPaymentTemplateModal: () => set({ isOpenPaymentTemplateModal: true }),
+    setClosePaymentTemplateModal: () => set({ isOpenPaymentTemplateModal: false }),
+    
+    isSuccessfullPay: false,
+    setSuccessfullPay: () => set({ isSuccessfullPay: true }),
+    setResetSuccessfullPay: () => set({ isSuccessfullPay: false }),
 
     isCompleteOrderTriggerLoading: false,
     setIsCompleteOrderTriggerLoading: () => set({ isCompleteOrderTriggerLoading: true }),
     setResetCompleteOrderTriggerLoading: () => set({ isCompleteOrderTriggerLoading: false }),
 
-    isPaymentProcessingLoading: false,
-    setIsPaymentProcessingLoading: () => set({ isPaymentProcessingLoading: true }),
-    setResetPaymentProcessingLoading: () => set({ isPaymentProcessingLoading: false }),
+    isGcashTemplateLoading: false,
+    setGcashTemplateLoading: () => set({ isGcashTemplateLoading: true }),
+    setResetGcashTemplateLoading: () => set({ isGcashTemplateLoading: false }),
+
+    isPaymayaTemplateLoading: false,
+    setPaymayaTemplateLoading: () => set({ isPaymayaTemplateLoading: true }),
+    setResetPaymayaTemplateLoading: () => set({ isPaymayaTemplateLoading: false }),
 }));

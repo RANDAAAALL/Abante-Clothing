@@ -1,57 +1,109 @@
+"use client"
+import { CheckoutURL } from "@/lib/config";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
-export default function PaymayaTemplate({overallPriceResult}: {
-    overallPriceResult: number
-}){
-    const { setSuccessfullPay, isPaymentProcessingLoading } = useCheckoutModal();
+export default function PaymayaTemplate(){
+    const { isPaymayaTemplateLoading,
+            setPaymayaTemplateLoading,
+            setResetPaymayaTemplateLoading,
+            isOpenPaymentTemplateModal,
+            setClosePaymentTemplateModal,
+            submittedFormCheckoutFormData,
+            setSuccessfullPay,
+            Payment,
+            computeItems } = useCheckoutModal();
     const serviceFee = 20;
+
+    if(!isOpenPaymentTemplateModal || Payment.paymentMethod !== "paymaya") return null;
+
+    const handlePaymaya = () => {
+        setPaymayaTemplateLoading();
+        toast.promise(
+            (async () => {
+              
+            //   simulate 3s loading
+              await new Promise(res => setTimeout(res, 3000));
+              const res = await fetch(`${CheckoutURL}`, {
+                method: "POST",
+                body: JSON.stringify(submittedFormCheckoutFormData),
+              });
+    
+              const data = await res.json();
+              if (!res.ok) throw new Error(data?.errorMessage || "Something went wrong while processing your payment.");
+    
+              // return to resolve toast.promise as success
+              return data;
+            })(),
+            {
+              loading: "Payment processing...",
+              success: "Payment successful! Your order is being processed.",
+              error: (e) => e?.message || "Payment failed",
+            },
+            { duration: 8000 }
+            ).finally(() => {
+                // reset paymaya loading state
+                // set successfull pay to true after toast.promise resolves and close the payment template modal
+                // will use this to show ReceiptModal and reset the form
+                setResetPaymayaTemplateLoading();
+                setSuccessfullPay();
+                setClosePaymentTemplateModal();
+              });
+    }
     return (
         <>
-            {/* container */}
-            <div className="flex flex-col p-4 sm:p-0">
-                <div className="relative w-18 h-8 mx-auto mb-4">
-                    <Image src="/images/png/paymaya-logo.png" fill alt="payamya-logo"/>
-                </div>
-                <hr className="border-1"/>
+            <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40">
+                <div className={`bg-card-white-background max-h-[70vh] sm:max-h-[95vh] overflow-y-auto dark:bg-card-black-background rounded-xl shadow-2xl w-[500px] max-w-[90%] p-6 sm:p-8 text-center space-y-6 transition-all duration-300`}>
+                    {/* container */}
+                    <div className="flex flex-col p-4 sm:p-0">
+                        <div className="relative w-18 h-8 mx-auto mb-4">
+                            <Image src="/images/png/paymaya-logo.png" fill alt="payamya-logo"/>
+                        </div>
+                        <hr className="border-1"/>
 
-                {/* sub container */}
-                <div className="py-8">
-                    <span className="font-medium">Confirm Payment</span>
-                    <div className="flex flex-col mt-6 space-y-1">
-                        <span className="font-regular text-sm text-gray-600 dark:text-gray-400">Abante Clothing</span>
-                        <span className="font-medium text-2xl">₱{overallPriceResult.toLocaleString("en-Ph")}.00</span>
+                        {/* sub container */}
+                        <div className="py-8">
+                            <span className="font-medium">Confirm Payment</span>
+                            <div className="flex flex-col mt-6 space-y-1">
+                                <span className="font-regular text-sm text-gray-600 dark:text-gray-400">Abante Clothing</span>
+                                <span className="font-medium text-2xl">₱{computeItems.overallPriceResult.toLocaleString("en-Ph")}.00</span>
+                            </div>
+                        </div>
+
+                        {/* sub container */}
+                        <div className="bg-[#f2f2f2] rounded-md p-4 w-full text-black">
+                            <div className="flex justify-between">
+                                <span className="font-thin text-xs">Pay using</span>
+                                <span className="font-regular text-sm">Maya Cash</span>
+                            </div>
+
+                            <div className="flex justify-between mt-4">
+                                <span className="font-thin text-xs">Payment amount</span>
+                                <span className="font-regular text-sm">₱{computeItems.overallPriceResult.toLocaleString("en-Ph")}.00</span>
+                            </div>
+
+                            <div className="flex justify-between mt-1">
+                                <span className="font-thin text-xs">Service Fee</span>
+                                <span className="font-regular text-sm">₱{serviceFee.toFixed(2)}</span>
+                            </div>
+                            <hr className="border-1 my-2.5 border-black"/>
+
+                            <div className="flex justify-between mt-3">
+                                <span className="font-thin text-xs">Total Amount</span>
+                                <span className="font-regular text-sm">₱{(computeItems.overallPriceResult + serviceFee).toLocaleString("en-Ph")}.00</span>
+                            </div>
+                        </div>
+
+                        <button
+                            disabled={isPaymayaTemplateLoading}
+                            onClick={handlePaymaya}
+                            className={`bg-[#50B16B] text-[#F2F3F4] rounded-md mt-10 py-3 text-sm font-regular
+                             ${isPaymayaTemplateLoading ? "cursor-not-allowed" : "cursor-pointer"}`}>
+                            {isPaymayaTemplateLoading ? "Processing..." : "Pay now"}
+                        </button>
                     </div>
                 </div>
-
-                {/* sub container */}
-                <div className="bg-[#f2f2f2] rounded-md p-4 w-full text-black">
-                    <div className="flex justify-between">
-                        <span className="font-thin text-xs">Pay using</span>
-                        <span className="font-regular text-sm">Maya Cash</span>
-                    </div>
-
-                    <div className="flex justify-between mt-4">
-                        <span className="font-thin text-xs">Payment amount</span>
-                        <span className="font-regular text-sm">₱{overallPriceResult.toLocaleString("en-Ph")}.00</span>
-                    </div>
-
-                    <div className="flex justify-between mt-1">
-                        <span className="font-thin text-xs">Service Fee</span>
-                        <span className="font-regular text-sm">₱{serviceFee.toFixed(2)}</span>
-                    </div>
-                    <hr className="border-1 my-2.5 border-black"/>
-
-                    <div className="flex justify-between mt-3">
-                        <span className="font-thin text-xs">Total Amount</span>
-                        <span className="font-regular text-sm">₱{(overallPriceResult + serviceFee).toLocaleString("en-Ph")}.00</span>
-                    </div>
-                </div>
-
-                <button 
-                disabled={isPaymentProcessingLoading}
-                onClick={setSuccessfullPay}
-                className={`${isPaymentProcessingLoading ? "cursort-not-allowed" : "cursor-pointer"} bg-[#50B16B] text-[#F2F3F4] rounded-md mt-10 py-3 cursor-pointer text-sm font-regular`}>Pay now</button>
             </div>
         </>
     );
