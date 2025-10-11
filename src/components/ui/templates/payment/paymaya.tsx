@@ -23,7 +23,7 @@ export default function PaymayaTemplate(){
         toast.promise(
             (async () => {
               
-            //   simulate 3s loading
+              // simulate 3s loading
               await new Promise(res => setTimeout(res, 3000));
               const res = await fetch(`${CheckoutURL}`, {
                 method: "POST",
@@ -38,7 +38,8 @@ export default function PaymayaTemplate(){
             })(),
             {
               loading: "Payment processing...",
-              success: "Payment successful! Your order is being processed.",
+            //   success: "Payment successful! Your order is being processed.",
+              success: "Still under development.",
               error: (e) => e?.message || "Payment failed",
             },
             { duration: 8000 }

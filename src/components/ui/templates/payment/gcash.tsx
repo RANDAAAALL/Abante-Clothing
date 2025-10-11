@@ -38,7 +38,8 @@ export default function GcashTemplate(){
             })(),
             {
               loading: "Payment processing...",
-              success: "Payment successful! Your order is being processed.",
+            //   success: "Payment successful! Your order is being processed.",
+              success: "Still under development.",
               error: (e) => e?.message || "Payment failed",
             },
             { duration: 8000 }

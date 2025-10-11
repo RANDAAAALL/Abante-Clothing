@@ -4,6 +4,7 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 
 // your base config
 const nextConfig: NextConfig = {
+  reactStrictMode: false,
   experimental: {
     ppr: "incremental",
   },

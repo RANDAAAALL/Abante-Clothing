@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { CheckoutFormType } from "../validations/checkout-schema";
 
-type ComputeItemState = {
+export type ComputeItemState = {
     subTotalPriceResult: number;
     overallQtyResult: number;
     overallPriceResult: number;
@@ -21,6 +21,7 @@ type CheckoutModalState = {
     computeItems: ComputeItemState;
     Payment: PaymentAndSaveInfoState;
     submittedFormCheckoutFormData: CheckoutFormType | null;
+    itemsData: CartItemsProps[] | null;
 }
 
 type CheckoutModalActionState = {
@@ -50,6 +51,9 @@ type CheckoutModalActionState = {
 
     setPaymayaTemplateLoading: () => void;
     setResetPaymayaTemplateLoading: () => void;
+
+    setItemsData: (itemsData: CartItemsProps[]) => void;
+    setClearItemsData: () => void; 
 }
 
 export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionState>((set) => ({
@@ -100,4 +104,8 @@ export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionS
     isPaymayaTemplateLoading: false,
     setPaymayaTemplateLoading: () => set({ isPaymayaTemplateLoading: true }),
     setResetPaymayaTemplateLoading: () => set({ isPaymayaTemplateLoading: false }),
+
+    itemsData: null,
+    setItemsData: (itemsData) => set({ itemsData }),
+    setClearItemsData: () => set({ itemsData: null }),
 }));
