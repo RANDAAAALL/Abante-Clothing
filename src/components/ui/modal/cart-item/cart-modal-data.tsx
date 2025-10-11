@@ -43,7 +43,7 @@ export default function CartModalData() {
               <div className="w-full flex flex-col p-2 max-h-75 overflow-y-auto snap-y">
                 {payload.map((item: CartItemsProps | SelectedItemProps, i: number) => (
                   <React.Fragment key={i}>
-                    <div className="relative flex items-center w-full justify-between px-2 snap-center">
+                    <div className="relative flex items-center w-full justify-between px-2 snap-center relative">
                       <Image
                         className="mt-5 mb-4"
                         src= {`${isCartItem(item)
@@ -70,7 +70,7 @@ export default function CartModalData() {
                       </div>
 
                       <button
-                        className="text-black dark:text-white font-bold cursor-pointer"
+                        className="text-black dark:text-white font-bold cursor-pointer absolute right-1 top-1"
                         onClick={() => {
                         if(isCartItem(item)) deleteData(item?.cart_item_ID.toString())
                         else removeSelectedItem(i)}}>

@@ -7,59 +7,27 @@ import toast from "react-hot-toast";
 import useGetCart from "@/hooks/useGetCart";
 import { useEffect } from "react";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
-import { CheckoutURL } from "@/lib/config";
+import useDeleteAllCart from "@/hooks/useDeleteAllCart";
 
 export default function CheckoutformContent(){
-    const { isSuccessfullPay,
+    const { isSuccessfullPay, 
             setPayment, 
-            setOpenModal,
-            submittedFormCheckoutFormData,
-            setSubmittedFormCheckoutFormData,
-            setIsPaymentProcessingLoading,
-            setResetPaymentProcessingLoading } = useCheckoutModal();
+            setOpenConfirmationModal,
+            setSubmittedFormCheckoutFormData } = useCheckoutModal();
     const { data } = useGetCart();
-
+    const { mutate: clearItems } = useDeleteAllCart();
     const { register,
             handleSubmit,
             reset,
             formState: {errors, isSubmitting}
         } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
 
-            useEffect(() => {
-                if(isSuccessfullPay && submittedFormCheckoutFormData){
-                    toast.promise(
-                    async () => {
-                        // simulate loading
-                        setIsPaymentProcessingLoading();
-                        await new Promise(res => setTimeout(res, 3000));
-
-                        const res = await fetch(`${CheckoutURL}`, {
-                            method: 'POST',
-                            body: JSON.stringify(submittedFormCheckoutFormData)
-                        });
-
-                    const data = await res.json();
-                    if(!res.ok) throw new Error( data?.errorMessage || "Something went wrong while processing your payment.");
-
-                    // reset the form after user successfully purchased
-                    reset();
-                    // reset loading state
-                    setResetPaymentProcessingLoading();
-                }, {
-                    loading: 'Payment processing...',
-                    // success: 'Payment successful\nYour order is now being processed',
-                    success: 'Still under development...',
-                    error: (e) => e?.message || 'Payment failed',
-                }, {
-                    duration: 8000
-                }
-            )
-        };
-    }, [isSuccessfullPay,
-        submittedFormCheckoutFormData,
-        reset, setIsPaymentProcessingLoading,
-        setResetPaymentProcessingLoading]
-    );
+    useEffect(() => {
+        if(isSuccessfullPay){
+            reset();
+            clearItems();
+        }
+    }, [isSuccessfullPay]);
 
     const handleClickSubmit = async (formData: CheckoutFormType) => {
         try {
@@ -71,7 +39,7 @@ export default function CheckoutformContent(){
             const res = { paymentMethod: formData.paymentMethod };
             setPayment(res);
             setSubmittedFormCheckoutFormData(formData);
-            setOpenModal();
+            setOpenConfirmationModal();
         } catch (err) {
             toast.error(`Error in submission: ${err}`);
         }
@@ -171,9 +139,9 @@ export default function CheckoutformContent(){
                 </div>
                 
                 <div className="flex flex-col border-2 rounded-sm border-gray w-full p-3">
-                    <div className="flex items-center space-x-2.5">
-                        <input {...register("paymentMethod")} type="radio" className="w-3.5 h-3.5" name="paymentMethod" value="bank-transfer"/>
-                        <span className="text-sm">Bank Transfer</span>
+                    <div className="flex items-center space-x-2.5 text-gray-500 cursor-not-allowed">
+                        <input {...register("paymentMethod")} type="radio" disabled={true} className="w-3.5 h-3.5" name="paymentMethod" value="bank-transfer"/>
+                        <span className="text-sm">Bank Transfer | Under Maintenance</span>
                     </div>
                 </div>
                 {errors.paymentMethod && <p className="text-red-600 text-xs text-left ml-1 mt-1">{errors.paymentMethod.message}</p>}
