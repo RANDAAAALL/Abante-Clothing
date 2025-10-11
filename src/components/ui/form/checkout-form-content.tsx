@@ -13,7 +13,8 @@ export default function CheckoutformContent(){
     const { isSuccessfullPay, 
             setPayment, 
             setOpenConfirmationModal,
-            setSubmittedFormCheckoutFormData } = useCheckoutModal();
+            setSubmittedFormCheckoutFormData,
+            setItemsData } = useCheckoutModal();
     const { data } = useGetCart();
     const { mutate: clearItems } = useDeleteAllCart();
     const { register,
@@ -23,11 +24,13 @@ export default function CheckoutformContent(){
         } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
 
     useEffect(() => {
-        if(isSuccessfullPay){
+        if(isSuccessfullPay && data?.length){
+            const copy = [...data];
+            setItemsData(copy)
             reset();
             clearItems();
         }
-    }, [isSuccessfullPay]);
+    }, [isSuccessfullPay, data, clearItems, setItemsData, reset]);
 
     const handleClickSubmit = async (formData: CheckoutFormType) => {
         try {
