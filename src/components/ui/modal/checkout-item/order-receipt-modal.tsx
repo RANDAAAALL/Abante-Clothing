@@ -23,6 +23,7 @@ export default function OrderReceiptModal() {
   const [orderNumber, setOrderNumber] = useState("");
   const [date, setDate] = useState("");
   const [isOrderDetailsOpen, setOrderDetailsOpen] = useState<boolean>(false);
+  const [isDownloading, setDownloading] = useState<boolean>(false);
 
   useEffect(() => {
     const randomID = Math.floor(1000 + Math.random() * 9000);
@@ -51,32 +52,50 @@ export default function OrderReceiptModal() {
 
     const itemsDataCopy = [...itemsData];
 
-    const blob = await pdf(
-      <OrderReceiptDocument
-        orderNumber={orderNumber}
-        date={date}
-        submittedFormCheckoutFormData={submittedFormCheckoutFormData}
-        computeItems={computeItems}
-        cartData={itemsDataCopy}
-      />
-    ).toBlob();
+    // loading state for downloading a order receipt
+    setDownloading(true);
 
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${orderNumber}.pdf`;
-    link.click();
-    URL.revokeObjectURL(url);
+    toast.promise(
+      (async () => {
+        // simulate loading
+        await new Promise(res => setTimeout(res, 3000));
 
-    setClearComputeItems();
-    setClearPayment();
-    setOrderNumber("");
-    setDate("");
-    setResetSuccessfullPay();
-    setClearSubmittedFormCheckoutFormData();
-    setClearItemsData();
-    toast("Still under development.", {
-      duration: 4000
+        const blob = await pdf(
+          <OrderReceiptDocument
+            orderNumber={orderNumber}
+            date={date}
+            submittedFormCheckoutFormData={submittedFormCheckoutFormData}
+            computeItems={computeItems}
+            cartData={itemsDataCopy} />
+        ).toBlob();
+
+        // check if its valid blob
+        if(!blob.size || blob.type !== "application/pdf") throw new Error("Failed to generate receipt."); 
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${orderNumber}.pdf`;
+        link.click();
+        URL.revokeObjectURL(url);
+      })(),
+      {
+        loading: "Downloading....",
+        success: "Receipt downloaded successfully.",
+        error: (e) => e?.message || "Failed to generate receipt.",
+      }
+    ).finally(() => {
+      setDownloading(false);
+      setClearComputeItems();
+      setClearPayment();
+      setOrderNumber("");
+      setDate("");
+      setResetSuccessfullPay();
+      setClearSubmittedFormCheckoutFormData();
+      setClearItemsData();
+      toast("Still under development.", {
+        duration: 4000
+      });
     });
   };
 
@@ -222,14 +241,16 @@ export default function OrderReceiptModal() {
           {/* buttons */}
           <div className="flex flex-col justify-center space-y-4 md:flex-row md:space-y-0 md:space-x-4">
             <button
+              disabled={isDownloading}
               onClick={handleReset}
-              className="cursor-pointer px-6 w-full md:w-auto py-2.5 rounded-md border border-gray-400 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">
+              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 w-full md:w-auto py-2.5 rounded-md border border-gray-400 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all`}>
               Close
             </button>
             <button
+              disabled={isDownloading}
               onClick={handleDownloadReceipt}
-              className="cursor-pointer px-6 py-2.5 rounded-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black hover:opacity-90 transition-all">
-              Download Receipt
+              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 py-2.5 rounded-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black hover:opacity-90 transition-all`}>
+              {isDownloading ? "Downloading..." : "Download Receipt"}
             </button>
           </div>
         </div>
