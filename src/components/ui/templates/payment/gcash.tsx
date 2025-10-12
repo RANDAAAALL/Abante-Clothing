@@ -1,6 +1,7 @@
 "use client"
 import { LogoSVG } from "@/components/icons/svg/abante-clothing-logo";
 import { CheckoutURL } from "@/lib/config";
+import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import { CircleCheck } from "lucide-react";
 import Image from "next/image";
@@ -12,33 +13,40 @@ export default function GcashTemplate(){
             setResetGcashTemplateLoading,
             submittedFormCheckoutFormData,
             setClosePaymentTemplateModal,
+            setOrderPurchasedNumberAndDate,
             isOpenPaymentTemplateModal,
             setSuccessfullPay,
+            itemsData,
             Payment,
             computeItems} = useCheckoutModal();
 
     if(!isOpenPaymentTemplateModal || Payment.paymentMethod !== "gcash") return null;
 
     const handlePayGcash = () => {
+        console.log("---STORES---", {submittedFormCheckoutFormData, itemsData, computeItems})
         setGcashTemplateLoading();  
         toast.promise(
             (async () => {
-              // simulate 3s loading
-              await new Promise(res => setTimeout(res, 3000));
-              const res = await fetch(`${CheckoutURL}`, {
-                method: "POST",
-                body: JSON.stringify(submittedFormCheckoutFormData),
-              });
+            // simulate 3s loading
+            // await new Promise(res => setTimeout(res, 3000));
+            const res = await fetch(`${CheckoutURL}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({submittedFormCheckoutFormData, itemsData, computeItems}),
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data?.errorMessage || "Something went wrong while processing your payment.");
     
-              const data = await res.json();
-              if (!res.ok) throw new Error(data?.errorMessage || "Something went wrong while processing your payment.");
-    
-              // return to resolve toast.promise as success
-              return data;
+            // store resolve data
+            setOrderPurchasedNumberAndDate({
+                orderPurchasedNumber: data?.actualData?.order_purchased_number,
+                orderPurchasedDate: OrderReceiptDateFormatter(data?.actualData?.order_purchased_date),
+            });
             })(),
             {
               loading: "Payment processing...",
-            //   success: "Payment successful! Your order is being processed.",
+            //success: "Payment successful! Your order is being processed.",
               success: "Still under development.",
               error: (e) => e?.message || "Payment failed",
             },
@@ -98,7 +106,7 @@ export default function GcashTemplate(){
 
                             <div className="flex justify-between text-sm font-regular">
                                 <span>Amount Due</span>
-                                <span>php{computeItems.overallPriceResult.toLocaleString("en-Ph")}</span>
+                                <span>php{computeItems?.overallPriceResult.toLocaleString("en-Ph")}</span>
                             </div>
 
                             <div className="flex justify-between text-sm">
@@ -111,7 +119,7 @@ export default function GcashTemplate(){
                             
                             <div className="flex justify-between text-md font-regular">
                                 <span>Total Amount</span>
-                                <span>php{computeItems.overallPriceResult.toLocaleString("en-Ph")}</span>
+                                <span>php{computeItems?.overallPriceResult.toLocaleString("en-Ph")}</span>
                             </div>
                         </div>
 
@@ -123,7 +131,7 @@ export default function GcashTemplate(){
                                 className={`${isGcashTemplateLoading ? "cursor-not-allowed" : "cursor-pointer"} bg-gcash-background text-white rounded-full px-12 md:px-13 py-2 font-regular`}>
                                 {isGcashTemplateLoading 
                                 ? "Processing..." 
-                                : `Pay php${computeItems.overallPriceResult.toLocaleString("en-Ph")}`}
+                                : `Pay php${computeItems?.overallPriceResult.toLocaleString("en-Ph")}`}
                             </button>
                         </div>
                     </div>

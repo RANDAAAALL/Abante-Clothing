@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { CheckoutFormType } from "../validations/checkout-schema";
+import { CartItemsProps } from "../types/cart-items-types";
 
 export type ComputeItemState = {
     subTotalPriceResult: number;
@@ -11,6 +12,11 @@ type PaymentAndSaveInfoState = {
     paymentMethod: string | null;
 }
 
+export type OrderPurchasedNumberAndDateState ={
+    orderPurchasedNumber: string;
+    orderPurchasedDate: string;
+};
+
 type CheckoutModalState = {
     isOpenConfirmationModal: boolean;
     isSuccessfullPay: boolean;
@@ -18,10 +24,11 @@ type CheckoutModalState = {
     isCompleteOrderTriggerLoading: boolean;
     isGcashTemplateLoading: boolean;
     isPaymayaTemplateLoading: boolean;
-    computeItems: ComputeItemState;
-    Payment: PaymentAndSaveInfoState;
-    submittedFormCheckoutFormData: CheckoutFormType | null;
+    computeItems: ComputeItemState | null;
     itemsData: CartItemsProps[] | null;
+    submittedFormCheckoutFormData: CheckoutFormType | null;
+    Payment: PaymentAndSaveInfoState;
+    orderPurchasedNumberAndDate: OrderPurchasedNumberAndDateState | null;
 }
 
 type CheckoutModalActionState = {
@@ -54,6 +61,9 @@ type CheckoutModalActionState = {
 
     setItemsData: (itemsData: CartItemsProps[]) => void;
     setClearItemsData: () => void; 
+
+    setOrderPurchasedNumberAndDate: (orderPurchasedNumberAndDate: OrderPurchasedNumberAndDateState) => void;
+    setClearOrderPurchasedNumberAndDate: () => void;
 }
 
 export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionState>((set) => ({
@@ -108,4 +118,8 @@ export const useCheckoutModal = create<CheckoutModalState & CheckoutModalActionS
     itemsData: null,
     setItemsData: (itemsData) => set({ itemsData }),
     setClearItemsData: () => set({ itemsData: null }),
+
+    orderPurchasedNumberAndDate: null,
+    setOrderPurchasedNumberAndDate: (orderPurchasedNumberAndDate) => set({ orderPurchasedNumberAndDate}),
+    setClearOrderPurchasedNumberAndDate: () => set({ orderPurchasedNumberAndDate: null }),
 }));

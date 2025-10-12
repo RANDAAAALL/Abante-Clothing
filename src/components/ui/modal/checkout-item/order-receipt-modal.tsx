@@ -1,44 +1,35 @@
 "use client";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
-import { pdf } from "@react-pdf/renderer";
-import { OrderReceiptDocument } from "../../documents/pdf/order-receipt-document";
+import { CartItemsProps } from "@/lib/types/cart-items-types";
+import { GenerateReceiptURL } from "@/lib/config";
 
 export default function OrderReceiptModal() {
   const {
     setClearComputeItems,
     setClearPayment,
     setResetSuccessfullPay,
-    submittedFormCheckoutFormData,
     setClearSubmittedFormCheckoutFormData,
-    computeItems,
+    setClearOrderPurchasedNumberAndDate,
     isSuccessfullPay,
     setClearItemsData,
+    orderPurchasedNumberAndDate,
+    submittedFormCheckoutFormData,
+    computeItems,
     itemsData,
   } = useCheckoutModal();
-
-  const [orderNumber, setOrderNumber] = useState("");
-  const [date, setDate] = useState("");
   const [isOrderDetailsOpen, setOrderDetailsOpen] = useState<boolean>(false);
   const [isDownloading, setDownloading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const randomID = Math.floor(1000 + Math.random() * 9000);
-    const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-    setOrderNumber(`ORD-${datePart}-${randomID}`);
-    setDate(new Date().toLocaleString());
-  }, []);
 
   if (!isSuccessfullPay) return null;
 
   const handleReset = () => {
     setClearComputeItems();
     setClearPayment();
-    setOrderNumber("");
-    setDate("");
+    setClearOrderPurchasedNumberAndDate();
     setResetSuccessfullPay();
     setClearSubmittedFormCheckoutFormData();
     setClearItemsData();
@@ -48,9 +39,7 @@ export default function OrderReceiptModal() {
   };
 
   const handleDownloadReceipt = async () => {
-    if (!submittedFormCheckoutFormData || !itemsData?.length) return;
-
-    const itemsDataCopy = [...itemsData];
+    if (!submittedFormCheckoutFormData || !itemsData?.length) return null;
 
     // loading state for downloading a order receipt
     setDownloading(true);
@@ -58,24 +47,30 @@ export default function OrderReceiptModal() {
     toast.promise(
       (async () => {
         // simulate loading
-        await new Promise(res => setTimeout(res, 3000));
+        // await new Promise(res => setTimeout(res, 3000));
 
-        const blob = await pdf(
-          <OrderReceiptDocument
-            orderNumber={orderNumber}
-            date={date}
-            submittedFormCheckoutFormData={submittedFormCheckoutFormData}
-            computeItems={computeItems}
-            cartData={itemsDataCopy} />
-        ).toBlob();
+        const payload = {
+          orderPurchasedNumberAndDate,
+          submittedFormCheckoutFormData,
+          computeItems,
+          itemsData,
+        }
 
-        // check if its valid blob
-        if(!blob.size || blob.type !== "application/pdf") throw new Error("Failed to generate receipt."); 
+        console.log(payload);
 
+        const res = await fetch(`${GenerateReceiptURL}`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload),
+        })
+
+        if(!res.ok) throw new Error("Failed to generate receipt.");
+
+        const blob = await res.blob();
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${orderNumber}.pdf`;
+        link.download = `${orderPurchasedNumberAndDate?.orderPurchasedNumber}.pdf`;
         link.click();
         URL.revokeObjectURL(url);
       })(),
@@ -88,8 +83,7 @@ export default function OrderReceiptModal() {
       setDownloading(false);
       setClearComputeItems();
       setClearPayment();
-      setOrderNumber("");
-      setDate("");
+      setClearOrderPurchasedNumberAndDate();
       setResetSuccessfullPay();
       setClearSubmittedFormCheckoutFormData();
       setClearItemsData();
@@ -111,9 +105,9 @@ export default function OrderReceiptModal() {
               Order Receipt
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Order No: <span className="font-semibold">{orderNumber}</span>
+              Order No: <span className="font-semibold">{orderPurchasedNumberAndDate?.orderPurchasedNumber}</span>
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{date}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{orderPurchasedNumberAndDate?.orderPurchasedDate}</p>
           </div>
 
           <hr className="border-black dark:border-white border-t-2 mt-4 mb-4" />
@@ -223,7 +217,7 @@ export default function OrderReceiptModal() {
                 <div className="flex justify-between">
                   <span className="font-semibold text-lg text-gray-900 dark:text-white">Total</span>
                   <span className="text-xl font-bold text-primary">
-                    ₱{computeItems.overallPriceResult?.toLocaleString("en-Ph")}.00
+                    ₱{computeItems?.overallPriceResult?.toLocaleString("en-Ph")}.00
                   </span>
                 </div>
               </div>

@@ -52,6 +52,38 @@ export const CheckoutSchema = z.object({
   addressType: z.enum(["shipping-address", "billing-address"], {
     error: () => ({ message: "Please select a billing address"})
   }),
+  billingRecipientFirstName: z.string().optional(),
+  billingRecipientLastName: z.string().optional(),
+  billingCompanyName: z.string().optional(),
+  billingAddressName: z.string().optional(),
+  billingApartmentName: z.string().optional(),
+  billingPostalCode: z.string().optional(),
+  billingCityName: z.string().optional(),
+  billingRegionName: z.string().optional(),
+  billingPhoneNumber: z.string().optional(),
+}).superRefine((data, ctx) => {
+  if (data.addressType === "billing-address") {
+    const requiredBillingFields = {
+      billingRecipientFirstName: "Billing first name is required",
+      billingRecipientLastName: "Billing last name is required",
+      billingAddressName: "Billing address is required",
+      billingPostalCode: "Billing postal code is required",
+      billingCityName: "Billing city is required",
+      billingRegionName: "Billing region is required",
+      billingPhoneNumber: "Billing phone number is required",
+    };
+
+    for (const [field, message] of Object.entries(requiredBillingFields)) {
+      if (!data[field as keyof typeof data]) {
+        ctx.addIssue({
+          code: "custom",
+          path: [field],
+          message,
+        });
+      }
+    }
+  }
 });
+
 
 export type CheckoutFormType = z.infer<typeof CheckoutSchema>;

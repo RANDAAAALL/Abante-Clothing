@@ -3,7 +3,7 @@
 import { Card } from "../carousel/card";
 import Image from "next/image";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
-import { DateFormatter } from "@/lib/helper/date-formatter";
+import { DateFormatter } from "@/lib/helper/feedback-date-formatter";
 import CustomerFeedbackRating from "../customer-feedback-rating";
 import PaginationSelection from "../pagination/paginated-selection";
 import usePaginationAndFilteredProducts from "@/hooks/usePaginationAndFilteredProducts";

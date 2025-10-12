@@ -1,4 +1,5 @@
 import { DeleteCartURL } from "@/lib/config";
+import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function useDeleteCart() {

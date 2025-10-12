@@ -1,4 +1,3 @@
-
 "use client"
 import Image from "next/image";
 import { Card } from "../carousel/card";
@@ -7,6 +6,7 @@ import React, { useEffect, useMemo } from "react";
 import { computeItems } from "@/lib/helper/compute-items";
 import useDeleteCart from "@/hooks/useDeleteCart";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
+import { CartItemsProps } from "@/lib/types/cart-items-types";
 
 export default function CheckoutItemData(){
     const { data } = useGetCart();

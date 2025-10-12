@@ -7,6 +7,7 @@ import { computeItems } from "@/lib/helper/compute-items";
 import useGetCart from "@/hooks/useGetCart";
 import useDeleteCart from "@/hooks/useDeleteCart";
 import isCartItem from "@/lib/helper/isCartItem";
+import { CartItemsProps } from "@/lib/types/cart-items-types";
 
 export default function CartModalData() {
   const { selectedItem, removeSelectedItem } = useCartItems();

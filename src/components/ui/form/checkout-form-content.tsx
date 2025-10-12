@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import useGetCart from "@/hooks/useGetCart";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import useDeleteAllCart from "@/hooks/useDeleteAllCart";
 
@@ -22,14 +22,14 @@ export default function CheckoutformContent(){
             reset,
             formState: {errors, isSubmitting}
         } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
-
+    const [ useDifferentBilling, setUseDifferentBilling ] = useState<boolean>(false);
+    
     useEffect(() => {
-        if(isSuccessfullPay && data?.length){
-            const copy = [...data];
-            setItemsData(copy)
+        if(isSuccessfullPay && data?.length) {
             reset();
             clearItems();
         }
+
     }, [isSuccessfullPay, data, clearItems, setItemsData, reset]);
 
     const handleClickSubmit = async (formData: CheckoutFormType) => {
@@ -38,7 +38,9 @@ export default function CheckoutformContent(){
                 toast.error("Your cart is currently empty.")
                 return;
             }
-
+            const copy = [...data];
+            console.log("Copy: ", copy);
+            setItemsData(copy)
             const res = { paymentMethod: formData.paymentMethod };
             setPayment(res);
             setSubmittedFormCheckoutFormData(formData);
@@ -122,52 +124,185 @@ export default function CheckoutformContent(){
                 <span className="text-sm">Save this information for next time</span>
             </div>
 
-            {/* Payment radio buttons*/}
-            <div className="flex flex-col">
-                <span className="font-medium text-lg">Payment</span>
-                <span className="text-[14px]">All transactions are secure and encrypted</span>
-            
-                <div className="flex flex-col border-2 rounded-sm border-gray w-full p-3 mt-1.5">
-                    <div className="flex items-center space-x-2.5">
-                        <input {...register("paymentMethod")} type="radio" className="w-3.5 h-3.5" name="paymentMethod" value="gcash"/>
-                        <span className="text-sm">Gcash</span>
+                {/* Payment radio buttons*/}
+                <div className="flex flex-col">
+                    <span className="font-medium text-lg">Payment</span>
+                    <span className="text-[14px]">All transactions are secure and encrypted</span>
+                
+                    <div className="flex flex-col border-2 rounded-sm border-gray w-full p-3 mt-1.5">
+                        <div className="flex items-center space-x-2.5">
+                            <input {...register("paymentMethod")} type="radio" className="w-3.5 h-3.5" name="paymentMethod" value="gcash"/>
+                            <span className="text-sm">Gcash</span>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col border-2 rounded-sm border-gray w-full p-3">
+                        <div className="flex items-center space-x-2.5">
+                            <input {...register("paymentMethod")} type="radio" className="w-3.5 h-3.5" name="paymentMethod" value="paymaya"/>
+                            <span className="text-sm">Paymaya</span>
+                        </div>
+                    </div>
+                    
+                    <div className="flex flex-col border-2 rounded-sm border-gray w-full p-3">
+                        <div className="flex items-center space-x-2.5 text-gray-500 cursor-not-allowed">
+                            <input {...register("paymentMethod")} type="radio" disabled={true} className="w-3.5 h-3.5" name="paymentMethod" value="bank-transfer"/>
+                            <span className="text-sm">Bank Transfer | Under Maintenance</span>
+                        </div>
+                    </div>
+                    {errors.paymentMethod && <p className="text-red-600 text-xs text-left ml-1 mt-1">{errors.paymentMethod.message}</p>}
+
+                    {/* Billing Address Type */}
+                    <div className="flex flex-col mb-5 mt-5">
+                    <span className="text-[14px]">Billing Address</span>
+                    
+                        <div className="flex items-center space-x-2.5 border-2 rounded-sm border-gray w-full p-3 mt-1.5">
+                            <input 
+                            {...register("addressType")}
+                            type="radio"
+                            className="w-3.5 h-3.5"
+                            name="addressType"
+                            value="shipping-address"
+                            onClick={() => setUseDifferentBilling(false)}/>
+                            <span className="text-sm">Same as shipping address</span>
+                        </div>
+                        <div className="flex items-center space-x-2.5 border-2 rounded-sm border-gray w-full p-3">
+                            <input
+                            {...register("addressType")}
+                            type="radio"
+                            className="w-3.5 h-3.5"
+                            name="addressType"
+                            value="billing-address"
+                            onClick={() => setUseDifferentBilling(true)}/>
+                            <span className="text-sm">Use different billing address</span>
+                        </div>
+                        {errors.addressType && <p className="text-red-600 text-xs text-left ml-1 mt-1">{errors.addressType.message}</p>}
                     </div>
                 </div>
 
-                <div className="flex flex-col border-2 rounded-sm border-gray w-full p-3">
-                    <div className="flex items-center space-x-2.5">
-                        <input {...register("paymentMethod")} type="radio" className="w-3.5 h-3.5" name="paymentMethod" value="paymaya"/>
-                        <span className="text-sm">Paymaya</span>
-                    </div>
-                </div>
-                
-                <div className="flex flex-col border-2 rounded-sm border-gray w-full p-3">
-                    <div className="flex items-center space-x-2.5 text-gray-500 cursor-not-allowed">
-                        <input {...register("paymentMethod")} type="radio" disabled={true} className="w-3.5 h-3.5" name="paymentMethod" value="bank-transfer"/>
-                        <span className="text-sm">Bank Transfer | Under Maintenance</span>
-                    </div>
-                </div>
-                {errors.paymentMethod && <p className="text-red-600 text-xs text-left ml-1 mt-1">{errors.paymentMethod.message}</p>}
+                {useDifferentBilling && (
+                    <div className="border-t border-gray-300 pt-4 space-y-2.5">
+                        <div className="mb-2">
+                        <span className="font-medium text-md">Billing Address</span>
+                        </div>
 
-                {/* Billing Address Type */}
-                <div className="flex flex-col mb-5 mt-5">
-                 <span className="text-[14px]">Billing Address</span>
-                
-                    <div className="flex items-center space-x-2.5 border-2 rounded-sm border-gray w-full p-3 mt-1.5">
-                        <input {...register("addressType")} type="radio" className="w-3.5 h-3.5" name="addressType" value="shipping-address"/>
-                        <span className="text-sm">Same as shipping address</span>
+                        <div className="flex space-x-2 text-sm">
+                        <div className="w-full">
+                            <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="First Name"
+                            {...register("billingRecipientFirstName")}
+                            />
+                            {errors.billingRecipientFirstName && (
+                            <p className="text-red-600 text-xs text-left ml-1 mt-1">
+                                {errors.billingRecipientFirstName.message}
+                            </p>
+                            )}
+                        </div>
+                        <div className="w-full">
+                            <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="Last Name"
+                            {...register("billingRecipientLastName")}
+                            />
+                            {errors.billingRecipientLastName && (
+                            <p className="text-red-600 text-xs text-left ml-1 mt-1">
+                                {errors.billingRecipientLastName.message}
+                            </p>
+                            )}
+                        </div>
+                        </div>
+
+                        <div className="text-sm">
+                        <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="Company (optional)"
+                            {...register("billingCompanyName")}
+                        />
+                        </div>
+
+                        <div className="text-sm">
+                        <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="Address"
+                            {...register("billingAddressName")}
+                        />
+                        {errors.billingAddressName && (
+                            <p className="text-red-600 text-xs text-left ml-1 mt-1">
+                            {errors.billingAddressName.message}
+                            </p>
+                        )}
+                        </div>
+
+                        <div className="text-sm">
+                        <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="Apartment, suite, etc. (optional)"
+                            {...register("billingApartmentName")}
+                        />
+                        </div>
+
+                        <div className="flex space-x-2 text-sm">
+                        <div className="w-full">
+                            <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="Postal Code"
+                            {...register("billingPostalCode")}
+                            />
+                            {errors.billingPostalCode && (
+                            <p className="text-red-600 text-xs text-left ml-1 mt-1">
+                                {errors.billingPostalCode.message}
+                            </p>
+                            )}
+                        </div>
+                        <div className="w-full">
+                            <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="City"
+                            {...register("billingCityName")}
+                            />
+                            {errors.billingCityName && (
+                            <p className="text-red-600 text-xs text-left ml-1 mt-1">
+                                {errors.billingCityName.message}
+                            </p>
+                            )}
+                        </div>
+                        </div>
+
+                        <div className="text-sm">
+                        <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="Region"
+                            {...register("billingRegionName")}
+                        />
+                        {errors.billingRegionName && (
+                            <p className="text-red-600 text-xs text-left ml-1 mt-1">
+                            {errors.billingRegionName.message}
+                            </p>
+                        )}
+                        </div>
+
+                        <div className="text-sm">
+                        <input
+                            className="border-2 rounded-sm border-gray w-full p-3"
+                            placeholder="Phone No."
+                            {...register("billingPhoneNumber")}
+                        />
+                        {errors.billingPhoneNumber && (
+                            <p className="text-red-600 text-xs text-left ml-1 mt-1">
+                            {errors.billingPhoneNumber.message}
+                            </p>
+                        )}
+                        </div>
                     </div>
-                    <div className="flex items-center space-x-2.5 border-2 rounded-sm border-gray w-full p-3">
-                        <input {...register("addressType")} type="radio" className="w-3.5 h-3.5" name="addressType" value="billing-address"/>
-                        <span className="text-sm">Use different billing address</span>
-                    </div>
-                    {errors.addressType && <p className="text-red-600 text-xs text-left ml-1 mt-1">{errors.addressType.message}</p>}
-                </div>
-            </div>
-                    <button 
-                    disabled={isSubmitting}
-                    type="submit"
-                    className={`${isSubmitting ? "cursor-not-allowed" : "cursor-pointer"} text-sm bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-sm py-2.5 w-full`}>{isSubmitting ? "Processing Order..." : "Complete Order"}</button>
+                )}
+
+                <button 
+                disabled={isSubmitting}
+                type="submit"
+                className={`${isSubmitting ? "cursor-not-allowed" : "cursor-pointer"}
+                ${useDifferentBilling && "mt-3"} text-sm bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-sm py-2.5 w-full`}>
+                {isSubmitting ? "Processing Order..." : "Complete Order"}
+                </button>
             </form>
         </Card>
         </>

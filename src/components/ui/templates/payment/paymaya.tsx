@@ -1,5 +1,6 @@
 "use client"
 import { CheckoutURL } from "@/lib/config";
+import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -11,7 +12,9 @@ export default function PaymayaTemplate(){
             isOpenPaymentTemplateModal,
             setClosePaymentTemplateModal,
             submittedFormCheckoutFormData,
+            setOrderPurchasedNumberAndDate,
             setSuccessfullPay,
+            itemsData,
             Payment,
             computeItems } = useCheckoutModal();
     const serviceFee = 20;
@@ -19,26 +22,30 @@ export default function PaymayaTemplate(){
     if(!isOpenPaymentTemplateModal || Payment.paymentMethod !== "paymaya") return null;
 
     const handlePaymaya = () => {
+        console.log("---STORES---", {submittedFormCheckoutFormData, itemsData, computeItems});
         setPaymayaTemplateLoading();
         toast.promise(
             (async () => {
-              
-              // simulate 3s loading
-              await new Promise(res => setTimeout(res, 3000));
-              const res = await fetch(`${CheckoutURL}`, {
-                method: "POST",
-                body: JSON.stringify(submittedFormCheckoutFormData),
-              });
+            // simulate 3s loading
+            // await new Promise(res => setTimeout(res, 3000));
+            const res = await fetch(`${CheckoutURL}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({submittedFormCheckoutFormData, itemsData, computeItems}),
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data?.errorMessage || "Something went wrong while processing your payment.");
     
-              const data = await res.json();
-              if (!res.ok) throw new Error(data?.errorMessage || "Something went wrong while processing your payment.");
-    
-              // return to resolve toast.promise as success
-              return data;
+            // store resolve data
+            setOrderPurchasedNumberAndDate({
+                orderPurchasedNumber: data?.actualData?.order_purchased_number,
+                orderPurchasedDate: OrderReceiptDateFormatter(data?.actualData?.order_purchased_date),
+            });
             })(),
             {
               loading: "Payment processing...",
-            //   success: "Payment successful! Your order is being processed.",
+            //success: "Payment successful! Your order is being processed.",
               success: "Still under development.",
               error: (e) => e?.message || "Payment failed",
             },
@@ -68,7 +75,7 @@ export default function PaymayaTemplate(){
                             <span className="font-medium">Confirm Payment</span>
                             <div className="flex flex-col mt-6 space-y-1">
                                 <span className="font-regular text-sm text-gray-600 dark:text-gray-400">Abante Clothing</span>
-                                <span className="font-medium text-2xl">₱{computeItems.overallPriceResult.toLocaleString("en-Ph")}.00</span>
+                                <span className="font-medium text-2xl">₱{computeItems?.overallPriceResult.toLocaleString("en-Ph")}.00</span>
                             </div>
                         </div>
 
@@ -81,7 +88,7 @@ export default function PaymayaTemplate(){
 
                             <div className="flex justify-between mt-4">
                                 <span className="font-thin text-xs">Payment amount</span>
-                                <span className="font-regular text-sm">₱{computeItems.overallPriceResult.toLocaleString("en-Ph")}.00</span>
+                                <span className="font-regular text-sm">₱{computeItems?.overallPriceResult.toLocaleString("en-Ph")}.00</span>
                             </div>
 
                             <div className="flex justify-between mt-1">
@@ -92,7 +99,7 @@ export default function PaymayaTemplate(){
 
                             <div className="flex justify-between mt-3">
                                 <span className="font-thin text-xs">Total Amount</span>
-                                <span className="font-regular text-sm">₱{(computeItems.overallPriceResult + serviceFee).toLocaleString("en-Ph")}.00</span>
+                                <span className="font-regular text-sm">₱{(computeItems!.overallPriceResult + serviceFee).toLocaleString("en-Ph")}.00</span>
                             </div>
                         </div>
 
