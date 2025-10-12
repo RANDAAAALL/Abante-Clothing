@@ -1,5 +1,6 @@
 import isCartItem from "./isCartItem";
 import { SelectedItemProps } from "../store/cart-items";
+import { CartItemsProps } from "../types/cart-items-types";
 
 export const computeItems = (
   cartItems: (CartItemsProps | SelectedItemProps)[],

@@ -8,7 +8,8 @@ export default function ConfirmationModal(){
         isCompleteOrderTriggerLoading,
         setIsCompleteOrderTriggerLoading,
         setResetCompleteOrderTriggerLoading,
-        setOpenPaymentTemplateModal } = useCheckoutModal();
+        setOpenPaymentTemplateModal,
+        setClearItemsData } = useCheckoutModal();
 
   // Only render when its open
   if (!isOpenConfirmationModal) return null;
@@ -29,6 +30,12 @@ export default function ConfirmationModal(){
     // then resets the loading state
     setResetCompleteOrderTriggerLoading();
   }
+
+  const handleClickCloseModal = () => {
+    setCloseConfirmationModal();
+    setClearItemsData();
+  }
+
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/40">
       <div className={`bg-card-white-background  max-h-[70vh] sm:max-h-[95vh] overflow-y-auto dark:bg-card-black-background rounded-xl shadow-2xl w-[500px] max-w-[90%] p-6 sm:p-8 text-center space-y-6 transition-all duration-300`}>
@@ -54,7 +61,7 @@ export default function ConfirmationModal(){
                 Yes, Complete Order
               </button>
 
-              <button onClick={setCloseConfirmationModal}
+              <button onClick={handleClickCloseModal}
                 className="cursor-pointer px-5 py-2 rounded-md border border-gray-400 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">
                 Cancel
               </button>

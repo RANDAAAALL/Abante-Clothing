@@ -1,5 +1,6 @@
 import { AddToCartURL } from "@/lib/config";
 import { AddToCartPayload } from "@/lib/interface/add-to-cart";
+import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function useAddToCart() {

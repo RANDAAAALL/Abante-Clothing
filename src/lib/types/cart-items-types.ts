@@ -13,3 +13,5 @@ type CartItemsProps = {
     cart_item_total?: number | null;
     cart_item_date?: Date | null;
 };
+
+export type { CartItemsProps };

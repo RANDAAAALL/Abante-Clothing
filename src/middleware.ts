@@ -64,6 +64,7 @@ export const config = {
     "/register",
     "/checkout",
     "/api/checkout",
+    "/api/generate-receipt",
     "/forgot-password",
   ],
 };
