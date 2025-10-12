@@ -22,12 +22,10 @@ export default function PaymayaTemplate(){
     if(!isOpenPaymentTemplateModal || Payment.paymentMethod !== "paymaya") return null;
 
     const handlePaymaya = () => {
-        console.log("---STORES---", {submittedFormCheckoutFormData, itemsData, computeItems});
         setPaymayaTemplateLoading();
         toast.promise(
             (async () => {
-            // simulate 3s loading
-            // await new Promise(res => setTimeout(res, 3000));
+                
             const res = await fetch(`${CheckoutURL}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },

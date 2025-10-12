@@ -39,7 +39,6 @@ export default function CheckoutformContent(){
                 return;
             }
             const copy = [...data];
-            console.log("Copy: ", copy);
             setItemsData(copy)
             const res = { paymentMethod: formData.paymentMethod };
             setPayment(res);

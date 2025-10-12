@@ -106,21 +106,19 @@ export async function POST(req: Request) {
             });
           
             // insert order_details
-            for (const item of cartItems) {
-              await tx.order_details.create({
-                data: {
-                  order_purchased_ID: orderPurchased.order_purchased_ID,
-                  product_item_ID: item.product_item_ID,
-                  order_detail_name: item.cart_item_name,
-                  order_detail_qty: item.cart_item_qty,
-                  order_detail_price: item.cart_item_price,
-                  order_detail_size: item.cart_item_size,
-                },
-              });
-            }
+            await tx.order_details.createMany({
+              data: cartItems.map((item) => ({
+                order_purchased_ID: orderPurchased.order_purchased_ID,
+                product_item_ID: item.product_item_ID,
+                order_detail_name: item.cart_item_name,
+                order_detail_qty: item.cart_item_qty,
+                order_detail_price: item.cart_item_price,
+                order_detail_size: item.cart_item_size,
+              })),
+            });
           
             return orderPurchased;
-          });
+          }, { timeout: 15000 });
           
         return NextResponse.json(
         { successMessage: "Successfully inserted an order", actualData: result },
