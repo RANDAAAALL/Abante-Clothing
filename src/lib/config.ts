@@ -12,3 +12,4 @@ export const AddToCartURL = `${getBaseUrl()}/api/add-to-cart`;
 export const DeleteCartURL = `${getBaseUrl()}/api/delete-cart`;
 export const DeleteAllCartURL = `${getBaseUrl()}/api/delete-all-cart`;
 export const CheckoutURL = `${getBaseUrl()}/api/checkout`;
+export const GenerateReceiptURL = `${getBaseUrl()}/api/generate-receipt`;
