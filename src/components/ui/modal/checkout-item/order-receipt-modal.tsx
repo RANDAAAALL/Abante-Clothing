@@ -33,7 +33,7 @@ export default function OrderReceiptModal() {
     setResetSuccessfullPay();
     setClearSubmittedFormCheckoutFormData();
     setClearItemsData();
-    toast("Still under development.", {
+    toast("Thank you for purchasing.", {
       duration: 4000
     });
   };
@@ -55,8 +55,6 @@ export default function OrderReceiptModal() {
           computeItems,
           itemsData,
         }
-
-        console.log(payload);
 
         const res = await fetch(`${GenerateReceiptURL}`, {
           method: "POST",
@@ -87,7 +85,7 @@ export default function OrderReceiptModal() {
       setResetSuccessfullPay();
       setClearSubmittedFormCheckoutFormData();
       setClearItemsData();
-      toast("Still under development.", {
+      toast("Thank you for purchasing.", {
         duration: 4000
       });
     });
