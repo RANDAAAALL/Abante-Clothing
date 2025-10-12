@@ -23,12 +23,10 @@ export default function GcashTemplate(){
     if(!isOpenPaymentTemplateModal || Payment.paymentMethod !== "gcash") return null;
 
     const handlePayGcash = () => {
-        console.log("---STORES---", {submittedFormCheckoutFormData, itemsData, computeItems})
         setGcashTemplateLoading();  
         toast.promise(
             (async () => {
-            // simulate 3s loading
-            // await new Promise(res => setTimeout(res, 3000));
+
             const res = await fetch(`${CheckoutURL}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
