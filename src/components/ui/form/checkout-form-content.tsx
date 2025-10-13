@@ -20,9 +20,6 @@ export default function CheckoutformContent(){
     const { register,
             handleSubmit,
             reset,
-            clearErrors,
-            getValues,
-            setValue,
             formState: {errors, isSubmitting}
         } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
     const [ useDifferentBilling, setUseDifferentBilling ] = useState<boolean>(false);

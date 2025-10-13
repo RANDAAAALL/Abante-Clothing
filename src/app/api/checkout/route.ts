@@ -2,7 +2,7 @@ import { isAuthenticatedUser } from "@/data-access-layer/verify-user";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
-import { CheckoutFormType } from "@/lib/validations/checkout-schema";
+import { CheckoutFormType, CheckoutSchema } from "@/lib/validations/checkout-schema";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { ComputeItemState } from "@/lib/store/checkout-items";
 import { nanoid } from "nanoid";
@@ -19,17 +19,18 @@ export async function POST(req: Request) {
         const { submittedFormCheckoutFormData, itemsData, computeItems } = await req.json();
        
         // safeParse
-        const checkoutForm = submittedFormCheckoutFormData as CheckoutFormType;
+        const parsed = CheckoutSchema.safeParse(submittedFormCheckoutFormData);
         const cartItems = itemsData as CartItemsProps[];
         const overallPrice = computeItems as ComputeItemState;
         
-        if (!checkoutForm || !cartItems?.length || overallPrice.overallPriceResult <= 0) {
+        if ( !parsed.success || !cartItems?.length || overallPrice.overallPriceResult <= 0) {
         return NextResponse.json(
-            { errorMessage: `${submittedFormCheckoutFormData} --- ${itemsData} --- ${computeItems}` },
+            { errorMessage: `Invalid checkout data` },
             { status: 400 }
         );
         }
 
+        const checkoutForm = parsed.data;
         const result = await prisma.$transaction(async (tx) => {
           
             // check if shipping address is already exists
