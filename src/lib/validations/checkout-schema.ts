@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const CheckoutSchema = z.object({
+  // shipping fields
   country: z.enum(["Philippines"], {
     error: () => ({ message: "Please select a valid country" }),
   }),
@@ -33,9 +34,8 @@ export const CheckoutSchema = z.object({
     .string()
     .transform((val) => val.replace(/\s+/g, ""))
     .refine(
-      (val) =>
-        /^(09\d{9}|9\d{9}|\+639\d{9}|639\d{9})$/.test(val),
-      { message: "Invalid phone number. It should start with +639, 09, or 9 and have the correct number of digits", }
+      (val) => /^(09\d{9}|9\d{9}|\+639\d{9}|639\d{9})$/.test(val),
+      { message: "Invalid phone number. It should start with +639, 09, or 9 and have the correct number of digits" }
     )
     .transform((val) => {
       if (val.startsWith("09")) return "+63" + val.slice(1);
@@ -50,59 +50,22 @@ export const CheckoutSchema = z.object({
   addressType: z.enum(["shipping-address", "billing-address"], {
     error: () => ({ message: "Please select a billing address" }),
   }),
-  
-  // Billing fields now match shipping rules
-  billingRecipientFirstName: z
-    .string()
-    .min(1, "Billing first name is required")
-    .regex(/^[A-Za-z\s]+$/, "Billing first name must not contain special characters")
-    .optional(),
-  billingRecipientLastName: z
-    .string()
-    .min(1, "Billing last name is required")
-    .regex(/^[A-Za-z\s]+$/, "Billing last name must not contain special characters")
-    .optional(),
+
+  // billing fields
+  billingFirstName: z.string().optional(),
+  billingLastName: z.string().optional(),
   billingCompanyName: z.string().optional(),
-  billingAddressName: z
-    .string()
-    .min(5, "Billing address is required")
-    .regex(/^[A-Za-z0-9\s,.'-]+$/, "Billing address contains invalid characters")
-    .optional(),
+  billingAddressName: z.string().optional(),
   billingApartmentName: z.string().optional(),
-  billingPostalCode: z
-    .string()
-    .regex(/^\d{4,5}$/, "Billing postal code must be 4–5 digits long")
-    .optional(),
-  billingCityName: z
-    .string()
-    .min(2, "Billing city is required")
-    .regex(/^[A-Za-z\s]+$/, "Billing city must only contain letters")
-    .optional(),
-  billingRegionName: z
-    .string()
-    .min(1, "Billing region is required")
-    .regex(/^[A-Za-z0-9\s]+$/, "Billing region contains invalid characters")
-    .optional(),
-  billingPhoneNumber: z
-  .string()
-  .transform((val) => val.replace(/\s+/g, ""))
-  .refine(
-    (val) =>
-      /^(09\d{9}|9\d{9}|\+639\d{9}|639\d{9})$/.test(val),
-    { message: "Invalid phone number. It should start with +639, 09, or 9 and have the correct number of digits", }
-  )
-  .transform((val) => {
-    if (val.startsWith("09")) return "+63" + val.slice(1);
-    if (val.startsWith("9")) return "+63" + val;
-    if (val.startsWith("639")) return "+63" + val.slice(2);
-    return val;
-  })
-    .optional(),
+  billingPostalCode: z.string().optional(),
+  billingCityName: z.string().optional(),
+  billingRegionName: z.string().optional(),
+billingPhoneNumber: z.string().optional(),
 }).superRefine((data, ctx) => {
   if (data.addressType === "billing-address") {
     const requiredBillingFields = [
-      "billingRecipientFirstName",
-      "billingRecipientLastName",
+      "billingFirstName",
+      "billingLastName",
       "billingAddressName",
       "billingPostalCode",
       "billingCityName",
@@ -110,15 +73,16 @@ export const CheckoutSchema = z.object({
       "billingPhoneNumber",
     ] as const;
 
-    for (const field of requiredBillingFields) {
-      if (!data[field]) {
+    requiredBillingFields.forEach((field) => {
+      const value = (data as any)[field];
+      if (!value || (typeof value === "string" && value.trim() === "")) {
         ctx.addIssue({
           code: "custom",
           path: [field],
-          message: `${field} is required`,
+          message: `${field.replace("billing", "Billing ")} is required`,
         });
       }
-    }
+    });
   }
 });
 

@@ -20,6 +20,9 @@ export default function CheckoutformContent(){
     const { register,
             handleSubmit,
             reset,
+            clearErrors,
+            getValues,
+            setValue,
             formState: {errors, isSubmitting}
         } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
     const [ useDifferentBilling, setUseDifferentBilling ] = useState<boolean>(false);
@@ -189,11 +192,11 @@ export default function CheckoutformContent(){
                             <input
                             className="border-2 rounded-sm border-gray w-full p-3"
                             placeholder="First Name"
-                            {...register("billingRecipientFirstName")}
+                            {...register("billingFirstName")}
                             />
-                            {errors.billingRecipientFirstName && (
+                            {errors.billingFirstName && (
                             <p className="text-red-600 text-xs text-left ml-1 mt-1">
-                                {errors.billingRecipientFirstName.message}
+                                {errors.billingFirstName.message}
                             </p>
                             )}
                         </div>
@@ -201,11 +204,11 @@ export default function CheckoutformContent(){
                             <input
                             className="border-2 rounded-sm border-gray w-full p-3"
                             placeholder="Last Name"
-                            {...register("billingRecipientLastName")}
+                            {...register("billingLastName")}
                             />
-                            {errors.billingRecipientLastName && (
+                            {errors.billingLastName && (
                             <p className="text-red-600 text-xs text-left ml-1 mt-1">
-                                {errors.billingRecipientLastName.message}
+                                {errors.billingLastName.message}
                             </p>
                             )}
                         </div>
