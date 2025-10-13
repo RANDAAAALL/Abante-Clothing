@@ -74,7 +74,7 @@ billingPhoneNumber: z.string().optional(),
     ] as const;
 
     requiredBillingFields.forEach((field) => {
-      const value = (data as any)[field];
+      const value = data[field];
       if (!value || (typeof value === "string" && value.trim() === "")) {
         ctx.addIssue({
           code: "custom",

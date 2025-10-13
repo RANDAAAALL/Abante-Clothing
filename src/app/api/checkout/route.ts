@@ -70,8 +70,8 @@ export async function POST(req: Request) {
                 data: {
                   user_ID: userID,
                   address_type: "billing",
-                  recipient_first_name: checkoutForm?.billingRecipientFirstName,
-                  recipient_last_name: checkoutForm.billingRecipientLastName,
+                  recipient_first_name: checkoutForm?.billingFirstName,
+                  recipient_last_name: checkoutForm.billingLastName,
                   company_name: checkoutForm.billingCompanyName,
                   address_name: checkoutForm.billingAddressName,
                   apartment_name: checkoutForm.billingApartmentName,
