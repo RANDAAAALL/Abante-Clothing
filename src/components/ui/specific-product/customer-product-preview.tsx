@@ -6,10 +6,10 @@ import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import { DateFormatter } from "@/lib/helper/feedback-date-formatter";
 import CustomerFeedbackRating from "../customer-feedback-rating";
 import PaginationSelection from "../pagination/paginated-selection";
-import usePaginationAndFilteredProducts from "@/hooks/usePaginationAndFilteredProducts";
+import usePaginationAndFiltered from "@/hooks/usePaginatedAndFiltered";
 
 export default function CustomerProductPreview( { props }: { props: CustomerFeedbackProps[]} ){
-    const { itemsPerPage, currentPage, setCurrentPage, currentData } = usePaginationAndFilteredProducts({props}, 3);
+    const { itemsPerPage, currentPage, setCurrentPage, currentData } = usePaginationAndFiltered({props}, 3);
 
     return (
         <>
@@ -47,6 +47,7 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
             ))}
 
             <PaginationSelection 
+            style="mt-4"
             totalItems={props.length}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}

@@ -1,14 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "./pagination";
-
+import clsx from "clsx";
 interface PaginationSelectionProps {
     totalItems: number;
     itemsPerPage: number;
     currentPage: number;
     setCurrentPage: Dispatch<SetStateAction<number>>;
+    style?: string
 }
 
 export default function PaginationSelection({
+    style,
     totalItems,
     itemsPerPage,
     currentPage,
@@ -33,7 +35,7 @@ export default function PaginationSelection({
     }
     
     return (
-    <Pagination className="mt-4 font-medium">
+    <Pagination className={clsx(style,"font-medium")}>
         <PaginationContent>
             <PaginationItem>
             <PaginationPrevious onClick={(e) => {

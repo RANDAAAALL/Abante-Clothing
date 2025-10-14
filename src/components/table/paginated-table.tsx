@@ -1,7 +1,7 @@
 "use client";
 import TableBody from "@/components/table/table-body";
 import PaginationSelection from "@/components/ui/pagination/paginated-selection";
-import usePaginationAndFiltered from "../../hooks/usePaginationAndFiltered";
+import usePaginationAndFiltered from "../../hooks/usePaginatedAndFiltered";
 import TableHead from "@/components/table/table-head";
 
 export default function PaginatedTable<T extends Record<string, string | number>>({
