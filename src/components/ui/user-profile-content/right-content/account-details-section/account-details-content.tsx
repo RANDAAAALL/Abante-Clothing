@@ -5,10 +5,10 @@ import EmailAndUsernameSkeleton from "@/components/ui/skeletons/email-and-userna
 export default function AccountDetailsContent(){
     return (
         <div>
-        <div className="text-center md:text-start">
-        <span className="text-2xl font-medium">Account Details</span>
-        </div>
-        <div className="mt-4"><Suspense fallback={<EmailAndUsernameSkeleton />}><AccountDetailsServerData /></Suspense></div>
+            <div className="text-center md:text-start">
+             <span className="text-2xl font-medium">Account Details</span>
+            </div>
+            <div className="mt-4"><Suspense fallback={<EmailAndUsernameSkeleton />}><AccountDetailsServerData /></Suspense></div>
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { isAuthenticatedUser } from "@/data-access-layer/verify-user";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
-import { CheckoutFormType, CheckoutSchema } from "@/lib/validations/checkout-schema";
+import { CheckoutSchema } from "@/lib/validations/checkout-schema";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { ComputeItemState } from "@/lib/store/checkout-items";
 import { nanoid } from "nanoid";

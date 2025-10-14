@@ -1,7 +1,6 @@
 import prisma from "@/lib/prisma/prisma";
 import { isAuthenticatedUser } from "./verify-user";
 import { redirect } from "next/navigation";
-import { getAuthCookie } from "@/lib/security/cookies";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
 
 type Props = {
@@ -11,8 +10,7 @@ type Props = {
 } | null
 
 export const getUserInfo = async (): Promise<Props> => {
-    const token = await getAuthCookie();
-    if(!await isAuthenticatedUser() || !token) redirect("/login");
+    if(!await isAuthenticatedUser()) redirect("/login");
     
     const payload = await UserPayload();
     
