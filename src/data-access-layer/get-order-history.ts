@@ -27,17 +27,16 @@ export const getOrderHistory = async () => {
     // format the data
     const tableData = data.flatMap(order =>
         order.order_details.map(detail => ({
-          "ORD-NO": order.order_purchased_number ?? "-",
+          "ORD-NO": order.order_purchased_number ? order.order_purchased_number : "-",
           "Product": detail.order_detail_name ? detail.order_detail_name[0].toUpperCase() + detail.order_detail_name.slice(1) : "-",
-          "Quantity": detail.order_detail_qty ?? 0,
+          "Quantity": detail.order_detail_qty ? detail.order_detail_qty : 0,
           "Price": detail.order_detail_price ? Number(detail.order_detail_price) : 0,
-          "Size": detail.order_detail_size ?? "-",
+          "Size": detail.order_detail_size ? detail.order_detail_size : "-",
           "Purchased Date": order.order_purchased_date
             ? new Date(order.order_purchased_date).toLocaleDateString()
             : "-", 
         }))
       );
       
-
      return tableData;
 }
