@@ -20,6 +20,7 @@ export default function CheckoutformContent(){
     const { register,
             handleSubmit,
             reset,
+            resetField,
             formState: {errors, isSubmitting}
         } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
     const [ useDifferentBilling, setUseDifferentBilling ] = useState<boolean>(false);
@@ -161,7 +162,18 @@ export default function CheckoutformContent(){
                             className="w-3.5 h-3.5"
                             name="addressType"
                             value="shipping-address"
-                            onClick={() => setUseDifferentBilling(false)}/>
+                            onClick={() => {
+                                setUseDifferentBilling(false);
+                                resetField("billingFirstName");
+                                resetField("billingLastName");
+                                resetField("billingCompanyName");
+                                resetField("billingAddressName");
+                                resetField("billingApartmentName");
+                                resetField("billingPostalCode");
+                                resetField("billingCityName");
+                                resetField("billingRegionName");
+                                resetField("billingPhoneNumber");
+                            }}/>
                             <span className="text-sm">Same as shipping address</span>
                         </div>
                         <div className="flex items-center space-x-2.5 border-2 rounded-sm border-gray w-full p-3">
