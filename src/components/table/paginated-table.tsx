@@ -7,7 +7,7 @@ import TableHead from "@/components/table/table-head";
 export default function PaginatedTable<T extends Record<string, string | number>>({
   TheadData,
   TbodyData,
-}: { TheadData: string[], TbodyData: T[] }) {
+}: { TheadData: (keyof T)[], TbodyData: T[] }) {
     const { itemsPerPage, currentPage, setCurrentPage, currentData } = usePaginationAndFiltered({props: TbodyData}, 5);
   return (
     <div className="flex flex-col h-full">

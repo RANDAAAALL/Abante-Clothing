@@ -1,6 +1,6 @@
 
-type TableBodyProps<T extends Record<string, string | number | Date | null>> = {
-    TheadData?: string[];
+type TableBodyProps<T extends Record<string, unknown>> = {
+    TheadData?: (keyof T)[];
     TbodyData: T[];
 }
 
