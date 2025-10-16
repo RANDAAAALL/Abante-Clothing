@@ -1,9 +1,8 @@
-import { getOrderHistory } from "@/data-access-layer/get-order-history";
 import PaginatedTable from "@/components/table/paginated-table";
+import { getOrderHistory } from "@/dal/get-order-history";
 
 export default async function OrderHistoryServerData(){
-    const payload = await getOrderHistory();
-    await new Promise(res => setTimeout(res, 1000));
+    const payload = await getOrderHistory()
 
     if(!payload || payload.length === 0) {
         return <div className="flex items-center justify-center h-full">

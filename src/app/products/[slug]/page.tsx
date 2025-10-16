@@ -6,11 +6,11 @@ import CustomerProductPreview from "@/components/ui/specific-product/customer-pr
 import HeroContents from "@/components/ui/specific-product/hero-contents";
 import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
 import ProductSpecifications from "@/components/ui/specific-product/product-specifications-content";
-import { getAllRelatedProducts } from "@/data-access-layer/get-all-products";
-import { getSingleProduct } from "@/data-access-layer/get-single-product";
-import { getAllProductsName } from "@/data-access-layer/get-all-products-name";
+import { getAllRelatedProducts } from "@/dal/get-all-related-products";
+import { getSingleProduct } from "@/dal/get-single-product";
+import { getAllProductsName } from "@/dal/get-all-products-name";
 import { ParamsProps } from "@/lib/types/params-types";
-import { getAllRelatedCustomerProductReview } from "@/data-access-layer/get-all-related-customer-product-review";
+import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
 
 // export const revalidate = 60;
 

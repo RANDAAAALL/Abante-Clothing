@@ -1,15 +1,11 @@
-import { redirect } from "next/navigation"
-import { isAuthenticatedUser } from "./verify-user"
-import { UserPayload } from "@/lib/security/payloads/get-user-payload";
 import prisma from "@/lib/prisma/prisma";
+import { unstable_cache } from "next/cache";
 
-export const getOrderHistory = async () => {
-    if(!await isAuthenticatedUser()) redirect("/login");
-
-    const payload = UserPayload();
+export const getOrderHistoryCached = unstable_cache(async (user_ID: number) => {
+    console.log("getOrderHistory HIT (unstable_cache)");
 
     const data = await prisma.order_purchased.findMany({
-        where: { user_ID: Number((await payload).user_ID) },
+        where: { user_ID: user_ID},
         select: {
             order_purchased_number: true,
             order_purchased_date: true,    
@@ -39,4 +35,4 @@ export const getOrderHistory = async () => {
       );
       
      return tableData;
-}
+}, ["order-history"], { tags: ["order-history"] });

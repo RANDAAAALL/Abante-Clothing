@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary"
-import { isAuthenticatedUser } from "@/data-access-layer/verify-user";
+import { isAuthenticatedUser } from "@/dal/verify-user";
 import prisma from "@/lib/prisma/prisma";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function POST(request: Request) {
   if (!await isAuthenticatedUser()) return NextResponse.redirect("/login");
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
       }
     });
 
-    // reload the page after user successfully uploaded an image
-    revalidatePath("/profile");
+    // revalidate the tag, to fecth fresh data on account-details
+    revalidateTag("account-details");
 
     return NextResponse.json({ successMessage: "uploaded sucessfully"}, { status: 200 });
   } catch (err) {

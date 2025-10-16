@@ -2,7 +2,7 @@
 import { pdf } from "@react-pdf/renderer";
 import { NextResponse } from "next/server";
 import { OrderReceiptDocument } from "@/components/ui/documents/pdf/order-receipt-document";
-import { isAuthenticatedUser } from "@/data-access-layer/verify-user";
+import { isAuthenticatedUser } from "@/dal/verify-user";
 
 export async function POST(req: Request) {
   if (!(await isAuthenticatedUser())) {

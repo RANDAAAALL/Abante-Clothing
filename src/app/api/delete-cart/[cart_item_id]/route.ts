@@ -1,4 +1,4 @@
-import { isAuthenticatedUser } from "@/data-access-layer/verify-user";
+import { isAuthenticatedUser } from "@/dal/verify-user";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
 
