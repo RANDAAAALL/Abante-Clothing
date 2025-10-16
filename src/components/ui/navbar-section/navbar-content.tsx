@@ -15,7 +15,7 @@ export default function NavbarContent() {
   const { data } = useGetCart();
   const { isOpen } = useMenuBarStore();
   const [isScrolled, setIsScrolled] = useState(false);
-
+  
   // track scroll for styling
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
@@ -25,7 +25,7 @@ export default function NavbarContent() {
     
   // to prevent background scroll when menu is open
   useEffect(() => { document.body.style.overflow = isOpen ? "hidden" : "auto"; }, [isOpen]);
-
+  
   return (
     <header className={`${isScrolled ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md" : ""} 
     w-full font-medium flex items-center max-w-5xl mx-auto p-4`}>

@@ -21,12 +21,6 @@ export async function middleware(request: NextRequest) {
       url.pathname = "/login";
       return NextResponse.redirect(url);
     }
-    
-  // if user is trying to access login/register and it is already logged in
-  if (token && ["/login", "/register", "/forgot-password"].includes(request.nextUrl.pathname)) {
-    url.pathname = "/";
-    return NextResponse.redirect(url);
-  }
 
   // verify token for protected routes
   if (token) {
@@ -60,11 +54,8 @@ export const config = {
     "/api/delete-cart",
     "/api/delete-all-cart",
     "/api/uploaded-profile-picture",
-    "/login",
-    "/register",
     "/checkout",
     "/api/checkout",
     "/api/generate-receipt",
-    "/forgot-password",
   ],
 };

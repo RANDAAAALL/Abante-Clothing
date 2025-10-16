@@ -14,7 +14,7 @@ export default function ToasterClient() {
               ? "toast-in 0.4s ease forwards"
               : "toast-out 0.4s ease forwards",
             fontSize: "15px",
-            background: "var(--card-white-background)"
+            background: "var(--card-white-background)",
           }}
         />
       )}

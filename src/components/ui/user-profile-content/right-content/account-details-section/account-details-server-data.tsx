@@ -1,6 +1,9 @@
 import { getUserInfo } from "@/dal/get-user-info";
 export default async function AccountDetailsServerData() {
   const data = await getUserInfo();
+
+  
+  
   return (
     <div className="space-y-5 font-medium flex flex-col">
       <div className="grid grid-cols-[1fr_minmax(0,1fr)] gap-x-3">

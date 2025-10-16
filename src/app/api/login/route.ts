@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma/prisma";
 import { GenerateAuthToken } from "@/lib/security/jwt";
 import { setAuthCookie } from "@/lib/security/cookies";
 import { isValidHashedPassword } from "@/lib/hash/compare-hash-password";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -54,6 +55,8 @@ export async function POST(req: Request) {
 
     // set the token in the cookie
     await setAuthCookie(authToken);
+
+    // revalidatePath("/");
 
     // return a success response
     return NextResponse.json(
