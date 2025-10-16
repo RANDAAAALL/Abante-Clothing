@@ -1,4 +1,4 @@
-import { isAuthenticatedUser } from "@/data-access-layer/verify-user";
+import { isAuthenticatedUser } from "@/dal/verify-user";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
@@ -6,6 +6,7 @@ import { CheckoutSchema } from "@/lib/validations/checkout-schema";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { ComputeItemState } from "@/lib/store/checkout-items";
 import { nanoid } from "nanoid";
+import { revalidateTag } from "next/cache";
 
 export async function POST(req: Request) {
     if (!(await isAuthenticatedUser())) return NextResponse.redirect("/login");
@@ -121,6 +122,10 @@ export async function POST(req: Request) {
             return orderPurchased;
           }, { timeout: 15000 });
           
+        
+        // revalidate the tag, to fecth fresh data on order-history
+        revalidateTag("order-history");
+
         return NextResponse.json(
         { successMessage: "Successfully inserted an order", actualData: result },
         { status: 200 }

@@ -1,4 +1,4 @@
-import { getAllRelatedProducts } from "@/data-access-layer/get-all-products";
+import { getAllRelatedProducts } from "@/dal/get-all-related-products";
 import { SearchQuerytypes } from "../types/search-query-types";
 import Fuse from "fuse.js"
 

@@ -1,5 +1,5 @@
 import SidebarUserImage from "./sidebar-user-image";
-import { getUserInfo } from "@/data-access-layer/get-user-info";
+import { getUserInfo } from "@/dal/get-user-info";
 
 export default async function SidebarServerData() {
   const data = await getUserInfo();
