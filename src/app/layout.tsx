@@ -7,6 +7,7 @@ import FooterSectionContent from "@/components/ui/footer-section/footer-content"
 import NavbarContent from "@/components/ui/navbar-section/navbar-content";
 import CartModalContent from "@/components/ui/modal/cart-item/cart-modal-content";
 import ToasterClient from "@/components/ui/toast/toaster-client";
+import NavbarLayout from "@/components/ui/navbar-section/navbar-layout";
 
 // SEO Config
 export const metadata: Metadata = {
@@ -51,18 +52,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${metrapolis.variable} dark:bg-black-background relative`} > 
-        
-        <ClientProvider>
-          {/* nav-bar section */}
-          <section className="z-50 sticky top-0"><NavbarContent /></section>
-
-          {/* {modal} */}
-          <CartModalContent />
-          <ToasterClient />
-          {children}
-          {/* footer section */}
-          <footer className="text-sm mx-auto max-w-[1980] p-4"><FooterSectionContent className="mt-25" styleName="md:pt-6" /></footer>  
-        </ClientProvider>
+          <ClientProvider>
+            <NavbarLayout>
+              <CartModalContent />
+              <ToasterClient />
+              {children}
+            </NavbarLayout>
+            <footer className="text-sm mx-auto max-w-[1980] p-4"><FooterSectionContent className="mt-25" styleName="md:pt-6" /></footer>  
+          </ClientProvider>
         <Analytics />
       </body>
     </html>
