@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 export default function LoginFormContent() {
   const resetFormRef = useRef<(() => void) | null>(null);
   const [isLoading, setLoading] = useState(false);
-  const { selectedItem } = useCartItems();
+  const { selectedItem, resetSelectedItem } = useCartItems();
   const { mutate: addData } = useAddToCart();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -40,15 +40,15 @@ export default function LoginFormContent() {
               selectedItem.map(item =>
                 addData({
                   product: item.product,
-                  selectedSizeAndQty: item.selectedSizeAndQty,
+                  selectedSizeQtyAndColor: item.selectedSizeQtyAndColor,
                 })
               )
             );
           }
 
-      // clear guest cart in Zustand + sessionStorage
-      selectedItem.splice(0, selectedItem.length);
-      sessionStorage.removeItem(`${process.env.STRG_NAME as string}`);
+      // clear cart items in zustand + sessionStorage
+      resetSelectedItem();
+      sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
       
       // smooth refresh for navbar/cart updates
       queryClient.invalidateQueries({ queryKey: ["get-cart"] });

@@ -57,7 +57,7 @@ export default function CheckoutformContent(){
             <form onSubmit={handleSubmit(handleClickSubmit)} className="space-y-2.5">
 
             {/* country  */}
-            <div className="p-2 space-y-1 flex flex-col items-start border border-2 rounded-sm border-gray w-full">
+            <div className="p-2 space-y-1 flex flex-col items-start border-2 rounded-sm border-gray w-full">
                 <label className="text-xs ml-1" htmlFor="country">Country</label>
                 <select id="country" {...register("country")} className="w-full text-sm rounded-sm focus:bg-transparent border-none focus:outline-none">
                     <option value="#" disabled className="dark:bg-[#1E1E1E] dark:text-white border-none">Select a country</option>
@@ -103,7 +103,7 @@ export default function CheckoutformContent(){
                 <div>
                     <input className="border-2 rounded-sm border-gray w-full p-3" {...register("cityName")} placeholder="City"/>
                     {errors.cityName && <p className="text-red-600 text-xs text-left ml-1 mt-1">{errors.cityName.message}</p>}
-                </div>
+                </div>  
             </div>
 
             {/* region */}
@@ -115,7 +115,7 @@ export default function CheckoutformContent(){
             {/* phone number */}
             <div>
                 <input className="border-2 rounded-sm border-gray w-full p-3" {...register("phoneNumber")} placeholder="Phone No."/>
-                {errors.phoneNumber && <p className="text-red-600 text-xs text-left -mt-3 ml-1 mt-1">{errors.phoneNumber.message}</p>}
+                {errors.phoneNumber && <p className="text-red-600 text-xs text-left ml-1 mt-1">{errors.phoneNumber.message}</p>}
             </div>
 
             {/* checkbox  */}

@@ -10,20 +10,21 @@ export async function POST(req: Request) {
   const payload = await UserPayload();
 
   try {
-    const { product, selectedSizeAndQty } = await req.json();
+    const { product, selectedSizeQtyAndColor } = await req.json();
 
     // check if this product+size already exists in cart
     const existing = await prisma.cart_items.findFirst({
       where: {
         user_ID: Number(payload.user_ID),
         product_item_ID: product.product_item_ID,
-        cart_item_size: selectedSizeAndQty.size,
+        cart_item_size: selectedSizeQtyAndColor.size,
+        cart_item_color: selectedSizeQtyAndColor.color,
       },
     });
 
     if (existing) {
       // update qty and total if it already exists
-      const newQty = (existing.cart_item_qty ?? 0) + selectedSizeAndQty.qty;
+      const newQty = (existing.cart_item_qty ?? 0) + selectedSizeQtyAndColor.qty;
 
       await prisma.cart_items.update({
         where: { cart_item_ID: existing.cart_item_ID },
@@ -44,10 +45,10 @@ export async function POST(req: Request) {
         cart_item_image: product.product_item_image,
         cart_item_name: product.product_item_name,
         cart_item_price: product.product_item_price,
-        cart_item_size: selectedSizeAndQty.size,
-        cart_item_color: product.product_item_color,
-        cart_item_qty: selectedSizeAndQty.qty,
-        cart_item_total: (product.product_item_price ?? 0) * selectedSizeAndQty.qty,
+        cart_item_size: selectedSizeQtyAndColor.size,
+        cart_item_color: selectedSizeQtyAndColor.color,
+        cart_item_qty: selectedSizeQtyAndColor.qty,
+        cart_item_total: (product.product_item_price ?? 0) * selectedSizeQtyAndColor.qty,
         cart_item_date: new Date(),
       },
     });

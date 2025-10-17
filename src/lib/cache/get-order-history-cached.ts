@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma/prisma";
 import { unstable_cache } from "next/cache";
 
 export const getOrderHistoryCached = unstable_cache(async (user_ID: number) => {
-    console.log("getOrderHistory HIT (unstable_cache)");
+    // console.log("getOrderHistory HIT (unstable_cache)");
 
     const data = await prisma.order_purchased.findMany({
         where: { user_ID: user_ID},

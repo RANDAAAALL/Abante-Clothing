@@ -6,7 +6,7 @@ export const filteredProductItems = async ({query}: SearchQuerytypes) =>{
     const items = await getAllRelatedProducts();
     if (!query) return items;
 
-    const fuse = new Fuse(items, {
+    const fuse = new Fuse(items!, {
         keys: [
           { name: "product_item_name", weight: 0.5 },
           { name: "product_item_color", weight: 0.3 },

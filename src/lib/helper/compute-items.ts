@@ -15,7 +15,7 @@ export const computeItems = (
       : item.product?.product_item_price ?? 0;
     const qty = isCartItem(item)
       ? item?.cart_item_qty ?? 0
-      : item?.selectedSizeAndQty?.qty ?? 0;
+      : item?.selectedSizeQtyAndColor?.qty ?? 0;
     return acc + price * qty;
   }, 0);
 
@@ -23,7 +23,7 @@ export const computeItems = (
   const overallQtyResult = cartItems.reduce((acc, item) => {
     const qty = isCartItem(item)
       ? item?.cart_item_qty ?? 0
-      : item?.selectedSizeAndQty?.qty ?? 0;
+      : item?.selectedSizeQtyAndColor?.qty ?? 0;
     return acc + qty;
   }, 0);
 

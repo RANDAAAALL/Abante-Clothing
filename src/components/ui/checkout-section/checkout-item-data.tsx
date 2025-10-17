@@ -57,7 +57,10 @@ export default function CheckoutItemData(){
                                     <span className="capitalize">{item?.cart_item_name}</span>
                                     <span>x{item?.cart_item_qty}</span>
                                 </div>
-                                <span>{item?.cart_item_size}</span>
+                                
+                                <div className="flex space-x-1">
+                                    <p>{item?.cart_item_size}</p><p className="capitalize">- {item?.cart_item_color}</p>
+                                </div>
                             </div>
 
                             {/* price */}

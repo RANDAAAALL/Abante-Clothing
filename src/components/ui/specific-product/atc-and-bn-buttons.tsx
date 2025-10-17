@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<Partial<TshirtType>>}){
     const { setSelectedItems,
-            selectedSizeAndQty,
+            selectedSizeQtyAndColor,
             selectedSize,
             // resetSelectedItem 
     } = useCartItems();
@@ -24,7 +24,11 @@ export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<
             return;
         } 
 
-        if(data) addToCart({product: props,selectedSizeAndQty})            
+        // if user is currently logged in
+        // we need to store cart items to their account
+        if(data) addToCart({product: props, selectedSizeQtyAndColor})        
+        
+        // otherwisze just store to the persist zustand storage
         else setSelectedItems(props);
 
         // resetSelectedItem();
@@ -36,7 +40,7 @@ export default function AddToCartAndBuyNowButtons({props}: {props: ProductProps<
             return;
         }
 
-        if(data) addToCart({product: props,selectedSizeAndQty})            
+        if(data) addToCart({product: props,selectedSizeQtyAndColor})            
         else setSelectedItems(props);
 
         // resetSelectedItem();

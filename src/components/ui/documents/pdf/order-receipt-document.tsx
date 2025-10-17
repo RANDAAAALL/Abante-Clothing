@@ -15,7 +15,7 @@ export const OrderReceiptDocument = ({
   computeItems: ComputeItemState,
   itemsData: CartItemsProps[],
 }) => {
-
+  console.log("images: ", itemsData.forEach(item => item.cart_item_color))
   return (
     <Document>
       <Page style={OrderReceiptStyle.page} size="A4">
@@ -86,6 +86,7 @@ export const OrderReceiptDocument = ({
               </View>
               <View style={OrderReceiptStyle.itemTextContainer}>
                 <Text style={OrderReceiptStyle.quantity}>{item.cart_item_qty}x</Text>
+                <Text style={OrderReceiptStyle.color}>{item.cart_item_color}</Text>
                 <Text style={OrderReceiptStyle.itemName}>{item.cart_item_name} - {item.cart_item_size}</Text>
               </View>
             </View>

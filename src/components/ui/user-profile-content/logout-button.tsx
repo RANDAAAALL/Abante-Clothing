@@ -1,5 +1,6 @@
 "use client";
 import { LogoutURL } from "@/lib/config";
+import {  useCartItems } from "@/lib/store/cart-items";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -11,6 +12,7 @@ export default function LogoutButton() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [isLoading, setLoading] = useState<boolean>(false);
+  const { selectedItem, resetSelectedItem } = useCartItems();
 
   const handleLogoutClick = async () => {
     setLoading(true);
@@ -22,8 +24,10 @@ export default function LogoutButton() {
         setLoading(false);
         return;
     }
-        // clear caches and notify other tabs
+        // clear caches, cart items in zustand + sessionStorage and notify other tabs
         queryClient.removeQueries();
+        resetSelectedItem();
+        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
         const bc = new BroadcastChannel("auth");
         bc.postMessage({ type: "LOGOUT" });
         bc.close();

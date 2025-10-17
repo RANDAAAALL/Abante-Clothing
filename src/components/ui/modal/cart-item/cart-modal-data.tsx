@@ -35,39 +35,44 @@ export default function CartModalData() {
   // checks if user is logged in or not
   // if its logged in means: we will use the data from the api route
   // if its not logged in means: we wil use the data from the localStorage
-  const payload = data ? data : selectedItem;
+  const payload = data ? data as CartItemsProps[] : selectedItem;
   
   return (
         <>
           {payload?.length >= 1 ? (
             <>
               <div className="w-full flex flex-col p-2 max-h-75 overflow-y-auto snap-y">
-                {payload.map((item: CartItemsProps | SelectedItemProps, i: number) => (
+                {payload.map((item, i: number) => (
                   <React.Fragment key={i}>
-                    <div className="relative flex items-center w-full justify-between px-2 snap-center relative">
+                    <div className="relative flex items-center w-full justify-between px-2 snap-center">
                       <Image
                         className="mt-5 mb-4"
                         src= {`${isCartItem(item)
                            ? item?.cart_item_image ??"/images/png/tshirt_placeholder.png" :
-                          item.product?.product_item_image ??
-                          "/images/png/tshirt_placeholder.png"}`}
+                          item.product?.product_item_image ?? "/images/png/tshirt_placeholder.png"}`}
                           width={100}
                           height={100}
                           alt={isCartItem(item) ?
                            `${item?.cart_item_ID}-${item?.cart_item_name}` :
                            `${item.product?.product_item_ID}-${item.product?.product_item_name}`}/>
 
-                      <div className="flex flex-1 ml-5 flex-col font-medium text-sm md:text-md">
+                      <div className="flex flex-1 ml-5 space-y-1 flex-col font-medium text-sm md:text-md">
                         <p className="capitalize">
                           {isCartItem(item) ? 
                           `${item?.cart_item_name} - ${item?.cart_item_size}` :
-                          `${item.product?.product_item_name} - ${item?.selectedSizeAndQty?.size}`}
+                          `${item.product?.product_item_name} - ${item?.selectedSizeQtyAndColor?.size}`}
                         </p>
                         <p>
                           {isCartItem(item) ?
                           `${item?.cart_item_qty} x P${item?.cart_item_price}` : 
-                          `${item?.selectedSizeAndQty?.qty} x P${item.product?.product_item_price}`}
+                          `${item?.selectedSizeQtyAndColor?.qty} x P${item.product?.product_item_price}`}
                         </p>
+                        <p className="capitalize">
+                          {
+                            isCartItem(item) ? 
+                            `${item?.cart_item_color}` : `${item?.selectedSizeQtyAndColor?.color}`
+                          }
+                          </p>
                       </div>
 
                       <button

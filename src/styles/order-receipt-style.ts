@@ -26,6 +26,7 @@ export const OrderReceiptStyle = StyleSheet.create({
     logo: { width: 70, height: 70, alignSelf: "center", marginBottom: 2 },
     itemTextContainer: { flexDirection: "column"},
     quantity: { fontWeight:"bold", textAlign: "right", alignSelf: "flex-end", marginBottom: 2},
+    color: { textTransform: "capitalize", textAlign: "right", alignSelf: "flex-end", marginBottom: 2},
     itemName: { textTransform: "capitalize", textAlign: "right", alignSelf: "flex-end"},
     totalRow: { flexDirection: "row", justifyContent: "space-between", fontSize: 14, fontWeight: "bold" },
   });

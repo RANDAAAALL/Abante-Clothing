@@ -188,6 +188,7 @@ export default function OrderReceiptModal() {
 
                         <div className="flex flex-col">
                           <span className="text-right">{item?.cart_item_qty}x</span>
+                          <span className="capitalize text-right">{item?.cart_item_color}</span>
                           <span className="capitalize">
                             {item?.cart_item_name} - {item?.cart_item_size}
                           </span>
