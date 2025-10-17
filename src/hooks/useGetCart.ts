@@ -39,7 +39,7 @@ export default function useGetCart() {
       }
     };
     return () => bc.close();
-  }, [router, setIsOpen, queryClient]);
+  }, [router, setIsOpen, queryClient, resetSelectedItem]);
 
   return {
     data,
