@@ -1,5 +1,6 @@
 "use client";
 import { GetCartURL } from "@/lib/config";
+import { useCartItems } from "@/lib/store/cart-items";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -9,6 +10,7 @@ export default function useGetCart() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { setIsOpen } = useMenuBarStore();
+  const { resetSelectedItem } = useCartItems();
 
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ["get-cart"],
@@ -30,6 +32,8 @@ export default function useGetCart() {
     bc.onmessage = (event) => {
       if (event.data?.type === "LOGOUT") {
         queryClient.removeQueries({ queryKey: ["get-cart"] });
+        resetSelectedItem();
+        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
         router.push("/login");
         setIsOpen(false);
       }

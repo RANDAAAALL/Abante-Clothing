@@ -13,11 +13,11 @@ export default function useAddToCart() {
     { previousData?: CartItemsProps[]}>({
 
     // sends request to server
-    mutationFn: async ({ product, selectedSizeAndQty }: AddToCartPayload) => {
+    mutationFn: async ({ product, selectedSizeQtyAndColor }: AddToCartPayload) => {
       const res = await fetch(`${AddToCartURL}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product, selectedSizeAndQty }),
+        body: JSON.stringify({ product, selectedSizeQtyAndColor }),
       });
       if (!res.ok) throw new Error("Failed to add to cart");
 
@@ -28,7 +28,7 @@ export default function useAddToCart() {
     },
 
     // // optimistic update
-    onMutate: async ({ product, selectedSizeAndQty }) => {
+    onMutate: async ({ product, selectedSizeQtyAndColor }) => {
       await queryClient.cancelQueries({ queryKey: ["get-cart"] });
       const previousData = queryClient.getQueryData<CartItemsProps[]>(["get-cart"]);
 
@@ -36,13 +36,14 @@ export default function useAddToCart() {
       const newItem: CartItemsProps = {
         cart_item_ID: Date.now(), 
         user_ID: Number(Date.now()),
-        cart_item_color: product.product_item_color ?? "",
+        // cart_item_color: product.product_item_color ?? "",
+        cart_item_color: selectedSizeQtyAndColor.color ?? "",
         cart_item_name: product.product_item_name ?? "",
         cart_item_price: product.product_item_price ?? 0,
-        cart_item_qty: selectedSizeAndQty.qty,
-        cart_item_size: selectedSizeAndQty.size,
+        cart_item_qty: selectedSizeQtyAndColor.qty,
+        cart_item_size: selectedSizeQtyAndColor.size,
         cart_item_image: product.product_item_image ?? "/images/png/tshirt_placeholder.png",
-        cart_item_total: (product.product_item_price ?? 0) * selectedSizeAndQty.qty,
+        cart_item_total: (product.product_item_price ?? 0) * selectedSizeQtyAndColor.qty,
         product_item_ID: product.product_item_ID!,
         cart_item_date: new Date(),
       };
@@ -61,20 +62,20 @@ export default function useAddToCart() {
     },
 
     // merge server response
-    onSuccess: (serverItem, { product, selectedSizeAndQty }) => {
+    onSuccess: (serverItem, { product, selectedSizeQtyAndColor }) => {
       queryClient.setQueryData<CartItemsProps[]>(["get-cart"], (old = []) => {
         
         // replace temporary item with real server item
         const exists = old.some(
           item =>
             item.product_item_ID === product.product_item_ID &&
-            item.cart_item_size === selectedSizeAndQty.size
+            item.cart_item_size === selectedSizeQtyAndColor.size
         );
 
         if (exists) {
           return old.map(item =>
             item.product_item_ID === product.product_item_ID &&
-            item.cart_item_size === selectedSizeAndQty.size
+            item.cart_item_size === selectedSizeQtyAndColor.size
               ? serverItem
               : item
           );

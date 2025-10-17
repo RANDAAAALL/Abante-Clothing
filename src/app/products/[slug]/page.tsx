@@ -11,20 +11,21 @@ import { getSingleProduct } from "@/dal/get-single-product";
 import { getAllProductsName } from "@/dal/get-all-products-name";
 import { ParamsProps } from "@/lib/types/params-types";
 import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
+import { Suspense } from "react";
 
 // export const revalidate = 60;
 
 export default async function Page({ params }: ParamsProps ) {
   const { slug } = await params;
-  const [ SingleProduct, AllRelatedProducts, AllRelatedCustomerFeedbacks ] = await Promise.all([
+  const [ ProductVariants, AllRelatedProducts, AllRelatedCustomerFeedbacks ] = await Promise.all([
     getSingleProduct({slug}),
     getAllRelatedProducts(),
     getAllRelatedCustomerProductReview()
   ]);
 
-  if(!SingleProduct || !AllRelatedProducts || !AllRelatedCustomerFeedbacks ) return <h1>Error! something wrong on fetching on db</h1>
+  if(!ProductVariants || !AllRelatedProducts || !AllRelatedCustomerFeedbacks ) return <div className="flex items-center justify-center h-screen"><h1>Error! something wrong on fetching on db</h1></div>
 
-  // console.log("Single Product: ",SingleProduct);
+  // console.log("Single Product: ", ProductVariants);
   // console.log("All Products: ",AllProducts);
   // console.log("RelatedCustomerProductReview: ", RelatedCustomerFeedbacks);
 
@@ -34,13 +35,17 @@ export default async function Page({ params }: ParamsProps ) {
       <main className="mt-10 flex flex-col sm:items-start min-h-screen sm:max-w-4xl w-full mx-auto p-4">
      
       {/* product path title */}
-      <section className="mx-auto md:mx-0"><ProductPathTitle productPathTitle={SingleProduct?.product_item_name as string} /></section>
+      <section className="mx-auto md:mx-0"><ProductPathTitle productPathTitle={ProductVariants[0]?.product_item_name as string} /></section>
 
       {/* hero contents */}
-      <section className="mt-9 sm:w-full"><HeroContents slug={slug!} props={SingleProduct}/></section>
+      <section className="mt-9 sm:w-full">
+          <Suspense fallback={<div>Loading product...</div>}>
+            <HeroContents slug={slug!} props={ProductVariants} />
+          </Suspense>
+      </section>
 
       {/* product specifications */}
-      <section className="mt-9"><ProductSpecifications props={SingleProduct} /></section>
+      <section className="mt-9"><ProductSpecifications props={ProductVariants[0]} /></section>
 
       {/* related products */}
       <span className="mt-9 font-bold text-lg">Related Products</span>
@@ -58,7 +63,7 @@ export async function generateStaticParams() {
   const ProductsName = await getAllProductsName();
   // console.log("All Products Name:", ProductsName);
 
-  return ProductsName.map((p) => ({
+  return ProductsName?.map((p) => ({
     slug: p.product_item_name,
   }));
 }

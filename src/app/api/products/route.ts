@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma/prisma";
 // get all tshirt product items
 export async function GET() {
   const products = await prisma.product_items.findMany({
+    distinct: ["product_item_name"], // retrieve only unique product/s based on product name
     select: {
       product_item_ID: true,
       product_item_image: true,

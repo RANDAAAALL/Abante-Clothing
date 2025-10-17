@@ -3,20 +3,22 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { TshirtType } from '../types/t-shirt-types';
 import { ProductProps } from '../types/product-types';
 
-type selectedSizeAndQtyProps = {
+type selectedSizeQtyAndColorProps = {
   size: string | null;
   qty: number;
+  color: string | null;
 };
 
 export type SelectedItemProps = {
   product: ProductProps<Partial<TshirtType>>;
-  selectedSizeAndQty: selectedSizeAndQtyProps;
+  selectedSizeQtyAndColor: selectedSizeQtyAndColorProps;
 };
 
 type CartItemsPropsState = {
   selectedSize: string | null;
   quantity: number;
-  selectedSizeAndQty: selectedSizeAndQtyProps;
+  selectedColor: string | null;
+  selectedSizeQtyAndColor: selectedSizeQtyAndColorProps;
   selectedItem: SelectedItemProps[];
 };
 
@@ -32,6 +34,9 @@ type CartItemModalPropsActions = {
 type CartItemsPropsActions = {
   setSelectedSize: (size: string | null) => void;
   resetSelectedSize: () => void;
+
+  setSelectedColor: (color: string) => void;
+  resetSelectedColor?: () => void;
 
   setIncreaseQuantity: () => void;
   setDecreaseQuantity: () => void;
@@ -54,23 +59,30 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
     (set, get) => ({
       selectedSize: null,
       quantity: 1,
-      selectedSizeAndQty: { size: null, qty: 1 },
+      selectedColor: null,
+      selectedSizeQtyAndColor: { size: null, qty: 1, color: null },
       selectedItem: [],
-
 
       setSelectedSize: (size) =>
         set((state) => ({
           selectedSize: size,
-          selectedSizeAndQty: { ...state.selectedSizeAndQty, size },
+          selectedSizeQtyAndColor: { ...state.selectedSizeQtyAndColor, size },
         })),
       resetSelectedSize: () => set({ selectedSize: null }),
+
+      setSelectedColor: (color) =>
+        set((state) => ({
+          selectedColor: color,
+          selectedSizeQtyAndColor: { ...state.selectedSizeQtyAndColor, color}
+        })),
+      resetSelectedColor: () => set({ selectedColor: null }),
 
       setIncreaseQuantity: () =>
         set((state) => {
           const newQty = state.quantity + 1;
           return {
             quantity: newQty,
-            selectedSizeAndQty: { ...state.selectedSizeAndQty, qty: newQty },
+            selectedSizeQtyAndColor: { ...state.selectedSizeQtyAndColor, qty: newQty },
           };
         }),
       setDecreaseQuantity: () =>
@@ -78,28 +90,29 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
           const newQty = state.quantity > 1 ? state.quantity - 1 : 1;
           return {
             quantity: newQty,
-            selectedSizeAndQty: { ...state.selectedSizeAndQty, qty: newQty },
+            selectedSizeQtyAndColor: { ...state.selectedSizeQtyAndColor, qty: newQty },
           };
         }),
-      resetQuantity: () => set({ quantity: 1, selectedSizeAndQty: { size: null, qty: 1 } }),
+      resetQuantity: () => set({ quantity: 1, selectedSizeQtyAndColor: { size: null, qty: 1, color: null } }),
 
       setSelectedItems: (product) =>
         set((state) => {
           const productExistsIndex = state.selectedItem.findIndex(
             (item) =>
               item.product.product_item_ID === product.product_item_ID &&
-              item.selectedSizeAndQty.size === state.selectedSizeAndQty.size
+              item.selectedSizeQtyAndColor.size === state.selectedSizeQtyAndColor.size &&
+              item.selectedSizeQtyAndColor.color === state.selectedSizeQtyAndColor.color
           );
 
           if (productExistsIndex > -1) {
             const updatedItems = [...state.selectedItem];
             updatedItems[productExistsIndex] = {
               ...updatedItems[productExistsIndex],
-              selectedSizeAndQty: {
-                ...updatedItems[productExistsIndex].selectedSizeAndQty,
+              selectedSizeQtyAndColor: {
+                ...updatedItems[productExistsIndex].selectedSizeQtyAndColor,
                 qty:
-                  updatedItems[productExistsIndex].selectedSizeAndQty.qty +
-                  state.selectedSizeAndQty.qty,
+                  updatedItems[productExistsIndex].selectedSizeQtyAndColor.qty +
+                  state.selectedSizeQtyAndColor.qty,
               },
             };
             return { selectedItem: updatedItems };
@@ -108,7 +121,7 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
           return {
             selectedItem: [
               ...state.selectedItem,
-              { product, selectedSizeAndQty: state.selectedSizeAndQty },
+              { product, selectedSizeQtyAndColor: state.selectedSizeQtyAndColor },
             ],
           };
         }),
@@ -122,7 +135,8 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
         set({
           selectedSize: null,
           quantity: 1,
-          selectedSizeAndQty: { size: null, qty: 1 },
+          selectedColor: null,
+          selectedSizeQtyAndColor: { size: null, qty: 1, color: null },
           selectedItem: [],
         }),
     }),

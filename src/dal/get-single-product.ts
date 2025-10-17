@@ -3,31 +3,38 @@ import { SlugProps } from "../lib/types/slug-types";
 import { TshirtType } from "../lib/types/t-shirt-types";
 
 export const getSingleProduct = async ( {slug}: SlugProps) => {
-    const temp = await prisma.product_items.findFirst({
-      where: { product_item_name: slug },
-      select: {
-        product_item_ID: true,
-        product_item_name: true,
-        product_item_price: true,
-        product_item_image: true,
-        product_item_back_image: true,
-        product_item_size: true,
-        product_item_color: true,
-        product_item_material: true,
-        product_item_construction: true,
-        product_item_design_features: true,
-      },
-    });
+    try{
 
-    if(!temp) console.error("Single Product Not Found!");
-    
-    const SingleProduct: Partial<TshirtType> = {
-      ...temp,
-      product_item_price: temp?.product_item_price?.toNumber(),
-    };
+      const products = await prisma.product_items.findMany({
+        where: {  product_item_name: slug },
+        select: {
+          product_item_ID: true,
+          product_item_name: true,
+          product_item_price: true,
+          product_item_image: true,
+          product_item_back_image: true,
+          product_item_size: true,
+          product_item_color: true,
+          product_item_material: true,
+          product_item_construction: true,
+          product_item_design_features: true,
+        },
+      });
+  
+      if (!products || products.length === 0)
+      throw new Error("No product variants found!");
 
+      // convert prices to number and format data
+      const formattedProducts: Partial<TshirtType>[] = products.map((p) => ({
+        ...p,
+        product_item_price: p.product_item_price?.toNumber(),
+      }));
 
-    return SingleProduct;
+    return formattedProducts;
+    }catch(err){
+      console.error(err);
+      return;
+    }
 }
 
   
