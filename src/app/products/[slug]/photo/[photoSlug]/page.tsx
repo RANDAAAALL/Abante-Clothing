@@ -1,20 +1,23 @@
+"use client"
 import RightArrowSVG from "@/components/icons/svg/right-arrow";
 import { PhotoParamsProps } from "@/lib/types/photo-params-types";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { use } from "react";
 
 export default function PhotoPage({ params }: PhotoParamsProps) {
   const { slug, photoSlug } = use(params);
+  const color = useSearchParams().get("color");
 
   const getImageSrc = () => {
     switch (photoSlug) {
       case "back":
-        return `https://res.cloudinary.com/abante-clothing/image/upload/abante-tshirts/abante-t-shirt-${slug}-back-image.png`;
+        return `https://res.cloudinary.com/abante-clothing/image/upload/abante-tshirts/abante-t-shirt-${slug}-${color}-back-image.png`;
       case "size-chart":
         return `/images/png/abante-t-shirt-size-chart-image.png`;
       default:
-        return `https://res.cloudinary.com/abante-clothing/image/upload/v1759378284/abante-tshirts/abante-t-shirt-${slug}.png`;
+        return `https://res.cloudinary.com/abante-clothing/image/upload/v1759378284/abante-tshirts/abante-t-shirt-${slug}-${color}.png`;
     }
   };
 
