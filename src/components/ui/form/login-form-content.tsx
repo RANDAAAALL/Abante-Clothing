@@ -68,7 +68,7 @@ export default function LoginFormContent() {
         schema={loginSchema}
         onSubmitAction={handleLoginClick}
         labelForm="Forgot Password?"
-        buttonText={isLoading ? "Signing in..." : "Sign In"}
+        buttonText="Sign in"
         footerDescription="Doesn't have an account?"
         footerHref="register"
         onResetRefAction={(reset) => (resetFormRef.current = reset)}
