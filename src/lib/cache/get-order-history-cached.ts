@@ -15,7 +15,12 @@ export const getOrderHistoryCached = unstable_cache(async (user_ID: number) => {
                     order_detail_qty: true,
                     order_detail_size: true,
                     order_detail_price: true,
-                }
+                    product_items: {
+                        select: {
+                            product_item_back_image: true,
+                        }
+                    }
+                },
             }
        }
     });
@@ -24,7 +29,12 @@ export const getOrderHistoryCached = unstable_cache(async (user_ID: number) => {
     const tableData = data.flatMap(order =>
         order.order_details.map(detail => ({
           "ORD-NO": order.order_purchased_number ? order.order_purchased_number : "-",
-          "Product": detail.order_detail_name ? detail.order_detail_name[0].toUpperCase() + detail.order_detail_name.slice(1) : "-",
+          "Product": {
+            name: detail.order_detail_name
+              ? detail.order_detail_name[0].toUpperCase() + detail.order_detail_name.slice(1)
+              : "-",
+            image: detail.product_items?.product_item_back_image ?? null,
+          },
           "Quantity": detail.order_detail_qty ? detail.order_detail_qty : 0,
           "Price": detail.order_detail_price ? Number(detail.order_detail_price) : 0,
           "Size": detail.order_detail_size ? detail.order_detail_size : "-",
