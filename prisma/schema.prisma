@@ -172,3 +172,14 @@ model users_feedback {
   @@index([order_detail_ID], map: "order_detail_ID")
   @@index([user_ID], map: "user_ID")
 }
+
+model password_resets {
+  id         Int       @id @default(autoincrement())
+  email      String    @db.VarChar(255)
+  token      String    @db.VarChar(255)
+  expires_at DateTime  @db.DateTime(0)
+  created_at DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([email], map: "email")
+  @@index([token], map: "token")
+}

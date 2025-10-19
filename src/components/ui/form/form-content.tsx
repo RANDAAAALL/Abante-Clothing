@@ -60,6 +60,7 @@ export default function FormsContent<TSchema extends AnyZodObject>({
     resolver: zodResolver(schema) as unknown as Resolver<RHFValues<TSchema>>,
   });
   const [ showPassword, setShowPassword] = useState<boolean>(false);
+  const [ showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   useEffect(() => {
     onResetRefAction?.(() => reset());
@@ -72,7 +73,9 @@ export default function FormsContent<TSchema extends AnyZodObject>({
         className="text-black shadow-md p-6 md:p-9 py-8 rounded-xl bg-card-white-background w-full ">
 
         {/* title and description  */}
-        <span className="font-bold text-xl">{title}</span>
+        <div className="text-center">
+          <span className="font-bold text-xl">{title}</span>
+        </div>
         <p className="font-regular text-sm mt-1 mb-5">{description}</p>
 
         {/* labels and input */}
@@ -89,24 +92,33 @@ export default function FormsContent<TSchema extends AnyZodObject>({
               className={"w-full text-sm border border-t-1 border-input-background focus:outline-none mb-4 rounded-sm p-3 px-4 pr-10"}
               {...register(field.fieldName)}
               placeholder={field.fieldPlaceholder}
-              type={buttonText === "Sign Up" && field.fieldName === "password" ?
-                   (showPassword ? "text" : "password") :
-                   (field.fieldType || "text")}
-              name={field.fieldName}
+              type={ field.fieldName === "password"
+                  ? (showPassword ? "text" : "password")
+                  : field.fieldName === "confirmPassword"
+                  ? (showConfirmPassword ? "text" : "password")
+                  : (field.fieldType || "text")
+              }
+              name={field.fieldName} 
               autoComplete={
-                field.fieldName === "email"
+                  field.fieldName === "email"
                   ? "email"
                   : field.fieldName === "password"
                   ? "new-password"
                   : "on"}/>
 
-              {/* toggle password visibility */}
-              {buttonText === "Sign Up" && field.fieldName === "password" && (
-                <div className="absolute right-3 top-3 cursor-pointer"
+                {field.fieldName === "password" && (
+                  <div className="absolute right-3 top-3 cursor-pointer" 
                   onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <EyeOpen/> : <EyeClosed/>}
-                </div>
-              )}
+                    {showPassword ? <EyeOpen /> : <EyeClosed />}
+                  </div>
+                )}
+
+                {field.fieldName === "confirmPassword" && (
+                  <div className="absolute right-3 top-3 cursor-pointer"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                    {showConfirmPassword ? <EyeOpen /> : <EyeClosed />}
+                  </div>
+                )}
               </div>
 
             {/* error messages  */}

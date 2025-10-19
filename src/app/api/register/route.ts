@@ -32,14 +32,14 @@ export async function POST(req: Request) {
     }
 
     // convert to a hash password
-    const convertToHash = await hashPassword(parseData.data.password);
+    const hashedPassword = await hashPassword(parseData.data.password);
 
     // create a new user in the database
     await prisma?.users.create({
       data: {
         username: parseData.data.username,
         email: parseData.data.email,
-        password: convertToHash,
+        password: hashedPassword,
         role: "user",
       }
     })
