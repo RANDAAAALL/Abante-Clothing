@@ -10,27 +10,19 @@ export default function ForgotPasswordContent(){
     const resetFormRef = useRef<(() => void) | null>(null);
 
     const handleForgotPasswordClick = async (formData: forgotPasswordFormType) => {
-        toast.promise(
-            (async () => {
-                const res = await fetch(`${ForgotPasswordURL}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData)
-                });
-                const data = await res.json();
-                if(!res.ok) throw new Error(data?.errorMessage || data?.parsedErrors);
-                return data?.successMessage;
-            })(),
-            {
-                loading: "Sending reset email...",
-                success: (successMessage) => {
-                    // reset the fields
-                    resetFormRef.current?.();
-                    return successMessage;
-                },
-                error: (e) => e?.message,
-            }, { duration: 5000}
-        )
+       try{
+           const res = await fetch(`${ForgotPasswordURL}`, {
+               method: "POST",
+               headers: { "Content-Type": "application/json" },
+               body: JSON.stringify(formData)
+           });
+           const data = await res.json();
+           if(!res.ok) throw new Error(data?.errorMessage || data?.parsedErrors);
+
+           toast.success(`${data?.successMessage}`);
+       }catch(err: unknown){
+            toast.error(`${err instanceof Error ? err.message : "Failed to send reset password link." }`)
+       }
     }
 
     return (    
@@ -41,7 +33,6 @@ export default function ForgotPasswordContent(){
         fields={forgotPasswordFields}
         onSubmitAction={handleForgotPasswordClick}
         buttonText="Submit"
-        // labelForm="Check your email"
         onResetRefAction={(reset) => (resetFormRef.current = reset)}/>
     );
 }

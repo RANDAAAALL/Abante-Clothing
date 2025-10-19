@@ -17,32 +17,22 @@ export default function ResetPasswordFormContent({
     const resetFormRef = useRef<(() => void) | null>(null);
     const router = useRouter();
 
-    const handleResetPasswordClick = (formData: resetPasswordFormType) => {
-        toast.promise(
-            (async () => {
-                
-                const res = await fetch(`${ResetPasswordAPIURL}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ resetPasswordToken, formData})
-                });
+    const handleResetPasswordClick = async (formData: resetPasswordFormType) => {
+        try{
+            const res = await fetch(`${ResetPasswordAPIURL}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ resetPasswordToken, formData})
+            });
 
-                const data = await res.json();
-                if(!res.ok) throw new Error(data?.errorMessage || data?.parsedErrors);
+            const data = await res.json();
+            if(!res.ok) throw new Error(data?.errorMessage || data?.parsedErrors);
 
-                router.replace(`/reset-password?token=${resetPasswordToken}&success=true`);
-                return data?.successMessage;
-            })(), {
-                loading: "Resetting password...",
-                success: (successMessage) => {
-                    // reset the fields
-                    resetFormRef.current?.();
-
-                    return successMessage;
-                },
-                error: (e) => e?.message,
-            }, { duration: 5000 }
-        )
+            router.replace(`/reset-password?token=${resetPasswordToken}&success=true`);
+            toast.success(`${data?.successMessage}`);
+        }catch(err: unknown){
+            toast.error(`${err instanceof Error ? err.message : "Failed to reset password." }`)
+        }
     }
 
     return (
@@ -55,7 +45,6 @@ export default function ResetPasswordFormContent({
                     onSubmitAction={handleResetPasswordClick}
                     buttonText="Reset Password"
                     onResetRefAction={(reset) => (resetFormRef.current = reset)}/>
-
             ) : (
                 <div className="flex flex-col items-center justify-center min-h-[500px] md:min-h-screen text-center">
                     <span className="text-4xl mb-4">✅</span>
