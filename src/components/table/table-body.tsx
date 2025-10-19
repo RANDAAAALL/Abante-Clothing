@@ -1,28 +1,38 @@
+import { isProductValue } from "@/lib/helper/isProductValue";
 import { TableBodyProps } from "@/lib/types/table-body-types";
+import Image from "next/image";
 
-export default function TableBody<T extends Record<string,string | number>>({
-    TheadData,
-    TbodyData,
-}: TableBodyProps<T>){
-    return (
-            <>
-                <tbody>
-                    {TbodyData.map((row, i) => (
-                        <tr key={i}>
-                            {TheadData && TheadData?.length > 0 ? ( 
-                                <>
-                                    {TheadData?.map((header, j) => (
-                                        <td key={j} className="border border-gray-300 text-wrap py-2 px-5 text-sm">{row[String(header)] ?? "-"}</td>))}
-                                </>
-                            ) : (
-                                <>
-                                    <td key={i} className="border border-gray-300 text-wrap py-2 px-5 text-sm">{String(row)}</td>
-                                </>
-                        )}    
-
-                    </tr>
-                ))}
-            </tbody>
-        </>
-    );
+export default function TableBody<T extends Record<string, unknown>>({
+  TheadData,
+  TbodyData,
+}: TableBodyProps<T>) {
+  return (
+    <tbody>
+      {TbodyData.map((row, i) => (
+        <tr key={i}>
+          {TheadData?.map((header, j) => {
+            const value = row[String(header)];
+            return (
+              <td key={j} className="border border-gray-300 text-wrap py-2 px-5 text-sm">
+                {isProductValue(value) ? (
+                  <div className="flex flex-col items-center">
+                    {value.image && (
+                      <Image
+                        src={value.image}
+                        alt={value.name}
+                        className="w-16 h-16 object-cover mb-1"
+                      />
+                    )}
+                    <span>{value.name}</span>
+                  </div>
+                ) : (
+                  String(value ?? "-")
+                )}
+              </td>
+            );
+          })}
+        </tr>
+      ))}
+    </tbody>
+  );
 }
