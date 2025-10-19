@@ -13,3 +13,6 @@ export const DeleteCartURL = `${getBaseUrl()}/api/delete-cart`;
 export const DeleteAllCartURL = `${getBaseUrl()}/api/delete-all-cart`;
 export const CheckoutURL = `${getBaseUrl()}/api/checkout`;
 export const GenerateReceiptURL = `${getBaseUrl()}/api/generate-receipt`;
+export const ForgotPasswordURL = `${getBaseUrl()}/api/forgot-password`;
+export const ResetPasswordURL = `${getBaseUrl()}/reset-password`;
+export const ResetPasswordAPIURL = `${getBaseUrl()}/api/reset-password`;
