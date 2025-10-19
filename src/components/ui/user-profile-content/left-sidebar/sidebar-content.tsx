@@ -12,7 +12,7 @@ export default function SidebarContent() {
     <section className="mb-2"><UserProfilePathTitle /></section>
 
     {/* card content container */}
-    <Card className="dark:bg-card-black-background h-auto md:h-123 rounded-md">
+    <Card className="dark:bg-card-black-background md:h-131 rounded-md">
         
       {/* images and username */}
       <CardHeader className="flex flex-col items-center cursor-default">
