@@ -40,7 +40,7 @@ export default function RegisterFormContent(){
         fields={registerFields}
         schema={registerationSchema}
         onSubmitAction={handleRegisterClick}
-        buttonText="Sign Up"
+        buttonText="Sign up"
         footerDescription="Already have an account?"
         footerHref="login"
         onResetRefAction={(reset) => (resetFormRef.current = reset)}/>

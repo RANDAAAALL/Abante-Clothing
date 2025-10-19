@@ -145,9 +145,9 @@ export default function FormsContent<TSchema extends AnyZodObject>({
         )}
 
         {/* submit button */}
-        <button className="cursor-pointer font-bold bg-card-black-background text-white rounded-sm p-2 mt-2 mb-3 w-full"
+        <button className={`${isSubmitting ? "cursor-not-allowed" : "cursor-pointer" } font-bold bg-card-black-background text-white rounded-sm p-2 mt-2 mb-3 w-full`}
         type="submit"
-        disabled={isSubmitting}>{isSubmitting ? "Loading..." : buttonText}</button>
+        disabled={isSubmitting}>{isSubmitting ? "Submitting..." : buttonText}</button>
 
         {/* form footer description */}
         <span className="font-regular text-sm">
