@@ -2,6 +2,7 @@
 import { LogoutURL } from "@/lib/config";
 import {  useCartItems } from "@/lib/store/cart-items";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
+import { useOrderHistoryReceiptModal } from "@/lib/store/order-history";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -13,6 +14,7 @@ export default function LogoutButton() {
   const router = useRouter();
   const [isLoading, setLoading] = useState<boolean>(false);
   const { selectedItem, resetSelectedItem } = useCartItems();
+  const {  setClearOrderHistoryReceiptData } = useOrderHistoryReceiptModal();
 
   const handleLogoutClick = async () => {
     setLoading(true);
@@ -32,6 +34,7 @@ export default function LogoutButton() {
         bc.postMessage({ type: "LOGOUT" });
         bc.close();
         setIsOpen(false);
+        setClearOrderHistoryReceiptData();
         router.replace("/login");
     }catch (err) {
         console.error(err);

@@ -7,7 +7,7 @@ export default function TableHead<T extends Record<string, unknown>>({
         <thead>
             <tr>
                 {TheadData.map((data, i) => (
-                    <th key={i} className="border border-gray-300 text-wrap py-2 px-3 text-sm">{String(data)}</th>
+                    <th key={i} className="border border-gray-300 text-wrap py-5 px-3 text-sm">{String(data)}</th>
                 ))}
             </tr>
         </thead>

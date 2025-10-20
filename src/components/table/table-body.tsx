@@ -1,38 +1,41 @@
-import { isProductValue } from "@/lib/helper/isProductValue";
+"use client"
+import { useOrderHistoryReceiptModal } from "@/lib/store/order-history";
 import { TableBodyProps } from "@/lib/types/table-body-types";
-import Image from "next/image";
-
-export default function TableBody<T extends Record<string, unknown>>({
+export default function TableBody<T extends Record<string, string | number>>({
   TheadData,
   TbodyData,
-}: TableBodyProps<T>) {
+}: TableBodyProps<T>){
+  const { setOpenModal, setOrderPurchasedNumber } = useOrderHistoryReceiptModal();
+
   return (
     <tbody>
       {TbodyData.map((row, i) => (
         <tr key={i}>
-          {TheadData?.map((header, j) => {
-            const value = row[String(header)];
-            return (
-              <td key={j} className="border border-gray-300 text-wrap py-2 px-5 text-sm">
-                {isProductValue(value) ? (
-                  <div className="flex flex-col items-center">
-                    {value.image && (
-                      <Image
-                        src={value.image}
-                        alt={value.name}
-                        className="w-16 h-16 object-cover mb-1"
-                      />
-                    )}
-                    <span>{value.name}</span>
-                  </div>
-                ) : (
-                  String(value ?? "-")
-                )}
-              </td>
-            );
-          })}
+          {(TheadData?.length ?? 0) > 0
+            ? TheadData?.map((header, j) => (
+                <td key={j}
+                  className="border border-gray-300 text-wrap py-3 px-5 text-sm h-13">
+                  {header === "Actions" ? ( 
+                    <button 
+                      onClick={() => {
+                        setOpenModal();
+                        setOrderPurchasedNumber(String(row["ORD-NO"]));
+                      }}
+                      className="cursor-pointer p-2 bg-card-black-background dark:bg-card-white-background rounded-sm text-white dark:text-black">
+                      {row[String(header)]}
+                    </button>
+                    ) : (
+                      <>{row[String(header)] ?? "-"}</>
+                   )}
+                </td>
+              ))
+            : (
+                <td className="border border-gray-300 text-wrap py-2 px-5 text-sm">
+                  {String(row)}
+                </td>
+              )}
         </tr>
       ))}
     </tbody>
-  );
+  );  
 }

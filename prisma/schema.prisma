@@ -21,8 +21,8 @@ model address {
   region_name                                                  String?           @db.VarChar(255)
   phone_number                                                 String?           @db.VarChar(50)
   users                                                        users?            @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "address_ibfk_1")
-  order_purchased_order_purchased_delivery_address_IDToaddress order_purchased[] @relation("order_purchased_delivery_address_IDToaddress")
   order_purchased_order_purchased_billing_address_IDToaddress  order_purchased[] @relation("order_purchased_billing_address_IDToaddress")
+  order_purchased_order_purchased_delivery_address_IDToaddress order_purchased[] @relation("order_purchased_delivery_address_IDToaddress")
 
   @@index([user_ID], map: "user_ID")
 }
@@ -80,14 +80,15 @@ model order_purchased {
   billing_address_ID                                   Int?
   payment_ID                                           Int?
   order_purchased_number                               String?         @unique(map: "order_purchased_number") @db.VarChar(255)
+  order_purchased_tracking_number                      String?         @db.VarChar(255)
   order_purchased_totalAmount                          Decimal?        @db.Decimal(10, 2)
   order_purchased_date                                 DateTime?       @default(now()) @db.DateTime(0)
   order_purchased_status                               String?         @db.VarChar(25)
   order_details                                        order_details[]
-  users                                                users?          @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "order_purchased_ibfk_1")
-  address_order_purchased_delivery_address_IDToaddress address?        @relation("order_purchased_delivery_address_IDToaddress", fields: [delivery_address_ID], references: [address_ID], onDelete: NoAction, onUpdate: NoAction, map: "order_purchased_ibfk_2")
   address_order_purchased_billing_address_IDToaddress  address?        @relation("order_purchased_billing_address_IDToaddress", fields: [billing_address_ID], references: [address_ID], onDelete: NoAction, onUpdate: NoAction, map: "order_purchased_ibfk_3")
+  address_order_purchased_delivery_address_IDToaddress address?        @relation("order_purchased_delivery_address_IDToaddress", fields: [delivery_address_ID], references: [address_ID], onDelete: NoAction, onUpdate: NoAction, map: "order_purchased_ibfk_2")
   payments                                             payments?       @relation(fields: [payment_ID], references: [payment_ID], onDelete: NoAction, onUpdate: NoAction, map: "order_purchased_ibfk_4")
+  users                                                users?          @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "order_purchased_ibfk_1")
 
   @@index([billing_address_ID], map: "billing_address_ID")
   @@index([delivery_address_ID], map: "delivery_address_ID")

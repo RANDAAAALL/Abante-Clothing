@@ -8,24 +8,9 @@ export async function POST(req: Request) {
   if (!(await isAuthenticatedUser())) {
     return NextResponse.redirect("/login");
   }
+  const { receiptData } = await req.json();
 
-  const data = await req.json();
-
-  const {
-    orderPurchasedNumberAndDate,
-    submittedFormCheckoutFormData,
-    computeItems,
-    itemsData,
-  } = data;
-
-  const doc = (
-    <OrderReceiptDocument
-      orderPurchasedNumberAndDate={orderPurchasedNumberAndDate}
-      submittedFormCheckoutFormData={submittedFormCheckoutFormData}
-      computeItems={computeItems}
-      itemsData={itemsData}
-    />
-  );
+  const doc = <OrderReceiptDocument receiptData={receiptData} />;
 
   const blob = await pdf(doc).toBlob();
 
