@@ -15,16 +15,20 @@ export default function TableBody<T extends Record<string, unknown>>({
             return (
               <td key={j} className="border border-gray-300 text-wrap py-2 px-5 text-sm">
                 {isProductValue(value) ? (
-                  <div className="flex flex-col items-center">
-                    {value.image && (
-                      <Image
-                        src={value.image}
-                        alt={value.name}
-                        className="w-16 h-16 object-cover mb-1"
-                      />
-                    )}
-                    <span>{value.name}</span>
-                  </div>
+                   <div className="flex flex-col items-center justify-center gap-1">
+                   {value.image && (
+                     <div className="relative w-16 h-16">
+                       <Image
+                         src={value.image}
+                         alt={value.name}
+                         width={64}
+                         height={64}
+                         className="object-contain rounded-md"
+                       />
+                     </div>
+                   )}
+                   <span className="text-center text-sm font-medium">{value.name}</span>
+                 </div>
                 ) : (
                   String(value ?? "-")
                 )}
