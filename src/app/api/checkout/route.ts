@@ -102,6 +102,7 @@ export async function POST(req: Request) {
                 billing_address_ID: billingAddress ? billingAddress.address_ID : shippingAddress.address_ID,
                 payment_ID: payment.payment_ID,
                 order_purchased_number: orderRef,
+                order_purchased_tracking_number: "pending",
                 order_purchased_totalAmount: overallPrice.overallPriceResult,
                 order_purchased_status: "pending",
               },

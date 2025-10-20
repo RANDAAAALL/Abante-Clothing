@@ -81,7 +81,7 @@ export const CheckoutSchema = z
       error: () => ({ message: "Please select a payment method." }),
     }),
     addressType: z.enum(["shipping-address", "billing-address"], {
-      error: () => ({ message: "Please select a billing address" }),
+      error: () => ({ message: "Please select a billing address" }), 
     }),
     ...BillingFields.shape,
   })
