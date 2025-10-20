@@ -6,6 +6,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { GenerateReceiptURL } from "@/lib/config";
+import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
 
 export default function OrderReceiptModal() {
   const {
@@ -49,17 +50,35 @@ export default function OrderReceiptModal() {
         // simulate loading
         // await new Promise(res => setTimeout(res, 3000));
 
-        const payload = {
-          orderPurchasedNumberAndDate,
-          submittedFormCheckoutFormData,
-          computeItems,
-          itemsData,
-        }
+        const receiptData: PDFReceiptDataProps = {
+          orderNumber: orderPurchasedNumberAndDate?.orderPurchasedNumber ?? "",
+          orderDate: orderPurchasedNumberAndDate?.orderPurchasedDate ?? "",
+          recipientFirstName: submittedFormCheckoutFormData.recipientFirstName,
+          recipientLastName: submittedFormCheckoutFormData.recipientLastName,
+          companyName: submittedFormCheckoutFormData.companyName,
+          addressName: submittedFormCheckoutFormData.addressName,
+          apartmentName: submittedFormCheckoutFormData.apartmentName,
+          cityName: submittedFormCheckoutFormData.cityName,
+          regionName: submittedFormCheckoutFormData.regionName,
+          country: submittedFormCheckoutFormData.country,
+          postalCode: submittedFormCheckoutFormData.postalCode,
+          phoneNumber: submittedFormCheckoutFormData.phoneNumber,
+          addressType: submittedFormCheckoutFormData.addressType,
+          paymentMethod: submittedFormCheckoutFormData.paymentMethod,
+          totalAmount: computeItems?.overallPriceResult ?? 0,
+          productDetails: itemsData.map(item => ({
+            name: item.cart_item_name ?? "",
+            color: item.cart_item_color ?? "",
+            size: item.cart_item_size ?? "",
+            qty: Number(item.cart_item_qty),
+            image: item.cart_item_image ?? "",
+          })),
+        };
 
         const res = await fetch(`${GenerateReceiptURL}`, {
           method: "POST",
           headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(payload),
+          body: JSON.stringify({receiptData}),
         })
 
         if(!res.ok) throw new Error("Failed to generate receipt.");
