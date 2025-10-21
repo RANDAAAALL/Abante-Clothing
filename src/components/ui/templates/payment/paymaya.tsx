@@ -74,7 +74,7 @@ export default function PaymayaTemplate(){
             });
             
             const emailResponseData = await emailResponse.json();
-            if (!emailResponse.ok) toast.error("Receipt email failed to send." + `${emailResponseData?.errorMessage}`);
+            if (!emailResponse.ok) toast.error(`${emailResponseData?.errorMessage}`);
             })(),
             {
               loading: "Payment processing...",
