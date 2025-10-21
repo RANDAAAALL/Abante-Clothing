@@ -79,7 +79,7 @@ export default function OrderReceiptModal() {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify({receiptData}),
-        })
+        });
 
         if(!res.ok) throw new Error("Failed to generate receipt.");
 

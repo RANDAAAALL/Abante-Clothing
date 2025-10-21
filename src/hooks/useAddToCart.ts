@@ -47,7 +47,6 @@ export default function useAddToCart() {
         product_item_ID: product.product_item_ID!,
         cart_item_date: new Date(),
       };
-      
 
       queryClient.setQueryData<CartItemsProps[]>(["get-cart"], (old = []) => [...old, newItem]);
 

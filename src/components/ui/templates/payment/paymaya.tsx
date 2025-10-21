@@ -1,7 +1,8 @@
 "use client"
-import { CheckoutURL } from "@/lib/config";
+import { CheckoutURL, OrderReceiptEmailURL } from "@/lib/config";
 import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
+import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
@@ -26,20 +27,54 @@ export default function PaymayaTemplate(){
         toast.promise(
             (async () => {
 
-            const res = await fetch(`${CheckoutURL}`, {
+            const paymentResponse = await fetch(`${CheckoutURL}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({submittedFormCheckoutFormData, itemsData, computeItems}),
             });
 
-            const data = await res.json();
-            if (!res.ok) throw new Error(data?.errorMessage || "Something went wrong while processing your payment.");
+            const paymentResponseData = await paymentResponse.json();
+            if (!paymentResponse.ok) throw new Error(paymentResponseData?.errorMessage || "Something went wrong while processing your payment.");
     
+            const receiptData: PDFReceiptDataProps = {
+                orderNumber: paymentResponseData?.actualData?.order_purchased_number ?? "",
+                orderDate: paymentResponseData?.actualData?.order_purchased_date ?? "",
+                recipientFirstName: submittedFormCheckoutFormData?.recipientFirstName ?? "",
+                recipientLastName: submittedFormCheckoutFormData?.recipientLastName ?? "",
+                companyName: submittedFormCheckoutFormData?.companyName ?? "",
+                addressName: submittedFormCheckoutFormData?.addressName ?? "",
+                apartmentName: submittedFormCheckoutFormData?.apartmentName ?? "",
+                cityName: submittedFormCheckoutFormData?.cityName ?? "",
+                regionName: submittedFormCheckoutFormData?.regionName ?? "",
+                country: submittedFormCheckoutFormData?.country ?? "",
+                postalCode: submittedFormCheckoutFormData?.postalCode ?? "",
+                phoneNumber: submittedFormCheckoutFormData?.phoneNumber ?? "",
+                addressType: submittedFormCheckoutFormData?.addressType ?? "",
+                paymentMethod: submittedFormCheckoutFormData?.paymentMethod ?? "",
+                totalAmount: computeItems?.overallPriceResult ?? 0,
+                productDetails: itemsData?.map(item => ({
+                  name: item.cart_item_name ?? "",
+                  color: item.cart_item_color ?? "",
+                  size: item.cart_item_size ?? "",
+                  qty: Number(item.cart_item_qty),
+                  image: item.cart_item_image ?? "",
+                })) ?? [],
+              };
+
+            const emailResponse = await fetch(`${OrderReceiptEmailURL}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(receiptData),
+            })
+            
             // store resolve data
             setOrderPurchasedNumberAndDate({
-                orderPurchasedNumber: data?.actualData?.order_purchased_number,
-                orderPurchasedDate: OrderReceiptDateFormatter(data?.actualData?.order_purchased_date),
+                orderPurchasedNumber: paymentResponseData?.actualData?.order_purchased_number,
+                orderPurchasedDate: OrderReceiptDateFormatter(paymentResponseData?.actualData?.order_purchased_date),
             });
+            
+            const emailResponseData = await emailResponse.json();
+            if (!emailResponse.ok) toast.error("Receipt email failed to send." + `${emailResponseData?.errorMessage}`);
             })(),
             {
               loading: "Payment processing...",
