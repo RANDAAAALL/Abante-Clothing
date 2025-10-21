@@ -7,7 +7,6 @@ import { OrderReceiptModalProps } from "@/lib/types/order-history-receipt-types"
 import { useEffect } from "react";
 import { useOrderHistoryReceiptModal } from "@/lib/store/order-history";
 import OrderHistoryReceiptModal from "../ui/modal/order-history/order-history-receipt-modal";
-import OrderReceipt from "../ui/templates/email/order-receipt";
 
 export default function PaginatedTable<T extends Record<string, string | number>>({
   TheadData,

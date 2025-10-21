@@ -16,3 +16,4 @@ export const GenerateReceiptURL = `${getBaseUrl()}/api/generate-receipt`;
 export const ForgotPasswordURL = `${getBaseUrl()}/api/forgot-password`;
 export const ResetPasswordURL = `${getBaseUrl()}/reset-password`;
 export const ResetPasswordAPIURL = `${getBaseUrl()}/api/reset-password`;
+export const OrderReceiptEmailURL = `${getBaseUrl()}/api/receipt-email`;

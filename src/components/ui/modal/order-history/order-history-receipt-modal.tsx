@@ -71,7 +71,7 @@ export default function OrderHistoryReceiptModal() {
         });
 
         if (!res.ok) throw new Error("Failed to generate receipt.");
-
+        
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
