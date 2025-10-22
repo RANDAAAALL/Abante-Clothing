@@ -1,4 +1,5 @@
 import { DeleteCartURL } from "@/lib/config";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -7,7 +8,7 @@ export default function useDeleteCart() {
 
   return useMutation({
     mutationFn: async (cart_item_id: string) => {
-      const res = await fetch(`${DeleteCartURL}/${cart_item_id}`, { method: "DELETE" });
+      const res = await fetchWithCsrf(`${DeleteCartURL}/${cart_item_id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete item");
     },
 

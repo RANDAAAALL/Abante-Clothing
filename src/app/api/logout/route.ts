@@ -1,12 +1,14 @@
 import { isAuthenticatedUser } from "@/dal/verify-user";
+import { verifyCsrfToken } from "@/lib/security/csrf/verify-csrf-token";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(){
+export async function POST(req: NextRequest){
     if(!await isAuthenticatedUser()) NextResponse.redirect("/login");
+    if(!verifyCsrfToken(req)) return NextResponse.json({ errorMessage: "Invalid CSRF Token" }, { status: 403 }); 
     const res = NextResponse.json({ successMessage: "Logged out successfully" });
 
-    // force deletion on a cookie
+    // force deletion on a session cookie
     res.cookies.set({
         name: "access_token",
         value: "",
@@ -17,6 +19,17 @@ export async function POST(){
         maxAge: 0,
       });
     
+    // force deletion on a csrf cookie
+    res.cookies.set({
+      name: "csrf_token",
+      value: "",
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 0,
+    });
+
     revalidateTag("access-details");
     revalidateTag("order-history");
     // revalidatePath("/login")

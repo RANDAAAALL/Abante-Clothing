@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
 
-// src/app/api/customer-feedbacks/route.ts
 export async function GET(req: Request) {
 
   const customerFeedbacks = await prisma.users_feedback.findMany({

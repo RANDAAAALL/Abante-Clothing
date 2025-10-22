@@ -1,5 +1,6 @@
 "use client";
 import { GetCartURL } from "@/lib/config";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { useCartItems } from "@/lib/store/cart-items";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +16,7 @@ export default function useGetCart() {
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ["get-cart"],
     queryFn: async () => {
-      const res = await fetch(`${GetCartURL}`, { cache: "no-store" });
+      const res = await fetchWithCsrf(`${GetCartURL}`);
       if (!res.ok) throw new Error("Failed to fetch cart");
       return res.json();
     },

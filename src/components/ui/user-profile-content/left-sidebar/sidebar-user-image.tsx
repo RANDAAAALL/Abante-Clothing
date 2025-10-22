@@ -1,9 +1,10 @@
 "use client";
-
 import { useRef, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
+import { UploadProfilePictureURL } from "@/lib/config";
 
 export default function SidebarUserImage({ user_image }:{user_image?: string;}) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -22,7 +23,7 @@ export default function SidebarUserImage({ user_image }:{user_image?: string;}) 
     toast.promise(
       (async () => {
         setIsUploading(true);
-        const res = await fetch("/api/upload-profile-picture", {
+        const res = await fetchWithCsrf(`${UploadProfilePictureURL}`, {
           method: "POST",
           body: formData,
         });

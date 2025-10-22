@@ -1,5 +1,6 @@
 "use client"
 import { CheckoutURL, OrderReceiptEmailURL } from "@/lib/config";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
@@ -27,9 +28,8 @@ export default function PaymayaTemplate(){
         toast.promise(
             (async () => {
 
-            const paymentResponse = await fetch(`${CheckoutURL}`, {
+            const paymentResponse = await fetchWithCsrf(`${CheckoutURL}`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({submittedFormCheckoutFormData, itemsData, computeItems}),
             });
 
@@ -61,9 +61,8 @@ export default function PaymayaTemplate(){
                 })) ?? [],
               };
 
-            const emailResponse = await fetch(`${OrderReceiptEmailURL}`, {
+            const emailResponse = await fetchWithCsrf(`${OrderReceiptEmailURL}`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(receiptData),
             })
             

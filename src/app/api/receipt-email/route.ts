@@ -2,11 +2,13 @@
 import { generateOrderReceiptHTML } from "@/components/ui/templates/email/order-receipt";
 import { getUserInfo } from "@/dal/get-user-info";
 import { isAuthenticatedUser } from "@/dal/verify-user";
+import { verifyCsrfToken } from "@/lib/security/csrf/verify-csrf-token";
 import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   if(!await isAuthenticatedUser()) return redirect("/login");
+  if(!verifyCsrfToken(req)) return NextResponse.json({ errorMessage: "Invalid CSRF Token" }, { status: 403 }); 
 
   const receiptData = await req.json();
   const payload = await getUserInfo();

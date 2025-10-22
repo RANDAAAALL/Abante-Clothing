@@ -1,5 +1,6 @@
 "use client";
 import { LogoutURL } from "@/lib/config";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import {  useCartItems } from "@/lib/store/cart-items";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useOrderHistoryReceiptModal } from "@/lib/store/order-history";
@@ -20,7 +21,7 @@ export default function LogoutButton() {
     setLoading(true);
 
     try {
-      const res = await fetch(LogoutURL, { method: "POST", credentials: "include" });
+      const res = await fetchWithCsrf(LogoutURL, { method: "POST", credentials: "include" });
       if (!res.ok) {
         toast.error("Logout failed");
         setLoading(false);

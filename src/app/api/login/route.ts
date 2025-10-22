@@ -1,10 +1,12 @@
 import { loginSchema } from "@/lib/validations/auth-schema";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
-import { GenerateAuthToken } from "@/lib/security/jwt";
-import { setAuthCookie } from "@/lib/security/cookies";
+import { GenerateAuthToken } from "@/lib/security/jwt/generate-auth-token";
+import { setAuthCookie } from "@/lib/security/cookie/set-auth-cookie";
 import { isValidHashedPassword } from "@/lib/hash/compare-hash-password";
 import { revalidatePath } from "next/cache";
+import { generateCsrfToken } from "@/lib/security/csrf/generate-csrf-token";
+import { setCsrfToken } from "@/lib/security/csrf/set-csrf-token";
 
 export async function POST(req: Request) {
   try {
@@ -55,6 +57,12 @@ export async function POST(req: Request) {
 
     // set the token in the cookie
     await setAuthCookie(authToken);
+
+    // generate a csrf token
+    const csrfToken = generateCsrfToken();
+
+    // set the csrf token in the cookie
+    await setCsrfToken(csrfToken);
 
     // revalidatePath("/");
 
