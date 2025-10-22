@@ -1,4 +1,5 @@
 import { AddToCartURL } from "@/lib/config";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { AddToCartPayload } from "@/lib/interface/add-to-cart";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -14,9 +15,8 @@ export default function useAddToCart() {
 
     // sends request to server
     mutationFn: async ({ product, selectedSizeQtyAndColor }: AddToCartPayload) => {
-      const res = await fetch(`${AddToCartURL}`, {
+      const res = await fetchWithCsrf(`${AddToCartURL}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product, selectedSizeQtyAndColor }),
       });
       if (!res.ok) throw new Error("Failed to add to cart");

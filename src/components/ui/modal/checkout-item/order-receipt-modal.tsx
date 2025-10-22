@@ -7,6 +7,7 @@ import Image from "next/image";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { GenerateReceiptURL } from "@/lib/config";
 import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 
 export default function OrderReceiptModal() {
   const {
@@ -75,9 +76,8 @@ export default function OrderReceiptModal() {
           })),
         };
 
-        const res = await fetch(`${GenerateReceiptURL}`, {
+        const res = await fetchWithCsrf(`${GenerateReceiptURL}`, {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
           body: JSON.stringify({receiptData}),
         });
 

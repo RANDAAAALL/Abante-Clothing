@@ -1,5 +1,5 @@
-import { getAuthCookie } from "@/lib/security/cookies"
-import { VerifyAuthToken } from "@/lib/security/jwt";
+import { getAuthCookie } from "@/lib/security/cookie/get-auth-cookie";
+import { VerifyAuthToken } from "@/lib/security/jwt/generate-auth-token";
 
 // this will check if the user is authenticated
 export const isAuthenticatedUser = async () => {

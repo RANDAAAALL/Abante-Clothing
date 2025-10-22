@@ -1,10 +1,12 @@
 import { isAuthenticatedUser } from "@/dal/verify-user";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
+import { verifyCsrfToken } from "@/lib/security/csrf/verify-csrf-token";
 
-export async function DELETE(){
+export async function DELETE(req: NextRequest){
     if (!await isAuthenticatedUser()) return NextResponse.redirect("/login");   
+    if(!verifyCsrfToken(req)) return NextResponse.json({ errorMessage: "Invalid CSRF Token" }, { status: 403 }); 
 
     const payload = await UserPayload();
 
@@ -14,7 +16,7 @@ export async function DELETE(){
         });
         
         return NextResponse.json({ message: "All items are deleted" });
-    }catch(err){
-        return NextResponse.json({ errorMessage: err }, { status: 500 })
+    }catch(err: unknown){
+        return NextResponse.json({ errorMessage: err  instanceof Error ? err.message : "Failed to delete all cart"}, { status: 500 })
     }
 }

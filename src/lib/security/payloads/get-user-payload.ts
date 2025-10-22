@@ -1,7 +1,7 @@
 import { JWTPayload } from "jose";
-import { VerifyAuthToken } from "../jwt";
+import { VerifyAuthToken } from "../jwt/generate-auth-token";
 import { redirect } from "next/navigation";
-import { getAuthCookie } from "../cookies";
+import { getAuthCookie } from "../cookie/get-auth-cookie";
 
 export interface UserPayload extends JWTPayload {
     user_ID: string;

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { GenerateReceiptURL } from "@/lib/config";
 import { useOrderHistoryReceiptModal } from "@/lib/store/order-history";
 import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 
 export default function OrderHistoryReceiptModal() {
   const {
@@ -64,9 +65,8 @@ export default function OrderHistoryReceiptModal() {
             })),
           };
 
-        const res = await fetch(`${GenerateReceiptURL}`, {
+        const res = await fetchWithCsrf(`${GenerateReceiptURL}`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({receiptData}),
         });
 

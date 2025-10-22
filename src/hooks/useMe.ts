@@ -1,5 +1,6 @@
 "use client"
 import { MeURL } from "@/lib/config";
+import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -13,7 +14,7 @@ export default function useMe(){
     const { data, error, isError, isLoading } = useQuery({
         queryKey: ['me'],
         queryFn: async () =>  { 
-            const res = await fetch(`${MeURL}`, {credentials: "include"})
+            const res = await fetchWithCsrf(`${MeURL}`);
             if(!res.ok) throw new Error("Failed to fetch user data");
             return res.json();
         },

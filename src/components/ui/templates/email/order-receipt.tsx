@@ -1,3 +1,5 @@
+import { DateFormatter } from "@/lib/helper/feedback-date-formatter";
+import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
 import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
 
 export const generateOrderReceiptHTML = (receiptData: PDFReceiptDataProps) => {
@@ -19,7 +21,7 @@ export const generateOrderReceiptHTML = (receiptData: PDFReceiptDataProps) => {
                  style="width: 120px; height: auto; margin-bottom: 10px;" />
             <h2 style="margin: 5px 0; font-size: 22px; color: #333;">Order Receipt</h2>
             <p style="margin: 0; color: #555;">Order No: ${receiptData.orderNumber}</p>
-            <p style="margin: 0; color: #555;">${receiptData.orderDate}</p>
+            <p style="margin: 0; color: #555;">${OrderReceiptDateFormatter(receiptData.orderDate)}</p>
           </td>
         </tr>
   

@@ -1,4 +1,4 @@
-import { getAuthCookie } from "@/lib/security/cookies";
+import { getAuthCookie } from "@/lib/security/cookie/get-auth-cookie";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 

@@ -7,12 +7,7 @@ export const setAuthCookie = async (token: string) => {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         path: "/",
-        maxAge: 60 * 15, // expire in 15 minutes
-        // maxAge: 60 * 60, // expire in 1hr
+        // maxAge: 60 * 15, // expire in 15 minutes
+        maxAge: 60 * 60, // expire in 1hr
     })
-}
-
-// get token from cookie
-export const getAuthCookie = async () => {
-    return (await cookies()).get("access_token")?.value;
 }

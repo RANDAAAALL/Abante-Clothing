@@ -1,15 +1,17 @@
 import { isAuthenticatedUser } from "@/dal/verify-user";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
 import { CheckoutSchema } from "@/lib/validations/checkout-schema";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { ComputeItemState } from "@/lib/store/checkout-items";
 import { nanoid } from "nanoid";
 import { revalidateTag } from "next/cache";
+import { verifyCsrfToken } from "@/lib/security/csrf/verify-csrf-token";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     if (!(await isAuthenticatedUser())) return NextResponse.redirect("/login");
+    if(!verifyCsrfToken(req)) return NextResponse.json({ errorMessage: "Invalid CSRF Token" }, { status: 403 }); 
 
     const payload = await UserPayload();
     const userID = Number(payload?.user_ID);
