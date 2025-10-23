@@ -1,6 +1,7 @@
 import { useCartItems } from "@/lib/store/cart-items";
+import React from "react";
 
-export default function TshirtSizesButtons(){
+function TshirtSizesButtonsContent(){
     const { selectedSize, setSelectedSize } = useCartItems();
 
     return (
@@ -22,3 +23,6 @@ export default function TshirtSizesButtons(){
         </>
     );
 }
+
+const AddToCartAndBuyNowButtons = React.memo(TshirtSizesButtonsContent);
+export default AddToCartAndBuyNowButtons;

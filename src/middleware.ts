@@ -21,8 +21,10 @@ export async function middleware(request: NextRequest) {
       "/api/checkout",
       "/api/generate-receipt",
       "/api/csrf",
+      "/api/me",
     ]
   }
+
   const sessionToken = request.cookies.get("access_token")?.value || request.headers.get("authorization")?.replace("Bearer ", "");
   
   const apiRoutes = protectedRoutes.apiRoutes.some((route) => request.nextUrl.pathname.startsWith(route));
@@ -44,9 +46,15 @@ export async function middleware(request: NextRequest) {
         },
       });
     } catch (err) {
-      if (err instanceof JWTExpired) return NextResponse.redirect(new URL("/login?reason=expired", request.url));
-      if (err instanceof JWTInvalid) return NextResponse.redirect(new URL("/login?reason=invalid", request.url));
-      return NextResponse.redirect(new URL("/login?reason=unknown", request.url));
+    
+      if (err instanceof JWTExpired) {
+        return NextResponse.redirect(new URL("/login?reason=expired", request.nextUrl.origin));
+      }
+      if (err instanceof JWTInvalid) {
+        return NextResponse.redirect(new URL("/login?reason=invalid", request.nextUrl.origin));
+      }
+      
+      return NextResponse.redirect(new URL("/login?reason=unknown", request.nextUrl.origin));
     }
   }
   return NextResponse.next();
@@ -67,5 +75,6 @@ export const config = {
     "/api/checkout",
     "/api/generate-receipt",
     "/api/csrf",
+    "/api/me",
   ],
 };

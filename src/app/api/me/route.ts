@@ -12,13 +12,12 @@ export async function GET(req: NextRequest){
     if(!payload) return NextResponse.redirect("/login");
 
      try{
-        
-        return NextResponse.json({
-            user_ID: payload.user_ID,
-            username: payload.username,
-            email: payload.email,
-        }, {status: 200});
-     }catch(err){
-         return NextResponse.json({errorMessage: err}, {status: 401});
+       // return a success response
+    return NextResponse.json(
+        { successMessage: "Login successfully"},
+        { status: 200 }
+    );
+     }catch(err: unknown){
+         return NextResponse.json({errorMessage: err instanceof Error ? err.message : "Failed to fetch"}, {status: 500});
      }
 }
