@@ -1,6 +1,7 @@
 "use client";
 import { GetCartURL } from "@/lib/config";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
+import { useAuth } from "@/lib/store/auth";
 import { useCartItems } from "@/lib/store/cart-items";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,8 +13,19 @@ export default function useGetCart() {
   const router = useRouter();
   const { setIsOpen } = useMenuBarStore();
   const { resetSelectedItem } = useCartItems();
+  const { isAuthenticated } = useAuth();
+  
+  let authData: {successMessage: string } | string | null = null;
+  try {
+    authData = typeof isAuthenticated === 'string' 
+      ? JSON.parse(isAuthenticated) 
+      : isAuthenticated;
+  } catch {
+    authData = isAuthenticated;
+  }
+  const isActuallyAuthenticated = authData && typeof authData === "object" && "successMessage" in authData;
 
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, error, isError, isFetching } = useQuery({
     queryKey: ["get-cart"],
     queryFn: async () => {
       const res = await fetchWithCsrf(`${GetCartURL}`);
@@ -24,7 +36,8 @@ export default function useGetCart() {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     retry: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: !!isActuallyAuthenticated, // only fetch if user is logged in
   });
 
   // Listen for logout event from other tabs
@@ -47,5 +60,6 @@ export default function useGetCart() {
     isLoading,
     error,
     isError,
+    isFetching
   };
 }

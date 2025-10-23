@@ -22,7 +22,6 @@ export default function PaginatedTable<T extends Record<string, string | number>
 
     useEffect(() => {
         if(!OrderReceiptModalData) return;
-        console.log(OrderReceiptModalData)
         setOrderHistoryReceiptData(OrderReceiptModalData);
     }, [OrderReceiptModalData, setOrderHistoryReceiptData]);
 
