@@ -28,8 +28,8 @@ export default function useDeleteCart() {
         queryClient.setQueryData(["get-cart"], context.previousData);
       } 
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-cart"] });
-    }
+    // onSettled: () => {
+    //   queryClient.invalidateQueries({ queryKey: ["get-cart"] });
+    // }
   });
 }

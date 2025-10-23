@@ -7,7 +7,7 @@ import { ProductProps } from "@/lib/types/product-types";
 import TshirtSizesButtons from "./sizes-buttons";
 import { usePhotoModal } from "@/lib/store/product-photos";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCartItems } from "@/lib/store/cart-items";
 
 export default function HeroContents({
@@ -22,18 +22,22 @@ export default function HeroContents({
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const colorParam = useSearchParams().get("color");
     const currentPhoto = props[selectedIndex];
+
+    const memoizedPhoto = useMemo(() => currentPhoto, [currentPhoto]);
+
     
     // on first load
     // it will extract and set the current index and color of value from the props
-    useEffect(() => { 
+    useEffect(() => {
       const defaultColor = props[0]?.product_item_color ?? "";
-    
       if (!colorParam) {
-        // it will set to default index and color if user typed non-existing color
-        // + fix the url param
+
+        // prevent redundant replace if already correct
+        if (!window.location.search.includes(`color=${defaultColor}`)) {
+          router.replace(`/products/${slug}?color=${encodeURIComponent(defaultColor)}`, { scroll: false });
+        }
         setSelectedIndex(0);
         setSelectedColor(defaultColor);
-        router.replace(`/products/${slug}?color=${encodeURIComponent(defaultColor)}`, { scroll: false });
         return;
       }
     
@@ -42,18 +46,17 @@ export default function HeroContents({
       );
     
       if (index !== -1) {
-        // if color value found in the props
         setSelectedIndex(index);
         setSelectedColor(props[index].product_item_color ?? "");
       } else {
-        // otherwise set to default index and color + fix the url param
+        if (!window.location.search.includes(`color=${defaultColor}`)) {
+          router.replace(`/products/${slug}?color=${encodeURIComponent(defaultColor)}`, { scroll: false });
+        }
         setSelectedIndex(0);
         setSelectedColor(defaultColor);
-        router.replace(`/products/${slug}?color=${encodeURIComponent(defaultColor)}`, { scroll: false });
       }
     }, [colorParam, props, router, slug, setSelectedColor]);
     
-
     const photos = [
       { src: currentPhoto.product_item_image, type: "front", alt: `${currentPhoto.product_item_ID}-front`},
       { src: currentPhoto.product_item_back_image, type: "back", alt: `${currentPhoto.product_item_ID}-back`},
@@ -110,7 +113,6 @@ export default function HeroContents({
                       key={i}
                       onClick={() => {
                       setSelectedIndex(i);
-                      console.log("selectedColor: ", variant.product_item_color)
                       setSelectedColor(variant.product_item_color ?? "");
                       router.push(`/products/${slug}/?color=${encodeURIComponent(variant.product_item_color!)}`,
                       { scroll: false })}}
@@ -141,7 +143,7 @@ export default function HeroContents({
 
                   {/* add-to-cart and buy now buttons */}
                   <div className="flex w-full sm:justify-center md:justify-start gap-1">
-                    <AddToCartAndBuyNowButtons props={currentPhoto} />
+                    <AddToCartAndBuyNowButtons props={memoizedPhoto} />
                   </div>
                 </div>
           </div>

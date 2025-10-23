@@ -2,27 +2,31 @@
 import AbanteClothingLogo from "@/components/icons/svg/abante-clothing-logo";
 import LogoutButton from "@/components/ui/user-profile-content/logout-button";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import NavbarButtons from "./navbar-buttons";
 import NavbarCart from "./navbar-cart";
 import NavbarLinks from "./navbar-links";
 import MenuBar from "./navbar-menu";
 import NavbarThemeToggle from "./navbar-theme-toggle";
 import UserProfileNavigator from "@/components/ui/user-profile-content/user-profile-navigator";
-import useGetCart from "@/hooks/useGetCart";
+import { useAuth } from "@/lib/store/auth";
 
-export default function NavbarContent() {
-  const { data } = useGetCart();
+function NavbarContentComponent() {
+  const { isAuthenticated, isLoading } = useAuth();
   const { isOpen } = useMenuBarStore();
   const [isScrolled, setIsScrolled] = useState(false);
   
   // track scroll for styling
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 0;
+      setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-    
+  }, [setIsScrolled]);
+
   // to prevent background scroll when menu is open
   useEffect(() => { document.body.style.overflow = isOpen ? "hidden" : "auto"; }, [isOpen]);
   
@@ -40,37 +44,52 @@ export default function NavbarContent() {
 
       {/* Desktop actions */}
       <div className="hidden md:flex items-center space-x-3">
-        <NavbarCart flag={false} />
-        <NavbarThemeToggle />
-        {data ? (
+        {isLoading ? <p>Loading...</p> : (
           <>
-            <UserProfileNavigator />
-            <LogoutButton />
+            <NavbarCart flag={false} />
+            <NavbarThemeToggle />
+            {isAuthenticated ? (
+              <>
+                <UserProfileNavigator />
+                <LogoutButton />
+              </>
+            ) : (
+              <NavbarButtons style="flex space-x-2" />
+            )}    
           </>
-        ) : (
-          <NavbarButtons style="flex space-x-2" />
         )}
       </div>
 
       {/* Mobile menu button */}
       <div className="md:hidden flex ml-auto space-x-3.5 mr-4.5">
-        <NavbarCart flag={false} />
-        <NavbarThemeToggle />
-        {data && <UserProfileNavigator />}
-        <MenuBar />
+            {isLoading ? <p>Loading...</p> : (
+              <>
+                <NavbarCart flag={false} />
+                <NavbarThemeToggle />
+                {isAuthenticated && <UserProfileNavigator />}
+                <MenuBar />
+              </>
+            )}
       </div>
 
       {/* Mobile overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-100 flex flex-col items-center h-screen justify-center gap-2 bg-white-background dark:bg-black-background">
-          <NavbarLinks style="flex flex-col text-center space-y-2" />
-          {data ? (
-            <LogoutButton />
-          ) : (
-            <NavbarButtons style="flex flex-col text-center space-y-2" />
-          )}
+            {isLoading ? <p>Loading...</p> : (
+              <>
+                <NavbarLinks style="flex flex-col text-center space-y-2" />
+                {isAuthenticated ? (
+                  <LogoutButton />
+                ) : (
+                  <NavbarButtons style="flex flex-col text-center space-y-2" />
+                )}   
+              </>
+            )}
         </div>
       )}
     </header>
   );
-}
+};
+
+const NavbarContent = memo(NavbarContentComponent);
+export default NavbarContent;

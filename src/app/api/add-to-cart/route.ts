@@ -24,11 +24,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    let cartItem;
+
     if (existing) {
       // update qty and total if it already exists
       const newQty = (existing.cart_item_qty ?? 0) + selectedSizeQtyAndColor.qty;
 
-      await prisma.cart_items.update({
+      cartItem = await prisma.cart_items.update({
         where: { cart_item_ID: existing.cart_item_ID },
         data: {
           cart_item_qty: newQty,
@@ -36,11 +38,12 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      return NextResponse.json({ message: "Cart updated" });
+      // return NextResponse.json({ message: "Cart updated" });
+      return NextResponse.json( cartItem );
     }
 
     // create new row if product+size doesn't exist
-    await prisma.cart_items.create({
+    cartItem = await prisma.cart_items.create({
       data: {
         user_ID: Number(payload.user_ID),
         product_item_ID: product.product_item_ID,
@@ -55,7 +58,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ message: "Item added to cart" });
+    // return NextResponse.json({ message: "Item added to cart" });
+    return NextResponse.json( cartItem );
   } catch (err) {
     console.error("Failed to add to cart:", err);
     return NextResponse.json({ errorMessage: "Something went wrong" }, { status: 500 });
