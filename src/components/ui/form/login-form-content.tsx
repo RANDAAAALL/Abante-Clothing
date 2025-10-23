@@ -52,7 +52,7 @@ export default function LoginFormContent({
 
 
   const handleLoginClick = async (formData: loginFormType) => {
-    setLoading();
+    // setLoading();
     setLoginLoading(true);
     try {
         const res = await fetch(`${LoginsURL}`, {
@@ -65,7 +65,7 @@ export default function LoginFormContent({
           toast.error(`${data.errorMessage || data.parsedErrors}` || "Login failed", {
             className: "z-[999999]"
           });
-          resetLoading();
+          // resetLoading();
           setLoginLoading(false);
           return;
         }
@@ -91,9 +91,8 @@ export default function LoginFormContent({
       setAuthUser(data)
       router.push("/");
     }finally {
-      // simulate loading delay
-      await new Promise(res => setTimeout(res, 1000));
-      resetLoading();
+      
+      // resetLoading();
       setLoginLoading(false);
     }
   };
