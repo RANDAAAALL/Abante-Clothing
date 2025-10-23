@@ -8,7 +8,6 @@ import useGetCart from "@/hooks/useGetCart";
 import useDeleteCart from "@/hooks/useDeleteCart";
 import isCartItem from "@/lib/helper/isCartItem";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
-import { useAuth } from "@/lib/store/auth";
 export default function CartModalData() {
   const { selectedItem, removeSelectedItem } = useCartItems();
   const { CloseModal } = useCartItemModal();
@@ -16,22 +15,10 @@ export default function CartModalData() {
   const router = useRouter();
 
   const { mutate: deleteData } = useDeleteCart();
-  
-  // Add comprehensive debugging
-  console.log("🔍 CartModalData Render:");
-  console.log("  - isLoading:", isLoading);
-  console.log("  - data:", data);
-  console.log("  - selectedItem:", selectedItem);
-  console.log("  - data type:", typeof data);
-  console.log("  - data length:", Array.isArray(data) ? data.length : 'not array');
-  
   const res = useMemo(() => {
-    console.log("🔍 Computing cart items...");
     const source = data && data.length > 0 ? data : selectedItem;
-    console.log("🔍 Source for computation:", source);
     
     if (!source || source.length === 0) {
-      console.log("🔍 Empty cart detected");
       return {
         subTotalPriceResult: 0,
         overallQtyResult: 0,
@@ -40,20 +27,11 @@ export default function CartModalData() {
     }
     
     const computed = computeItems(source);
-    console.log("🔍 Computed result:", computed);
     return computed;
   }, [data, selectedItem]);
   
-  console.log("🔍 Final isLoading state: ", isLoading);
-  
-  if (isLoading) {
-    console.log("🔍 Showing loading state");
-    return <p className="text-sm text-black dark:text-white h-50 flex items-center justify-center">Loading...</p>;
-  }
-  
+  if (isLoading) return <p className="text-sm text-black dark:text-white h-50 flex items-center justify-center">Loading...</p>;
   const payload = data ? data as CartItemsProps[] : selectedItem;
-  console.log("🔍 Final payload:", payload);
-  console.log("🔍 Payload length:", payload?.length);
   
   return (
         <>

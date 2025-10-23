@@ -7,19 +7,9 @@ import { useAuth } from "@/lib/store/auth";
 const queryClient = new QueryClient();
 
 export default function ClientProvider({children}: { children: React.ReactNode}){
-  const { setAuthUser, fetchUser } = useAuth();
+  const { checkAuthOnLoad } = useAuth();
+  useEffect(() => { checkAuthOnLoad()}, [checkAuthOnLoad]);
   
-  useEffect(() => {
-      const stored = sessionStorage.getItem("successMessage");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setAuthUser(parsed);
-        fetchUser();
-      }
-
-  }, [fetchUser, setAuthUser]);
-  
-
     return (
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={true}>
         <QueryClientProvider client={queryClient}>
