@@ -1,13 +1,13 @@
-import { getAuthCookie } from "@/lib/security/cookie/get-auth-cookie";
-import { VerifyAuthToken } from "@/lib/security/jwt/generate-auth-token";
+import { getSessionCookie } from "@/lib/security/cookie/get-session-cookie";
+import { verifySessionToken } from "@/lib/security/jwt/verify-session-token";
 
 // this will check if the user is authenticated
 export const isAuthenticatedUser = async () => {
-    const token = await getAuthCookie();
+    const token = await getSessionCookie();
     if(!token) return false;
 
     try{
-        await VerifyAuthToken(token);
+        await verifySessionToken(token);
         return true;
     }catch {
         return false;

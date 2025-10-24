@@ -1,10 +1,13 @@
-"use client"
 import LoginFormContent from "@/components/ui/form/login-form-content";
-import { useSearchParams } from "next/navigation";
+import { use } from "react";
 
-export default function Login() {
-  const searchParams = useSearchParams();
-  const reason = searchParams.get('reason') ?? undefined;
+export default function Login({
+  searchParams,
+}: {
+  searchParams: Promise<{ reason?: string }>;
+}) {
+  const { reason } = use(searchParams);
+  // console.log("Login reason:", reason);
 
   return (
     <div className="bg-white dark:bg-black-background dark:text-white text-black w-full max-w-[1980] mx-auto">

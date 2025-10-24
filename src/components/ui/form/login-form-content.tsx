@@ -28,6 +28,8 @@ export default function LoginFormContent({
   
   useEffect(() => {
     if (!reason) return;
+    
+    // console.log("Login reason received: ", reason);
   
     queryClient.removeQueries();
     resetSelectedItem();
@@ -38,16 +40,8 @@ export default function LoginFormContent({
     setClearOrderHistoryReceiptData();
     setClearAuthUser();
 
-    toast(
-      reason === "expired"
-        ? "Your session has expired. Please log in again."
-        : reason === "invalid" 
-        ? "Invalid authentication token. Please log in."
-        : reason === "no-token"
-        ? "Please log in to access this page."
-        : "Authentication error. Please log in."
-    , { duration: 5000 });
-     
+    toast("Your session has expired. Please log in again.",{ duration: 5000 });
+
   }, [reason, queryClient, resetSelectedItem, setClearAuthUser, setClearOrderHistoryReceiptData]);
 
 
