@@ -4,7 +4,7 @@ import { QueryClient ,QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useAuth } from "@/lib/store/auth";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 export default function ClientProvider({children}: { children: React.ReactNode}){
   const { checkAuthOnLoad } = useAuth();
