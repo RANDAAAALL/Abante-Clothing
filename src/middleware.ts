@@ -78,7 +78,7 @@ export async function middleware(request: NextRequest) {
         res.cookies.set({name: "session_token", value: "", maxAge: 0});
         res.cookies.set({name: "refresh_token", value: "", maxAge: 0});
         res.cookies.set({name: "csrf_token", value: "", maxAge: 0});
-        sessionStorage.removeItem("successMessage");
+        localStorage.removeItem("successMessage");
         return res;
       }
     }
@@ -87,7 +87,7 @@ export async function middleware(request: NextRequest) {
     res.cookies.set({name: "session_token", value: "", maxAge: 0});
     res.cookies.set({name: "refresh_token", value: "", maxAge: 0});
     res.cookies.set({name: "csrf_token", value: "", maxAge: 0});
-    sessionStorage.removeItem("successMessage");
+    localStorage.removeItem("successMessage");
     return res;
   }
 }
