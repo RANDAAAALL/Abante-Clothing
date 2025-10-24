@@ -24,6 +24,7 @@ export const useAuth = create<AuthState & AuthActionState>((set) => ({
   resetLoading: () => set({ isLoading: false }),
 
   fetchUser: async () => {
+
     try {
       const res = await fetchWithCsrf(`${MeURL}`);
       if (!res.ok) throw new Error("Not logged in");

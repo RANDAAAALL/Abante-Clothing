@@ -1,4 +1,4 @@
-import { getAuthCookie } from "@/lib/security/cookie/get-auth-cookie";
+import { getSessionCookie } from "@/lib/security/cookie/get-session-cookie";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -7,7 +7,7 @@ export default async function AuthLayout({
 }: {
     children: ReactNode
 }) {
-    const token = await getAuthCookie();
+    const token = await getSessionCookie();
     if(token) redirect("/");
   
     return <>{children}</>   

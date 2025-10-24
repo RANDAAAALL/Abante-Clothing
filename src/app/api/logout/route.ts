@@ -10,7 +10,18 @@ export async function POST(req: NextRequest){
 
     // force deletion on a session cookie
     res.cookies.set({
-        name: "access_token",
+        name: "session_token",
+        value: "",
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 0,
+      });
+
+    // force deletion on a refresh cookie
+    res.cookies.set({
+        name: "refresh_token",
         value: "",
         path: "/",
         httpOnly: true,
