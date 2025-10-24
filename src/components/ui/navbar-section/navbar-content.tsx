@@ -28,7 +28,24 @@ function NavbarContentComponent() {
   }, [setIsScrolled]);
 
   // to prevent background scroll when menu is open
-  useEffect(() => { document.body.style.overflow = isOpen ? "hidden" : "auto"; }, [isOpen]);
+  useEffect(() => { 
+    document.body.style.overflow = isOpen ? "hidden" : "auto"; 
+  }, [isOpen]);
+
+  // Show loading state until auth check is complete
+  // if (isLoading) {
+  //   return (
+  //     <header className="w-full font-medium flex items-center max-w-5xl mx-auto p-4">
+  //       <AbanteClothingLogo flag={true} />
+  //       <div className="flex-1 flex justi fy-center">
+  //         <div className="flex items-center space-x-3">
+  //           <div className="w-6 h-6 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+  //           <span className="text-sm text-gray-500">Loading...</span>
+  //         </div>
+  //       </div>
+  //     </header>
+  //   );
+  // }
   
   return (
     <header className={`${isScrolled ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md" : ""} 
@@ -62,29 +79,25 @@ function NavbarContentComponent() {
 
       {/* Mobile menu button */}
       <div className="md:hidden flex ml-auto space-x-3.5 mr-4.5">
-            {isLoading ? <p>Loading...</p> : (
-              <>
-                <NavbarCart flag={false} />
-                <NavbarThemeToggle />
-                {isAuthenticated && <UserProfileNavigator />}
-                <MenuBar />
-              </>
-            )}
+        {isLoading ? <p>Loading...</p> : (
+          <>
+            <NavbarCart flag={false} />
+            <NavbarThemeToggle />
+            {isAuthenticated && <UserProfileNavigator />}
+            <MenuBar />
+          </>
+        )}
       </div>
 
       {/* Mobile overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-100 flex flex-col items-center h-screen justify-center gap-2 bg-white-background dark:bg-black-background">
-            {isLoading ? <p>Loading...</p> : (
-              <>
-                <NavbarLinks style="flex flex-col text-center space-y-2" />
-                {isAuthenticated ? (
-                  <LogoutButton />
-                ) : (
-                  <NavbarButtons style="flex flex-col text-center space-y-2" />
-                )}   
-              </>
-            )}
+          <NavbarLinks style="flex flex-col text-center space-y-2" />
+          {isAuthenticated ? (
+            <LogoutButton />
+          ) : (
+            <NavbarButtons style="flex flex-col text-center space-y-2" />
+          )}   
         </div>
       )}
     </header>

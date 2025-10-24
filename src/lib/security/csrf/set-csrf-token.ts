@@ -6,6 +6,7 @@ export const setCsrfToken = async (csrfToken: string) => {
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             path: "/",
-            maxAge: 60 * 60, // 1hr
+            maxAge: 60 * 15, // 15 mins for test purposes only
+            // maxAge: 60 * 60, // 1hr
         })
 }

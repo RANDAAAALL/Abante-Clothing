@@ -1,12 +1,13 @@
 import { loginSchema } from "@/lib/validations/auth-schema";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
-import { GenerateAuthToken } from "@/lib/security/jwt/generate-auth-token";
-import { setAuthCookie } from "@/lib/security/cookie/set-auth-cookie";
+import { generateSessionToken } from "@/lib/security/jwt/generate-session-token";
+import { setSessionCookie } from "@/lib/security/cookie/set-session-cookie";
 import { isValidHashedPassword } from "@/lib/hash/compare-hash-password";
-import { revalidatePath } from "next/cache";
 import { generateCsrfToken } from "@/lib/security/csrf/generate-csrf-token";
 import { setCsrfToken } from "@/lib/security/csrf/set-csrf-token";
+import { generateRefreshToken } from "@/lib/security/jwt/generate-refresh-token";
+import { setRefreshCookie } from "@/lib/security/cookie/set-refresh-cookie";
 
 export async function POST(req: Request) {
   try {
@@ -50,13 +51,17 @@ export async function POST(req: Request) {
         )
       }
 
-    // generate auth token
-    const authToken = await GenerateAuthToken({
-      user_ID: usersDetails.user_ID,
-    });    
+    // generate session token
+    const sessionToken = await generateSessionToken({ user_ID: usersDetails.user_ID });    
 
-    // set the token in the cookie
-    await setAuthCookie(authToken);
+    // generate refresh token
+    const refreshToken = await generateRefreshToken({ user_ID: usersDetails.user_ID });    
+
+    // set session token in cookie
+    await setSessionCookie(sessionToken);
+
+    // set refresh token in cookie
+    await setRefreshCookie(refreshToken);
 
     // generate a csrf token
     const csrfToken = generateCsrfToken();
@@ -71,10 +76,10 @@ export async function POST(req: Request) {
       { successMessage: "Login successfully"},
       { status: 200 }
     );
-  } catch (error) {
-    console.error("Error Logging in: ", error);
+  } catch (error: unknown) {
+    console.error("Error Logging in: ", error instanceof Error ? error.message : error);
     return NextResponse.json(
-      { errorMessage: "Internal Server Error" },
+      { errorMessage: `Internal Server Error: ${error instanceof Error ? error.message : error}` },
       { status: 500 }
     );
   }
