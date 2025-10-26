@@ -24,7 +24,7 @@ export const getAddressCached = unstable_cache(async (user_ID: number) => {
     });
 
     const parsedAddressData: AddressProps[] = addressData.map(address => ({
-        country: "Philippines" ?? "-",
+        country: "Philippines",
         address_ID: address?.address_ID ?? 0,
         recipientFirstName: address?.recipient_first_name ?? "-",
         recipientLastName: address?.recipient_last_name ?? "-",
