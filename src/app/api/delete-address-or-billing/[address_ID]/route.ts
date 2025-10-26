@@ -7,7 +7,7 @@ import { revalidateTag } from "next/cache";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ address_ID: number }> }
+  { params }: { params: Promise<{ address_ID: string }> }
 ) {
   // check if user is logged in
   if (!(await isAuthenticatedUser())) return NextResponse.redirect("/login");
