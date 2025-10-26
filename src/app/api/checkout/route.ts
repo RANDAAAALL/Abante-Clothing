@@ -126,8 +126,10 @@ export async function POST(req: NextRequest) {
           }, { timeout: 15000 });
           
         
-        // revalidate the tag, to fecth fresh data on order-history
+        // revalidate the tag/s, to fecth fresh data on order-history
         revalidateTag("order-history");
+        revalidateTag("billing");
+        revalidateTag("shipping");
 
         return NextResponse.json(
         { successMessage: "Successfully inserted an order", actualData: result },

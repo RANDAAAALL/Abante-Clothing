@@ -1,5 +1,7 @@
 import { FieldProps } from "@/components/ui/form/form-content";
 import { forgotPasswordFormType, loginFormType, registerFormType, resetPasswordFormType } from "../validations/auth-schema";
+import { Field } from "react-hook-form";
+import { AddressProps } from "../types/address-types";
 
 export const registerFields: FieldProps<registerFormType>[] = [
     { fieldName: "username", fieldPlaceholder: "Enter your username", fieldType: "text" },
@@ -21,4 +23,3 @@ export const registerFields: FieldProps<registerFormType>[] = [
     { fieldName: "password", fieldPlaceholder: "Enter your new password", fieldType: "password" },
     { fieldName: "confirmPassword", fieldPlaceholder: "Confirm your password", fieldType: "password" },
   ];
-  

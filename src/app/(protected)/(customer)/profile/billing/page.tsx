@@ -1,7 +1,5 @@
-
+import BillingContent from "@/components/ui/user-profile-content/right-content/billing-section/billing-content";
 
 export default function Billing(){
-    return (
-        <>This is billing page</>
-    );
+    return <BillingContent />
 }

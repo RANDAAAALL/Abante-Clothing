@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // billing schema
-const BillingFields = z.object({
+const BillingFieldsSchema = z.object({
   billingFirstName: z
     .string()
     .min(1, "First name is required")
@@ -83,11 +83,11 @@ export const CheckoutSchema = z
     addressType: z.enum(["shipping-address", "billing-address"], {
       error: () => ({ message: "Please select a billing address" }), 
     }),
-    ...BillingFields.shape,
+    ...BillingFieldsSchema.shape,
   })
   .superRefine((data, ctx) => {
     if (data.addressType === "billing-address") {
-      const billingParse = BillingFields.safeParse(data);
+      const billingParse = BillingFieldsSchema.safeParse(data);
 
       if (!billingParse.success) {
         billingParse.error.issues.forEach((issue) => {
@@ -101,4 +101,5 @@ export const CheckoutSchema = z
     }
   });
 
+export type BillingFieldsType = z.infer<typeof BillingFieldsSchema>
 export type CheckoutFormType = z.infer<typeof CheckoutSchema>;

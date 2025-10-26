@@ -1,8 +1,5 @@
 "use client";
 import { create } from "zustand";
-import { fetchWithCsrf } from "../helper/custom-fetch";
-import { MeURL } from "../config";
-import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "@/context/client-providers";
 
 type AuthState = {
@@ -25,26 +22,14 @@ export const useAuth = create<AuthState & AuthActionState>((set) => ({
   resetLoading: () => set({ isLoading: false }),
 
   checkAuthOnLoad: async () => {
-    try {
-      // first check localStorage for quick restore
-      const stored = localStorage.getItem("successMessage");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        set({ isAuthenticated: parsed, isLoading: false });
-        return; // if we have localStorage, use it
-      }
-      
-      // If no localStorage, verify with server using cookies
-      const res = await fetchWithCsrf(`${MeURL}`);
-      if (res.ok) {
-        const data = await res.json();
-        set({ isAuthenticated: data.successMessage, isLoading: false });
-        localStorage.setItem("successMessage", JSON.stringify(data.successMessage));
-        queryClient.invalidateQueries({ queryKey: ["get-cart"] });
-      } else {
-        throw new Error("Not authenticated");
-      }
-    } catch {
+    // first check localStorage for quick restore
+    const stored = localStorage.getItem("successMessage");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      set({ isAuthenticated: parsed, isLoading: false });
+      queryClient.invalidateQueries({ queryKey: ['get-cart'] });
+      return; // if we have localStorage, use it
+    } else {
       set({ isAuthenticated: null, isLoading: false });
       localStorage.removeItem("successMessage");
     }

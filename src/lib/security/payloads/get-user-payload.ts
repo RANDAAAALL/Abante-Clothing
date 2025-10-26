@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { getSessionCookie } from "../cookie/get-session-cookie";
 import { verifySessionToken } from "../jwt/verify-session-token";
 import { UserPayloadProps } from "@/lib/interface/user-payload";

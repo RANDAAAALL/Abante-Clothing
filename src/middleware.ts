@@ -9,8 +9,8 @@ export async function middleware(request: NextRequest) {
   const routes = {
     protectedRoutes: [
       "/profile",
-      "/profile/billing",
       "/profile/order-history",
+      "/profile/billing",
       "/profile/address",
       "/checkout",
     ],
@@ -24,6 +24,9 @@ export async function middleware(request: NextRequest) {
       "/api/generate-receipt",
       "/api/csrf",
       "/api/me",
+      "/api/add-to-address-or-billing",
+      "/api/update-address-or-billing",
+      "/api/delete-address-or-billing",
     ],
     passRoutes: [
       "/login",
@@ -108,5 +111,8 @@ export const config = {
     "/api/generate-receipt",
     "/api/csrf",
     "/api/me",
+    "/api/add-address-or-billing",
+    "/api/update-address-or-billing",
+    "/api/delete-address-or-billing",
   ],
 };

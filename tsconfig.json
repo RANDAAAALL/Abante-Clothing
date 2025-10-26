@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/api/add-address-or-billing"  ],
   "exclude": [
     "node_modules"
   ]
