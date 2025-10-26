@@ -9,8 +9,8 @@ export async function middleware(request: NextRequest) {
   const routes = {
     protectedRoutes: [
       "/profile",
-      "/profile/billing",
       "/profile/order-history",
+      "/profile/billing",
       "/profile/address",
       "/checkout",
     ],
@@ -24,6 +24,9 @@ export async function middleware(request: NextRequest) {
       "/api/generate-receipt",
       "/api/csrf",
       "/api/me",
+      "/api/add-to-address-or-billing",
+      "/api/update-address-or-billing",
+      "/api/delete-address-or-billing",
     ],
     passRoutes: [
       "/login",
@@ -78,7 +81,7 @@ export async function middleware(request: NextRequest) {
         res.cookies.set({name: "session_token", value: "", maxAge: 0});
         res.cookies.set({name: "refresh_token", value: "", maxAge: 0});
         res.cookies.set({name: "csrf_token", value: "", maxAge: 0});
-        sessionStorage.removeItem("successMessage");
+        localStorage.removeItem("successMessage");
         return res;
       }
     }
@@ -87,7 +90,7 @@ export async function middleware(request: NextRequest) {
     res.cookies.set({name: "session_token", value: "", maxAge: 0});
     res.cookies.set({name: "refresh_token", value: "", maxAge: 0});
     res.cookies.set({name: "csrf_token", value: "", maxAge: 0});
-    sessionStorage.removeItem("successMessage");
+    localStorage.removeItem("successMessage");
     return res;
   }
 }
@@ -108,5 +111,8 @@ export const config = {
     "/api/generate-receipt",
     "/api/csrf",
     "/api/me",
+    "/api/add-address-or-billing",
+    "/api/update-address-or-billing",
+    "/api/delete-address-or-billing",
   ],
 };

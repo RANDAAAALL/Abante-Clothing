@@ -19,3 +19,6 @@ export const ResetPasswordURL = `${getBaseUrl()}/reset-password`;
 export const ResetPasswordAPIURL = `${getBaseUrl()}/api/reset-password`;
 export const OrderReceiptEmailURL = `${getBaseUrl()}/api/receipt-email`;
 export const CsrfURL = `${getBaseUrl()}/api/csrf`;
+export const AddAddressOrBillingURL = `${getBaseUrl()}/api/add-address-or-billing`;
+export const UpdateAddressOrBillingURL = `${getBaseUrl()}/api/update-address-or-billing`;
+export const DeleteAddressOrBillingURL = `${getBaseUrl()}/api/delete-address-or-billing`

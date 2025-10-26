@@ -8,9 +8,6 @@ export async function DELETE(
   { params }: { params: Promise<{ cart_item_id: string }> }
 ) {
   if (!await isAuthenticatedUser()) return NextResponse.redirect("/login");
-  console.log("CSRF cookie:", req.cookies.get("csrf_token")?.value);
-  console.log("CSRF header:", req.headers.get("x-csrf-token"));
-
   if(!verifyCsrfToken(req)) return NextResponse.json({ errorMessage: "Invalid CSRF Token" }, { status: 403 }); 
 
   const cart_item_id = (await params).cart_item_id
