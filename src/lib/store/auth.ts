@@ -22,13 +22,13 @@ export const useAuth = create<AuthState & AuthActionState>((set) => ({
   resetLoading: () => set({ isLoading: false }),
 
   checkAuthOnLoad: async () => {
-      // first check localStorage for quick restore
-      const stored = localStorage.getItem("successMessage");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        set({ isAuthenticated: parsed, isLoading: false });
-        queryClient.invalidateQueries({ queryKey: ['get-cart']});
-        return; // if we have localStorage, use it
+    // first check localStorage for quick restore
+    const stored = localStorage.getItem("successMessage");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      set({ isAuthenticated: parsed, isLoading: false });
+      queryClient.invalidateQueries({ queryKey: ['get-cart'] });
+      return; // if we have localStorage, use it
     } else {
       set({ isAuthenticated: null, isLoading: false });
       localStorage.removeItem("successMessage");
