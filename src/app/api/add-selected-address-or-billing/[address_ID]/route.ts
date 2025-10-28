@@ -42,6 +42,7 @@ export async function PUT(
 
     // revalidate the relevant cache tags
     revalidateTag(addressType);
+    revalidateTag("get-address-and-billing");
 
     return NextResponse.json(
       { successMessage: `Selected successfully.` },

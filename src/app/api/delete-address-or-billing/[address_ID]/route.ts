@@ -68,7 +68,8 @@ export async function DELETE(
     // revalidate the relevant cache tags
     revalidateTag(addressType);
     revalidateTag("order-history");
-
+    revalidateTag("get-address-and-billing");
+    
     return NextResponse.json(
       { successMessage: "Deleted Successfully." },
       { status: 200 }

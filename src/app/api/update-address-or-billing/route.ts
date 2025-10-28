@@ -20,7 +20,7 @@ export async function PUT(request: NextRequest) {
 
   try {
     const { title, address_ID, formData } = await request.json();
-    console.log(title, address_ID, formData);
+    // console.log(title, address_ID, formData);
 
     // parsed datas
     const parsedFormData = AddressAndBillingSchema.safeParse(formData);
@@ -71,7 +71,8 @@ export async function PUT(request: NextRequest) {
 
     // revalidate cache
     revalidateTag(addressType);
-
+    revalidateTag("get-address-and-billing");
+    
     return NextResponse.json(
       { successMessage: "Updated successfully" },
       { status: 200 }
