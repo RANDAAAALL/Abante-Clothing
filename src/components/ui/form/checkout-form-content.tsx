@@ -1,30 +1,164 @@
-"use client"
+"use client";
 import { CheckoutFormType, CheckoutSchema } from "@/lib/validations/checkout-schema";
 import { Card } from "../carousel/card";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import useGetCart from "@/hooks/useGetCart";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import useDeleteAllCart from "@/hooks/useDeleteAllCart";
+import { DefaultAddressAndBillingProps } from "@/lib/types/address-and-billing-form-types";
 
-export default function CheckoutformContent(){
-    const { isSuccessfullPay, 
-            setPayment, 
-            setOpenConfirmationModal,
-            setSubmittedFormCheckoutFormData,
-            setItemsData } = useCheckoutModal();
-    const { data } = useGetCart();
-    const { mutate: clearItems } = useDeleteAllCart();
-    const { register,
-            handleSubmit,
-            reset,
-            resetField,
-            formState: {errors, isSubmitting}
-        } = useForm<CheckoutFormType>({resolver: zodResolver(CheckoutSchema)});
-    const [ useDifferentBilling, setUseDifferentBilling ] = useState<boolean>(false);
-    
+export default function CheckoutformContent({ defaultAddressAndBilling }: { defaultAddressAndBilling: DefaultAddressAndBillingProps }) {
+  const {
+    isSuccessfullPay,
+    setPayment,
+    setOpenConfirmationModal,
+    setSubmittedFormCheckoutFormData,
+    setItemsData,
+  } = useCheckoutModal();
+  const { data } = useGetCart();
+  const { mutate: clearItems } = useDeleteAllCart();
+  const { shipping, billing } = defaultAddressAndBilling;
+
+  const { register, handleSubmit, reset, resetField, watch, setValue, formState: { errors, isSubmitting } 
+        } = useForm<CheckoutFormType>({ resolver: zodResolver(CheckoutSchema) });
+  const watchedValues = watch();
+
+  const [useDifferentBilling, setUseDifferentBilling] = useState<boolean>(false);
+  const [useDefaultShipping, setUseDefaultShipping] = useState(false);
+  const [useDefaultBilling, setUseDefaultBilling] = useState(false);
+
+  // track the changes
+  const isProgrammaticChange = useRef(false);
+  const shippingFieldsFilled = useRef(false);
+  const billingFieldsFilled = useRef(false);
+
+  useEffect(() => {
+    if (useDefaultShipping && shipping && !shippingFieldsFilled.current) {
+      isProgrammaticChange.current = true;
+      
+      setValue("recipientFirstName", shipping.recipientFirstName ?? "");
+      setValue("recipientLastName", shipping.recipientLastName ?? "");
+      setValue("companyName", shipping.companyName ?? "");
+      setValue("addressName", shipping.addressName ?? "");
+      setValue("apartmentName", shipping.apartmentName ?? "");
+      setValue("postalCode", shipping.postalCode ?? "");
+      setValue("cityName", shipping.cityName ?? "");
+      setValue("regionName", shipping.regionName ?? "");
+      setValue("phoneNumber", shipping.phoneNumber ?? "");
+      
+      shippingFieldsFilled.current = true;
+      
+      // reset the flag after a slight delay
+      setTimeout(() => {
+        isProgrammaticChange.current = false;
+      }, 100);
+    } else if (!useDefaultShipping && shippingFieldsFilled.current) {
+      isProgrammaticChange.current = true;
+      
+      // Clear fields
+      setValue("recipientFirstName", "");
+      setValue("recipientLastName", "");
+      setValue("companyName", "");
+      setValue("addressName", "");
+      setValue("apartmentName", "");
+      setValue("postalCode", "");
+      setValue("cityName", "");
+      setValue("regionName", "");
+      setValue("phoneNumber", "");
+      
+      shippingFieldsFilled.current = false;
+      
+      setTimeout(() => {
+        isProgrammaticChange.current = false;
+      }, 100);
+    }
+    }, [useDefaultShipping, shipping, setValue]);
+
+  // auto-uncheck shipping address only if user edits
+  useEffect(() => {
+    if (useDefaultShipping && shipping && !isProgrammaticChange.current) {
+      const isChanged =
+        watchedValues.recipientFirstName !== (shipping.recipientFirstName ?? "") ||
+        watchedValues.recipientLastName !== (shipping.recipientLastName ?? "") ||
+        watchedValues.companyName !== (shipping.companyName ?? "") ||
+        watchedValues.addressName !== (shipping.addressName ?? "") ||
+        watchedValues.apartmentName !== (shipping.apartmentName ?? "") ||
+        watchedValues.postalCode !== (shipping.postalCode ?? "") ||
+        watchedValues.cityName !== (shipping.cityName ?? "") ||
+        watchedValues.regionName !== (shipping.regionName ?? "") ||
+        watchedValues.phoneNumber !== (shipping.phoneNumber ?? "");
+
+      if (isChanged) {
+        setUseDefaultShipping(false);
+        shippingFieldsFilled.current = false;
+      }
+    }
+    }, [watchedValues, useDefaultShipping, shipping]);
+
+    useEffect(() => {
+    if (useDefaultBilling && billing && !billingFieldsFilled.current) {
+      isProgrammaticChange.current = true;
+      
+      setValue("billingFirstName", billing.recipientFirstName ?? "");
+      setValue("billingLastName", billing.recipientLastName ?? "");
+      setValue("billingCompanyName", billing.companyName ?? "");
+      setValue("billingAddressName", billing.addressName ?? "");
+      setValue("billingApartmentName", billing.apartmentName ?? "");
+      setValue("billingPostalCode", billing.postalCode ?? "");
+      setValue("billingCityName", billing.cityName ?? "");
+      setValue("billingRegionName", billing.regionName ?? "");
+      setValue("billingPhoneNumber", billing.phoneNumber ?? "");
+      
+      billingFieldsFilled.current = true;
+      
+      setTimeout(() => {
+        isProgrammaticChange.current = false;
+      }, 100);
+    } else if (!useDefaultBilling && billingFieldsFilled.current) {
+      isProgrammaticChange.current = true;
+      
+      setValue("billingFirstName", "");
+      setValue("billingLastName", "");
+      setValue("billingCompanyName", "");
+      setValue("billingAddressName", "");
+      setValue("billingApartmentName", "");
+      setValue("billingPostalCode", "");
+      setValue("billingCityName", "");
+      setValue("billingRegionName", "");
+      setValue("billingPhoneNumber", "");
+      
+      billingFieldsFilled.current = false;
+      
+      setTimeout(() => {
+        isProgrammaticChange.current = false;
+      }, 100);
+    }
+    }, [useDefaultBilling, billing, setValue]);
+
+    // auto-uncheck billing address only if user edits
+    useEffect(() => {
+    if (useDefaultBilling && billing && !isProgrammaticChange.current) {
+      const isChanged =
+        watchedValues.billingFirstName !== (billing.recipientFirstName ?? "") ||
+        watchedValues.billingLastName !== (billing.recipientLastName ?? "") ||
+        watchedValues.billingCompanyName !== (billing.companyName ?? "") ||
+        watchedValues.billingAddressName !== (billing.addressName ?? "") ||
+        watchedValues.billingApartmentName !== (billing.apartmentName ?? "") ||
+        watchedValues.billingPostalCode !== (billing.postalCode ?? "") ||
+        watchedValues.billingCityName !== (billing.cityName ?? "") ||
+        watchedValues.billingRegionName !== (billing.regionName ?? "") ||
+        watchedValues.billingPhoneNumber !== (billing.phoneNumber ?? "");
+
+      if (isChanged) {
+        setUseDefaultBilling(false);
+        billingFieldsFilled.current = false;
+      }
+    }
+    }, [watchedValues, useDefaultBilling, billing]);
+   
     useEffect(() => {
         if(isSuccessfullPay && data?.length) {
             reset();
@@ -48,7 +182,7 @@ export default function CheckoutformContent(){
         } catch (err) {
             toast.error(`Error in submission: ${err}`);
         }
-        };
+    };
 
     return (
         <>
@@ -118,11 +252,17 @@ export default function CheckoutformContent(){
                 {errors.phoneNumber && <p className="text-red-600 text-xs text-left ml-1 mt-1">{errors.phoneNumber.message}</p>}
             </div>
 
-            {/* checkbox  */}
-            <div className="flex space-x-2 mb-5 ml-1">
-                <input type="checkbox" className="w-4 h-4" {...register("saveInformation")}/>
-                <span className="text-sm">Save this information for next time</span>
-            </div>
+                {/* delivery address checkbox*/}
+                { shipping && (
+                    <div className="flex space-x-2 mb-5 ml-1">
+                        <input 
+                        type="checkbox" 
+                        checked={useDefaultShipping}
+                        onChange={(e) => setUseDefaultShipping(e.target.checked)}
+                        className="w-4 h-4"/>
+                        <span className="text-sm">Use default delivery address</span>
+                    </div>
+                )}
 
                 {/* Payment radio buttons*/}
                 <div className="flex flex-col">
@@ -304,9 +444,20 @@ export default function CheckoutformContent(){
                             </p>
                         )}
                         </div>
+                        
+                        {/* checkbox billing address */}
+                        { billing && (
+                            <div className="flex space-x-2 mb-5 ml-1">
+                                <input 
+                                type="checkbox" 
+                                checked={useDefaultBilling}
+                                onChange={(e) => setUseDefaultBilling(e.target.checked)}
+                                className="w-4 h-4"/>
+                                <span className="text-sm">Use default billing address</span>
+                            </div>
+                        )}
                     </div>
                 )}
-
                 <button 
                 disabled={isSubmitting}
                 type="submit"

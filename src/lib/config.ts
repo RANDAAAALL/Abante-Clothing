@@ -22,3 +22,6 @@ export const CsrfURL = `${getBaseUrl()}/api/csrf`;
 export const AddAddressOrBillingURL = `${getBaseUrl()}/api/add-address-or-billing`;
 export const UpdateAddressOrBillingURL = `${getBaseUrl()}/api/update-address-or-billing`;
 export const DeleteAddressOrBillingURL = `${getBaseUrl()}/api/delete-address-or-billing`
+export const AddSelectedAddressOrBillingURL = `${getBaseUrl()}/api/add-selected-address-or-billing`
+export const GetSelectedAddressOrBillingURL = `${getBaseUrl()}/api/get-selected-address-or-billing`
+export const RemoveSelectedAddressOrBillingURL = `${getBaseUrl()}/api/remove-selected-address-or-billing`

@@ -76,7 +76,7 @@ export const CheckoutSchema = z
         if (val.startsWith("639")) return "+63" + val.slice(2);
         return val;
       }),
-    saveInformation: z.boolean().optional(),
+    // saveInformation: z.boolean().optional(),
     paymentMethod: z.enum(["gcash", "paymaya", "bank-transfer"], {
       error: () => ({ message: "Please select a payment method." }),
     }),
