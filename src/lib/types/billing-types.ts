@@ -2,8 +2,8 @@ import { BillingFieldsType } from "../validations/checkout-schema";
 
 type BillingProps = {
     country: string;
-    // order_purchased_date: string | Date;
-    address_ID: number
+    address_ID: number;
+    is_selected: boolean,
 } & BillingFieldsType
 
 export type { BillingProps };

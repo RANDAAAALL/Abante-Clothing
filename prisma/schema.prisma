@@ -20,6 +20,7 @@ model address {
   city_name                                                    String?           @db.VarChar(255)
   region_name                                                  String?           @db.VarChar(255)
   phone_number                                                 String?           @db.VarChar(50)
+  is_selected                                                  Boolean?          @default(false)
   users                                                        users?            @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "address_ibfk_1")
   order_purchased_order_purchased_billing_address_IDToaddress  order_purchased[] @relation("order_purchased_billing_address_IDToaddress")
   order_purchased_order_purchased_delivery_address_IDToaddress order_purchased[] @relation("order_purchased_delivery_address_IDToaddress")

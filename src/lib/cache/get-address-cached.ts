@@ -19,6 +19,7 @@ export const getAddressCached = unstable_cache(async (user_ID: number) => {
                 city_name: true,
                 region_name: true,
                 phone_number: true,
+                is_selected: true,
             },
         orderBy: { address_ID: 'desc' }
     });
@@ -35,8 +36,8 @@ export const getAddressCached = unstable_cache(async (user_ID: number) => {
         cityName: address?.city_name ?? "-",
         regionName: address?.region_name ?? "-",
         phoneNumber: address?.phone_number ?? "-",
+        is_selected: address?.is_selected ?? false,
     }))
-      
 
-    return parsedAddressData;
+    return parsedAddressData
 }, ['shipping'], { tags: ['shipping']});

@@ -9,8 +9,9 @@ import { useCheckoutModal } from "@/lib/store/checkout-items";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 
 export default function CheckoutItemData(){
-    const { data } = useGetCart();
-    const { setComputeItems,  } = useCheckoutModal();
+    const { data, isLoading } = useGetCart();
+    const { mutate: deleteData } = useDeleteCart();
+    const { setComputeItems } = useCheckoutModal();
     const shippingFee = "105"
 
     const res = useMemo(() => {
@@ -21,61 +22,60 @@ export default function CheckoutItemData(){
             overallPriceResult: 0,
           };
         }
-        
         return computeItems(data, shippingFee);
-      }, [data, shippingFee]);
+    }, [data, shippingFee]);
       
-      useEffect(() => {
+    useEffect(() => {
         if(data && data.length > 0){
-          setComputeItems(res);
+            setComputeItems(res);
         }
-      }, [data, res, setComputeItems]);
-
-      const { mutate: deleteData } = useDeleteCart();
-      
+    }, [data, res, setComputeItems]);
 
     return (
     <>
         <Card className="h-auto rounded-md mt-6 gap-3 dark:bg-card-black-background px-8 py-5">
-        {data?.length > 0 ? (
-        <>
-            {data?.map((item: CartItemsProps, index: number) => (
-                <React.Fragment key={index}>
-                    {/* tshirt image, name, qty, size and price container*/}
-                    <div className="flex flex-col md:flex-row items-center space-x-4 text-sm relative">
-            
-                        {/* tshirt image */}
-                        <div className="h-30 w-50 relative">
-                        <Image className="object-contain" src={item?.cart_item_image ?? "/images/png/tshirt_placeholder.png"}
-                        priority fill alt="checkout-tshirt-image"/>
-                        </div>
-
-                        {/* name, qty and size */}
-                        <div className="flex mt-2 md:mt-0 justify-between w-full">
-                            <div className="flex space-x-2 md:flex-col md:space-x-0">
-                                <div className="space-x-1">
-                                    <span className="capitalize">{item?.cart_item_name}</span>
-                                    <span>x{item?.cart_item_qty}</span>
-                                </div>
-                                
-                                <div className="flex space-x-1">
-                                    <p>{item?.cart_item_size}</p><p className="capitalize">- {item?.cart_item_color}</p>
-                                </div>
+        {isLoading || typeof data === "undefined" ? <p className="h-auto md:h-100 flex items-center justify-center">Loading...</p> : (
+            <>
+                {data?.length > 0 ? (
+                <>
+                {data?.map((item: CartItemsProps, index: number) => (
+                    <React.Fragment key={index}>
+                        {/* tshirt image, name, qty, size and price container*/}
+                        <div className="flex flex-col md:flex-row items-center space-x-4 text-sm relative">
+                
+                            {/* tshirt image */}
+                            <div className="h-30 w-50 relative">
+                            <Image className="object-contain" src={item?.cart_item_image ?? "/images/png/tshirt_placeholder.png"}
+                            priority fill alt="checkout-tshirt-image"/>
                             </div>
 
-                            {/* price */}
-                            <div>
-                                P{item?.cart_item_price}
-                                <button className="text-black dark:text-white font-bold cursor-pointer absolute top-0 right-0"
-                                onClick={() => deleteData(item?.cart_item_ID.toString())}>x</button>
+                            {/* name, qty and size */}
+                            <div className="flex mt-2 md:mt-0 justify-between w-full">
+                                <div className="flex space-x-2 md:flex-col md:space-x-0">
+                                    <div className="space-x-1">
+                                        <span className="capitalize">{item?.cart_item_name}</span>
+                                        <span>x{item?.cart_item_qty}</span>
+                                    </div>
+                                    
+                                    <div className="flex space-x-1">
+                                        <p>{item?.cart_item_size}</p><p className="capitalize">- {item?.cart_item_color}</p>
+                                    </div>
                                 </div>
-                        </div>
-                            
 
-                    </div>
-                    <hr className="border-black dark:border-white border-t-2"/>
+                                {/* price */}
+                                <div>
+                                    P{item?.cart_item_price}
+                                    <button className="text-black dark:text-white font-bold cursor-pointer absolute top-0 right-0"
+                                    onClick={() => deleteData(item?.cart_item_ID.toString())}>x</button>
+                                    </div>
+                            </div>
+                                
+
+                        </div>
+                        <hr className="border-black dark:border-white border-t-2"/>
                     
-                </React.Fragment>))}
+                     </React.Fragment>))}
+                     
                     { /* subtotal, shipping and total prices container */}
                     <div className="space-y-4">
 
@@ -101,8 +101,10 @@ export default function CheckoutItemData(){
                         </div>
                     
                     </div>
-        </> ) : (
-           <div className="h-auto md:h-100 flex items-center justify-center">Your cart is currently empty</div>
+                </> ) : (
+                    <div className="h-auto md:h-100 flex items-center justify-center">Your cart is currently empty</div>
+                    )}
+            </>
         )}
         </Card>
     </>
