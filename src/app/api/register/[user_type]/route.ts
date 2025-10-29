@@ -1,11 +1,14 @@
 import { registerationSchema } from "@/lib/validations/auth-schema";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
 import { hashPassword } from "@/lib/hash/create-hash-password";
 
-export async function POST(req: Request) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ user_type: string }> }) {
   try {
     const bodyData = await req.json();
+    const userType = (await params).user_type;
 
     // validate the incoming data
     const parseData = registerationSchema.safeParse(bodyData);
@@ -17,7 +20,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    
+
     // check if the users email already exists in the database
     const userEmailExists = await prisma.users.findUnique({
       where: { email: parseData.data.email }
@@ -40,7 +43,7 @@ export async function POST(req: Request) {
         username: parseData.data.username,
         email: parseData.data.email,
         password: hashedPassword,
-        role: "user",
+        role: userType,
       }
     })
 

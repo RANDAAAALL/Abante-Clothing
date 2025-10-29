@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifySessionToken } from "./lib/security/jwt/verify-session-token";
 import { generateSessionToken } from "./lib/security/jwt/generate-session-token";
-import { UserPayloadProps } from "./lib/interface/user-payload";
 import { verifyRefreshToken } from "./lib/security/jwt/verify-refresh-token";
+import { UserPayloadProps } from "./lib/interface/user-payload";
 
 export async function middleware(request: NextRequest) {
   const routes = {
-    protectedRoutes: [
+    userProtectedRoutes: [
       "/profile",
       "/profile/order-history",
       "/profile/billing",
@@ -28,35 +28,66 @@ export async function middleware(request: NextRequest) {
       "/api/update-address-or-billing",
       "/api/delete-address-or-billing",
     ],
+    adminProtectedRoutes: ["/admin/dashboard"],
     passRoutes: [
       "/login",
       "/register",
       "/forgot-password",
       "/reset-password",
+      "/admin/login",
     ],
+    publicRoutes: [
+      "/",
+      "/about",
+      "/terms-and-conditions",
+      "/all-products",
+      "/privacy-policy",
+    ]
   };
 
   const { pathname, origin } = request.nextUrl;
   const sessionToken = request.cookies.get("session_token")?.value || request.headers.get("authorization")?.replace("Bearer ", "");
   const refreshToken = request.cookies.get("refresh_token")?.value;
 
-  // allow public routes
-  // const isPassRoute = routes.passRoutes.some(route => pathname.startsWith(route));
-  // if (isPassRoute) return NextResponse.next();
+  // route categories
+  const isProtectedPage = routes.userProtectedRoutes.some((r) => pathname.startsWith(r));
+  const isAdminRoute = routes.adminProtectedRoutes.some((r) => pathname.startsWith(r));
+  const isProtectedApi = routes.protectedApiRoutes.some((r) => pathname.startsWith(r));
+  const isPassRoute = routes.passRoutes.some((r) => pathname.startsWith(r));
+  const isUserPublicPage = routes.publicRoutes.some((r) => pathname === r);
 
-  const isProtectedPage = routes.protectedRoutes.some(route => pathname.startsWith(route));
-  const isProtectedApi = routes.protectedApiRoutes.some(route => pathname.startsWith(route));
-
+  //  If there is no token
   if (!sessionToken) {
-    if (isProtectedApi) {
-      return NextResponse.json({ errorMessage: "Unauthorized" }, { status: 401 });
-    } else if (isProtectedPage) {
-      return NextResponse.redirect(new URL("/login?reason=expired", origin));
-    }
+    // allow access to public pages like /login, /register and etc...
+    if (isPassRoute) return NextResponse.next();
+
+    // block protected routes
+    if (isProtectedApi) return NextResponse.json({ errorMessage: "Unauthorized" }, { status: 401 });
+
+    const redirectPath = pathname.startsWith("/admin") ? "/admin/login?reason=expired" : "/login?reason=expired";
+    if (isProtectedPage || isAdminRoute)return NextResponse.redirect(new URL(redirectPath, origin));
+  
+    return NextResponse.next();
   }
 
   try {
-    await verifySessionToken(sessionToken!);
+    //  verify the session token
+    const { payload } = await verifySessionToken(sessionToken);
+    const user = payload as UserPayloadProps;
+
+    //  block logged-in users or admins from visiting auth pages
+    if (isPassRoute) {
+      if (user.user_role === "admin") return NextResponse.redirect(new URL("/admin/dashboard", origin));
+      if (user.user_role === "user") return NextResponse.redirect(new URL("/", origin));
+    }
+
+    // block admin from visiting public routes
+    if (user.user_role === "admin" && isUserPublicPage) return NextResponse.redirect(new URL("/admin/dashboard", origin));
+
+    // role-based restrictions
+    if (user.user_role === "admin" && isProtectedPage) return NextResponse.redirect(new URL("/admin/dashboard", origin))
+    if (user.user_role === "user" && isAdminRoute) return NextResponse.redirect(new URL("/", origin));
+
     return NextResponse.next();
   } catch {
     if (refreshToken) {
@@ -71,25 +102,24 @@ export async function middleware(request: NextRequest) {
           secure: process.env.NODE_ENV === "production",
           sameSite: "strict",
           path: "/",
-          maxAge: 60 * 15, // 15 mins expiration
-          // maxAge: 60, // 1 min expiration for testing purposes
+          maxAge: 60 * 15, // expire in 15 mins
         });
 
         return res;
       } catch {
         const res = NextResponse.redirect(new URL("/login?reason=expired", origin));
-        res.cookies.set({name: "session_token", value: "", maxAge: 0});
-        res.cookies.set({name: "refresh_token", value: "", maxAge: 0});
-        res.cookies.set({name: "csrf_token", value: "", maxAge: 0});
+        res.cookies.delete("session_token");
+        res.cookies.delete("refresh_token");
+        res.cookies.delete("csrf_token");
         localStorage.removeItem("successMessage");
         return res;
       }
     }
 
     const res = NextResponse.redirect(new URL("/login?reason=expired", origin));
-    res.cookies.set({name: "session_token", value: "", maxAge: 0});
-    res.cookies.set({name: "refresh_token", value: "", maxAge: 0});
-    res.cookies.set({name: "csrf_token", value: "", maxAge: 0});
+    res.cookies.delete("session_token");
+    res.cookies.delete("refresh_token");
+    res.cookies.delete("csrf_token");
     localStorage.removeItem("successMessage");
     return res;
   }
@@ -97,6 +127,11 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
+    "/about",
+    "/terms-and-conditions",
+    "/all-products",
+    "/privacy-policy",
     "/profile",
     "/profile/billing",
     "/profile/order-history",
@@ -111,6 +146,13 @@ export const config = {
     "/api/generate-receipt",
     "/api/csrf",
     "/api/me",
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+    "/admin/login",
+    "/admin/register",
+    "/admin/dashboard",
     "/api/add-address-or-billing",
     "/api/update-address-or-billing",
     "/api/delete-address-or-billing",

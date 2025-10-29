@@ -8,13 +8,14 @@ import { registerationSchema, registerFormType } from "@/lib/validations/auth-sc
 import { RegisterURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { NavbarButtonActionProps } from "@/lib/interface/navbar-action-button";
 
-export default function RegisterFormContent(){
+export default function RegisterFormContent({ user_type, href_type, footer_href_type }: NavbarButtonActionProps){
     const resetFormRef = useRef<(() => void) | null>(null);
     const router = useRouter();
 
     const handleRegisterClick = async (formData: registerFormType) => {
-        const res = await fetch(`${RegisterURL}`, {
+        const res = await fetch(`${RegisterURL}/${user_type}`, {
             method: "POST",
             headers: {"Content-Type": "application/json",},
             body: JSON.stringify(formData),
@@ -28,7 +29,7 @@ export default function RegisterFormContent(){
         }
 
         toast("Registered Successfully!");
-        router.push("/login");
+        router.push(href_type);
         // reset the fields
         resetFormRef.current?.();
     }
@@ -42,7 +43,7 @@ export default function RegisterFormContent(){
         onSubmitAction={handleRegisterClick}
         buttonText="Sign up"
         footerDescription="Already have an account?"
-        footerHref="login"
+        footerHref={footer_href_type}
         onResetRefAction={(reset) => (resetFormRef.current = reset)}/>
     );
 }

@@ -2,15 +2,19 @@
 import { create } from "zustand";
 import { queryClient } from "@/context/client-providers";
 
+type isAuthenticatedProps = {
+  successMessage: string 
+}
+
 type AuthState = {
-  isAuthenticated: string | null;
+  isAuthenticated: isAuthenticatedProps | null;
   isLoading: boolean; 
 }
 
 type AuthActionState = {
   setLoading: () => void;
   resetLoading: () => void;
-  setAuthUser: (message: string) => void;
+  setAuthUser: (message: isAuthenticatedProps) => void;
   setClearAuthUser: () => void;
   checkAuthOnLoad: () => Promise<void>; 
 }

@@ -152,7 +152,14 @@ export default function FormsContent<TSchema extends AnyZodObject>({
         {/* form footer description */}
         <span className="font-regular text-sm">
         {footerDescription}
-        <Link href={`/${footerHref}`}><span className="font-bold ml-1 capitalize">{footerHref}</span></Link>
+        <Link href={`/${footerHref}`}>
+          <span className="font-bold ml-1 capitalize">
+            {footerHref === "admin/register"
+            ? "register"
+            : footerHref === "admin/login" ? "login"
+            : footerHref}
+          </span>
+        </Link>
         </span>
       </form>
     </div>
