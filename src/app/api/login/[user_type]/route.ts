@@ -9,10 +9,13 @@ import { setCsrfToken } from "@/lib/security/csrf/set-csrf-token";
 import { generateRefreshToken } from "@/lib/security/jwt/generate-refresh-token";
 import { setRefreshCookie } from "@/lib/security/cookie/set-refresh-cookie";
 
-export async function POST(req: Request) {
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ user_type: string }> }) {
   try {
     const bodyData = await req.json();
-    
+    const userType = (await params).user_type;
+
     // validate the incoming data
     const parseData = loginSchema.safeParse(bodyData);
 
@@ -26,11 +29,10 @@ export async function POST(req: Request) {
 
     // check if the user exists in the database
     const usersDetails = await prisma?.users.findUnique({
-      where: {
-        email: parseData.data.email,
-      },
+      where: { email: parseData.data.email },
       select: {
         user_ID: true,
+        role: true,
         password: true,
       }
     });
@@ -41,6 +43,17 @@ export async function POST(req: Request) {
         {errorMessage: "Login failed. Please check your email or password."},
         {status: 404}
       )
+    };
+
+    
+    if (usersDetails.role !== userType) {
+      return NextResponse.json(
+        { errorMessage:
+          usersDetails.role === "admin"
+          ? "Admin accounts must log in the admin route."
+          : "User accounts cannot log in the admin route.",
+        }, { status: 403 }
+      );
     }
 
       // check if the password isn't matches
@@ -52,10 +65,10 @@ export async function POST(req: Request) {
       }
 
     // generate session token
-    const sessionToken = await generateSessionToken({ user_ID: usersDetails.user_ID });    
+    const sessionToken = await generateSessionToken({ user_ID: usersDetails.user_ID, user_role: usersDetails.role });    
 
     // generate refresh token
-    const refreshToken = await generateRefreshToken({ user_ID: usersDetails.user_ID });    
+    const refreshToken = await generateRefreshToken({ user_ID: usersDetails.user_ID, user_role: usersDetails.role });    
 
     // set session token in cookie
     await setSessionCookie(sessionToken);
@@ -69,11 +82,9 @@ export async function POST(req: Request) {
     // set the csrf token in the cookie
     await setCsrfToken(csrfToken);
 
-    // revalidatePath("/");
-
     // return a success response
     return NextResponse.json(
-      { successMessage: "Login successfully"},
+      { successMessage: `Login successfully${userType === "user" ? "!" : "!!"}`},
       { status: 200 }
     );
   } catch (error: unknown) {

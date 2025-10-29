@@ -151,19 +151,17 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
   }
     return (
         <div className="space-y-2">
-          <div className="flex flex-col md:flex-row text-center justify-between">
-          <p className="p-0 font-regular">
-            Select or manage your {title}
-          </p>
-          <button 
-          disabled={isLoading}
-          onClick={() => handleAddData(title, "Add")}
-          className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"} text-sm py-3 md:-mt-4 px-3 font-medium bg-slight-gray-background dark:bg-[#3B3B3B] rounded-md`}>
-            + Add new {title}
-          </button>
-        </div>
+          <div className="flex flex-col text-center md:flex-row md:text-left justify-between">
+            <p className="p-0 font-regular">Select or manage your {title}</p>
+            <button 
+            disabled={isLoading}
+            onClick={() => handleAddData(title, "Add")}
+            className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"} hyphens-auto text-sm py-3 md:-mt-4 px-3 font-medium bg-slight-gray-background dark:bg-[#3B3B3B] rounded-md`}>
+              + Add new {title}
+            </button>
+          </div>
 
-        {selectedAddress?.is_selected &&  ( 
+         {selectedAddress?.is_selected &&  ( 
           <Card className="py-3 gap-0 px-5  dark:bg-card-black-background rounded-sm">
             <div className="flex flex-col space-y-0 gap-0">
               <div className="flex justify-between items-center">

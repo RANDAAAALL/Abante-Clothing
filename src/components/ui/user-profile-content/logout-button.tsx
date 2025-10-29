@@ -1,6 +1,7 @@
 "use client";
 import { LogoutURL } from "@/lib/config";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
+import { NavbarButtonActionProps } from "@/lib/interface/navbar-action-button";
 import { useAuth } from "@/lib/store/auth";
 import {  useCartItems } from "@/lib/store/cart-items";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
@@ -9,7 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-export default function LogoutButtonContent() {
+export default function LogoutButtonContent({ user_type, href_type }: NavbarButtonActionProps) {
   const { setIsOpen } = useMenuBarStore();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -22,20 +23,23 @@ export default function LogoutButtonContent() {
     setIsOpen(false);
     
     try {
-      const res = await fetchWithCsrf(LogoutURL, { method: "POST"});
+      const res = await fetchWithCsrf(`${LogoutURL}/${user_type}`, { method: "POST"});
       const data = await res.json();
       if (!res.ok) throw new Error(`${data?.errorMessage}` || "Logout failed");
       
       // clear caches, cart items in zustand + sessionStorage and notify other tabs
-      queryClient.removeQueries();
-      resetSelectedItem();
-      sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
+      if(user_type === "user") {
+        queryClient.removeQueries();
+        resetSelectedItem();
+        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
+        setClearOrderHistoryReceiptData();
+      }
+
       const bc = new BroadcastChannel("auth");
       bc.postMessage({ type: "LOGOUT" });
       bc.close();
-      setClearOrderHistoryReceiptData();
       setClearAuthUser();
-      router.replace("/login");
+      router.push(href_type);
     }catch (err) {
       toast.error(`${err}`);
       resetLoading();

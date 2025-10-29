@@ -13,6 +13,3 @@ export const UserPayload = async (): Promise<UserPayloadProps> => {
 
     return payload as UserPayloadProps;
 }
-
-
-
