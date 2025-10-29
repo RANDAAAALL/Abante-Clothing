@@ -41,7 +41,7 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
 
     toast("Your session has expired. Please log in again.",{ duration: 5000 });
 
-  }, [reason, queryClient, resetSelectedItem, setClearAuthUser, setClearOrderHistoryReceiptData]);
+  }, [reason, user_type, queryClient, resetSelectedItem, setClearAuthUser, setClearOrderHistoryReceiptData]);
 
 
   const handleLoginClick = async (formData: loginFormType) => {
