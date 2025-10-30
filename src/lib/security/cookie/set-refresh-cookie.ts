@@ -5,7 +5,7 @@ export const setRefreshCookie = async (token: string) => {
     (await cookies()).set("refresh_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "lax",
         path: "/",
         // maxAge: 60 * 2, // expire in 2 min for testing purposes only
         maxAge: 60 * 15, // expire in 15 minutes for testing purposes only

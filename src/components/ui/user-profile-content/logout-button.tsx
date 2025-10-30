@@ -34,10 +34,11 @@ export default function LogoutButtonContent({ user_type, href_type }: NavbarButt
         sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
         setClearOrderHistoryReceiptData();
       }
-
+      
       const bc = new BroadcastChannel("auth");
       bc.postMessage({ type: "LOGOUT" });
       bc.close();
+      console.log (`${user_type}: Logout to -> `, href_type);
       setClearAuthUser();
       router.push(href_type);
     }catch (err) {
