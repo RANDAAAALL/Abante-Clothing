@@ -29,7 +29,7 @@ function AddToCartAndBuyNowButtonsComponent({
       return;
     }
 
-    if (isAuthenticated) addToCart({ product: props, selectedSizeQtyAndColor });
+    if (isAuthenticated?.successMessage?.match(/!/)) addToCart({ product: props, selectedSizeQtyAndColor });
     else setSelectedItems(props);
   }, [selectedSize, isAuthenticated, addToCart, props, selectedSizeQtyAndColor, setSelectedItems]);
 
@@ -40,7 +40,7 @@ function AddToCartAndBuyNowButtonsComponent({
       return;
     }
 
-    if (isAuthenticated) addToCart({ product: props, selectedSizeQtyAndColor });
+    if (isAuthenticated?.successMessage?.match(/!/)) addToCart({ product: props, selectedSizeQtyAndColor });
     else setSelectedItems(props);
 
     router.push("/checkout");
