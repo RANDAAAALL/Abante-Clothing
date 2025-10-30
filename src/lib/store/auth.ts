@@ -48,8 +48,8 @@ export const useAuth = create<AuthState & AuthActionState>((set) => ({
     }
   },
 
-  setClearAuthUser: () => {
-    set({ isAuthenticated: null, isLoading: false });
-    localStorage.removeItem("successMessage");
-  },
+    setClearAuthUser: () => {
+      set({ isAuthenticated: null, isLoading: false });
+      localStorage.removeItem("successMessage");
+    },
 }));

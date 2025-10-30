@@ -100,7 +100,7 @@ export async function middleware(request: NextRequest) {
         res.cookies.set("session_token", newSessionToken, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
+          sameSite: "lax",
           path: "/",
           maxAge: 60 * 15, // expire in 15 mins
         });
