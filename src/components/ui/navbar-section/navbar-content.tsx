@@ -88,7 +88,7 @@ function NavbarContentComponent() {
           {isAuthenticated ? (
              <LogoutButton 
              user_type={isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}
-             href_type={isAuthenticated?.successMessage?.match(/!!/) ? "/admin/login" : "login"}
+             href_type={isAuthenticated?.successMessage?.match(/!!/) ? "/admin/login" : "/login"}
              />
           ) : (
             <NavbarButtons style="flex flex-col text-center space-y-2" />

@@ -63,29 +63,33 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
           return;
         }
 
-        if(user_type === "user"){
-            // Merge guest cart items to server
-            if (selectedItem.length > 0) {
-              await Promise.all(
-                selectedItem.map(item =>
-                  addData({
-                    product: item.product,
-                    selectedSizeQtyAndColor: item.selectedSizeQtyAndColor,
-                  })
-                )
-              );
-            }
-    
-          // clear cart items in zustand + sessionStorage
+        if (user_type === "user") {
+          if (selectedItem.length > 0) {
+            await Promise.all(
+              selectedItem.map(item =>
+                addData({
+                  product: item.product,
+                  selectedSizeQtyAndColor: item.selectedSizeQtyAndColor,
+                })
+              )
+            );
+          }
+        
+          // allow cookie to settle
+          await new Promise((r) => setTimeout(r, 300));
+        
           resetSelectedItem();
           sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
-          
-          // smooth refresh for navbar/cart updates
-          queryClient.invalidateQueries({ queryKey: ["get-cart"] });
-        }
-
-      setAuthUser(data)
-      router.push(href_type);
+        
+          setAuthUser(data);
+          router.push(href_type);
+        
+          // revalidate after redirect
+          setTimeout(() => {
+            queryClient.invalidateQueries({ queryKey: ["get-cart"] });
+            queryClient.refetchQueries({ queryKey: ["get-cart"] });
+          }, 500);
+        }        
     }finally {
       // resetLoading();
       setLoginLoading(false);

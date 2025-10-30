@@ -111,7 +111,6 @@ export async function middleware(request: NextRequest) {
         res.cookies.delete("session_token");
         res.cookies.delete("refresh_token");
         res.cookies.delete("csrf_token");
-        localStorage.removeItem("successMessage");
         return res;
       }
     }
@@ -120,7 +119,6 @@ export async function middleware(request: NextRequest) {
     res.cookies.delete("session_token");
     res.cookies.delete("refresh_token");
     res.cookies.delete("csrf_token");
-    localStorage.removeItem("successMessage");
     return res;
   }
 }
