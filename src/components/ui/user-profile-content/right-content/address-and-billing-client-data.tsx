@@ -164,21 +164,25 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
          {selectedAddress?.is_selected &&  ( 
           <Card className="py-3 gap-0 px-5  dark:bg-card-black-background rounded-sm">
             <div className="flex flex-col space-y-0 gap-0">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center space-x-1 font-medium">
-                  <Check width={30} height={30}/>
-                  <span className="text-xl">Selected default {title}</span>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                {/* Left side: check and title */}
+                <div className="flex gap-1 font-medium text-center sm:text-left">
+                  <Check width={24} height={24} className="shrink-0" />
+                  <span className="text-lg sm:text-xl leading-tight">
+                    Selected default {title}
+                  </span>
                 </div>
-                <div className="flex flex-col text-sm">
-                      <button 
-                        disabled={isLoading}
-                        onClick={() => handleRemoveSelectedAddressOrBilling(title, selectedAddress?.address_ID)}
-                        className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"} flex space-x-1 hover:bg-gray-300 dark:hover:bg-gray-500 hover:rounded-md p-1`}>
-                        <span><Trash width={17} height={17}/></span>
-                        <span>Remove</span>
-                      </button>
-                  </div>
+                <button
+                  disabled={isLoading}
+                  onClick={() => handleRemoveSelectedAddressOrBilling(title, selectedAddress?.address_ID)}
+                  className={`${
+                    isLoading ? "cursor-not-allowed opacity-60" : "hover:bg-gray-200 dark:hover:bg-gray-600"
+                  } flex items-center justify-center gap-1 px-2 py-1 rounded-md text-sm w-fit self-center sm:self-auto`}>
+                  <Trash width={16} height={16} />
+                  <span>Remove</span>
+                </button>
               </div>
+
               <div className="flex space-x-1.5 mt-1">
                 <span>{mapBillingAndAddressToFormSchema(selectedAddress).recipientFirstName}</span> 
                 <span>{mapBillingAndAddressToFormSchema(selectedAddress).recipientLastName}</span> 
