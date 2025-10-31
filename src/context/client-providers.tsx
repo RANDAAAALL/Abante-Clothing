@@ -6,9 +6,10 @@ import { useAuth } from "@/lib/store/auth";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
+import { RefreshTokenURL } from "@/lib/config";
 
 export const queryClient = new QueryClient();
-const REFRESH_INTERVAL_MS = 1000 * 60 * 60 * 6; // refresh token inverval rotation
+const REFRESH_INTERVAL_MS = 1000 * 60 * 60 * 6; // refresh token inverval rotation every 6 hours
 
 export default function ClientProvider({children}: { children: React.ReactNode}){
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function ClientProvider({children}: { children: React.ReactNode})
       if (expired) return; 
   
       try {
-        const res = await fetchWithCsrf(`/api/refresh-session/${isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}`,
+        const res = await fetchWithCsrf(`${RefreshTokenURL}/${isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}`,
           { method: "POST" }
         );
         const data = await res.json();
@@ -42,7 +43,7 @@ export default function ClientProvider({children}: { children: React.ReactNode})
           return;
         }
   
-        if (data.isLastTry) console.log("Last try! Session will expire together with refresh token.");
+        // if (data.isLastTry) console.log("Last try! Session will expire together with refresh token.");
   
         lastRefresh = Date.now();
       } catch {
