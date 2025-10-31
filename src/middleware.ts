@@ -47,7 +47,6 @@ export async function middleware(request: NextRequest) {
 
   const { pathname, origin } = request.nextUrl;
   const sessionToken = request.cookies.get("session_token")?.value || request.headers.get("authorization")?.replace("Bearer ", "");
-  const refreshToken = request.cookies.get("refresh_token")?.value;
 
   // route categories
   const isProtectedPage = routes.userProtectedRoutes.some((r) => pathname.startsWith(r));
@@ -90,37 +89,12 @@ export async function middleware(request: NextRequest) {
 
     return NextResponse.next();
   } catch {
-    if (refreshToken) {
-      try {
-        const { payload } = await verifyRefreshToken(refreshToken);
-        const parsedPayload = payload as UserPayloadProps;
-        const newSessionToken = await generateSessionToken(parsedPayload);
-
-        const res = NextResponse.redirect(request.url);
-        res.cookies.set("session_token", newSessionToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          path: "/",
-          maxAge: 60 * 15, // expire in 15 mins
-        });
-
-        return res;
-      } catch {
         const res = NextResponse.redirect(new URL("/login?reason=expired", origin));
         res.cookies.delete("session_token");
         res.cookies.delete("refresh_token");
         res.cookies.delete("csrf_token");
         return res;
-      }
     }
-
-    const res = NextResponse.redirect(new URL("/login?reason=expired", origin));
-    res.cookies.delete("session_token");
-    res.cookies.delete("refresh_token");
-    res.cookies.delete("csrf_token");
-    return res;
-  }
 }
 
 export const config = {

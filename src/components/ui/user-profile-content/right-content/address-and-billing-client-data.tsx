@@ -177,7 +177,7 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
                   onClick={() => handleRemoveSelectedAddressOrBilling(title, selectedAddress?.address_ID)}
                   className={`${
                     isLoading ? "cursor-not-allowed opacity-60" : "hover:bg-gray-200 dark:hover:bg-gray-600"
-                  } flex items-center justify-center gap-1 px-2 py-1 rounded-md text-sm w-fit self-center sm:self-auto`}>
+                  } flex justify-center gap-1 px-2 py-1 rounded-md text-sm w-fit self-center sm:self-auto`}>
                   <Trash width={16} height={16} />
                   <span>Remove</span>
                 </button>
