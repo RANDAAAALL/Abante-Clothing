@@ -8,8 +8,7 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ user_type: string }> }
 ) {
-  if (!await isAuthenticatedUser())
-    return NextResponse.redirect(new URL("/login", req.url));
+  if (!await isAuthenticatedUser()) return NextResponse.redirect(new URL("/login", req.url));
 
   if (!verifyCsrfToken(req))
     return NextResponse.json({ errorMessage: "Invalid CSRF Token" }, { status: 403 });

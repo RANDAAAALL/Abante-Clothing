@@ -43,58 +43,51 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
 
   }, [reason, user_type, queryClient, resetSelectedItem, setClearAuthUser, setClearOrderHistoryReceiptData]);
 
-
   const handleLoginClick = async (formData: loginFormType) => {
-    // setLoading();
     setLoginLoading(true);
     try {
-        const res = await fetch(`${LoginURL}/${user_type}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          toast.error(`${data.errorMessage || data.parsedErrors}` || "Login failed", {
-            className: "z-[999999]"
-          });
-          // resetLoading();
-          setLoginLoading(false);
-          return;
-        }
-
-        if (user_type === "user") {
-          if (selectedItem.length > 0) {
-            await Promise.all(
-              selectedItem.map(item =>
-                addData({
-                  product: item.product,
-                  selectedSizeQtyAndColor: item.selectedSizeQtyAndColor,
-                })
-              )
-            );
-          }
-        
-          // allow cookie to settle
-          await new Promise((r) => setTimeout(r, 300));
-        
-          resetSelectedItem();
-          sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
-        
-          setAuthUser(data);
-          router.push(href_type);
-        
-          // revalidate after redirect
-          setTimeout(() => {
-            queryClient.invalidateQueries({ queryKey: ["get-cart"] });
-            queryClient.refetchQueries({ queryKey: ["get-cart"] });
-          }, 500);
-        }        
-    }finally {
-      // resetLoading();
+      const res = await fetch(`${LoginURL}/${user_type}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+  
+      if (!res.ok) {
+        toast.error(`${data.errorMessage || data.parsedErrors}` || "Login failed");
+        setLoginLoading(false);
+        return;
+      }
+  
+      // handle both user & admin
+      console.log("Client -> Log in as: ", data);
+      setAuthUser(data); // save to Zustand/localStorage
+  
+      // navigate after login
+      router.replace(href_type);
+  
+      // only do cart stuff for users
+      if (user_type === "user" && selectedItem.length > 0) {
+        await Promise.all(
+          selectedItem.map(item =>
+            addData({
+              product: item.product,
+              selectedSizeQtyAndColor: item.selectedSizeQtyAndColor,
+            })
+          )
+        );
+        resetSelectedItem();
+        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
+        setTimeout(() => {
+          queryClient.invalidateQueries({ queryKey: ["get-cart"] });
+          queryClient.refetchQueries({ queryKey: ["get-cart"] });
+        }, 500);
+      }
+  
+    } finally {
       setLoginLoading(false);
     }
-  };
+  };  
 
   return (
     <React.Fragment>
