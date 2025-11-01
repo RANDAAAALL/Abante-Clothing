@@ -38,7 +38,6 @@ export default function LogoutButtonContent({ user_type, href_type }: NavbarButt
       const bc = new BroadcastChannel("auth");
       bc.postMessage({ type: "LOGOUT" });
       bc.close();
-      console.log (`${user_type}: Logout to -> `, href_type);
       setClearAuthUser();
       router.push(href_type);
     }catch (err) {

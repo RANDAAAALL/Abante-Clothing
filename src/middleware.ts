@@ -79,15 +79,15 @@ export async function middleware(request: NextRequest) {
 
     //  block logged-in users or admins from visiting auth pages
     if (isPassRoute) {
-      if (user.user_role === "admin") return NextResponse.redirect(new URL("/admin/dashboard/", origin));
+      if (user.user_role === "admin") return NextResponse.redirect(new URL("/admin/dashboard", origin));
       if (user.user_role === "user") return NextResponse.redirect(new URL("/", origin));
     }
 
     // block admin from visiting public routes
-    if (user.user_role === "admin" && isUserPublicPage) return NextResponse.redirect(new URL("/admin/dashboard/", origin));
+    if (user.user_role === "admin" && isUserPublicPage) return NextResponse.redirect(new URL("/admin/dashboard", origin));
 
     // role-based restrictions
-    if (user.user_role === "admin" && isProtectedPage) return NextResponse.redirect(new URL("/admin/dashboard/", origin))
+    if (user.user_role === "admin" && isProtectedPage) return NextResponse.redirect(new URL("/admin/dashboard", origin))
     if (user.user_role === "user" && isAdminRoute) return NextResponse.redirect(new URL("/", origin));
 
     return NextResponse.next();

@@ -37,6 +37,7 @@ export async function POST(
     revalidateTag("access-details");
     revalidateTag("order-history");
   }
+  revalidateTag("sales");
 
   return res;
 }

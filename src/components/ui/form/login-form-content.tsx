@@ -60,7 +60,6 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
       }
   
       // handle both user & admin
-      console.log("Client -> Log in as: ", data);
       setAuthUser(data); // save to Zustand/localStorage
   
       // navigate after login
