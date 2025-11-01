@@ -130,6 +130,7 @@ export async function POST(req: NextRequest) {
         revalidateTag("order-history");
         revalidateTag("billing");
         revalidateTag("shipping");
+        revalidateTag("sales");
 
         return NextResponse.json(
         { successMessage: "Successfully inserted an order", actualData: result },

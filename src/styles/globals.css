@@ -287,4 +287,30 @@ body {
   }
 }
 
+@layer utilities {
+  .dashboard-sales-skeleton {
+    @apply relative overflow-hidden bg-gray-200 dark:bg-card-black-background rounded-md;
+  }
 
+  .dashboard-sales-skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    height: 100%;
+    width: 150%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(192, 190, 190, 0.6),
+      transparent
+    );
+    animation: dashboardSalesShimmer 1.5s infinite;
+  }
+
+  @keyframes dashboardSalesShimmer {
+    100% {
+      transform: translateX(150%);
+    }
+  }
+}
