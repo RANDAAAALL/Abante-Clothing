@@ -15,7 +15,8 @@ function NavbarContentComponent() {
   const { isAuthenticated, isLoading } = useAuth();
   const { isOpen } = useMenuBarStore();
   const [isScrolled, setIsScrolled] = useState(false);
-  
+  const userType = isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user";
+
   // track scroll for styling
   useEffect(() => {
     const handleScroll = () => {
@@ -34,14 +35,25 @@ function NavbarContentComponent() {
   
   return (
     <header className={`${isScrolled ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md" : ""} 
-    w-full font-medium flex items-center max-w-5xl mx-auto p-4`}>
+    w-full font-medium flex items-center ${isAuthenticated?.successMessage?.match(/!!/) ? "" : "max-w-5xl"} mx-auto p-4`}>
     
       {/* Logo always visible */}
       <AbanteClothingLogo flag={true} />
 
       {/* Desktop links */}
       <div className="hidden md:flex flex-1 justify-center md:ml-30">
-        {isAuthenticated?.successMessage?.match(/!!/) ? null : <NavbarLinks style="space-x-6" />}
+        {<NavbarLinks linksPath={
+          userType === "admin" 
+          ?
+          [{path: "/admin/dashboard", name: "Sales"},
+          {path: "/admin/dashboard/products", name: "Products"},
+          {path: "/admin/dashboard/orders", name: "Orders"},
+          {path: "/admin/dashboard/upload-product", name: "Upload Product"},
+          ]
+          : 
+          [{path: "/", name: "Home"},
+          {path: "/about", name: "About"},
+          {path: "/all-products", name: "Products"}]} style="space-x-6" />}
       </div>
 
       {/* Desktop actions */}
@@ -52,7 +64,7 @@ function NavbarContentComponent() {
             <NavbarThemeToggle />
             {isAuthenticated ? (
               <>
-                {isAuthenticated?.successMessage?.match(/!!/) ? null : <UserProfileNavigator />}
+                {isAuthenticated?.successMessage?.match(/!!/) ? <p>Admin</p> : <UserProfileNavigator />}
                 <LogoutButton 
                 user_type={isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}
                 href_type={isAuthenticated?.successMessage?.match(/!!/) ? "/admin/login" : "/login"}
@@ -73,7 +85,7 @@ function NavbarContentComponent() {
             <NavbarThemeToggle />
             {isAuthenticated && (
               <>
-                {isAuthenticated?.successMessage?.match(/!!/) ? null : <UserProfileNavigator />}
+                {isAuthenticated?.successMessage?.match(/!!/) ? <p>Admin</p> : <UserProfileNavigator />}
               </>
             )}
             <MenuBar />
@@ -84,11 +96,22 @@ function NavbarContentComponent() {
       {/* Mobile overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-100 flex flex-col items-center h-screen justify-center gap-2 bg-white-background dark:bg-black-background">
-          {isAuthenticated?.successMessage?.match(/!!/) ? null : <NavbarLinks style="flex flex-col text-center space-y-2" />}
+          {<NavbarLinks linksPath={
+          userType === "admin" 
+          ?
+          [{path: "/admin/dashboard", name: "Sales"},
+          {path: "/admin/dashboard/orders", name: "Orders"},
+          {path: "/admin/dashboard/products", name: "Products"},
+          {path: "/admin/dashboard/upload-product", name: "Upload Product"},
+          ]
+          : 
+          [{path: "/", name: "Home"},
+          {path: "/about", name: "About"},
+          {path: "/all-products", name: "Products"}]} style="flex flex-col items-center" />}
           {isAuthenticated ? (
-             <LogoutButton 
-             user_type={isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}
-             href_type={isAuthenticated?.successMessage?.match(/!!/) ? "/admin/login" : "/login"}
+            <LogoutButton 
+            user_type={isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}
+            href_type={isAuthenticated?.successMessage?.match(/!!/) ? "/admin/login" : "/login"}
              />
           ) : (
             <NavbarButtons style="flex flex-col text-center space-y-2" />

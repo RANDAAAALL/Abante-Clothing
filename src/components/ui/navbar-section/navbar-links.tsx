@@ -1,13 +1,13 @@
-import { LinksPath } from "@/lib/paths/links-path";
+import { NavbarLinksProps } from "@/lib/interface/navbar-links";
 import { useMenuBarStore } from "@/lib/store/menu-bar";
 import clsx from "clsx";
 import Link from "next/link";
 
-export default function NavbarLinks({ style }: { style: string}){
+export default function NavbarLinks({ linksPath  ,style }: NavbarLinksProps){
     const { setIsOpen } = useMenuBarStore();
     return (
         <div className={clsx( style)}>
-        {LinksPath.map((link, i ) => (
+        {linksPath.map((link, i ) => (
             <Link
             key={i} href={`${link.path}`}
             onClick={() => setIsOpen(false)}

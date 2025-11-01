@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifySessionToken } from "./lib/security/jwt/verify-session-token";
-import { generateSessionToken } from "./lib/security/jwt/generate-session-token";
-import { verifyRefreshToken } from "./lib/security/jwt/verify-refresh-token";
+import { verifySessionToken } from "./lib/security/jwt/verify-session-token"; 
 import { UserPayloadProps } from "./lib/interface/user-payload";
 
 export async function middleware(request: NextRequest) {
@@ -28,7 +26,12 @@ export async function middleware(request: NextRequest) {
       "/api/update-address-or-billing",
       "/api/delete-address-or-billing",
     ],
-    adminProtectedRoutes: ["/admin/dashboard"],
+    adminProtectedRoutes: [
+      "/admin/dashboard",
+      "/admin/dashboard/orders",
+      "/admin/dashboard/products",
+      "/admin/dashboard/upload-product",
+    ],
     passRoutes: [
       "/login",
       "/register",
@@ -76,15 +79,15 @@ export async function middleware(request: NextRequest) {
 
     //  block logged-in users or admins from visiting auth pages
     if (isPassRoute) {
-      if (user.user_role === "admin") return NextResponse.redirect(new URL("/admin/dashboard", origin));
+      if (user.user_role === "admin") return NextResponse.redirect(new URL("/admin/dashboard/", origin));
       if (user.user_role === "user") return NextResponse.redirect(new URL("/", origin));
     }
 
     // block admin from visiting public routes
-    if (user.user_role === "admin" && isUserPublicPage) return NextResponse.redirect(new URL("/admin/dashboard", origin));
+    if (user.user_role === "admin" && isUserPublicPage) return NextResponse.redirect(new URL("/admin/dashboard/", origin));
 
     // role-based restrictions
-    if (user.user_role === "admin" && isProtectedPage) return NextResponse.redirect(new URL("/admin/dashboard", origin))
+    if (user.user_role === "admin" && isProtectedPage) return NextResponse.redirect(new URL("/admin/dashboard/", origin))
     if (user.user_role === "user" && isAdminRoute) return NextResponse.redirect(new URL("/", origin));
 
     return NextResponse.next();
@@ -125,6 +128,7 @@ export const config = {
     "/admin/login",
     "/admin/register",
     "/admin/dashboard",
+    "/admin/dashboard/:path*",
     "/api/add-address-or-billing",
     "/api/update-address-or-billing",
     "/api/delete-address-or-billing",
