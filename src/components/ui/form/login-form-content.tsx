@@ -20,7 +20,7 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
   const { mutate: addData } = useAddToCart();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { setClearAuthUser, setAuthUser, setLoading, resetLoading } = useAuth();
+  const { setClearAuthUser, setAuthUser } = useAuth();
   const [ loginLoading, setLoginLoading ] = useState(false);
   const { setClearOrderHistoryReceiptData } = useOrderHistoryReceiptModal();
   

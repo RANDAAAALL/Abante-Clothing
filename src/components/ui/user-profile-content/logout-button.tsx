@@ -8,6 +8,7 @@ import { useMenuBarStore } from "@/lib/store/menu-bar";
 import { useOrderHistoryReceiptModal } from "@/lib/store/order-history";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import React from "react";
 import toast from "react-hot-toast";
 
 export default function LogoutButtonContent({ user_type, href_type }: NavbarButtonActionProps) {
@@ -17,8 +18,11 @@ export default function LogoutButtonContent({ user_type, href_type }: NavbarButt
   const { resetSelectedItem } = useCartItems();
   const { setClearOrderHistoryReceiptData } = useOrderHistoryReceiptModal();
   const { setClearAuthUser, setLoading, resetLoading } = useAuth();
+  // const [ logoutLoading, setLogoutLoading ] = useState(false);
+
 
   const handleLogoutClick = async () => {
+    // setLogoutLoading(true);
     setLoading();
     setIsOpen(false);
     
@@ -39,23 +43,32 @@ export default function LogoutButtonContent({ user_type, href_type }: NavbarButt
       bc.postMessage({ type: "LOGOUT" });
       bc.close();
       setClearAuthUser();
-      router.push(href_type);
+      await new Promise((res) => setTimeout(res, 100)); 
+      router.replace(href_type);
     }catch (err) {
       toast.error(`${err}`);
       resetLoading();
     }finally {
       resetLoading();
+      // setLogoutLoading(false);
     }
   };
 
   return (
-    <>
+    <React.Fragment>
       <button
         onClick={handleLogoutClick}
         className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-lg py-3 px-4">
         Logout
       </button>
-    </>
+
+      {/* overlay for smoother feel */}
+      {/* {logoutLoading && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[100] transition-opacity duration-300">
+          <div className="text-white text-lg animate-pulse">Logging out...</div>
+        </div>
+      )} */}
+    </React.Fragment>
   );
 }
 
