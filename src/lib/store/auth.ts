@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { queryClient } from "@/context/client-providers";
 
-type isAuthenticatedProps = {
+export type isAuthenticatedProps = {
   successMessage: string 
 }
 

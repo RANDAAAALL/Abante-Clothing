@@ -126,11 +126,14 @@ export async function POST(req: NextRequest) {
           }, { timeout: 15000 });
           
         
-        // revalidate the tag/s, to fecth fresh data on order-history
+        // revalidate cache on the customer side
         revalidateTag("order-history");
         revalidateTag("billing");
         revalidateTag("shipping");
+
+        // revalidate cache on the admin side
         revalidateTag("sales");
+        revalidateTag("orders");
 
         return NextResponse.json(
         { successMessage: "Successfully inserted an order", actualData: result },
