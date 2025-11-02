@@ -26,3 +26,4 @@ export const AddSelectedAddressOrBillingURL = `${getBaseUrl()}/api/add-selected-
 export const GetSelectedAddressOrBillingURL = `${getBaseUrl()}/api/get-selected-address-or-billing`
 export const RemoveSelectedAddressOrBillingURL = `${getBaseUrl()}/api/remove-selected-address-or-billing`
 export const RefreshTokenURL = `${getBaseUrl()}/api/refresh-session`
+export const UpdateOrdersStatusAndTrackingNumberURL = `${getBaseUrl()}/api/update-order-status-and-tracking-number`

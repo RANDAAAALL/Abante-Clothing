@@ -10,6 +10,8 @@ import MenuBar from "./navbar-menu";
 import NavbarThemeToggle from "./navbar-theme-toggle";
 import UserProfileNavigator from "@/components/ui/user-profile-content/user-profile-navigator";
 import { useAuth } from "@/lib/store/auth";
+import React from "react";
+import NavbarSkeleton from "../skeletons/navbar-card";
 
 function NavbarContentComponent() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -34,32 +36,32 @@ function NavbarContentComponent() {
   }, [isOpen]);
   
   return (
-    <header className={`${isScrolled ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md" : ""} 
-    w-full font-medium flex items-center ${isAuthenticated?.successMessage?.match(/!!/) ? "" : "max-w-5xl"} mx-auto p-4`}>
+    <React.Fragment>
+      {isLoading ? <NavbarSkeleton isAuthenticated={isAuthenticated!} /> : ( 
+        <header className={`${isScrolled ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md" : ""} 
+          w-full font-medium flex items-center ${isAuthenticated?.successMessage?.match(/!!/) ? "" : "max-w-5xl"} mx-auto p-4`}> 
+         
+          {/* logo */}
+          <AbanteClothingLogo flag={true} />
     
-      {/* Logo always visible */}
-      <AbanteClothingLogo flag={true} />
-
-      {/* Desktop links */}
-      <div className="hidden md:flex flex-1 justify-center md:ml-30">
-        {<NavbarLinks linksPath={
-          userType === "admin" 
-          ?
-          [{path: "/admin/dashboard", name: "Sales"},
-          {path: "/admin/dashboard/products", name: "Products"},
-          {path: "/admin/dashboard/orders", name: "Orders"},
-          {path: "/admin/dashboard/upload-product", name: "Upload Product"},
-          ]
-          : 
-          [{path: "/", name: "Home"},
-          {path: "/about", name: "About"},
-          {path: "/all-products", name: "Products"}]} style="space-x-6" />}
-      </div>
-
-      {/* Desktop actions */}
-      <div className="hidden md:flex items-center space-x-3">
-        {isLoading ? <p>Loading...</p> : (
-          <>
+          {/* desktop links */}
+          <div className="hidden md:flex flex-1 justify-center md:ml-30">
+            {<NavbarLinks linksPath={
+              userType === "admin" 
+              ?
+              [{path: "/admin/dashboard", name: "Sales"},
+              {path: "/admin/dashboard/products", name: "Products"},
+              {path: "/admin/dashboard/orders", name: "Orders"},
+              {path: "/admin/dashboard/upload-product", name: "Upload Product"},
+              ]
+              : 
+              [{path: "/", name: "Home"},
+              {path: "/about", name: "About"},
+              {path: "/all-products", name: "Products"}]} style="space-x-6" />}
+          </div>
+    
+          {/* desktop actions */}
+          <div className="hidden md:flex items-center space-x-3">
             {isAuthenticated?.successMessage?.match(/!!/) ? null : <NavbarCart flag={false} />}
             <NavbarThemeToggle />
             {isAuthenticated ? (
@@ -72,15 +74,11 @@ function NavbarContentComponent() {
               </>
             ) : (
               <NavbarButtons style="flex space-x-2" />
-            )}    
-          </>
-        )}
-      </div>
-
-      {/* Mobile menu button */}
-      <div className="md:hidden flex ml-auto space-x-3.5 mr-4.5">
-        {isLoading ? <p>Loading...</p> : (
-          <>
+            )}
+          </div>
+    
+          {/* mobile menu button */}
+          <div className="md:hidden flex ml-auto space-x-3.5 mr-4.5">  
             {isAuthenticated?.successMessage?.match(/!!/) ? null : <NavbarCart flag={false} />}
             <NavbarThemeToggle />
             {isAuthenticated && (
@@ -89,36 +87,36 @@ function NavbarContentComponent() {
               </>
             )}
             <MenuBar />
-          </>
-        )}
-      </div>
-
-      {/* Mobile overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 z-100 flex flex-col items-center h-screen justify-center gap-2 bg-white-background dark:bg-black-background">
-          {<NavbarLinks linksPath={
-          userType === "admin" 
-          ?
-          [{path: "/admin/dashboard", name: "Sales"},
-          {path: "/admin/dashboard/orders", name: "Orders"},
-          {path: "/admin/dashboard/products", name: "Products"},
-          {path: "/admin/dashboard/upload-product", name: "Upload Product"},
-          ]
-          : 
-          [{path: "/", name: "Home"},
-          {path: "/about", name: "About"},
-          {path: "/all-products", name: "Products"}]} style="flex flex-col items-center" />}
-          {isAuthenticated ? (
-            <LogoutButton 
-            user_type={isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}
-            href_type={isAuthenticated?.successMessage?.match(/!!/) ? "/admin/login" : "/login"}
-             />
-          ) : (
-            <NavbarButtons style="flex flex-col text-center space-y-2" />
-          )}   
-        </div>
+          </div>
+    
+          {/* mobile overlay */}
+          {isOpen && (
+            <div className="fixed inset-0 z-100 flex flex-col items-center h-screen justify-center gap-2 bg-white-background dark:bg-black-background">
+              {<NavbarLinks linksPath={
+              userType === "admin" 
+              ?
+              [{path: "/admin/dashboard", name: "Sales"},
+              {path: "/admin/dashboard/orders", name: "Orders"},
+              {path: "/admin/dashboard/products", name: "Products"},
+              {path: "/admin/dashboard/upload-product", name: "Upload Product"},
+              ]
+              : 
+              [{path: "/", name: "Home"},
+              {path: "/about", name: "About"},
+              {path: "/all-products", name: "Products"}]} style="flex flex-col items-center" />}
+              {isAuthenticated ? (
+                <LogoutButton 
+                user_type={isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}
+                href_type={isAuthenticated?.successMessage?.match(/!!/) ? "/admin/login" : "/login"}
+                />
+              ) : (
+                <NavbarButtons style="flex flex-col text-center space-y-2" />
+              )}   
+            </div>
+          )}
+        </header>
       )}
-    </header>
+    </React.Fragment>
   );
 };
 
