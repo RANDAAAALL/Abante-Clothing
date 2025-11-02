@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
       "/api/add-to-address-or-billing",
       "/api/update-address-or-billing",
       "/api/delete-address-or-billing",
-      "api/update-order-status-and-tracking-number",
+      "/api/update-order-status-and-tracking-number",
     ],
     adminProtectedRoutes: [
       "/admin/dashboard",
@@ -133,6 +133,6 @@ export const config = {
     "/api/add-address-or-billing",
     "/api/update-address-or-billing",
     "/api/delete-address-or-billing",
-    "api/update-order-status-and-tracking-number",
+    "/api/update-order-status-and-tracking-number",
   ],
 };
