@@ -17,7 +17,6 @@ export default function TshirtsImageDescContent<T extends TshirtType | TshirtTyp
     const pathname = usePathname();
     const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
     const list: TshirtType | TshirtType[] = Array.isArray(props) ? props : [props]; 
-
     return (
     <>
     <Carousel className={`${flag ? "mt-3 mx-auto md:flex-start md:justify-start lg:max-w-[865px]" : "lg:max-w-4xl"}  font-bold w-full max-w-xs md:max-w-xl xl:max-w-none'}`} opts={{
@@ -35,34 +34,28 @@ export default function TshirtsImageDescContent<T extends TshirtType | TshirtTyp
                 href={`/products/${tshirt?.product_item_name}`}
                 onClick={(e) => { if(pathname === `/products/${tshirt?.product_item_name}`) e.preventDefault()}}>
                
-                {/* card container */}
-                <Card> 
+               <Card className="dark:bg-card-black-background h-[445px] gap-0 pb-2 flex flex-col justify-between">
+              <CardHeader>
+                <CardTitle className="text-right">
+                  {tshirt?.product_item_discount ? `-${tshirt?.product_item_discount}%` : ""}
+                </CardTitle>
+              </CardHeader>
 
-                  {/* card header */}
-                  <CardHeader>
-                    {!flag && <CardTitle className="text-right">-{tshirt?.discount?.toString()}%</CardTitle>}
-                  </CardHeader>
-                  
-                  {/* card body content */}
-                  <CardContent className="relative flex aspect-square items-center justify-center">
-                  <Image
-                    src={tshirt?.product_item_image ?? "t-shirt-not-found"}
-                    fill
-                    style={{ objectFit: 'contain', padding: 15 }}
-                    sizes="auto"
-                    alt={tshirt?.alt ?? "t-shirt-alt"}
-                    priority={true}
-                  />
-                </CardContent>
+              <CardContent className="relative w-full aspect-square flex items-center justify-center">
+                <Image
+                  src={tshirt?.product_item_image ?? "t-shirt-not-found"}
+                  fill
+                  style={{ objectFit: "contain", padding: 15 }}
+                  sizes="auto"
+                  alt={tshirt?.alt ?? "t-shirt-alt"}
+                  priority/>
+              </CardContent>
 
-                  {/* card footer  */}
-                  <CardFooter className="justify-between">
-                    <div>{tshirt?.product_item_name?.toUpperCase()}</div>
-                    <div>P{tshirt?.product_item_price}</div>
-                  </CardFooter>
-                  
-                </Card>
-
+              <CardFooter className="justify-between min-h-[50px]">
+                <div>{tshirt?.product_item_name?.toUpperCase()}</div>
+                <div>P{tshirt?.product_item_price}</div>
+              </CardFooter>
+            </Card>
             </Link>
           </CarouselItem> ))}
       </CarouselContent>

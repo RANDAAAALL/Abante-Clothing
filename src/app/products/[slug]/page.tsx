@@ -27,6 +27,7 @@ export default async function Page({ params }: ParamsProps ) {
 
   // console.log("Single Product: ", ProductVariants);
   // console.log("All Products: ",AllProducts);
+  // console.log("All Products: ",AllRelatedProducts);
   // console.log("RelatedCustomerProductReview: ", RelatedCustomerFeedbacks);
 
   return (

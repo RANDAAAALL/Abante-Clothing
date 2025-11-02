@@ -29,7 +29,7 @@ export async function POST(
     // if email exists, return a 409 response
     if(userEmailExists){
       return NextResponse.json(
-        { errorMessage: "Email already exists"},
+        { errorMessage: "Email already exists. Please try another email"},
         { status: 409 }
       );
     }
@@ -52,10 +52,9 @@ export async function POST(
       { successMessage: "Registered successfully"},
       { status: 201 }
     );
-  } catch (error) {
-    console.error("Error registering user:", error);
+  } catch (error: unknown) {
     return NextResponse.json(
-      { errorMessage: "Internal Server Error" },
+      { errorMessage: error instanceof Error ? error.message :  "Internal Server Error" },
       { status: 500 }
     );
   }

@@ -147,7 +147,19 @@ export default function FormsContent<TSchema extends AnyZodObject>({
         {/* submit button */}
         <button className={`${isSubmitting ? "cursor-not-allowed" : "cursor-pointer" } font-bold bg-card-black-background text-white rounded-sm p-2 mt-2 mb-3 w-full`}
         type="submit"
-        disabled={isSubmitting}>{isSubmitting ? "Submitting..." : buttonText}</button>
+        disabled={isSubmitting}>{isSubmitting ? `Signing ${buttonText === "Sign up" ? "up" : "in"}....` : buttonText}</button>
+
+        {/* terms and condition */}
+        {footerHref === "login" && (
+          <div className="flex flex-col text-sm my-2">
+            <span>by signing up, you agree to Abante&apos;s</span>
+            <div>
+              <Link href="/terms-and-conditions" className="font-bold" target="_blank">Terms and Conditions</Link>
+              <span> & </span>
+              <Link href="/privacy-policy" className="font-bold" target="_blank">Privacy Policy</Link>
+            </div>
+          </div>
+        )}
 
         {/* form footer description */}
         <span className="font-regular text-sm">

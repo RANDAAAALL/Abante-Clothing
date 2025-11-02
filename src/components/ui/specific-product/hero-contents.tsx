@@ -24,7 +24,6 @@ export default function HeroContents({
     const currentPhoto = props[selectedIndex];
 
     const memoizedPhoto = useMemo(() => currentPhoto, [currentPhoto]);
-
     
     // on first load
     // it will extract and set the current index and color of value from the props
@@ -128,9 +127,23 @@ export default function HeroContents({
                 {/* tshirt title, price and buttons container */}
                 <div className="flex flex-col justify-center w-full gap-3 md:w-md">
                   {/* t-shirt title and price */}
-                  <div className="flex flex-row justify-between items-center md:items-start md:flex-col capitalize md:gap-1 font-bold md:mb-6">
-                    <span className="text-2xl md:text-3xl">{props[0].product_item_name}</span>
-                    <span className="text-2xl md:text-5xl">P{props[0].product_item_price?.toString()}</span>
+                  <div className="flex flex-row justify-between items-center -mb-2 md:items-start md:flex-col capitalize md:gap-1 font-bold md:mb-6">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-2xl md:text-3xl">{props[0].product_item_name}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className={`text-2xl ${props[0].product_item_discount ? "line-through md:text-3xl" : "md:text-5xl"}`}>
+                        P{props[0].product_item_price?.toString()}
+                      </span>
+                      {props[0].product_item_discount! > 0 && (
+                        <>
+                          <span className="text-2xl">-</span>
+                          <span className="text-2xl md:text-3xl">P{(props[0].product_item_price! * ( 1 - props[0].product_item_discount! / 100)).toFixed(0)}</span>
+                        <span className="text-md -ml-1">-{props[0].product_item_discount}%</span>
+
+                        </>
+                      )}
+                    </div>
                   </div>
 
                   {/* t-shirt sizes */}

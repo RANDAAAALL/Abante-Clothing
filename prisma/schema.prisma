@@ -114,6 +114,7 @@ model product_items {
   user_ID                      Int?
   product_item_name            String?         @db.VarChar(255)
   product_item_price           Decimal?        @db.Decimal(10, 2)
+  product_item_discount        Int?            @default(0)
   product_item_image           String?         @db.VarChar(255)
   product_item_color           String?         @db.VarChar(255)
   product_item_size            String?         @db.VarChar(255)
