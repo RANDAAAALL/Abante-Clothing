@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "../../carousel/card";
 import {
   DropdownMenu,
@@ -36,6 +36,15 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    router.refresh(); 
+    const interval = setInterval(() => {
+      console.log("orders useEffect triggered!");
+      router.refresh()
+    }, 30000); // interval every 30s
+    return () => clearInterval(interval);
+  }, [router]);
 
   const totals = useMemo(() => {
     const counts = { pending: 0, processing: 0, shipped: 0, delivered: 0 };

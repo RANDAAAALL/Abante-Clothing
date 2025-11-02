@@ -15,9 +15,9 @@ export default function SalesClientData({ sales }: { sales: SalesDataProps[] }) 
   useEffect(() => {
     router.refresh(); 
     const interval = setInterval(() => {
-      console.log("useEffect triggered!");
+      console.log("sales useEffect triggered!");
       router.refresh()
-    }, 30000);
+    }, 30000); // interval every 30s
     return () => clearInterval(interval);
   }, [router]);
 
