@@ -9,6 +9,7 @@ export const getAllRelatedProducts = async () => {
           product_item_name: true,
           product_item_color: true,
           product_item_price: true,
+          product_item_discount: true,
           product_item_image: true,
           product_item_size: true,
         },
@@ -20,7 +21,6 @@ export const getAllRelatedProducts = async () => {
         ...p, 
         product_item_price: p.product_item_price?.toNumber(),
         alt: `${p.product_item_ID}-${p.product_item_name} alt`,
-        discount: 30,
       }));
   
       return AllRelatedProducts;

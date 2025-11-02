@@ -19,7 +19,7 @@ export default function LogoutButtonContent({ user_type, href_type }: NavbarButt
   const { setClearOrderHistoryReceiptData } = useOrderHistoryReceiptModal();
   const { setClearAuthUser, setLoading, resetLoading } = useAuth();
   // const [ logoutLoading, setLogoutLoading ] = useState(false);
-
+  // console.log("Current LogoutLoading State: ", logoutLoading)
 
   const handleLogoutClick = async () => {
     // setLogoutLoading(true);
@@ -57,9 +57,9 @@ export default function LogoutButtonContent({ user_type, href_type }: NavbarButt
   return (
     <React.Fragment>
       <button
-        onClick={handleLogoutClick}
-        className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-lg py-3 px-4">
-        Logout
+      onClick={handleLogoutClick}
+      className="cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black rounded-lg py-3 px-4">
+      Logout
       </button>
 
       {/* overlay for smoother feel */}

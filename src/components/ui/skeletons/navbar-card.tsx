@@ -1,28 +1,26 @@
 "use client";
 import { useState, useEffect } from "react";
-import { isAuthenticatedProps } from "@/lib/store/auth";
 
 export default function NavbarSkeleton({
-  isAuthenticated
-}: { isAuthenticated: isAuthenticatedProps }) {
+  userType
+}: { userType: string }) {
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // track scroll for styling
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0);
+    const handleScroll = () => {
+      const scrolled = window.scrollY > 0;
+      setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
+  }, [setIsScrolled]);
+  
   return (
-    <header
-  className={`${isScrolled
-    ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md"
-    : ""
-  } w-full font-medium`}>
-  <div
-    className={`flex items-center p-4 ${
-      isAuthenticated?.successMessage?.match(/!!/) ? "max-w-full" : "max-w-5xl mx-auto"
-    }`}>
+    <header className={`${isScrolled ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md" : ""} 
+    w-full font-medium flex items-center ${userType === "admin" ? "" : "max-w-5xl"} mx-auto p-4`}> 
+
       
     {/* === LOGO SKELETON === */}
     <div className="aspect-square h-11 rounded-full w-11 dashboard-orders-skeleton" />
@@ -47,8 +45,7 @@ export default function NavbarSkeleton({
       <div className="h-6 w-6 dashboard-orders-skeleton rounded-full" />
       <div className="h-6 w-6 dashboard-orders-skeleton rounded-full" />
     </div>
-  </div>
-</header>
+  </header>
 
   );
 }

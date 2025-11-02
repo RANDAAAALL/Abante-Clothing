@@ -11,6 +11,7 @@ export const getSingleProduct = async ( {slug}: SlugProps) => {
           product_item_ID: true,
           product_item_name: true,
           product_item_price: true,
+          product_item_discount: true,
           product_item_image: true,
           product_item_back_image: true,
           product_item_size: true,

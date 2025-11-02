@@ -15,23 +15,28 @@ export default function RegisterFormContent({ user_type, href_type, footer_href_
     const router = useRouter();
 
     const handleRegisterClick = async (formData: registerFormType) => {
-        const res = await fetch(`${RegisterURL}/${user_type}`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json",},
-            body: JSON.stringify(formData),
-        });
-
-        const data = await res.json();
-        
-        if(!res.ok){
-            toast(`${data.errorMessage || data.parsedErrors}`);
-            return;
-        }
-
-        toast("Registered Successfully!");
-        router.push(href_type);
-        // reset the fields
-        resetFormRef.current?.();
+        return toast.promise(
+            (async () => {
+                const res = await fetch(`${RegisterURL}/${user_type}`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json",},
+                    body: JSON.stringify(formData),
+                });
+                const data = await res.json();
+                if(!res.ok) throw new Error(`${data.errorMessage || data.parsedErrors}`);    
+                
+                return data;
+            })(), {
+                loading: "Signing up....",
+                success: (message) => {
+                    router.push(href_type);
+                    // reset the fields
+                    resetFormRef.current?.();
+                    return message?.successMessage;
+                },
+                error: (e) => e.message || "Registered Unsucessfully. Please try again."
+            }
+        )
     }
 
     return (

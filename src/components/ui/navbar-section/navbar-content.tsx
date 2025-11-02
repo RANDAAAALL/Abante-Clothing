@@ -37,7 +37,7 @@ function NavbarContentComponent() {
   
   return (
     <React.Fragment>
-      {isLoading ? <NavbarSkeleton isAuthenticated={isAuthenticated!} /> : ( 
+      {isLoading ? <NavbarSkeleton userType={userType} /> : ( 
         <header className={`${isScrolled ? "rounded-lg bg-white-background/20 dark:bg-black-background/20 backdrop-blur-md shadow-md" : ""} 
           w-full font-medium flex items-center ${isAuthenticated?.successMessage?.match(/!!/) ? "" : "max-w-5xl"} mx-auto p-4`}> 
          
