@@ -11,11 +11,11 @@ export default function ProductSpecificationsContent({ props }: { props: Product
       <div className="mt-3 grid grid-cols-[140px_1fr] gap-y-5 md:gap-7 gap-x-3 text-sm md:text-base">
         {/* Product Type */}
         <span className="font-medium">Product Type:</span>
-        <span className="capitalize">{props.product_item_size?.split(/\s+/)[0]} T-Shirt</span>
+        <span className="capitalize">{props.product_item_type} T-Shirt</span>
 
         {/* Fit */}
         <span className="font-medium">Fit:</span>
-        <span>{props.product_item_size}</span>
+        <span>{props.product_item_fit}</span>
 
         {/* Material */}
         <span className="font-medium">Material:</span>

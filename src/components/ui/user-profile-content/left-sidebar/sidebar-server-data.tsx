@@ -2,7 +2,7 @@ import SidebarUserImage from "./sidebar-user-image";
 import { getUserInfo } from "@/dal/get-user-info";
 
 export default async function SidebarServerData() {
-  const data = await getUserInfo();
+  const data = awaiuploadProductFieldsTypet getUserInfo();
   return (
     <div className="flex flex-col items-center">
       <div className="relative group w-[110px] h-[110px]">

@@ -146,11 +146,11 @@ export default function HeroContents({
                   </div>
 
                   {/* t-shirt sizes */}
-                  <TshirtSizesButtons />
+                  <TshirtSizesButtons productID={memoizedPhoto.product_item_ID} currentSizes={memoizedPhoto.product_item_size} />
 
                   {/* quantity buttons */}
                   <div className="flex w-full sm:justify-center md:justify-start gap-1">
-                    <QuantityButtons style="text-center font-regular text-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black py-1 w-full md:w-auto md:px-6 rounded-sm" />
+                    <QuantityButtons productID={memoizedPhoto.product_item_ID} style="text-center font-regular text-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black py-1 w-full md:w-auto md:px-6 rounded-sm" />
                   </div>
 
                   {/* add-to-cart and buy now buttons */}

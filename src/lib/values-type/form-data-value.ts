@@ -1,5 +1,6 @@
 import { FieldProps } from "@/components/ui/form/form-content";
 import { forgotPasswordFormType, loginFormType, registerFormType, resetPasswordFormType } from "../validations/auth-schema";
+import { uploadProductFieldsType } from "../validations/upload-product-schema";
 export const registerFields: FieldProps<registerFormType>[] = [
     { fieldName: "username", fieldPlaceholder: "Enter your username", fieldType: "text" },
     { fieldName: "email", fieldPlaceholder: "Enter your email", fieldType: "email" },
