@@ -15,7 +15,7 @@ export default function useAddToCart() {
     { previousData?: CartItemsProps[]; tempId?: number }
   >({
     mutationFn: async ({ product, selectedSizeQtyAndColor }: AddToCartPayload) => {
-      console.log("Client ->  ", product)
+      // console.log("Client ->  ", product)
       // console.log("🔄 addToCart MutationFN triggered");
       const res = await fetchWithCsrf(`${AddToCartURL}`, {
         method: "POST",
@@ -48,7 +48,7 @@ export default function useAddToCart() {
         cart_item_date: new Date(),
       };
 
-      console.log("Client New Item->  ", newItem);
+      // console.log("Client New Item->  ", newItem);
       queryClient.setQueryData<Partial<CartItemsProps>[]>(["get-cart"], (old = []) => {
         const newData = [...old, newItem];
         return newData;
