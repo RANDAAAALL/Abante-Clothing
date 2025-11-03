@@ -8,6 +8,7 @@ import useGetCart from "@/hooks/useGetCart";
 import useDeleteCart from "@/hooks/useDeleteCart";
 import isCartItem from "@/lib/helper/isCartItem";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
+import { getDiscountedPrice } from "@/lib/helper/get-discounted-price";
 export default function CartModalData() {
   const { selectedItem, removeSelectedItem } = useCartItems();
   const { CloseModal } = useCartItemModal();
@@ -52,24 +53,25 @@ export default function CartModalData() {
                            `${item?.cart_item_ID}-${item?.cart_item_name}` :
                            `${item.product?.product_item_ID}-${item.product?.product_item_name}`}/>
 
-                      <div className="flex flex-1 ml-5 space-y-1 flex-col font-medium text-sm md:text-md">
-                        <p className="capitalize">
-                          {isCartItem(item) ? 
-                          `${item?.cart_item_name} - ${item?.cart_item_size}` :
-                          `${item.product?.product_item_name} - ${item?.selectedSizeQtyAndColor?.size}`}
-                        </p>
-                        <p>
-                          {isCartItem(item) ?
-                          `${item?.cart_item_qty} x P${item?.cart_item_price}` : 
-                          `${item?.selectedSizeQtyAndColor?.qty} x P${item.product?.product_item_price}`}
-                        </p>
-                        <p className="capitalize">
-                          {
-                            isCartItem(item) ? 
-                            `${item?.cart_item_color}` : `${item?.selectedSizeQtyAndColor?.color}`
-                          }
+                        <div className="flex flex-1 ml-5 space-y-1 flex-col font-medium text-sm md:text-md">
+                          <p className="capitalize">
+                            {isCartItem(item) 
+                              ? `${item?.cart_item_name} - ${item?.cart_item_size}` 
+                              : `${item.product?.product_item_name} - ${item?.selectedSizeQtyAndColor?.size}`
+                            }
                           </p>
-                      </div>
+
+                          <p>
+                            {isCartItem(item)
+                              ? `${item?.cart_item_qty} x P${getDiscountedPrice(item?.cart_item_price ?? 0, item?.cart_item_discount ?? 0)}`
+                              : `${item?.selectedSizeQtyAndColor?.qty} x P${getDiscountedPrice(item?.product.product_item_price ?? 0, item?.product.product_item_discount ?? 0)}`
+                            }
+                          </p>
+
+                          <p className="capitalize">
+                            {isCartItem(item) ? `${item?.cart_item_color}` : `${item?.selectedSizeQtyAndColor?.color}`}
+                          </p>
+                        </div>
 
                       <button
                         className="text-black dark:text-white font-bold cursor-pointer absolute right-1 top-1"

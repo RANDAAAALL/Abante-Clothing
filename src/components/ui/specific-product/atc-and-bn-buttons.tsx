@@ -34,7 +34,7 @@ function AddToCartAndBuyNowButtonsComponent({
   }, [selectedSize, isAuthenticated, addToCart, props, selectedSizeQtyAndColor, setSelectedItems]);
 
   const handleBuyNow = useCallback(() => {
-    console.log("buy now button triggered");
+    // console.log("buy now button triggered");
     if (!selectedSize) {
       toast.error("Please select a t-shirt size");
       return;
