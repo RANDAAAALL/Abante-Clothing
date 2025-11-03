@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const { product, selectedSizeQtyAndColor } = await req.json();
-    console.log("Server recieved: ", product);
 
     // check if this product+size already exists in cart
     const existing = await prisma.cart_items.findFirst({
@@ -62,7 +61,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    console.log("Server ->  ",cartItem)
+    // console.log("Server ->  ",cartItem)
     // return NextResponse.json({ message: "Item added to cart" });
     return NextResponse.json( cartItem );
   } catch (err: unknown) {
