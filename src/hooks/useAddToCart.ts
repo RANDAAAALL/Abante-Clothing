@@ -15,6 +15,7 @@ export default function useAddToCart() {
     { previousData?: CartItemsProps[]; tempId?: number }
   >({
     mutationFn: async ({ product, selectedSizeQtyAndColor }: AddToCartPayload) => {
+      console.log("Client ->  ", product)
       // console.log("🔄 addToCart MutationFN triggered");
       const res = await fetchWithCsrf(`${AddToCartURL}`, {
         method: "POST",
@@ -27,27 +28,28 @@ export default function useAddToCart() {
     },
 
     onMutate: async ({ product, selectedSizeQtyAndColor }) => {
+      const discountedPrice = Math.round(getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0));
       await queryClient.cancelQueries({ queryKey: ["get-cart"] });
       
       const previousData = queryClient.getQueryData<CartItemsProps[]>(["get-cart"]);
       const tempId = -Date.now();
 
-      const newItem: CartItemsProps = {
+      const newItem: Partial<CartItemsProps> = {
         cart_item_ID: tempId, 
         user_ID: -1,
         cart_item_color: selectedSizeQtyAndColor.color ?? "",
         cart_item_name: product.product_item_name ?? "",
-        cart_item_price: getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0),
-        cart_item_discount: product.product_item_discount ?? 0,
+        cart_item_price: discountedPrice,
         cart_item_qty: selectedSizeQtyAndColor.qty,
         cart_item_size: selectedSizeQtyAndColor.size,
         cart_item_image: product.product_item_image ?? "/images/png/tshirt_placeholder.png",
-        cart_item_total: getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0) * selectedSizeQtyAndColor.qty,
+        cart_item_total: discountedPrice * selectedSizeQtyAndColor.qty,
         product_item_ID: product.product_item_ID!,
         cart_item_date: new Date(),
       };
 
-      queryClient.setQueryData<CartItemsProps[]>(["get-cart"], (old = []) => {
+      console.log("Client New Item->  ", newItem);
+      queryClient.setQueryData<Partial<CartItemsProps>[]>(["get-cart"], (old = []) => {
         const newData = [...old, newItem];
         return newData;
       });

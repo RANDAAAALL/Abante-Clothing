@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { product, selectedSizeQtyAndColor } = await req.json();
+    console.log("Server recieved: ", product);
 
     // check if this product+size already exists in cart
     const existing = await prisma.cart_items.findFirst({
@@ -26,6 +27,7 @@ export async function POST(req: NextRequest) {
     });
 
     let cartItem;
+    const discountedPrice = Math.round(getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0));
 
     if (existing) {
       // update qty and total if it already exists
@@ -35,7 +37,7 @@ export async function POST(req: NextRequest) {
         where: { cart_item_ID: existing.cart_item_ID },
         data: {
           cart_item_qty: newQty,
-          cart_item_total: getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0) * newQty,
+          cart_item_total: discountedPrice * newQty,
           // cart_item_total: (product.product_item_price ?? 0) * newQty,
         },
       });
@@ -51,19 +53,20 @@ export async function POST(req: NextRequest) {
         product_item_ID: product.product_item_ID,
         cart_item_image: product.product_item_image,
         cart_item_name: product.product_item_name,
-        cart_item_price:  getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0),
+        cart_item_price:  discountedPrice,
         cart_item_size: selectedSizeQtyAndColor.size,
         cart_item_color: selectedSizeQtyAndColor.color,
         cart_item_qty: selectedSizeQtyAndColor.qty,
-        cart_item_total: getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0) * selectedSizeQtyAndColor.qty,
+        cart_item_total: discountedPrice * selectedSizeQtyAndColor.qty,
         cart_item_date: new Date(),
       },
     });
 
+    console.log("Server ->  ",cartItem)
     // return NextResponse.json({ message: "Item added to cart" });
     return NextResponse.json( cartItem );
-  } catch (err) {
-    console.error("Failed to add to cart:", err);
-    return NextResponse.json({ errorMessage: "Something went wrong" }, { status: 500 });
+  } catch (err: unknown) {
+    // console.error("Failed to add to cart:", err);
+    return NextResponse.json({ errorMessage: err instanceof Error ? err.message : "Failed to add to cart" }, { status: 500 });
   }
 }
