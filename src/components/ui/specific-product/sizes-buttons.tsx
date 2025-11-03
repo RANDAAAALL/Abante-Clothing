@@ -1,27 +1,55 @@
+import React, { useEffect, useRef } from "react";
 import { useCartItems } from "@/lib/store/cart-items";
-import React from "react";
 
-function TshirtSizesButtonsContent(){
-    const { selectedSize, setSelectedSize } = useCartItems();
+function TshirtSizesButtonsContent({
+  currentSizes,
+  productID, 
+}: {
+  currentSizes?: string | null;
+  productID?: number | string | null;
+}) {
+  const { selectedSize, setSelectedSize } = useCartItems();
+  const prevProductId = useRef<number | string | null>(null);
+  const allSizes = ["XS", "S", "M", "L", "XL", "OS"];
+  const availableSizes = currentSizes?.split(",").map((s) => s.trim().toUpperCase()) ?? [];
+  
+  useEffect(() => {
+    if (productID && prevProductId.current !== productID) {
+      setSelectedSize(null);
+      prevProductId.current = productID;
+    }
+  }, [productID, setSelectedSize]);
 
-    return (
-        <>
-        <div><span className="font-bold text-lg">Size</span></div>
-        
-        <div className="flex gap-2 -mt-3">      
-        {["XS", "S", "M", "L", "XL", "OS"].map((size, i) => (
-            <button onClick={() => setSelectedSize(size)}
-            key={i}
-            className={`font-regular text-xs mt-1 cursor-pointer rounded-sm w-full py-2
-            ${selectedSize === size
-            ? "bg-[#666666] text-white"
-            : "bg-card-black-background text-white dark:bg-card-white-background dark:text-black"}`}>
-            {size}
+  return (
+    <>
+      <div><span className="font-bold text-lg">Size</span></div>
+
+      <div className="flex gap-2 -mt-3">
+        {allSizes.map((size, i) => {
+          const isAvailable = availableSizes.includes(size);
+
+          return (
+            <button
+              key={i}
+              onClick={() => isAvailable && setSelectedSize(size)}
+              type="button"
+              disabled={!isAvailable}
+              className={`font-regular text-xs mt-1 rounded-sm py-2 transition w-full
+                ${
+                  selectedSize === size
+                    ? "bg-[#666666] text-white"
+                    : isAvailable
+                    ? "cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black"
+                    : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                }`}
+            >
+              {size}
             </button>
-        ))}
-        </div>
-        </>
-    );
+          );
+        })}
+      </div>
+    </>
+  );
 }
 
 const AddToCartAndBuyNowButtons = React.memo(TshirtSizesButtonsContent);

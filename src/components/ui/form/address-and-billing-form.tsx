@@ -36,7 +36,7 @@ export default function AddressAndBillingFormContent() {
       }
   }, [selectedFormData, reset]);
 
-  const handleClickSubmit = (formData: AddressAndBillingType) => {
+  const handleClickSubmit = async (formData: AddressAndBillingType) => {
     return toast.promise(
         (async () => {
           if (selectedFormData) {

@@ -29,19 +29,18 @@ model address {
 }
 
 model cart_items {
-  cart_item_ID    Int            @id @default(autoincrement())
+  cart_item_ID    Int       @id @default(autoincrement())
   user_ID         Int?
   product_item_ID Int?
-  cart_item_image String?        @db.VarChar(255)
-  cart_item_name  String?        @db.VarChar(50)
-  cart_item_price Decimal?       @db.Decimal(10, 2)
-  cart_item_size  String?        @db.VarChar(255)
-  cart_item_color String?        @db.VarChar(255)
+  cart_item_image String?   @db.VarChar(255)
+  cart_item_name  String?   @db.VarChar(50)
+  cart_item_price Decimal?  @db.Decimal(10, 2)
+  cart_item_size  String?   @db.VarChar(255)
+  cart_item_color String?   @db.VarChar(255)
   cart_item_qty   Int?
-  cart_item_total Decimal?       @db.Decimal(10, 2)
-  cart_item_date  DateTime?      @db.DateTime(0)
-  users           users?         @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "cart_items_ibfk_1")
-  product_items   product_items? @relation(fields: [product_item_ID], references: [product_item_ID], onDelete: NoAction, onUpdate: NoAction, map: "cart_items_ibfk_2")
+  cart_item_total Decimal?  @db.Decimal(10, 2)
+  cart_item_date  DateTime? @db.DateTime(0)
+  users           users?    @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "cart_items_ibfk_1")
 
   @@index([product_item_ID], map: "product_item_ID")
   @@index([user_ID], map: "user_ID")
@@ -110,14 +109,16 @@ model payments {
 }
 
 model product_items {
-  product_item_ID              Int             @id
+  product_item_ID              Int             @id @default(autoincrement())
   user_ID                      Int?
   product_item_name            String?         @db.VarChar(255)
   product_item_price           Decimal?        @db.Decimal(10, 2)
   product_item_discount        Int?            @default(0)
   product_item_image           String?         @db.VarChar(255)
   product_item_color           String?         @db.VarChar(255)
-  product_item_size            String?         @db.VarChar(255)
+  product_item_size            String?         @default("S, M, L") @db.VarChar(255)
+  product_item_type            String          @db.VarChar(255)
+  product_item_fit             String?         @default("Regular Fit") @db.VarChar(255)
   product_item_material        String?         @db.VarChar(255)
   product_item_construction    String?         @db.VarChar(255)
   product_item_design_features String?         @db.VarChar(255)
@@ -125,7 +126,6 @@ model product_items {
   product_item_displayDate     DateTime?       @db.DateTime(0)
   product_item_status          String?         @db.VarChar(255)
   product_item_back_image      String?         @db.VarChar(255)
-  cart_items                   cart_items[]
   order_details                order_details[]
   users                        users?          @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "product_items_ibfk_1")
 
