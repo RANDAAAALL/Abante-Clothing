@@ -7,6 +7,7 @@ type CartItemsProps = {
     cart_item_image: string | null;
     cart_item_name: string | null;
     cart_item_price: number | null;
+    cart_item_discount: number | null;
     cart_item_size: string | null;
     cart_item_color: string | null;
     cart_item_qty: number | null;

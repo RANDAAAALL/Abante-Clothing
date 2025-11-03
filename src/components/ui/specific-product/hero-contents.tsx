@@ -139,8 +139,7 @@ export default function HeroContents({
                         <>
                           <span className="text-2xl">-</span>
                           <span className="text-2xl md:text-3xl">P{(props[0].product_item_price! * ( 1 - props[0].product_item_discount! / 100)).toFixed(0)}</span>
-                        <span className="text-md -ml-1">-{props[0].product_item_discount}%</span>
-
+                          <span className="text-md -ml-1">-{props[0].product_item_discount}%</span>
                         </>
                       )}
                     </div>

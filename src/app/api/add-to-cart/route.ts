@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma/prisma";
 import { isAuthenticatedUser } from "@/dal/verify-user";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
 import { verifyCsrfToken } from "@/lib/security/csrf/verify-csrf-token";
+import { getDiscountedPrice } from "@/lib/helper/get-discounted-price";
 
 export async function POST(req: NextRequest) {
   // check if user is logged in
@@ -34,7 +35,8 @@ export async function POST(req: NextRequest) {
         where: { cart_item_ID: existing.cart_item_ID },
         data: {
           cart_item_qty: newQty,
-          cart_item_total: (product.product_item_price ?? 0) * newQty,
+          cart_item_total: getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0) * newQty,
+          // cart_item_total: (product.product_item_price ?? 0) * newQty,
         },
       });
 
@@ -49,11 +51,11 @@ export async function POST(req: NextRequest) {
         product_item_ID: product.product_item_ID,
         cart_item_image: product.product_item_image,
         cart_item_name: product.product_item_name,
-        cart_item_price: product.product_item_price,
+        cart_item_price:  getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0),
         cart_item_size: selectedSizeQtyAndColor.size,
         cart_item_color: selectedSizeQtyAndColor.color,
         cart_item_qty: selectedSizeQtyAndColor.qty,
-        cart_item_total: (product.product_item_price ?? 0) * selectedSizeQtyAndColor.qty,
+        cart_item_total: getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0) * selectedSizeQtyAndColor.qty,
         cart_item_date: new Date(),
       },
     });

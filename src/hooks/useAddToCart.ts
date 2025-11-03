@@ -1,6 +1,7 @@
 
 import { AddToCartURL } from "@/lib/config";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
+import { getDiscountedPrice } from "@/lib/helper/get-discounted-price";
 import { AddToCartPayload } from "@/lib/interface/add-to-cart";
 import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -36,11 +37,12 @@ export default function useAddToCart() {
         user_ID: -1,
         cart_item_color: selectedSizeQtyAndColor.color ?? "",
         cart_item_name: product.product_item_name ?? "",
-        cart_item_price: product.product_item_price ?? 0,
+        cart_item_price: Number(getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0)),
+        cart_item_discount: product.product_item_discount ?? 0,
         cart_item_qty: selectedSizeQtyAndColor.qty,
         cart_item_size: selectedSizeQtyAndColor.size,
         cart_item_image: product.product_item_image ?? "/images/png/tshirt_placeholder.png",
-        cart_item_total: (product.product_item_price ?? 0) * selectedSizeQtyAndColor.qty,
+        cart_item_total: (Number(getDiscountedPrice(product.product_item_price ?? 0, product.product_item_discount ?? 0))) * selectedSizeQtyAndColor.qty,
         product_item_ID: product.product_item_ID!,
         cart_item_date: new Date(),
       };
