@@ -13,7 +13,7 @@ import { ParamsProps } from "@/lib/types/params-types";
 import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
 import { Suspense } from "react";
 
-// export const revalidate = 60;
+export const revalidate = 30;
 
 export default async function Page({ params }: ParamsProps ) {
   const { slug } = await params;

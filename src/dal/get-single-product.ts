@@ -6,7 +6,7 @@ export const getSingleProduct = async ( {slug}: SlugProps) => {
     try{
 
       const products = await prisma.product_items.findMany({
-        where: {  product_item_name: slug },
+        where: {  product_item_name: slug, product_item_status: "available" },
         select: {
           product_item_ID: true,
           product_item_name: true,

@@ -4,7 +4,7 @@ import { isAuthenticatedUser } from "./verify-user";
 import { getOrdersCached } from "@/lib/cache/get-orders-cached";
 
 export const getOrders = async () => {
-    if(!await isAuthenticatedUser()) redirect("/login");
+    if(!await isAuthenticatedUser()) redirect("/admin/login");
   
     return getOrdersCached();
 }
