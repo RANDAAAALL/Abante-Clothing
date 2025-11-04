@@ -50,7 +50,6 @@ function NavbarContentComponent() {
               userType === "admin" 
               ?
               [{path: "/admin/dashboard", name: "Sales"},
-              {path: "/admin/dashboard/products", name: "Products"},
               {path: "/admin/dashboard/orders", name: "Orders"},
               {path: "/admin/dashboard/upload-product", name: "Upload Product"},
               ]
@@ -97,7 +96,6 @@ function NavbarContentComponent() {
               ?
               [{path: "/admin/dashboard", name: "Sales"},
               {path: "/admin/dashboard/orders", name: "Orders"},
-              {path: "/admin/dashboard/products", name: "Products"},
               {path: "/admin/dashboard/upload-product", name: "Upload Product"},
               ]
               : 

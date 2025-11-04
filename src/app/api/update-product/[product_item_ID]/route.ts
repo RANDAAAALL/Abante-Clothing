@@ -6,25 +6,23 @@ import prisma from "@/lib/prisma/prisma";
 import { uploadProductSchema } from "@/lib/validations/upload-product-schema";
 import { revalidateTag } from "next/cache";
 
-export async function POST(request: NextRequest) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ product_item_ID: string }> }
+) {
   if (!(await isAuthenticatedUser())) return NextResponse.redirect("/login");
   if (!verifyCsrfToken(request))
     return NextResponse.json({ errorMessage: "Invalid CSRF Token" }, { status: 403 });
 
   try {
+    const product_item_ID = (await params).product_item_ID;
     const formData = await request.formData();
 
-    // extract files
-    const frontFile = formData.get("product_item_image") as File | null;
-    const backFile = formData.get("product_item_back_image") as File | null;
+    // get files
+    const frontFile = formData.get("product_item_image") as File | string | null;
+    const backFile = formData.get("product_item_back_image") as File | string | null;
 
-    if (!frontFile || !backFile)
-      return NextResponse.json(
-        { errorMessage: "Both front and back images are required" },
-        { status: 400 }
-      );
-
-    // extract fields
+    // get all other fields
     const rawFields = {
       product_item_name: formData.get("product_item_name")?.toString() || "",
       product_item_price: formData.get("product_item_price")?.toString() || "",
@@ -40,24 +38,14 @@ export async function POST(request: NextRequest) {
       product_item_status: formData.get("product_item_status")?.toString() || "",
     };
 
-    // validate and parse upload fields
-    const parsedResult = uploadProductSchema.safeParse({
-      ...rawFields,
-      product_item_image: frontFile,
-      product_item_back_image: backFile,
+    // fetch current product to preserve old images if not re-uploaded
+    const existingProduct = await prisma.product_items.findUnique({
+      where: { product_item_ID: Number(product_item_ID) },
     });
 
-    if (!parsedResult.success) {
-      const firstError = parsedResult.error.issues[0];
-      return NextResponse.json(
-        { errorMessage: `${firstError.path.join(".")}: ${firstError.message}` },
-        { status: 400 }
-      );
-    }
+    if (!existingProduct) return NextResponse.json({ errorMessage: "Product not found. Failed to update" }, { status: 404 });
 
-    const uploadFields = parsedResult.data;
-
-    // upload images to cloudinary
+    // conditional uploads
     const uploadToCloudinary = async (file: File) => {
       const arrayBuffer = await file.arrayBuffer();
       const base64 = Buffer.from(arrayBuffer).toString("base64");
@@ -71,18 +59,48 @@ export async function POST(request: NextRequest) {
       });
     };
 
-    const frontImageUpload = await uploadToCloudinary(frontFile);
-    const backImageUpload = await uploadToCloudinary(backFile);
+    let frontImageUrl = existingProduct.product_item_image;
+    let backImageUrl = existingProduct.product_item_back_image;
 
-    await prisma.product_items.create({
+    // only upload if File, not a string
+    if (frontFile instanceof File) {
+      const frontRes = await uploadToCloudinary(frontFile);
+      frontImageUrl = frontRes.secure_url;
+    }
+
+    if (backFile instanceof File) {
+      const backRes = await uploadToCloudinary(backFile);
+      backImageUrl = backRes.secure_url;
+    }
+
+    // validate with zod
+    const parsedResult = uploadProductSchema.safeParse({
+      ...rawFields,
+      product_item_image: frontFile instanceof File ? frontFile : frontImageUrl,
+      product_item_back_image: backFile instanceof File ? backFile : backImageUrl,
+    });
+
+    if (!parsedResult.success) {
+      const firstError = parsedResult.error.issues[0];
+      return NextResponse.json(
+        { errorMessage: `${firstError.path.join(".")}: ${firstError.message}` },
+        { status: 400 }
+      );
+    }
+
+    const uploadFields = parsedResult.data;
+
+    // update product in DB
+    await prisma.product_items.update({
+      where: { product_item_ID: Number(product_item_ID) },
       data: {
         product_item_name: uploadFields.product_item_name,
         product_item_price: parseFloat(uploadFields.product_item_price),
         product_item_discount: uploadFields.product_item_discount
           ? parseFloat(uploadFields.product_item_discount)
           : 0,
-        product_item_image: frontImageUpload.secure_url,
-        product_item_back_image: backImageUpload.secure_url,
+        product_item_image: frontImageUrl,
+        product_item_back_image: backImageUrl,
         product_item_color: uploadFields.product_item_color,
         product_item_size: uploadFields.product_item_size,
         product_item_type: uploadFields.product_item_type,
@@ -92,15 +110,16 @@ export async function POST(request: NextRequest) {
         product_item_design_features: uploadFields.product_item_design_features,
         product_item_stock: parseInt(uploadFields.product_item_stock),
         product_item_status: uploadFields.product_item_status,
-        product_item_displayDate: new Date(),
       },
     });
-    // revalidate the tag, to fecth fresh data to display new uploaded product
+
+    // revalidate cache
     revalidateTag("all-status-products");
-    return NextResponse.json({ successMessage: "Product uploaded successfully" });
+
+    return NextResponse.json({ successMessage: "Product updated successfully" });
   } catch (err) {
     return NextResponse.json(
-      { errorMessage: err instanceof Error ? err.message : "Failed to upload product." },
+      { errorMessage: err instanceof Error ? err.message : "Failed to update product." },
       { status: 500 }
     );
   }

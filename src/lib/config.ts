@@ -28,3 +28,4 @@ export const RemoveSelectedAddressOrBillingURL = `${getBaseUrl()}/api/remove-sel
 export const RefreshTokenURL = `${getBaseUrl()}/api/refresh-session`
 export const UpdateOrdersStatusAndTrackingNumberURL = `${getBaseUrl()}/api/update-order-status-and-tracking-number`
 export const UploadProductURL = `${getBaseUrl()}/api/upload-product`;
+export const UpdateProductURL = `${getBaseUrl()}/api/update-product`;

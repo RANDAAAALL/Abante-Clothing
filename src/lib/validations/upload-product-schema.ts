@@ -11,8 +11,23 @@ export const uploadProductSchema = z.object({
       "Discount must be a positive number")
     .optional(),
   
-  product_item_image: z.any().refine((file) => file instanceof File, "Front image is required"),
-  product_item_back_image: z.any().refine((file) => file instanceof File, "Back image is required"),
+    product_item_image: z
+    .any()
+    .refine(
+      (val) =>
+        val instanceof File ||
+        (typeof val === "string" && val.trim().length > 0),
+      "Front image is required"
+    ),
+  
+  product_item_back_image: z
+    .any()
+    .refine(
+      (val) =>
+        val instanceof File ||
+        (typeof val === "string" && val.trim().length > 0),
+      "Back image is required"
+    ),
   
   product_item_color: z.string().min(1, "Color is required"),
   product_item_size: z
@@ -43,8 +58,8 @@ export type uploadProductFieldsType = {
   product_item_name: string;
   product_item_price: string;
   product_item_discount?: string;
-  product_item_image: File;
-  product_item_back_image: File;
+  product_item_image: File | string;
+  product_item_back_image: File | string;
   product_item_color: string;
   product_item_size: string;
   product_item_type: string;
