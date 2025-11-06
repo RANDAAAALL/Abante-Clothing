@@ -16,7 +16,7 @@ export default function TableBody<T extends Record<string, string | number>>({
       {TbodyData.map((row, i) => (
         <div
           key={i}
-          className="border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-4 flex flex-col justify-between bg-white dark:bg-card-black-background transition hover:shadow-md"
+          className="border border-gray-200 dark:border-gray-700 rounded-md shadow-sm p-4 flex flex-col justify-between bg-white dark:bg-card-black-background transition hover:shadow-md"
         >
           {/* Header (Order Number or First Column) */}
           <h2 className="font-semibold text-base mb-3">
