@@ -2,8 +2,8 @@ export default function DashboardOrdersSkeleton() {
     return (
       <div className="mt-6 space-y-6">
         {/* ==== STATUS CARDS SKELETON ==== */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[...Array(6)].map((_, i) => (
             <div
               key={i}
               className="rounded-lg border border-border p-4 bg-muted/30 flex flex-col justify-between h-[150px]"
