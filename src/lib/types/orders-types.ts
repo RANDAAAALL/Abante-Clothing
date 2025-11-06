@@ -1,10 +1,16 @@
 export interface OrderDetailProps {
+    order_detail_ID: number;
     order_detail_name: string | null;
     order_detail_qty: number | null;
     order_detail_size: string | null;
     product_items: {
       product_item_color: string | null;
     } | null;
+
+    is_returned?: boolean | null;
+    returned_qty?: number | null;
+    return_reason?: string | null;
+    return_accepted?: boolean | null;
   }
   
   type OrdersProps =  {
@@ -26,6 +32,7 @@ export interface OrderDetailProps {
     payments: {
       payment_amount: number | null;
     } | null;
+
 };
 
 export type { OrdersProps };

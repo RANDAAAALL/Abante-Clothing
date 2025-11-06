@@ -70,8 +70,8 @@ export default function UploadProductClientData({
       </div>
 
       {/* === Filter Section === */}
-      <div className="flex flex-col md:flex-row md:items-center gap-2 mt-6">
-        <span className="text-lg font-semibold">Product Status:</span>
+      <div className="flex flex-col md:flex-row md:items-center gap-2 mt-6 mb-3">
+        <span className="text-sm font-medium">Product Status:</span>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -98,7 +98,7 @@ export default function UploadProductClientData({
       </div>
 
       {/* === Products Display === */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.length > 0 ? (
           filtered.map((p) => (
             <Card key={p.product_item_ID} className="dark:bg-card-black-background py-2 gap-0 overflow-hidden hover:shadow-md transition">

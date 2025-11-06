@@ -1,7 +1,4 @@
-// src/app/products/[slug]/page.tsx
-// import FooterSectionContent from "@/components/ui/footer-section/footer-content";
 import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
-// import NavbarContent from "@/components/ui/navbar-section/navbar-client";
 import CustomerProductPreview from "@/components/ui/specific-product/customer-product-preview";
 import HeroContents from "@/components/ui/specific-product/hero-contents";
 import ProductPathTitle from "@/components/ui/specific-product/product-path-title";

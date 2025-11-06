@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import prisma from "../prisma/prisma";
 
-export const getOrdersCached = unstable_cache(async () => {
+export const getOrdersCached = async () => {
   const ordersData = await prisma.order_purchased.findMany({
     where: {
       // Only fetch orders that have a shipping/delivery address of type "shipping"
@@ -24,9 +24,14 @@ export const getOrdersCached = unstable_cache(async () => {
       // Products column
       order_details: {
         select: {
+          order_detail_ID: true,
           order_detail_name: true,
           order_detail_qty: true,
           order_detail_size: true,
+          is_returned: true,
+          returned_qty: true,
+          return_reason: true,
+          return_accepted: true,
           product_items: {
             select: {
               product_item_color: true,
@@ -67,4 +72,4 @@ export const getOrdersCached = unstable_cache(async () => {
   }));
 
   return parsedOrdersData;
-}, ["orders"], { tags: ["orders"] });
+}

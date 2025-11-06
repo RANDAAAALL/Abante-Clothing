@@ -1,10 +1,10 @@
 import { getBaseUrl } from "@/lib/helper/getBaseUrl";
 
 // dynamically builds URLs based on environment
-export const ProductsURL = `${getBaseUrl()}/api/products`;
+// export const ProductsURL = `${getBaseUrl()}/api/products`;
 export const LoginURL = `${getBaseUrl()}/api/login`;
 export const RegisterURL = `${getBaseUrl()}/api/register`;
-export const CustomerFeedbackURL = `${getBaseUrl()}/api/customer-feedbacks`;
+// export const CustomerFeedbackURL = `${getBaseUrl()}/api/customer-feedbacks`;
 export const LogoutURL = `${getBaseUrl()}/api/logout`;
 export const MeURL = `${getBaseUrl()}/api/me`;
 export const GetCartURL = `${getBaseUrl()}/api/get-cart`;

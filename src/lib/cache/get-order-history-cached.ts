@@ -51,6 +51,7 @@ export const getOrderHistoryCached = unstable_cache(async (user_ID: number) => {
 
         order_details: {
           select: {
+            order_detail_ID: true,
             order_detail_name: true,
             order_detail_qty: true,
             order_detail_size: true,
@@ -67,10 +68,13 @@ export const getOrderHistoryCached = unstable_cache(async (user_ID: number) => {
     });
 
     const tableData = orderReceiptData.map(order => ({
-      "TRACK-NO": order.order_purchased_tracking_number
-        ? firstLetterUpcase(order.order_purchased_tracking_number)
+      "Order #": order.order_purchased_number ?? "-",
+      "Status": order.order_purchased_status
+        ? order.order_purchased_status
         : "-",
-      "ORD-NO": order.order_purchased_number ?? "-",
+      "Track #": order.order_purchased_tracking_number
+      ? order.order_purchased_tracking_number
+      : "-",
       "Items": order.order_details.reduce(
         (acc, detail) => acc + (detail.order_detail_qty ?? 0),
         0
@@ -78,13 +82,10 @@ export const getOrderHistoryCached = unstable_cache(async (user_ID: number) => {
       "Payment": order.payments?.payment_method
         ? firstLetterUpcase(order.payments.payment_method)
         : "-",
-      "Status": order.order_purchased_status
-        ? firstLetterUpcase(order.order_purchased_status)
-        : "-",
-      "Purchased Date": order.order_purchased_date
+      "Date": order.order_purchased_date
         ? new Date(order.order_purchased_date).toLocaleDateString()
         : "-",
-      "Actions": "View details",
+      "Actions": "View Receipt",
     }));
 
     const orderReceiptModalData: OrderReceiptModalProps[] = orderReceiptData.map(order => {
