@@ -1,9 +1,9 @@
-import { getAllRelatedProducts } from "@/dal/get-all-related-products";
 import { SearchQuerytypes } from "../types/search-query-types";
 import Fuse from "fuse.js"
+import { getAllProductsCached } from "../cache/get-all-products";
 
 export const filteredProductItems = async ({query}: SearchQuerytypes) =>{
-    const items = await getAllRelatedProducts();
+    const items = await getAllProductsCached();
     if (!query) return items;
 
     const fuse = new Fuse(items!, {

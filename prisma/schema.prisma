@@ -65,6 +65,10 @@ model order_details {
   order_detail_qty   Int?
   order_detail_price Decimal?         @db.Decimal(10, 2)
   order_detail_size  String?          @db.VarChar(50)
+  is_returned        Boolean          @default(false)
+  returned_qty       Int?             @default(0)
+  return_reason      String?          @db.VarChar(255)
+  return_accepted    Boolean?         @default(false)
   order_purchased    order_purchased? @relation(fields: [order_purchased_ID], references: [order_purchased_ID], onDelete: Cascade, onUpdate: NoAction, map: "order_details_ibfk_1")
   product_items      product_items?   @relation(fields: [product_item_ID], references: [product_item_ID], onDelete: NoAction, onUpdate: NoAction, map: "order_details_ibfk_2")
   users_feedback     users_feedback[]

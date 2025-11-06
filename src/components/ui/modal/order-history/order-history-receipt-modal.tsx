@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
@@ -16,12 +16,22 @@ export default function OrderHistoryReceiptModal() {
     orderPurchasedNumber,
     setClearOrderPurchasedNumber,
   } = useOrderHistoryReceiptModal();
-
   const [isOrderDetailsOpen, setOrderDetailsOpen] = useState<boolean>(false);
   const [isDownloading, setDownloading] = useState<boolean>(false);
-
+  
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+  
   if (!isOpen) return null;
-
+  
   const isTheSameOrderPurchasedNumber = orderHistoryReceiptData?.some(
     (order) => order?.orderNumber === orderPurchasedNumber
   );
