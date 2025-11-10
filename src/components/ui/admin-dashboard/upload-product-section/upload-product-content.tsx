@@ -1,3 +1,4 @@
+import UploadProductSkeleton from "../../skeletons/upload-product-card";
 import UploadProductClientButton from "./upload-product-client-button";
 import UploadProductServerData from "./upload-product-server-data";
 import { Suspense } from "react";
@@ -9,7 +10,7 @@ export default function UploadProductContent() {
         <span className="font-bold text-3xl">Products Management</span>
         <UploadProductClientButton />
       </div>
-      <Suspense><UploadProductServerData /></Suspense>
+      <Suspense fallback={<UploadProductSkeleton />}><UploadProductServerData /></Suspense>
     </main>
   );
 }

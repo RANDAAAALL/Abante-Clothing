@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import CheckoutItemData from "./checkout-item-data";
 import CheckoutServerData from "./checkout-server-data";
+import CheckoutFormSkeleton from "../skeletons/checkout-form-card";
 
 export default function CheckoutContent(){
 
@@ -13,7 +14,7 @@ export default function CheckoutContent(){
         <div className="grid grid-cols-1 md:gap-5 md:grid-cols-[1fr_1fr]">
 
         {/* left content */}
-        <Suspense fallback={<p className="h-auto md:h-123 flex items-center justify-center">Loading...</p>}><CheckoutServerData /></Suspense>
+        <Suspense fallback={<CheckoutFormSkeleton />}><CheckoutServerData /></Suspense>
         
         {/* right content */}
         <div><CheckoutItemData /></div>
