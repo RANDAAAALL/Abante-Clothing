@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import prisma from "../prisma/prisma";
+import { filterUniqueUserFeedbacks } from "../helper/filter-unique-user-feedbacks";
 export const getCustomerFeedbacksCached = unstable_cache(async () => {
   const customerFeedbacks = await prisma.users_feedback.findMany({
     select: {
@@ -20,15 +21,6 @@ export const getCustomerFeedbacksCached = unstable_cache(async () => {
     },
   });
 
-  const seen = new Map<number, boolean>();
-  const filteredFeedbacks = customerFeedbacks.filter((fb) => {
-    if (fb.feedback_comment !== "No additional comments provided.") return true;
-
-    const userId = fb.user_ID;
-    if (seen.has(userId ?? 0)) return false; 
-    seen.set(userId ?? 0, true);
-    return true;
-  });
-
-  return filteredFeedbacks;
+  // 1 feedback per user will be shown
+  return filterUniqueUserFeedbacks(customerFeedbacks);
 }, ["customer-feedbacks"], { tags: ["customer-feedbacks"], revalidate: 30 });

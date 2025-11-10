@@ -9,18 +9,26 @@ import { getAllProductsName } from "@/dal/get-all-products-name";
 import { ParamsProps } from "@/lib/types/params-types";
 import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
 import { Suspense } from "react";
+import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 
 export const revalidate = 30;
 
 export default async function Page({ params }: ParamsProps ) {
   const { slug } = await params;
-  const [ ProductVariants, AllRelatedProducts, AllRelatedCustomerFeedbacks ] = await Promise.all([
-    getSingleProduct({slug}),
+  
+   const [ ProductVariants, AllRelatedProducts ] = await Promise.all([
+    getSingleProduct({ slug }),
     getAllRelatedProducts(),
-    getAllRelatedCustomerProductReview()
   ]);
 
-  if(!ProductVariants || !AllRelatedProducts || !AllRelatedCustomerFeedbacks ) return <div className="flex items-center justify-center h-screen"><h1>Error! something wrong on fetching on db</h1></div>
+  if(!ProductVariants || !AllRelatedProducts) return <div className="flex items-center justify-center h-screen"><h1>Error! something wrong on fetching on db</h1></div>
+
+  let CurrentProductFeedbacks: CustomerFeedbackProps[] = [];
+  if (ProductVariants[0]?.product_item_ID != null) {
+    CurrentProductFeedbacks = await getAllRelatedCustomerProductReview(
+      ProductVariants[0].product_item_ID
+    );
+  }
 
   // console.log("Single Product: ", ProductVariants);
   // console.log("All Products: ",AllProducts);
@@ -50,7 +58,7 @@ export default async function Page({ params }: ParamsProps ) {
       <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllRelatedProducts}/></section>
 
       {/* customer product preview */}
-      <section className="mt-9 w-full"><CustomerProductPreview props={AllRelatedCustomerFeedbacks}/></section>
+      <section className="mt-9 w-full"><CustomerProductPreview props={CurrentProductFeedbacks}/></section>
       </main>
       </div>
     </>
