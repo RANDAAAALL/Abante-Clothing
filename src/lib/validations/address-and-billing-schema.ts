@@ -40,19 +40,20 @@ export const AddressAndBillingSchema = z.object({
     .min(1, "Region name is required"),
 
   phoneNumber: z
-    .string()
-    .trim()
-    .transform((val) => val.replace(/\s+/g, ""))
-    .refine(
-      (val) => /^(09\d{9}|9\d{9}|\+639\d{9}|639\d{9})$/.test(val),
-      { message: "Invalid phone number. Use +639, 09, or 9 followed by 9 digits." }
-    )
-    .transform((val) => {
-      if (val.startsWith("09")) return "+63" + val.slice(1);
-      if (val.startsWith("9")) return "+63" + val;
-      if (val.startsWith("639")) return "+63" + val.slice(2);
-      return val;
-    }),
+  .string()
+  .transform((val) => val.replace(/\s+/g, "")) 
+  .transform((val) => {
+    // Normalize to +639XXXXXXXXX format
+    if (val.startsWith("+639")) return val;
+    if (val.startsWith("639")) return "+63" + val.slice(2);
+    if (val.startsWith("09")) return "+63" + val.slice(1);
+    if (val.startsWith("9")) return "+63" + val;
+    return val; // fallback
+  })
+  .refine(
+    (val) => /^\+639\d{9}$/.test(val),
+    { message: "Invalid phone number. Must start with +639, 639, 09, or 9 and contain 11 digits in total." }
+  )
 });
 
 export type AddressAndBillingType = z.infer<typeof AddressAndBillingSchema>;

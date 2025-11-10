@@ -11,7 +11,7 @@ export const getStatusBadgeColor = (status: string | null) => {
       case "delivered":
         return "bg-green-100 text-green-800";
       case "pending_return":
-        return "bg-red-200 text-red-600";
+        return "bg-orange-300 text-orange-800";
       default:
         return "bg-red-500 text-red-800";
     }

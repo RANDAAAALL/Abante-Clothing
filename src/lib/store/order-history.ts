@@ -26,23 +26,8 @@ export const useOrderHistoryReceiptModal = create<
   setOpenModal: () => set({ isOpen: true }),
   setCloseModal: () => set({ isOpen: false }),
 
-  setOrderHistoryReceiptData: (data) =>
-    set((state) => {
-      const newData = data.filter(
-        (incomingOrder) =>
-          !state.orderHistoryReceiptData.some(
-            (existing) => existing.orderNumber === incomingOrder.orderNumber
-          )
-      );
-
-      // merge without duplicates
-      return {
-        orderHistoryReceiptData: [
-          ...state.orderHistoryReceiptData,
-          ...newData,
-        ],
-      };
-    }),
+  // ✅ FIX: Replace entire data instead of merging
+  setOrderHistoryReceiptData: (data) => set({ orderHistoryReceiptData: data }),
 
   setClearOrderHistoryReceiptData: () => set({ orderHistoryReceiptData: [] }),
   setOrderPurchasedNumber: (orderNumber) => set({ orderPurchasedNumber: orderNumber }),

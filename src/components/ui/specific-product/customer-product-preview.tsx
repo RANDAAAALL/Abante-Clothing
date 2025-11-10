@@ -18,12 +18,16 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
                 <Card key={i} className={`dark:bg-card-black-background mt-3 flex items-center flex-col sm:flex-row px-6 min-h-32`}>
                 
                 {/* customer image */}
-                <Image  
-                src={customer?.users?.user_image ?? "/images/png/default_avatar.png"}
-                width={71}
-                height={71}
-                alt="customer-feedback-alt"
-                className="rounded-full"/>
+                <div className="w-[71px] h-[71px] rounded-full overflow-hidden flex-shrink-0 mr-4">
+                    <Image
+                        src={customer?.users?.user_image ?? "/images/png/default_avatar.png"}
+                        alt="customer-feedback-alt"
+                        width={71}
+                        height={71}
+                        className="object-cover w-full h-full"
+                    />
+                    </div>
+
 
                 {/* customer name, rating, feedback */}
                 <div className="space-y-6 sm:space-y-3 text-sm flex-1 shrink-1">

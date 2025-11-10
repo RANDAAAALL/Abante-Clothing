@@ -65,12 +65,9 @@ model order_details {
   order_detail_qty   Int?
   order_detail_price Decimal?         @db.Decimal(10, 2)
   order_detail_size  String?          @db.VarChar(50)
-  is_returned        Boolean          @default(false)
-  returned_qty       Int?             @default(0)
-  return_reason      String?          @db.VarChar(255)
-  return_accepted    Boolean?         @default(false)
   order_purchased    order_purchased? @relation(fields: [order_purchased_ID], references: [order_purchased_ID], onDelete: Cascade, onUpdate: NoAction, map: "order_details_ibfk_1")
   product_items      product_items?   @relation(fields: [product_item_ID], references: [product_item_ID], onDelete: NoAction, onUpdate: NoAction, map: "order_details_ibfk_2")
+  returns            returns[]
   users_feedback     users_feedback[]
 
   @@index([order_purchased_ID], map: "order_purchased_ID")
@@ -137,15 +134,25 @@ model product_items {
 }
 
 model returns {
-  return_ID         Int       @id
-  user_ID           Int?
-  return_item_ID    Int?
-  return_status     String?   @db.VarChar(50)
-  return_type_issue String?   @db.VarChar(50)
-  return_date       DateTime? @db.DateTime(0)
-  users             users?    @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "returns_ibfk_1")
+  return_ID               Int            @id @default(autoincrement())
+  user_ID                 Int?
+  returned_date           DateTime?      @db.DateTime(0)
+  order_detail_ID         Int?
+  is_returned             Int?           @default(0) @db.TinyInt
+  returned_product_qty    Int?
+  returned_product_size   String?        @db.VarChar(50)
+  returned_product_color  String?        @db.VarChar(50)
+  returned_product_reason String?        @db.VarChar(255)
+  returned_product_image  Json?
+  is_return_accepted      String?        @db.VarChar(50)
+  request_return_date     DateTime?      @db.DateTime(0)
+  returned_product_price  Decimal?       @db.Decimal(10, 2)
+  returned_product_name   String?        @db.VarChar(255)
+  order_details           order_details? @relation(fields: [order_detail_ID], references: [order_detail_ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_detail")
+  users                   users?         @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "returns_ibfk_1")
 
   @@index([user_ID], map: "user_ID")
+  @@index([order_detail_ID], map: "fk_order_detail")
 }
 
 model users {
@@ -167,12 +174,12 @@ model users {
 }
 
 model users_feedback {
-  feedback_ID      Int            @id
+  feedback_ID      Int            @id @default(autoincrement())
   user_ID          Int?
   order_detail_ID  Int?
   feedback_comment String?        @db.VarChar(255)
   feedback_rating  Int?
-  feedback_date    DateTime?      @db.DateTime(0)
+  feedback_date    DateTime?      @default(now()) @db.DateTime(0)
   users            users?         @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "users_feedback_ibfk_1")
   order_details    order_details? @relation(fields: [order_detail_ID], references: [order_detail_ID], onDelete: NoAction, onUpdate: NoAction, map: "users_feedback_ibfk_2")
 

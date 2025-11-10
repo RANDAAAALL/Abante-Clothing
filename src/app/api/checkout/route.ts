@@ -70,21 +70,36 @@ export async function POST(req: NextRequest) {
             // check if user selected different billing address
             let billingAddress = null;
             if (checkoutForm.addressType === "billing-address") {
-              billingAddress = await tx.address.create({
-                data: {
+              // check if billing address is already exists
+              billingAddress = await tx.address.findFirst({
+                where: {
                   user_ID: userID,
-                  address_type: "billing",
-                  recipient_first_name: checkoutForm?.billingFirstName,
-                  recipient_last_name: checkoutForm.billingLastName,
-                  company_name: checkoutForm.billingCompanyName,
                   address_name: checkoutForm.billingAddressName,
-                  apartment_name: checkoutForm.billingApartmentName,
-                  postal_code: checkoutForm.billingPostalCode,
                   city_name: checkoutForm.billingCityName,
                   region_name: checkoutForm.billingRegionName,
+                  postal_code: checkoutForm.billingPostalCode,
                   phone_number: checkoutForm.billingPhoneNumber,
+                  address_type: "billing",
                 },
               });
+            
+              if (!billingAddress) {
+                billingAddress = await tx.address.create({
+                  data: {
+                    user_ID: userID,
+                    address_type: "billing",
+                    recipient_first_name: checkoutForm?.billingFirstName,
+                    recipient_last_name: checkoutForm.billingLastName,
+                    company_name: checkoutForm.billingCompanyName,
+                    address_name: checkoutForm.billingAddressName,
+                    apartment_name: checkoutForm.billingApartmentName,
+                    postal_code: checkoutForm.billingPostalCode,
+                    city_name: checkoutForm.billingCityName,
+                    region_name: checkoutForm.billingRegionName,
+                    phone_number: checkoutForm.billingPhoneNumber,
+                  },
+                });
+              }
             }
           
             // create payment

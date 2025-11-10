@@ -1,5 +1,6 @@
 export interface OrderDetailProps {
     order_detail_ID: number;
+    order_purchased_ID?: number;
     order_detail_name: string | null;
     order_detail_qty: number | null;
     order_detail_size: string | null;
@@ -7,10 +8,26 @@ export interface OrderDetailProps {
       product_item_color: string | null;
     } | null;
 
-    is_returned?: boolean | null;
-    returned_qty?: number | null;
-    return_reason?: string | null;
-    return_accepted?: boolean | null;
+    // is_returned?: boolean | null;
+    // returned_qty?: number | null;
+    // return_reason?: string | null;
+    // return_accepted?: boolean | null;
+
+    returns?: {
+      return_ID: number;
+      order_detail_ID: number | null;  // Make nullable to match Prisma
+      is_returned: number | null;      // Change from boolean to number | null
+      returned_product_name: string | null;  // Make nullable
+      returned_product_price: number | null;  // Make nullable
+      returned_product_color: string | null;  // Make nullable
+      returned_product_qty: number | null;    // Make nullable
+      returned_product_size: string | null;   // Make nullable
+      returned_product_image: string[] | null;  // Make nullable
+      returned_product_reason: string | null;  // Make nullable
+      request_return_date: Date | string | null;  // Make nullable
+      returned_date: Date | string | null;  // Make nullable
+      is_return_accepted: string | null;
+    }[]
   }
   
   type OrdersProps =  {
