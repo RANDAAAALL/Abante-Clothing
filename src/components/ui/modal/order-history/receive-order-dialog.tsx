@@ -216,7 +216,7 @@ export default function ReceiveOrderDialog({
           <DialogTitle>
             {hasProductsWithoutFeedback
               ? "Confirm You've Received Your Order"
-              : "Order Already Processed"}
+              : "Order Completed"}
           </DialogTitle>
           <DialogDescription>
             {hasProductsWithoutFeedback 

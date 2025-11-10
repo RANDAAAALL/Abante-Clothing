@@ -26,7 +26,7 @@ export default async function Page({ params }: ParamsProps ) {
   let CurrentProductFeedbacks: CustomerFeedbackProps[] = [];
   if (ProductVariants[0]?.product_item_ID != null) {
     CurrentProductFeedbacks = await getAllRelatedCustomerProductReview(
-      ProductVariants[0].product_item_ID
+      ProductVariants[0].product_item_name as string
     );
   }
 

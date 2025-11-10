@@ -246,7 +246,7 @@ export default function OrderReceiptModal() {
           <div className="mt-8 text-center">
             <p className="text-gray-600 dark:text-gray-300 text-sm">
               Thank you for your purchase! 🎉 <br />
-              A confirmation email has been sent to your inbox.
+              A receipt email has also been sent to your inbox.
             </p>
           </div>
 
