@@ -133,7 +133,6 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
           ? { ...product, feedback_rating: value }
           : product
       ));
-      toast.success("Rating updated successfully!");
     } catch (error) {
       setUpdatedRatings(prev => {
         const newRatings = { ...prev };
@@ -166,13 +165,13 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
 
     const originalProducts = [...localProducts];
 
-    // ✅ OPTIMISTIC UPDATE: Update local state immediately
+    //  OPTIMISTIC UPDATE: Update local state immediately
     const updatedProducts = localProducts.map(product => {
       if (selectedProducts.includes(String(product.order_detail_ID))) {
         return {
           ...product,
           returns: [{
-            return_ID: Date.now(), // temporary ID for optimistic update
+            return_ID: Date.now(), 
             order_detail_ID: product.order_detail_ID,
             is_returned: 1,
             returned_product_name: product.name,
@@ -184,7 +183,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
             returned_product_reason: returnReasons[String(product.order_detail_ID)] || "",
             request_return_date: new Date().toISOString(),
             returned_date: null,
-            is_return_accepted: null // Set to null for pending state
+            is_return_accepted: null 
           }]
         };
       }
@@ -386,11 +385,22 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
                       <label className="text-xs text-gray-600 dark:text-gray-400">
                         Your Rating:
                       </label>
-                      <CustomerFeedbackRating
-                        rating={updatedRatings[id] ?? product.feedback_rating ?? 0}
-                        max={5}
-                        onChange={(value) => handleRatingChange(id, value)}
-                      />
+
+                      {/* disable editing if product already rated */}
+                      {product.feedback_rating ? (
+                        // show static stars, not interactive
+                        <CustomerFeedbackRating
+                          rating={product.feedback_rating}
+                          max={5}
+                        />
+                      ) : (
+                        // show interactive stars if not yet rated
+                        <CustomerFeedbackRating
+                          rating={updatedRatings[id] ?? 0}
+                          max={5}
+                          onChange={(value) => handleRatingChange(id, value)}
+                        />
+                      )}
                     </div>
                     {product.feedback_comment && (
                       <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">

@@ -91,18 +91,33 @@ export default function OrderHistoryCards<
           (o) => o.orderNumber === orderNum
         );
         
-        // check if all products have ratings (feedback given)
+        // Check if all products are processed (received/rated or returned)
+        const allProductsProcessed = orderData?.productDetails.every(
+          (p) => {
+            const hasFeedback = !!p.feedback_rating;
+            const hasReturns = p.returns && p.returns.length > 0;
+            const hasAcceptedReturn = hasReturns && p.returns?.some(r => r.is_return_accepted === "Accepted");
+            const hasRejectedReturn = hasReturns && p.returns?.some(r => r.is_return_accepted === "Rejected");
+            
+            // Product is considered processed if:
+            // - It has been rated (received) OR
+            // - It has an accepted return OR
+            // - It has a rejected return (considered final)
+            return hasFeedback || hasAcceptedReturn || hasRejectedReturn;
+          }
+        );
+
+        // Check if all products have ratings (all items received and rated)
         const allProductsFeedbacked = orderData?.productDetails.every(
           (p) => p.feedback_rating && p.feedback_rating > 0
         );
 
-        // calculate return statuses for the order using the new returns structure
+        // Calculate return statuses
         const totalItems = orderData?.productDetails.reduce(
           (sum, p) => sum + Number((p.qty ?? 0)),
           0
         ) || 0;
 
-        // calculate from returns array instead of individual fields
         const allReturns = orderData?.productDetails.flatMap(p => p.returns || []) || [];
         
         const totalReturnedAccepted = allReturns
@@ -113,15 +128,14 @@ export default function OrderHistoryCards<
           .filter(r => r.is_returned === 1 && r.is_return_accepted === null)
           .reduce((sum, r) => sum + (r.returned_product_qty || 0), 0);
 
-        // In the tableBody component, add this calculation after the existing return calculations:
         const totalReturnedRejected = allReturns
-        .filter(r => r.is_returned === 1 && r.is_return_accepted === "Rejected")
-        .reduce((sum, r) => sum + (r.returned_product_qty || 0), 0);
+          .filter(r => r.is_returned === 1 && r.is_return_accepted === "Rejected")
+          .reduce((sum, r) => sum + (r.returned_product_qty || 0), 0);
 
         const allReturned = totalReturnedAccepted === totalItems && totalItems > 0;
         const nonReturnedLeft = totalItems - totalReturnedAccepted - pendingReturnCount;
 
-        // get order status
+        // Get order status
         const orderStatus = row["Status"] as string;
 
         return (
@@ -147,13 +161,48 @@ export default function OrderHistoryCards<
                 if (isActions) {
                   const actions = Array.isArray(value) ? value : [value];
                   
-                  // filter actions - only show "Receive Order" and "Request Return" for delivered/all returned status
-                  const filteredActions = actions.filter(action => {
-                    // Always show "View Receipt"
-                    if (action === "View Receipt") return true;
+                  // In the actions section, replace the button text logic:
+                  const filteredActions = actions.map(action => {
+                    // Always show "View Receipt" as is
+                    if (action === "View Receipt") return action;
                     
-                    // only show "Receive Order" and "Request Return" if status is delivered or all returned
-                    if (action === "Receive Order" || action === "Request Return") {
+                    // Check if there are any pending returns - if yes, don't change button titles
+                    const hasPendingReturns = pendingReturnCount > 0;
+                    
+                    // Modify "Receive Order" button text
+                    if (action === "Receive Order") {
+                      // If there are pending returns, keep original title
+                      if (hasPendingReturns) {
+                        return action;
+                      }
+                      // Otherwise, if all products are processed (any mix of received/returned/rejected)
+                      if (allProductsProcessed) {
+                        return "✓ Order Completed";
+                      }
+                      return action;
+                    }
+                    
+                    // Modify "Request Return" button text
+                    if (action === "Request Return") {
+                      // If there are pending returns, keep original title
+                      if (hasPendingReturns) {
+                        return action;
+                      }
+                      // Otherwise, if all products are processed
+                      if (allProductsProcessed) {
+                        return "✓ No Returns Left";
+                      }
+                      return action;
+                    }
+                    
+                    return action;
+                  }).filter(action => {
+                    // Filter out actions that shouldn't be shown
+                    if (action === "Receive Order" || action === "✓ Order Completed") {
+                      return orderStatus?.toLowerCase() === "delivered" || allReturned;
+                    }
+                    
+                    if (action === "Request Return" || action === "✓ No Returns Left") {
                       return orderStatus?.toLowerCase() === "delivered" || allReturned;
                     }
                     
@@ -163,10 +212,11 @@ export default function OrderHistoryCards<
                   return (
                     <div key={j} className="flex flex-col gap-2 pt-2 mt-auto">
                       {filteredActions.map((action, idx) => {
-                        const isReceipt = action === "View Receipt";
-                        const isReceiveOrder = action === "Receive Order";
-                        const isReturn = action === "Request Return";
-
+                        const actionText = String(action);
+                        const isReceipt = actionText === "View Receipt";
+                        const isReceiveOrder = actionText === "Receive Order" || actionText === "✓ Order Completed";
+                        const isReturn = actionText === "Request Return" || actionText === "✓ No Returns Left";
+                  
                         const handleClick = () => {
                           if (isReceipt) {
                             setOpenModal();
@@ -177,12 +227,34 @@ export default function OrderHistoryCards<
                             handleOpenDialog("return", orderNum);
                           }
                         };
-
+                  
+                        // determine button style based on the action type
+                        const getButtonStyle = (actionText: string | number) => {
+                          const text = String(actionText);
+                          
+                          // for completed states with specific colors
+                          if (text === "✓ Order Completed") {
+                            return "w-full py-2 text-xs font-semibold rounded-md transition bg-green-600 text-white hover:bg-green-700";
+                          } else if (text === "✓ No Returns Left") {
+                            return "w-full py-2 text-xs font-semibold rounded-md transition bg-red-600 text-white hover:bg-red-700";
+                          } 
+                          // for other completed states (fallback)
+                          else if (text.includes("✓")) {
+                            return "w-full py-2 text-xs font-semibold rounded-md transition bg-gray-400 text-white hover:bg-gray-500";
+                          } 
+                          // default active buttons
+                          else {
+                            return "w-full py-2 text-xs font-semibold rounded-md transition bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200";
+                          }
+                        };
+                  
                         return (
                           <Button
                             key={idx}
                             onClick={handleClick}
-                            className={`w-full py-2 text-xs font-semibold rounded-md transition bg-black text-white dark:bg-white dark:text-black`}>
+                            className={getButtonStyle(action)}
+                            // disabled={actionText.includes("✓")} // Disable completed state buttons
+                          >
                             {action}
                           </Button>
                         );
@@ -199,7 +271,6 @@ export default function OrderHistoryCards<
                     {isStatus ? (
                       <div className="flex flex-col gap-1 items-end">
                         {allReturned ? (
-                          // all items returned
                           <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-500 text-red-800">
                             all returned
                           </span>
@@ -211,7 +282,6 @@ export default function OrderHistoryCards<
                                 className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(
                                   value as string
                                 )}`}>
-                                {/* only show quantity for delivered status */}
                                 {(value as string).toLowerCase() === "delivered" && nonReturnedLeft > 0 && totalReturnedAccepted > 0
                                   ? `(${nonReturnedLeft}) ${value}`
                                   : value}
