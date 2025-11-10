@@ -54,7 +54,7 @@ export default function CustomerImageDescContent({ customerFeedback }: { custome
                   </CardContent>
 
                   {/* Rating */}
-                  <CardFooter className="flex pb-4">
+                  <CardFooter className="flex justify-center md:justify-start pb-4">
                     <CustomerFeedbackRating rating={customer?.feedback_rating} />
                   </CardFooter>
                 </Card>
