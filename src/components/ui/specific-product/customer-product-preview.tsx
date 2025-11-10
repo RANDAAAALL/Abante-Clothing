@@ -15,7 +15,7 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
         <>
         <div className="mx-auto md:mx-0"><span className="mt-9 font-bold text-lg">Product Preview</span></div>
             {currentData.map(( customer, i ) => (
-                <Card key={i} className={`dark:bg-card-black-background mt-3 flex items-center flex-col sm:flex-row px-6 min-h-32`}>
+                <Card key={i} className={`dark:bg-card-black-background mt-3 gap-3 flex items-center flex-col sm:flex-row px-6 min-h-32`}>
                 
                 {/* customer image */}
                 <div className="w-[71px] h-[71px] rounded-full overflow-hidden flex-shrink-0 mr-4">
