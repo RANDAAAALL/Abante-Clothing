@@ -29,8 +29,19 @@ const BillingFieldsSchema = z.object({
     .regex(/^[A-Za-z0-9\s]+$/, "Special characters are not allowed"),
   billingPhoneNumber: z
     .string()
-    .regex(/^(09\d{9}|9\d{9}|\+639\d{9}|639\d{9})$/, "Invalid phone number. It should start with +639, 09, or 9 and have the correct number of digits"),
-}).partial(); 
+    .transform((val) => val.replace(/\s+/g, "")) 
+    .transform((val) => {
+      // Normalize to +639XXXXXXXXX format
+      if (val.startsWith("+639")) return val;
+      if (val.startsWith("639")) return "+63" + val.slice(2);
+      if (val.startsWith("09")) return "+63" + val.slice(1);
+      if (val.startsWith("9")) return "+63" + val;
+      return val;
+    })
+    .refine(
+      (val) => /^\+639\d{9}$/.test(val),
+      { message: "Invalid phone number. Must start with +639, 639, 09, or 9 and contain 11 digits in total." }
+    )}).partial();
 
 // checkout schema
 export const CheckoutSchema = z
@@ -65,17 +76,20 @@ export const CheckoutSchema = z
       .regex(/^[A-Za-z0-9\s]+$/, "Special characters are not allowed"),
     phoneNumber: z
       .string()
-      .transform((val) => val.replace(/\s+/g, ""))
-      .refine(
-        (val) => /^(09\d{9}|9\d{9}|\+639\d{9}|639\d{9})$/.test(val),
-        { message: "Invalid phone number. It should start with +639, 09, or 9 and have the correct number of digits" }
-      )
+      .transform((val) => val.replace(/\s+/g, "")) 
       .transform((val) => {
+        // Normalize to +639XXXXXXXXX format
+        if (val.startsWith("+639")) return val;
+        if (val.startsWith("639")) return "+63" + val.slice(2);
         if (val.startsWith("09")) return "+63" + val.slice(1);
         if (val.startsWith("9")) return "+63" + val;
-        if (val.startsWith("639")) return "+63" + val.slice(2);
-        return val;
-      }),
+        return val; 
+      })
+      .refine(
+        (val) => /^\+639\d{9}$/.test(val),
+        { message: "Invalid phone number. Must start with +639, 639, 09, or 9 and contain 11 digits in total." }
+      ),
+      
     // saveInformation: z.boolean().optional(),
     paymentMethod: z.enum(["gcash", "paymaya", "bank-transfer"], {
       error: () => ({ message: "Please select a payment method." }),

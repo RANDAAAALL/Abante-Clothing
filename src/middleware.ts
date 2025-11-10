@@ -28,6 +28,9 @@ export async function middleware(request: NextRequest) {
       "/api/update-order-status-and-tracking-number",
       "/api/upload-product",
       "/api/update-product",
+      "/api/add-feedback",
+      "/api/request-return",
+      "/api/update-return-status",
     ],
     adminProtectedRoutes: [
       "/admin/dashboard",
@@ -137,5 +140,8 @@ export const config = {
     "/api/update-order-status-and-tracking-number",
     "/api/upload-product",
     "/api/update-product",
+    "/api/add-feedback",
+    "/api/request-return",
+    "/api/update-return-status",
   ],
 };

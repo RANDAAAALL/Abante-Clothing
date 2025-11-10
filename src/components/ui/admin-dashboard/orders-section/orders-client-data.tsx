@@ -23,13 +23,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
-import { UpdateOrdersStatusAndTrackingNumberURL } from "@/lib/config";
+import { UpdateOrdersStatusAndTrackingNumberURL, UpdateReturnStatusURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { OrderDetailProps, OrdersProps } from "@/lib/types/orders-types";
 import { getStatusBadgeColor } from "@/lib/helper/get-order-status-badge-color";
+import { useOrderCalculations } from "@/hooks/useOrderCalculations";
+import { OrderStatusBadges } from "@/components/ui/status/order-status-badges";
+import { ProductLine } from "@/components/ui/order/product-line";
+import { ReturnDetailsDialog } from "../../modal/return-details-dialog";
+import { Search } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../select";
+import { ProductItem } from "@/lib/interface/order-history-dialog";
 
 export default function OrdersClientData({ orders }: OrdersClientDataProps) {
   const [statusFilter, setStatusFilter] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<Partial<OrdersProps> | null>(null);
   const [editStatus, setEditStatus] = useState("");
   const [editTracking, setEditTracking] = useState("");
@@ -38,6 +46,8 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
   const [selectedReturn, setSelectedReturn] = useState<OrderDetailProps | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
+
+  const { totals } = useOrderCalculations(orders);
 
   // Auto-refresh every 30s
   useEffect(() => {
@@ -48,78 +58,42 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
     }, 30000);
     return () => clearInterval(interval);
   }, [router]);
-  const totals = useMemo(() => {
-    const counts = { 
-      pending: 0, 
-      processing: 0, 
-      shipped: 0, 
-      delivered: 0, 
-      pending_return: 0, 
-      returned: 0 
-    };
-  
-    orders.forEach((order) => {
-      const status = order.order_purchased_status?.toLowerCase();
-  
-      if (status && counts.hasOwnProperty(status)) {
-        counts[status as keyof typeof counts]++;
-      }
-  
-      // Pending returns (any order with unaccepted returns)
-      const totalPendingQty = orders.reduce((sum, order) => {
-        return (
-          sum +
-          order.order_details
-            .filter((d) => d.is_returned && !d.return_accepted)
-            .reduce((t, i) => t + (i.returned_qty ?? 0), 0)
-        );
-      }, 0);
-  
-      const totalReturnedQty = orders.reduce((sum, order) => {
-        return (
-          sum +
-          order.order_details
-            .filter((d) => d.is_returned && d.return_accepted)
-            .reduce((t, i) => t + (i.returned_qty ?? 0), 0)
-        );
-      }, 0);
-      
-      counts.pending_return = totalPendingQty;
-      counts.returned = totalReturnedQty;
-    });
-  
-    return counts;
-  }, [orders]);
-  
-  
-  // Filter orders based on dropdown
+
+  // Filter orders based on dropdown AND search term
   const filteredOrders = useMemo(() => {
-    if (statusFilter === "All") return orders;
-  
-    // If user filters by "returned"
+    let filtered = orders;
+
+    // First apply status filter
     if (statusFilter === "Returned") {
-      return orders.filter(
+      filtered = filtered.filter((order) =>
+        order.order_details.some((d) => 
+          d.returns?.some(r => r.is_returned === 1 && r.is_return_accepted === "Accepted")
+        )
+      );
+    } else if (statusFilter === "Pending Return") {
+      filtered = filtered.filter((order) =>
+        order.order_details.some((d) => 
+          d.returns?.some(r => r.is_returned === 1 && r.is_return_accepted === null)
+        )
+      );
+    } else if (statusFilter !== "All") {
+      filtered = filtered.filter(
         (order) =>
-          order.order_details.filter(o => !o.is_returned) &&
-          order.order_details.some((d) => d.is_returned && d.return_accepted)
+          order.order_purchased_status?.toLowerCase() === statusFilter.toLowerCase()
       );
     }
 
-    // If user filters by "pending return"
-    if (statusFilter === "Pending Return") {
-      return orders.filter(
-        (order) =>
-          order.order_details.some((d) => d.is_returned && !d.return_accepted)
+    // Then apply search filter
+    if (searchTerm.trim()) {
+      filtered = filtered.filter((order) =>
+        order.order_purchased_number?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-  
-    // Default behavior for other statuses
-    return orders.filter(
-      (order) => order.order_purchased_status?.toLowerCase() === statusFilter.toLowerCase()
-    );
-  }, [orders, statusFilter]);
 
-  // Open edit modal
+    return filtered;
+  }, [orders, statusFilter, searchTerm]);
+
+  // Edit Modal Handlers
   const handleEdit = (order: Partial<OrdersProps>) => {
     setSelectedOrder(order);
     setEditStatus(order.order_purchased_status || "");
@@ -127,22 +101,25 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
     setIsDialogOpen(true);
   };
 
-  // Open return details dialog
-  const handleViewReturnDetails = (orderDetail: OrderDetailProps) => {
-    // console.log("Selected Returned: ", orderDetail);
-    setSelectedReturn(orderDetail);
+  // View Return Details 
+  const handleViewReturnDetails = (orderDetail: OrderDetailProps, returnItem: NonNullable<ProductItem["returns"]>[0]) => {
+    setSelectedReturn({
+      ...orderDetail,
+      returns: [returnItem]
+    });
     setIsReturnDialogOpen(true);
   };
 
-  // Accept a return
-  const handleAcceptReturnItem = async (order_detail_ID: number) => {
+  // Accept/Reject Return
+  const handleAcceptOrRejectReturnItem = async (return_ID: number, isReturnAccepted: boolean) => {
+    console.log("Return ID: ", return_ID, isReturnAccepted );
     return toast.promise(
       (async () => {
-        const res = await fetchWithCsrf("/api/update-return-status", {
+        const res = await fetchWithCsrf(`${UpdateReturnStatusURL}`, {
           method: "PATCH",
           body: JSON.stringify({
-            order_detail_ID,
-            return_accepted: true,
+            return_ID,
+            is_return_accepted: isReturnAccepted ? "Accepted" : "Rejected",
           }),
         });
         const data = await res.json();
@@ -150,17 +127,17 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
         return data;
       })(),
       {
-        loading: "Accepting return...",
+        loading: isReturnAccepted ? "Accepting return..." : "Rejecting return...",
         success: (message) => {
           router.refresh();
           return message?.successMessage;
         },
-        error: (e) => e.message || "Failed to accept return."
+        error: (e) => e.message || (isReturnAccepted ? "Failed to accept return." : "Failed to reject return."),
       }
     );
   };
 
-  // Save changes (PATCH)
+  // Save changes
   const handleSave = async () => {
     if (!selectedOrder) return;
 
@@ -189,7 +166,6 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
 
           const data = await res.json();
           if (!res.ok) throw new Error(`${data?.errorMessage}`);
-
           return data;
         })(),
         {
@@ -208,6 +184,11 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
     }
   };
 
+  // Clear search
+  const handleClearSearch = () => {
+    setSearchTerm("");
+  };
+
   return (
     <div className="mt-8">
       {/* ==== STATUS CARDS ==== */}
@@ -218,7 +199,10 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
             className={`${getStatusBadgeColor(status)} border-border`}>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium capitalize">
-                Total {status === "pending_return" ? "Pending Return" : status}
+                Total {status === "pending_return" 
+                      ? "Pending Return Quantity" 
+                      : status === "returned" ? "Returned Quantity" 
+                      : status}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -228,162 +212,180 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
         ))}
       </div>
 
-      {/* ==== FILTER DROPDOWN ==== */}
-      <div className="mt-6 mb-3 flex items-center gap-4">
-        <label className="font-medium text-sm">Order Status:</label>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="w-40 justify-between">
-              {statusFilter}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup value={statusFilter} onValueChange={setStatusFilter}>
-              {["All", "Pending", "Processing", "Shipped", "Delivered",  "Pending Return", "Returned"].map((s) => (
-                <DropdownMenuRadioItem key={s} value={s}>
-                  {s}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      {/* ==== FILTERS ==== */}
+      <div className="mt-6 mb-3 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="flex items-center gap-4">
+          <label className="font-medium text-sm whitespace-nowrap">Order Status:</label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="w-40 justify-between">
+                {statusFilter}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuRadioGroup value={statusFilter} onValueChange={setStatusFilter}>
+                {[
+                  "All",
+                  "Pending",
+                  "Processing",
+                  "Shipped",
+                  "Delivered",
+                  "Pending Return",
+                  "Returned",
+                ].map((s) => (
+                  <DropdownMenuRadioItem key={s} value={s}>
+                    {s}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative w-full sm:w-64">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Search by Order #..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-10"
+          />
+          {searchTerm && (
+            <button
+              onClick={handleClearSearch}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              ×
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Results Count */}
+      {searchTerm && (
+        <div className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+          Showing {filteredOrders.length} order{filteredOrders.length !== 1 ? 's' : ''} 
+          {searchTerm && ` for "${searchTerm}"`}
+          {statusFilter !== "All" && ` in ${statusFilter}`}
+        </div>
+      )}
 
       {/* ==== ORDERS TABLE ==== */}
       <div className="overflow-x-auto border rounded-lg">
         <table className="min-w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-gray-50 dark:bg-card-black-background">
+        <thead className="bg-gray-50 dark:bg-card-black-background">
             <tr>
-              <th className="px-4 py-2 text-left font-semibold">Order #</th>
-              <th className="px-4 py-2 text-left font-semibold">Customer</th>
-              <th className="px-4 py-2 text-left font-semibold">Products</th>
-              <th className="px-4 py-2 text-left font-semibold">Total</th>
-              <th className="px-4 py-2 text-left font-semibold">Status</th>
-              <th className="px-4 py-2 text-left font-semibold">Tracking #</th>
-              <th className="px-4 py-2 text-left font-semibold">Date</th>
-              <th className="px-4 py-2 text-left font-semibold">Action</th>
+              <th className="px-4 py-3 text-left font-semibold">Order #</th>
+              <th className="px-4 py-3 text-left font-semibold">Customer</th>
+              <th className="px-4 py-3 text-left font-semibold">Products</th>
+              <th className="px-4 py-3 text-left font-semibold">Total</th>
+              <th className="px-4 py-3 text-left font-semibold min-w-[160px]">Status</th>
+              <th className="px-4 py-3 text-left font-semibold">Tracking #</th>
+              <th className="px-4 py-3 text-left font-semibold">Date</th>
+              <th className="px-4 py-3 text-left font-semibold">Action</th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-gray-100">
             {filteredOrders.length > 0 ? (
-              filteredOrders.map((order) => (
-                <tr key={order.order_purchased_number}>
-                  <td className="px-4 py-2 font-medium">{order.order_purchased_number}</td>
+              filteredOrders.map((order) => {
+                // Calculate return stats from the new returns table
+                const allReturns = order.order_details.flatMap(d => d.returns || []);
+                const totalReturnedAccepted = allReturns
+                  .filter(r => r.is_return_accepted === "Accepted")
+                  .reduce((sum, r) => sum + (r.returned_product_qty || 0), 0);
 
-                  <td className="px-4 py-2">
-                    {order.address_order_purchased_delivery_address_IDToaddress?.recipient_first_name}{" "}
-                    {order.address_order_purchased_delivery_address_IDToaddress?.recipient_last_name}
-                  </td>
+                const totalReturnedRejected = allReturns
+                  .filter(r => r.is_return_accepted === "Rejected")
+                  .reduce((sum, r) => sum + (r.returned_product_qty || 0), 0);
 
-                  <td className="px-4 py-2 text-muted-foreground">
-                    {order.order_details.map((d, index) => (
-                      <div key={index} className="flex flex-col gap-1 border-b last:border-b-0 py-1">
-                        <div className="flex items-center justify-between">
-                          <div className={`flex items-center flex-wrap gap-1 ${
-                                d.is_returned && !d.return_accepted
-                                ? "line-through decoration-red-800  decoration-1"
-                                : d.is_returned && d.return_accepted ? "line-through decoration-red-800 decoration-2"
-                                : "" 
-                              }`}>
-                            <span
-                              className={`capitalize font-medium `}
-                            >
-                              {d.order_detail_name}
-                            </span>
-                            <span className="text-xs capitalize text-gray-500">
-                              {d.product_items?.product_item_color}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                              ({d.order_detail_size}) ×{d.order_detail_qty}
-                            </span>
-                          </div>
+                const pendingReturnCount = allReturns
+                  .filter(r => r.is_return_accepted === null)
+                  .reduce((sum, r) => sum + (r.returned_product_qty || 0), 0);
+                
+                const totalItems = order.order_details.reduce(
+                  (sum, d) => sum + (d.order_detail_qty ?? 0),
+                  0
+                );
+                const allReturned = totalReturnedAccepted === totalItems && totalItems > 0;
 
-                          {d.is_returned && !d.return_accepted ? (
-                            <Button
-                              variant="outline"
-                              onClick={() => handleViewReturnDetails(d)}
-                              className="text-xs"
-                            >
-                              View
-                            </Button>
-                          ) : null}
-                        </div>
+                return (
+                  <tr key={order.order_purchased_number}>
+                    <td className="px-4 py-2 font-medium">
+                      {order.order_purchased_number}
+                    </td>
+
+                    <td className="px-4 py-2">
+                      {
+                        order.address_order_purchased_delivery_address_IDToaddress
+                          ?.recipient_first_name
+                      }{" "}
+                      {
+                        order.address_order_purchased_delivery_address_IDToaddress
+                          ?.recipient_last_name
+                      }
+                    </td>
+
+                    {/* ==== PRODUCTS ==== */}
+                    <td className="px-4 py-2 text-muted-foreground">
+                      {order.order_details.map((d, index) => (
+                        <ProductLine
+                          key={index}
+                          orderDetail={d}
+                          onViewReturn={handleViewReturnDetails}
+                        />
+                      ))}
+                    </td>
+
+                    <td className="px-4 py-2 font-medium">
+                      ₱{order.payments?.payment_amount?.toLocaleString() ?? "0.00"}
+                    </td>
+
+                    {/* ==== STATUS BADGES ==== */}
+                    <td className="px-4 py-3">
+                      <div className="min-w-[160px]">
+                        <OrderStatusBadges
+                          orderStatus={order.order_purchased_status || ""}
+                          totalReturnedAccepted={totalReturnedAccepted}
+                          totalReturnedRejected={totalReturnedRejected}
+                          pendingReturnCount={pendingReturnCount}
+                          totalItems={totalItems}
+                          allReturned={allReturned}
+                        />
                       </div>
-                    ))}
-                  </td>
+                    </td>
 
-                  <td className="px-4 py-2 font-medium">
-                    ₱{order.payments?.payment_amount?.toLocaleString() ?? "0.00"}
-                  </td>
+                    <td className="px-4 py-2">
+                      {order.order_purchased_tracking_number || "-"}
+                    </td>
 
-                  <td className="px-4 py-2 space-x-1">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(
-                        order.order_purchased_status
-                      )}`}>
-                      {order.order_purchased_status === "returned" ? "all returned" : order.order_purchased_status}
-                    </span>
-                    
-                    {order.order_purchased_status !== "returned" && (
-                        <>
-                          {/* 🔴 Pending Return Badge */}
-                          {order.order_details.some((d) => d.is_returned && !d.return_accepted) && (
-                            <div
-                              className="mt-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"
-                            >
-                              <span>
-                                (
-                                  { order.order_details
-                                  .filter((d) => d.is_returned && !d.return_accepted)
-                                  .reduce((sum, d) => sum + (d.returned_qty ?? 0), 0)
-                                  }
-                                )
-                              </span>
-                              <span>pending return</span>
-                            </div>
-                          )}
-                      
-                          {/* 🟢 Returned Badge */}
-                          {order.order_details.some((d) => d.is_returned && d.return_accepted) && (
-                            <div
-                              className="mt-1 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500 text-red-800"
-                            >
-                              <span>
-                                (
-                                  { order.order_details
-                                    .filter((d) => d.is_returned && d.return_accepted)
-                                    .reduce((sum, d) => sum + (d.returned_qty ?? 0), 0)
-                                  }
-                                )
-                              </span>
-                              <span>returned</span>
-                            </div>
-                          )}
-                        </>
-                      )         
-                    }
-                  </td>
+                    <td className="px-4 py-2">
+                      {OrderReceiptDateFormatter(
+                        order.order_purchased_date!.toString()
+                      )}
+                    </td>
 
-                  <td className="px-4 py-2">
-                    {order.order_purchased_tracking_number || "-"}
-                  </td>
-
-                  <td className="px-4 py-2">
-                    {OrderReceiptDateFormatter(order.order_purchased_date!.toString())}
-                  </td>
-
-                  <td className="px-4 py-2">
-                    <Button size="sm" variant="outline" onClick={() => handleEdit(order)}>
-                      Edit
-                    </Button>
-                  </td>
-                </tr>
-              ))
+                    <td className="px-4 py-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleEdit(order)}>
+                        Edit
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
-                <td colSpan={8} className="px-4 py-6 text-center text-gray-500">
-                  No orders found for this status.
+                <td
+                  colSpan={8}
+                  className="px-4 py-6 text-center text-gray-500">
+                  {searchTerm || statusFilter !== "All" 
+                    ? `No orders found${searchTerm ? ` for "${searchTerm}"` : ""}${statusFilter !== "All" ? ` in ${statusFilter}` : ""}.` 
+                    : "No orders found."}
                 </td>
               </tr>
             )}
@@ -393,7 +395,7 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
 
       {/* ==== EDIT DIALOG ==== */}
       <Dialog open={isDialogOpen} onOpenChange={!isSaving ? setIsDialogOpen : undefined}>
-        <DialogContent>
+        <DialogContent className="dark:bg-card-black-background">
           <DialogHeader>
             <DialogTitle>Edit Order #{selectedOrder?.order_purchased_number}</DialogTitle>
             <DialogDescription>
@@ -404,17 +406,21 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
           <div className="space-y-4 py-4">
             <div>
               <Label>Status</Label>
-              <select
+              <Select
                 disabled={isSaving}
-                className="mt-1.5 w-full border rounded-md p-2 text-sm"
                 value={editStatus}
-                onChange={(e) => setEditStatus(e.target.value)}
-              >
-                <option value="pending">Pending</option>
-                <option value="processing">Processing</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
-              </select>
+                onValueChange={setEditStatus}
+>
+                <SelectTrigger className="mt-1.5 w-full">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent className="dark:bg-card-black-background">
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="processing">Processing</SelectItem>
+                  <SelectItem value="shipped">Shipped</SelectItem>
+                  <SelectItem value="delivered">Delivered</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -441,57 +447,12 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
       </Dialog>
 
       {/* ==== RETURN DETAILS DIALOG ==== */}
-      <Dialog open={isReturnDialogOpen} onOpenChange={setIsReturnDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Return Details</DialogTitle>
-            <DialogDescription>
-              View reason and status for this returned item.
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedReturn && (
-            <div className="space-y-3 py-3">
-              <p className="capitalize">
-                <strong>Product:</strong> {selectedReturn.order_detail_name}
-              </p>
-              <p>
-                <strong>Returned Qty:</strong> {selectedReturn.returned_qty}
-              </p>
-              <p>
-                <strong>Reason:</strong> {selectedReturn.return_reason}
-              </p>
-              <p>
-                <strong>Status:</strong>{" "}
-                {selectedReturn.return_accepted ? (
-                  <span className="text-green-600 font-semibold">Accepted</span>
-                ) : (
-                  <span className="text-red-600 font-semibold">Pending</span>
-                )}
-              </p>
-            </div>
-          )}
-
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsReturnDialogOpen(false)}>
-              Close
-            </Button>
-
-            {!selectedReturn?.return_accepted && (
-              <Button
-                className="bg-green-600 text-white hover:bg-green-700"
-                onClick={() => {
-                  handleAcceptReturnItem(selectedReturn?.order_detail_ID ?? 0);
-                  setIsReturnDialogOpen(false);
-                }}>
-                Accept Return
-              </Button>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ReturnDetailsDialog
+        isOpen={isReturnDialogOpen}
+        onClose={() => setIsReturnDialogOpen(false)}
+        selectedReturn={selectedReturn}
+        onAcceptOrReject={handleAcceptOrRejectReturnItem}
+      />
     </div>
   );
 }

@@ -89,6 +89,7 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
   };
 
   const handleSelectAddress = async (actionTitle: string, address_ID: number) => {
+      if(address_ID === selectedAddress?.address_ID) return;
       return toast.promise(
         (async () => {
           setLoading(true);
@@ -232,7 +233,7 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
                   <button 
                   disabled={isLoading}
                   onClick={() => handleSelectAddress(title, address_ID)}
-                  className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"} h-5 w-5 rounded-full bg-gray-300 ${ selectedAddress?.address_ID === data?.address_ID ? "bg-gray-950 dark:bg-gray-500" : "hover:bg-gray-950 dark:hover:bg-gray-500"}`}>
+                  className={`${isLoading || selectedAddress?.address_ID === address_ID ? "cursor-not-allowed" : "cursor-pointer"} h-5 w-5 rounded-full bg-gray-300 ${ selectedAddress?.address_ID === data?.address_ID ? "bg-gray-950 dark:bg-gray-500" : "hover:bg-gray-950 dark:hover:bg-gray-500"}`}>
                   </button>
                   <div>
                     <span>{firstName}</span> <span>{lastName}</span>
