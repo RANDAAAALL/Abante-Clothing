@@ -32,7 +32,20 @@ export async function POST(
         { errorMessage: "Email already exists. Please try another email"},
         { status: 409 }
       );
-    }
+    };
+
+     // check if the users username already exists in the database
+     const userUsernameExists = await prisma.users.findUnique({
+      where: { email: parseData.data.username }
+    });
+
+     // if username exists, return a 409 response
+     if(userUsernameExists){
+      return NextResponse.json(
+        { errorMessage: "Username already exists. Please try another username"},
+        { status: 409 }
+      );
+    };
 
     // convert to a hash password
     const hashedPassword = await hashPassword(parseData.data.password);
@@ -54,7 +67,7 @@ export async function POST(
     );
   } catch (error: unknown) {
     return NextResponse.json(
-      { errorMessage: error instanceof Error ? error.message :  "Internal Server Error" },
+      { errorMessage: error instanceof Error ? error.message :  "Something went wrong during register" },
       { status: 500 }
     );
   }

@@ -165,7 +165,7 @@ export default function ReceiveOrderDialog({
           return data;
         })(),
         {
-          loading: "Confirming receipt...",
+          loading: "Confirming order...",
           success: (data) => {
             return data?.successMessage || "Order received successfully!";
           },

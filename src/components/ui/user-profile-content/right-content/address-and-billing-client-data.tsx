@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { AddSelectedAddressOrBillingURL, DeleteAddressOrBillingURL, RemoveSelectedAddressOrBillingURL } from "@/lib/config";
 import { useState } from "react";
+import { Button } from "../../button";
 
 export default function AddressAndBillingClientData<T extends BillingProps | AddressProps>({
   title,
@@ -154,16 +155,25 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
         <div className="space-y-2">
           <div className="flex flex-col text-center md:flex-row md:text-left justify-between">
             <p className="p-0 font-regular">Select or manage your {title}</p>
-            <button 
+            {/* <button 
             disabled={isLoading}
             onClick={() => handleAddData(title, "Add")}
             className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"} hyphens-auto text-sm py-3 md:-mt-4 px-3 font-medium bg-slight-gray-background dark:bg-[#3B3B3B] rounded-md`}>
               + Add new {title}
-            </button>
+            </button> */}
+
+            <Button
+            variant="outline"
+            size="lg"
+            disabled={isLoading}
+            onClick={() => handleAddData(title, "Add")}
+            className={`${isLoading ? "cursor-not-allowed" : "cursor-default"} hyphens-auto text-sm py-3 md:-mt-4 px-3 font-medium rounded-sm`}>
+                + Add new {title}
+            </Button>
           </div>
 
          {selectedAddress?.is_selected &&  ( 
-          <Card className="py-3 gap-0 px-5  dark:bg-card-black-background rounded-sm">
+          <Card className="py-3 gap-0 px-5 dark:bg-card-black-background rounded-sm">
             <div className="flex flex-col space-y-0 gap-0">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                 {/* Left side: check and title */}
@@ -228,14 +238,30 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
             return (
               <Card
                 key={index}
-                className={`py-3 gap-0 px-5 dark:bg-card-black-background rounded-sm ${ selectedAddress?.address_ID === data?.address_ID ? "border-2 border-black dark:border-white" : ""}`}>
+                className={`group py-3 gap-0 px-5 dark:bg-card-black-background rounded-sm 
+                            border-2 not-[]:hover:border-2 hover:border-black hover:dark:border-white 
+                            transition-all duration-200 ease-in-out
+                            ${isLoading || selectedAddress?.address_ID === address_ID ? "cursor-not-allowed" : "cursor-pointer"}
+                            ${selectedAddress?.address_ID === data?.address_ID ? "border-2 border-black dark:border-white" : ""}`}
+                onClick={() => handleSelectAddress(title, address_ID)}>
                 <div className="flex items-center space-x-2 font-medium">
-                  <button 
-                  disabled={isLoading}
-                  onClick={() => handleSelectAddress(title, address_ID)}
-                  className={`${isLoading || selectedAddress?.address_ID === address_ID ? "cursor-not-allowed" : "cursor-pointer"} h-5 w-5 rounded-full bg-gray-300 ${ selectedAddress?.address_ID === data?.address_ID ? "bg-gray-950 dark:bg-gray-500" : "hover:bg-gray-950 dark:hover:bg-gray-500"}`}>
-                  </button>
-                  <div>
+                  <button
+                    disabled={isLoading}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectAddress(title, address_ID);
+                    }}
+                    className={`
+                      ${isLoading || selectedAddress?.address_ID === address_ID ? "cursor-not-allowed" : "cursor-pointer"} 
+                      h-5 w-5 rounded-full bg-gray-300
+                      transition-all duration-300 ease-in-out
+                      ${selectedAddress?.address_ID === data?.address_ID
+                        ? "bg-gray-950 dark:bg-gray-500"
+                        : "group-hover:bg-gray-950 group-hover:dark:bg-gray-500"}
+                    `}
+                  ></button>
+
+                  <div className="transition-colors duration-200 ease-in-out">
                     <span>{firstName}</span> <span>{lastName}</span>
                   </div>
                 </div>

@@ -1,7 +1,8 @@
 "use client";
 import { usePathname } from "next/navigation";
+import { memo } from "react";
 
-export default function UserProfilePathTitle() {
+function UserProfilePathTitleComponent() {
   const pathName = usePathname();
   const pathSegments = pathName.split("/").filter(Boolean);
 
@@ -20,3 +21,6 @@ export default function UserProfilePathTitle() {
     </>
   );
 }
+
+const UserProfilePathTitle = memo(UserProfilePathTitleComponent);
+export default UserProfilePathTitle;

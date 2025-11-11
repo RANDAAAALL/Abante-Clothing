@@ -82,7 +82,7 @@ export default function PaginateOrderHistoryCards<T extends Record<string, strin
     <>
       {/* Filter Dropdown */}
       <div className="mb-3 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <label className="text-2xl font-medium">Filter Orders by Status</label>
+        <label className="text-2xl font-medium text-center md:text-start">Filter Orders by Status</label>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="w-full md:w-40 justify-between">
