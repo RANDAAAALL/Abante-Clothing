@@ -20,8 +20,9 @@ export default function EditUploadProductForm({
 }) {
   const [frontImagePreview, setFrontImagePreview] = useState<string | null>(product.product_item_image);
   const [backImagePreview, setBackImagePreview] = useState<string | null>(product.product_item_back_image);
+  const [hasNewFrontImage, setHasNewFrontImage] = useState(false);
+  const [hasNewBackImage, setHasNewBackImage] = useState(false);
   const router = useRouter();
-  // console.log("Current edit product: ", product);
 
   const {
     register,
@@ -55,82 +56,135 @@ export default function EditUploadProductForm({
   const handleFileSelect = (file: File, type: "front" | "back") => {
     const url = URL.createObjectURL(file);
     const key = type === "front" ? "product_item_image" : "product_item_back_image";
+    
     setValue(key, file);
-    if(type === "front") setFrontImagePreview(url);
-    else setBackImagePreview(url);
+    if (type === "front") {
+      setFrontImagePreview(url);
+      setHasNewFrontImage(true);
+    } else {
+      setBackImagePreview(url);
+      setHasNewBackImage(true);
+    }
+  };
+
+  const handleRemoveImage = (type: "front" | "back") => {
+    const key = type === "front" ? "product_item_image" : "product_item_back_image";
+    
+    // Clear the form value - set to empty string
+    setValue(key, "");
+    
+    if (type === "front") {
+      setFrontImagePreview(null);
+      setHasNewFrontImage(false);
+    } else {
+      setBackImagePreview(null);
+      setHasNewBackImage(false);
+    }
   };
 
   const onSubmit = async (uploadFields: uploadProductFieldsType) => {
-    // console.log("Selected edit product: ", uploadFields);
+    // Debug: Check what we're submitting
+    console.log('📤 Submitting:', {
+      frontImage: uploadFields.product_item_image,
+      backImage: uploadFields.product_item_back_image,
+      hasNewFrontImage,
+      hasNewBackImage
+    });
 
-    // create a comparison data
+    // Check if images are required but missing
+    if ((!uploadFields.product_item_image || uploadFields.product_item_image === "") && 
+        (!uploadFields.product_item_back_image || uploadFields.product_item_back_image === "")) {
+      toast.error("Both front and back images are required");
+      return;
+    }
+
+    if (!uploadFields.product_item_image || uploadFields.product_item_image === "") {
+      toast.error("Front image is required");
+      return;
+    }
+
+    if (!uploadFields.product_item_back_image || uploadFields.product_item_back_image === "") {
+      toast.error("Back image is required");
+      return;
+    }
+
+    // Create comparison data
     const currentData = {
       ...uploadFields,
-      product_item_image: frontImagePreview,
-      product_item_back_image: backImagePreview,
+      product_item_image: uploadFields.product_item_image,
+      product_item_back_image: uploadFields.product_item_back_image,
     };
-  
-    // create a orig data
+
+    // Create original data
     const originalData = {
       ...product,
       product_item_price: product.product_item_price?.toString() ?? "",
       product_item_discount: product.product_item_discount?.toString() ?? "",
       product_item_stock: product.product_item_stock?.toString() ?? "",
+      product_item_image: product.product_item_image,
+      product_item_back_image: product.product_item_back_image,
     };
-  
-    // check if there is something changed
-    type ProductData = typeof currentData;
 
+    // Enhanced change detection
     const isChanged = Object.keys(currentData).some((key) => {
-      const k = key as keyof ProductData;
-
+      const k = key as keyof typeof currentData;
       const currentValue = currentData[k];
       const originalValue = originalData[k];
 
-      // Ignore if both undefined
-      if (currentValue === undefined && originalValue === undefined) return false;
+      // Handle image fields
+      if (k === 'product_item_image' || k === 'product_item_back_image') {
+        // If current value is empty string but original has value, it's a change (removal)
+        if (currentValue === "" && originalValue) return true;
+        // If current value is a File (new upload), it's a change
+        if (currentValue instanceof File) return true;
+        // If current value is different string from original, it's a change
+        if (typeof currentValue === 'string' && currentValue !== originalValue) return true;
+        return false;
+      }
 
-      // If file selected — definitely changed
-      if (typeof currentValue === "object" && currentValue !== null && "name" in currentValue) {
-        // likely a File
-        return true;
-      }      
-
-      // Compare stringified values safely
+      // Handle other fields
       return String(currentValue ?? "") !== String(originalValue ?? "");
     });
-  
+
     if (!isChanged) {
       toast.error("No changes detected — nothing to update.");
       return;
     }
-  
-    // continue to update if something changed
+
+    // Continue to update if something changed
     const formData = new FormData();
-  
-    // handle files
-    if (uploadFields.product_item_image instanceof File)
+
+    // Handle files - only append if they're File objects (new uploads)
+    if (uploadFields.product_item_image instanceof File) {
       formData.append("product_item_image", uploadFields.product_item_image);
-  
-    if (uploadFields.product_item_back_image instanceof File)
+    } else if (uploadFields.product_item_image === "") {
+      // If image was removed, send a flag to the backend
+      formData.append("remove_front_image", "true");
+    }
+
+    if (uploadFields.product_item_back_image instanceof File) {
       formData.append("product_item_back_image", uploadFields.product_item_back_image);
-  
-    // append other fields
+    } else if (uploadFields.product_item_back_image === "") {
+      // If image was removed, send a flag to the backend
+      formData.append("remove_back_image", "true");
+    }
+
+    // Append other fields
     for (const [key, value] of Object.entries(uploadFields)) {
-      if (key.includes("image")) continue;
+      if (key === "product_item_image" || key === "product_item_back_image") continue;
       formData.append(key, value);
     }
-  
+
     return toast.promise(
       (async () => {
         const res = await fetchWithCsrf(`${UpdateProductURL}/${product.product_item_ID}`, {
           method: "PUT",
           body: formData,
         });
-  
+
         const data = await res.json();
         if (!res.ok) throw new Error(data?.errorMessage || "Update failed");
-  
+
         return data;
       })(),
       {
@@ -143,7 +197,7 @@ export default function EditUploadProductForm({
         error: (e) => e.message || "Failed to update product",
       }
     );
-  };  
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
@@ -155,7 +209,7 @@ export default function EditUploadProductForm({
               id="frontImage"
               preview={frontImagePreview}
               label="Click or drag front image"
-              onRemove={() => setFrontImagePreview(null)}
+              onRemove={() => handleRemoveImage("front")}
               onFileChange={(file) => handleFileSelect(file, "front")}
             />
             {errors.product_item_image?.message && (
@@ -163,13 +217,16 @@ export default function EditUploadProductForm({
                   {String(errors.product_item_image.message)}
                 </p>
             )}
+            {hasNewFrontImage && (
+              <p className="text-green-600 text-sm mt-1">New front image selected</p>
+            )}
           </div>
           <div>
             <ImageUploadBox
               id="backImage"
               preview={backImagePreview}
               label="Click or drag back image"
-              onRemove={() => setBackImagePreview(null)}
+              onRemove={() => handleRemoveImage("back")}
               onFileChange={(file) => handleFileSelect(file, "back")}
             />
             {errors.product_item_back_image?.message && (
@@ -177,10 +234,14 @@ export default function EditUploadProductForm({
                 {String(errors.product_item_back_image.message)}
               </p>
             )}
+            {hasNewBackImage && (
+              <p className="text-green-600 text-sm mt-1">New back image selected</p>
+            )}
           </div>
         </div>
       </section>
 
+      {/* Rest of your form remains the same */}
       <section>
         <h3 className="font-medium text-lg mb-4">Product Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

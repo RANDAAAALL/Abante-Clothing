@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
       product_item_status: formData.get("product_item_status")?.toString() || "",
     };
 
-    // validate and parse upload fields
+    //  VALIDATION 1: Validate with Zod schema (including filename patterns)
     const parsedResult = uploadProductSchema.safeParse({
       ...rawFields,
       product_item_image: frontFile,
@@ -57,7 +57,28 @@ export async function POST(request: NextRequest) {
 
     const uploadFields = parsedResult.data;
 
-    // upload images to cloudinary
+    //  VALIDATION 2: Check if product combination already exists in ANY product
+    const existingProductWithSameDetails = await prisma.product_items.findFirst({
+      where: {
+        AND: [
+          { product_item_name: uploadFields.product_item_name },
+          { product_item_color: uploadFields.product_item_color },
+          { product_item_size: uploadFields.product_item_size },
+          { product_item_type: uploadFields.product_item_type },
+        ]
+      }
+    });
+
+    if (existingProductWithSameDetails) {
+      return NextResponse.json(
+        { errorMessage: "Can't create product because a product with the same name, color, size, and type already exists" },
+        { status: 400 }
+      );
+    }
+
+    // ALL VALIDATIONS PASSED - Now upload to Cloudinary and create in database
+
+    // upload images to Cloudinary
     const uploadToCloudinary = async (file: File) => {
       const arrayBuffer = await file.arrayBuffer();
       const base64 = Buffer.from(arrayBuffer).toString("base64");
@@ -74,6 +95,7 @@ export async function POST(request: NextRequest) {
     const frontImageUpload = await uploadToCloudinary(frontFile);
     const backImageUpload = await uploadToCloudinary(backFile);
 
+    // create product in database
     await prisma.product_items.create({
       data: {
         product_item_name: uploadFields.product_item_name,
@@ -95,10 +117,11 @@ export async function POST(request: NextRequest) {
         product_item_displayDate: new Date(),
       },
     });
-    // revalidate the tag, to fecth fresh data to display new uploaded product
+
+    // Revalidate the tag to fetch fresh data and display new uploaded product
     revalidateTag("all-status-products");
     return NextResponse.json({ successMessage: "Product uploaded successfully" });
-  } catch (err) {
+  } catch (err: unknown) {
     return NextResponse.json(
       { errorMessage: err instanceof Error ? err.message : "Failed to upload product." },
       { status: 500 }
