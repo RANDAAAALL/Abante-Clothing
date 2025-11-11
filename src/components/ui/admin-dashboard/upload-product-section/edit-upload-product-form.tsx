@@ -158,8 +158,10 @@ export default function EditUploadProductForm({
               onRemove={() => setFrontImagePreview(null)}
               onFileChange={(file) => handleFileSelect(file, "front")}
             />
-            {errors.product_item_image && (
-              <p className="text-red-500 text-sm mt-1">{errors.product_item_image.message}</p>
+            {errors.product_item_image?.message && (
+                <p className="text-red-500 text-sm mt-1">
+                  {String(errors.product_item_image.message)}
+                </p>
             )}
           </div>
           <div>
@@ -170,8 +172,10 @@ export default function EditUploadProductForm({
               onRemove={() => setBackImagePreview(null)}
               onFileChange={(file) => handleFileSelect(file, "back")}
             />
-            {errors.product_item_back_image && (
-              <p className="text-red-500 text-sm mt-1">{errors.product_item_back_image.message}</p>
+            {errors.product_item_back_image?.message && (
+              <p className="text-red-500 text-sm mt-1">
+                {String(errors.product_item_back_image.message)}
+              </p>
             )}
           </div>
         </div>
