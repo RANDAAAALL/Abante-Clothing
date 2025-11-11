@@ -4,8 +4,9 @@ import HistorySVG from "@/components/icons/svg/history";
 import BillingSVG from "@/components/icons/svg/billing";
 import AddressSVG from "@/components/icons/svg/address";
 import { usePathname, useRouter } from "next/navigation";
+import React from "react";
 
-export default function SidebarNavLists() {
+function SidebarNavListsComponent() {
   const router = useRouter();
   const pathName = usePathname();
 
@@ -20,12 +21,20 @@ export default function SidebarNavLists() {
     <>
       {profilePaths.map((p, i) => {
         const activePath = pathName === p.path;
+        const handleClick = () => {
+          if (!activePath) {
+            router.push(p.path);
+          }
+        };
+
         return (
           <div
             key={i}
-            onClick={() => router.push(p.path)}
-            className={`cursor-pointer rounded-md text-sm font-medium space-x-3 py-3 px-4 flex items-center hover:bg-slight-gray-background dark:hover:bg-[#3B3B3B] ${
-              activePath ? "bg-slight-gray-background dark:bg-[#3B3B3B]" : ""
+            onClick={handleClick}
+            className={`rounded-md text-sm font-medium space-x-3 py-3 px-4 flex items-center ${
+              activePath 
+                ? "bg-slight-gray-background dark:bg-[#3B3B3B] cursor-default" 
+                : "cursor-pointer hover:bg-slight-gray-background dark:hover:bg-[#3B3B3B]"
             }`}>
             <span>{p.icon}</span>
             <span>{p.title}</span>
@@ -35,3 +44,6 @@ export default function SidebarNavLists() {
     </>
   );
 }
+
+const SidebarNavLists = React.memo(SidebarNavListsComponent);
+export default SidebarNavLists;

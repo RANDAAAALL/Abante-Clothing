@@ -28,12 +28,16 @@ export default function SidebarUserImage({ user_image }:{user_image?: string;}) 
           body: formData,
         });
         const data = await res.json();
-        if(!res.ok) throw new Error(data?.errorMessage || "Something went wrong during upload");
-        router.refresh(); // to trigger the server revalidatePath
+        if(!res.ok) throw new Error(data?.errorMessage);
+        
+        return data;
       })(), {
-      loading: 'Uploading.....',
-      success: 'Uploaded successfully',
-      error: (e) => e?.message ||  'Upload failed'
+        loading: 'Uploading.....',
+        success: (message) => {
+        router.refresh(); 
+        return message?.successMessage;
+      },
+      error: (e) => e?.message || "Something went wrong during upload"
     }).finally(() => setIsUploading(false));
     };
 
@@ -45,7 +49,7 @@ export default function SidebarUserImage({ user_image }:{user_image?: string;}) 
         onChange={handleChange}
         ref={fileInputRef}
         disabled={isUploading}
-        className="hidden"/>
+        className="hidden disabled:cursor-not-allowed"/>
 
       <Image
         key={user_image}

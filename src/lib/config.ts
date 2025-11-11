@@ -30,3 +30,4 @@ export const UpdateProductURL = `${getBaseUrl()}/api/update-product`;
 export const UpdateReturnStatusURL = `${getBaseUrl()}/api/update-return-status`;
 export const AddFeedbackURL = `${getBaseUrl()}/api/add-feedback`;
 export const RequestReturnURL = `${getBaseUrl()}/api/request-return`;
+export const UpdateAccountDetailsURL = `${getBaseUrl()}/api/update-account-details`

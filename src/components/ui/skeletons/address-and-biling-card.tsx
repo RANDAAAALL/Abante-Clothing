@@ -4,8 +4,8 @@ export default function AddressAndBillingSkeleton() {
     <div className="space-y-3">
       {/* ==== HEADER BAR ==== */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-        <div className="h-4 w-52 order-history-skeleton rounded"></div>
-        <div className="h-10 w-36 order-history-skeleton rounded"></div>
+        <div className="h-5 w-74 order-history-skeleton rounded"></div>
+        <div className="h-9 w-50 order-history-skeleton rounded"></div>
       </div>
 
       {/* ==== SELECTED DEFAULT ADDRESS ==== */}
