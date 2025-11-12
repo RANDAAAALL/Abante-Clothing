@@ -100,8 +100,29 @@ export async function POST(req: NextRequest) {
                   },
                 });
               }
-            }
-          
+            }   
+
+            await prisma.$transaction(async (tx) => {
+              for (const item of cartItems) {
+                const currentProductItemStock = await tx.product_items.findUnique({
+                  where: { product_item_ID: Number(item.product_item_ID) },
+                  select: { product_item_stock: true },
+                });
+            
+                const newStock = Number(currentProductItemStock?.product_item_stock) - Number(item.cart_item_qty);
+                // if (newStock < 0) throw new Error(`Insufficient stock for product_item_ID ${item.product_item_ID}. Please check the item stock and try again.`);
+                if (newStock < 0) throw new Error(`Insufficient stock for product. Please check the stock and try again.`);
+            
+                await tx.product_items.update({
+                  where: { product_item_ID: Number(item.product_item_ID) },
+                  data: { 
+                    product_item_stock: newStock,
+                    product_item_status: newStock === 0 ? "not available" : "available",
+                  },
+                });
+              }
+            });            
+
             // create payment
             const payment = await tx.payments.create({
               data: {
@@ -126,7 +147,7 @@ export async function POST(req: NextRequest) {
             });
           
             // insert order_details
-            await tx.order_details.createMany({
+           await tx.order_details.createMany({
               data: cartItems.map((item) => ({
                 order_purchased_ID: orderPurchased.order_purchased_ID,
                 product_item_ID: item.product_item_ID,
@@ -136,7 +157,7 @@ export async function POST(req: NextRequest) {
                 order_detail_size: item.cart_item_size,
               })),
             });
-          
+
             return orderPurchased;
           }, { timeout: 15000 });
           
@@ -145,6 +166,8 @@ export async function POST(req: NextRequest) {
         revalidateTag("order-history");
         revalidateTag("billing");
         revalidateTag("shipping");
+        revalidateTag("all-products");
+        revalidateTag("all-status-products");
 
         // revalidate cache on the admin side
         revalidateTag("sales");
@@ -155,7 +178,7 @@ export async function POST(req: NextRequest) {
         { status: 200 }
         );
     } catch (err) {
-        console.error("Checkout Error:", err);
+        // console.error("Checkout Error:", err);
         return NextResponse.json(
         { errorMessage: err instanceof Error ? err.message : String(err) },
         { status: 500 }

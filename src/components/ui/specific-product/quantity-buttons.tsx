@@ -3,7 +3,8 @@ import { useCartItems } from "@/lib/store/cart-items";
 import clsx from "clsx";
 import React, { useEffect, useRef } from "react";
 
-function QuantityButtonsContent({productID, style}: {productID?: number | string | null, style?: string}){
+function QuantityButtonsContent({productID, style, product_item_stock}
+: {productID?: number | string | null, style?: string, product_item_stock?: number | null}){
     const { quantity , setIncreaseQuantity, setDecreaseQuantity, resetQuantity, resetSelectedSize } = useCartItems();
     const prevProductId = useRef<number | string | null>(null);
 
@@ -17,9 +18,9 @@ function QuantityButtonsContent({productID, style}: {productID?: number | string
 
     return (
         <>
-        <button className={clsx(style, "cursor-pointer")} onClick={() => setDecreaseQuantity()}>-</button>
-        <span className={clsx(style, "cursor-default")}>{quantity}</span>
-        <button className={clsx(style, "cursor-pointer")} onClick={() => setIncreaseQuantity()}>+</button>
+        <button className={clsx(style, `${product_item_stock === 0 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`)}  onClick={() => setDecreaseQuantity()}>-</button>
+        <span className={clsx(style, `${product_item_stock === 0? "opacity-50 cursor-not-allowed" : ""}`)}>{product_item_stock === 0 ? 0 : quantity}</span>
+        <button className={clsx(style, `${product_item_stock === 0 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`)} onClick={() => setIncreaseQuantity(product_item_stock ?? 0)}>+</button>
         </>
     );
 };

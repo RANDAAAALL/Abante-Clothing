@@ -8,8 +8,10 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 function AddToCartAndBuyNowButtonsComponent({
+  product_item_stock,
   props,
 }: {
+  product_item_stock?: number | null,
   props: ProductProps<Partial<TshirtType>>;
 }) {
   const {
@@ -49,11 +51,15 @@ function AddToCartAndBuyNowButtonsComponent({
   return (
     <>
       <button
-        className="cursor-pointer py-2 rounded-sm w-full text-sm bg-card-black-background text-white dark:bg-card-white-background dark:text-black active:bg-gray-600 dark:active:bg-gray-300"
+        className={`${product_item_stock === 0 ? "opacity-50  cursor-not-allowed" : "cursor-pointer"} py-2 rounded-sm w-full text-sm bg-card-black-background
+                  text-white dark:bg-card-white-background dark:text-black active:bg-gray-600 dark:active:bg-gray-300`}
+        disabled={product_item_stock === 0 }
         onClick={handleAddToCart}>
         Add to Cart
       </button>
-      <button className="cursor-pointer py-2 rounded-sm w-full text-sm bg-card-black-background text-white dark:bg-card-white-background dark:text-black active:bg-gray-600 dark:active:bg-gray-300"
+      <button className={`${product_item_stock === 0 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"} py-2 rounded-sm w-full text-sm bg-card-black-background
+            text-white dark:bg-card-white-background dark:text-black active:bg-gray-600 dark:active:bg-gray-300`}
+        disabled={product_item_stock === 0 }
         onClick={handleBuyNow}>
         Buy now
       </button>

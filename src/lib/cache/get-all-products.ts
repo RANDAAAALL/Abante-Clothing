@@ -3,7 +3,7 @@ import prisma from "../prisma/prisma";
 import { TshirtType } from "../types/t-shirt-types";
 
 export const getAllProductsCached = unstable_cache(async () => {
-    console.log("getAllProductsCached triggered!");
+    // console.log("getAllProductsCached triggered!");
     try{
         const temp = await prisma.product_items.findMany({
           where: { product_item_status: "available" },

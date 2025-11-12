@@ -2,6 +2,7 @@
 
 type CartItemsProps = {
     product_item_ID: number | null;
+    product_item_stock?: number | null;
     user_ID?: number | null;
     cart_item_ID: number;
     cart_item_image: string | null;

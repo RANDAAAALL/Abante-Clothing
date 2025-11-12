@@ -4,9 +4,11 @@ import { useCartItems } from "@/lib/store/cart-items";
 function TshirtSizesButtonsContent({
   currentSizes,
   productID, 
+  product_item_stock,
 }: {
   currentSizes?: string | null;
   productID?: number | string | null;
+  product_item_stock?: number | null;
 }) {
   const { selectedSize, setSelectedSize } = useCartItems();
   const prevProductId = useRef<number | string | null>(null);
@@ -26,7 +28,7 @@ function TshirtSizesButtonsContent({
 
       <div className="flex gap-2 -mt-3">
         {allSizes.map((size, i) => {
-          const isAvailable = availableSizes.includes(size);
+          const isAvailable = availableSizes.includes(size) && product_item_stock !== 0;
 
           return (
             <button
@@ -40,7 +42,7 @@ function TshirtSizesButtonsContent({
                     ? "bg-[#666666] text-white"
                     : isAvailable
                     ? "cursor-pointer bg-card-black-background text-white dark:bg-card-white-background dark:text-black"
-                    : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    : "opacity-50 bg-card-black-background dark:bg-card-white-background dark:text-black text-white cursor-not-allowed"
                 }`}
             >
               {size}

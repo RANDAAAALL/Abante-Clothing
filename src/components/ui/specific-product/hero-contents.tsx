@@ -22,7 +22,6 @@ export default function HeroContents({
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const colorParam = useSearchParams().get("color");
     const currentPhoto = props[selectedIndex];
-
     const memoizedPhoto = useMemo(() => currentPhoto, [currentPhoto]);
     
     // on first load
@@ -57,8 +56,8 @@ export default function HeroContents({
     }, [colorParam, props, router, slug, setSelectedColor]);
     
     const photos = [
-      { src: currentPhoto.product_item_image, type: "front", alt: `${currentPhoto.product_item_ID}-front`},
-      { src: currentPhoto.product_item_back_image, type: "back", alt: `${currentPhoto.product_item_ID}-back`},
+      { src: memoizedPhoto.product_item_image, type: "front", alt: `${memoizedPhoto.product_item_ID}-front`},
+      { src: memoizedPhoto.product_item_back_image, type: "back", alt: `${memoizedPhoto.product_item_ID}-back`},
       { src: "/images/png/abante-t-shirt-size-chart-image.png", type: "size-chart", alt: "size-chart"},
     ];
 
@@ -77,7 +76,7 @@ export default function HeroContents({
                       <button
                         key={i}
                         className="relative w-[90px] h-[90px] sm:w-[120px] sm:h-[120px]"
-                        onClick={() => {router.push(`/products/${slug}/photo/${photo.type}${photo.type !== "size-chart" ? `?color=${currentPhoto.product_item_color}`: ""}`,{ scroll: false });
+                        onClick={() => {router.push(`/products/${slug}/photo/${photo.type}${photo.type !== "size-chart" ? `?color=${memoizedPhoto.product_item_color}`: ""}`,{ scroll: false });
                         openPhotoModal();}}>
                         <Image
                         src={photo.src!}
@@ -93,12 +92,12 @@ export default function HeroContents({
                   {/* main photo image */}
                   <div className="relative w-[350px] h-[350px]">
                     <button
-                      onClick={() => {router.push(`/products/${slug}/photo/main?color=${currentPhoto.product_item_color}`, { scroll: false });
+                      onClick={() => {router.push(`/products/${slug}/photo/main?color=${memoizedPhoto.product_item_color}`, { scroll: false });
                       openPhotoModal()}}
                       className="cursor-pointer">
                       <Image
-                      src={currentPhoto.product_item_image!}
-                      alt={`${currentPhoto.product_item_ID}-main`}
+                      src={memoizedPhoto.product_item_image!}
+                      alt={`${memoizedPhoto.product_item_ID}-main`}
                       fill
                       priority
                       sizes="auto"
@@ -127,35 +126,47 @@ export default function HeroContents({
                 {/* tshirt title, price and buttons container */}
                 <div className="flex flex-col justify-center w-full gap-3 md:w-md">
                   {/* t-shirt title and price */}
-                  <div className="flex flex-row justify-between items-center -mb-2 md:items-start md:flex-col capitalize md:gap-1 font-bold md:mb-6">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-2xl md:text-3xl">{props[0].product_item_name}</span>
+                  <div className="flex flex-row justify-between items-center -mb-2 md:items-start md:flex-col md:gap-1 font-bold md:mb-0">
+                    <div className="flex items-center">
+                      <span className="text-2xl md:text-3xl capitalize">{memoizedPhoto.product_item_name}</span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <span className={`text-2xl ${props[0].product_item_discount ? "line-through md:text-3xl" : "md:text-5xl"}`}>
-                        P{props[0].product_item_price?.toString()}
-                      </span>
-                      {props[0].product_item_discount! > 0 && (
-                        <>
-                          <span className="text-2xl">-</span>
-                          <span className="text-2xl md:text-3xl">P{(props[0].product_item_price! * ( 1 - props[0].product_item_discount! / 100)).toFixed(0)}</span>
-                          <span className="text-md -ml-1">-{props[0].product_item_discount}%</span>
-                        </>
-                      )}
+                    <div className="flex flex-col items-end md:items-start space-x-2">
+                      <div className="flex items-center space-x-2">
+                        <span className={`text-2xl ${memoizedPhoto.product_item_discount ? "line-through md:text-3xl" : "md:text-5xl"}`}>
+                          P{memoizedPhoto.product_item_price?.toString()}
+                        </span>
+                        {memoizedPhoto.product_item_discount! > 0 && (
+                          <>
+                            <span className="text-2xl">-</span>
+                            <span className="text-2xl md:text-3xl">P{(memoizedPhoto.product_item_price! * ( 1 - memoizedPhoto.product_item_discount! / 100)).toFixed(0)}</span>
+                            <span className="text-md -ml-1">-{memoizedPhoto.product_item_discount}%</span>
+                          </>
+                        )}
+                      </div>
+                        <span className="text-lg">
+                          {memoizedPhoto.product_item_stock === 0
+                          ? "Out of Stock"
+                          : `${memoizedPhoto.product_item_stock}${memoizedPhoto.product_item_stock === 1 ? "pc" : "pcs"}`}</span>
                     </div>
                   </div>
 
                   {/* t-shirt sizes */}
-                  <TshirtSizesButtons productID={memoizedPhoto.product_item_ID} currentSizes={memoizedPhoto.product_item_size} />
+                  <TshirtSizesButtons 
+                  product_item_stock={memoizedPhoto.product_item_stock}
+                  productID={memoizedPhoto.product_item_ID}
+                  currentSizes={memoizedPhoto.product_item_size} />
 
                   {/* quantity buttons */}
                   <div className="flex w-full sm:justify-center md:justify-start gap-1">
-                    <QuantityButtons productID={memoizedPhoto.product_item_ID} style="text-center font-regular text-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black py-1 w-full md:w-auto md:px-6 rounded-sm" />
+                    <QuantityButtons 
+                    product_item_stock={memoizedPhoto.product_item_stock}
+                    productID={memoizedPhoto.product_item_ID}
+                    style="text-center font-regular text-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black py-1 w-full md:w-auto md:px-6 rounded-sm" />
                   </div>
 
                   {/* add-to-cart and buy now buttons */}
                   <div className="flex w-full sm:justify-center md:justify-start gap-1">
-                    <AddToCartAndBuyNowButtons props={memoizedPhoto} />
+                    <AddToCartAndBuyNowButtons product_item_stock={memoizedPhoto.product_item_stock} props={memoizedPhoto} />
                   </div>
                 </div>
           </div>

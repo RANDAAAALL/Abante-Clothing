@@ -10,7 +10,7 @@ export default function UploadProductDialogButton() {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <Button>+ Upload New Product</Button>
+        <Button variant="outline">+ Upload New Product</Button>
       </Dialog.Trigger>
 
       <Dialog.Portal>

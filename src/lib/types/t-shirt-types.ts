@@ -13,6 +13,7 @@ type TshirtType = {
     product_item_material?: string | null,
     product_item_construction?: string | null,
     product_item_design_features?: string | null,
+    product_item_stock?: number | null;
     alt?: string | null,
 }
 

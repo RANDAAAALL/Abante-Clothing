@@ -65,7 +65,7 @@ function NavbarContentComponent() {
             <NavbarThemeToggle />
             {isAuthenticated ? (
               <>
-                {isAuthenticated?.successMessage?.match(/!!/) ? <p>Admin</p> : <UserProfileNavigator />}
+                {isAuthenticated?.successMessage?.match(/!!/) ? <p>{"Admin"}</p> : <UserProfileNavigator />}
                 <LogoutButton 
                 user_type={isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}
                 href_type={isAuthenticated?.successMessage?.match(/!!/) ? "/admin/login" : "/login"}
