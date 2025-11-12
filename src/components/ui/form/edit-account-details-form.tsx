@@ -1,16 +1,18 @@
 "use client"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronDown, ChevronUp, EyeClosed } from "lucide-react";
 import toast from "react-hot-toast";
 import { EditAccountDetailsFormType, EditAccountDetailsSchema } from "@/lib/validations/edit-account-detail-schema";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { UpdateAccountDetailsURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
+import EyeOpen from "@/components/icons/svg/eye-open";
 
 interface EditAccountDetailsFormProps {
   isOpen: boolean;
@@ -26,9 +28,14 @@ export default function EditAccountDetailsForm({
   onClose, 
   initialData 
 }: EditAccountDetailsFormProps) {
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
+    resetField,
     formState: { errors, isSubmitting, isDirty },
     reset,
     watch
@@ -40,47 +47,51 @@ export default function EditAccountDetailsForm({
 
   const router = useRouter();
 
-  // reset form when dialog opens/closes or initialData changes
   useEffect(() => {
     if (isOpen) {
       reset(initialData);
+      setShowChangePassword(false);
+      setShowPassword(false);
+      setShowConfirmPassword(false);
     }
   }, [isOpen, initialData, reset]);
 
   const onSubmit = async (editFormData: EditAccountDetailsFormType) => {
     return toast.promise(
-        (async () => {
-            const res = await fetchWithCsrf(UpdateAccountDetailsURL, { 
-                method: "PUT",
-                body: JSON.stringify(editFormData)
-            });
-
-            const data = await res.json();
-            if(!res.ok) throw new Error(data?.errorMessage || data?.parsedErrors);
-
-            return data;
-        })(), {
-            loading: "Updating account details...",
-            success: (message) => {
-                router.refresh();
-                onClose();
-                return message?.successMessage;
-            }, 
-            error: (err) => err?.message || "Failed to update account details." 
-        }
+      (async () => {
+        const res = await fetchWithCsrf(UpdateAccountDetailsURL, { 
+          method: "PUT",
+          body: JSON.stringify(editFormData)
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data?.errorMessage || data?.parsedErrors);
+        return data;
+      })(),
+      {
+        loading: "Updating account details...",
+        success: (message) => {
+          router.refresh();
+          onClose();
+          return message?.successMessage;
+        },
+        error: (err) => err?.message || "Failed to update account details."
+      }
     )
   };
 
   const handleCancel = () => {
     reset(initialData);
+    setShowChangePassword(false);
+    setShowPassword(false);
+    setShowConfirmPassword(false);
     onClose();
   };
 
-  // watch form values to determine if there are changes
   const watchedValues = watch();
   const hasChanges = 
     watchedValues.email !== initialData.email || 
-    watchedValues.username !== initialData.username;
+    watchedValues.username !== initialData.username ||
+    (showChangePassword && (watchedValues.password || watchedValues.confirmPassword));
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleCancel()}>
@@ -88,12 +99,13 @@ export default function EditAccountDetailsForm({
         <DialogHeader>
           <DialogTitle>Edit Account Details</DialogTitle>
           <DialogDescription>
-            Update your email address and username.
+            Update your email address, username, and optionally your password.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4 py-4">
+            {/* Email */}
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
               <Input
@@ -103,11 +115,10 @@ export default function EditAccountDetailsForm({
                 placeholder="Enter your email address"
                 disabled={isSubmitting}
               />
-              {errors.email && (
-               <p className="text-sm text-red-600 ml-1">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-sm text-red-600 ml-1">{errors.email.message}</p>}
             </div>
 
+            {/* Username */}
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <Input
@@ -115,10 +126,81 @@ export default function EditAccountDetailsForm({
                 type="text"
                 {...register("username")}
                 placeholder="Enter your username"
-                disabled={isSubmitting}/>
-                {errors.username && (
-                <p className="text-sm text-red-600 ml-1">{errors.username.message}</p>
-              )}
+                disabled={isSubmitting}
+              />
+              {errors.username && <p className="text-sm text-red-600 ml-1">{errors.username.message}</p>}
+            </div>
+
+            {/* Change Password Collapsible */}
+            <div className="border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden">
+              <button
+                type="button"
+                className="w-full flex justify-between items-center px-4 py-2 text-sm font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                onClick={() => {
+                  setShowChangePassword(prev => {
+                    if (prev) {
+                      resetField("password");
+                      resetField("confirmPassword");
+                      setShowPassword(false);
+                      setShowConfirmPassword(false);
+                    }
+                    return !prev;
+                  });
+                }}>
+                
+                <span>Change Password</span>
+                {showChangePassword ? <ChevronUp className="w-4 h-4"/> : <ChevronDown className="w-4 h-4"/>}
+              </button>
+
+              <div
+                className={`transition-all duration-300 ease-in-out px-4 ${showChangePassword ? "py-4 max-h-96" : "py-0 max-h-0 overflow-hidden"}`}
+              >
+                {/* New Password */}
+                <div className="space-y-2">
+                  <Label htmlFor="password">New Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      {...register("password")}
+                      placeholder="Enter new password"
+                      disabled={isSubmitting}
+                      className="pr-10 mb-2" 
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOpen/> : <EyeClosed/>}
+                    </button>
+                  </div>
+                  {errors.password && <p className="text-sm text-red-600 ml-1">{errors.password.message}</p>}
+                </div>
+
+                {/* Confirm Password */}
+                <div className="space-y-2 mt-2">
+                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      {...register("confirmPassword")}
+                      placeholder="Confirm new password"
+                      disabled={isSubmitting}
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <EyeOpen/> : <EyeClosed/>}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && <p className="text-sm text-red-600 ml-1">{errors.confirmPassword.message}</p>}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -127,13 +209,13 @@ export default function EditAccountDetailsForm({
               type="button"
               variant="outline"
               onClick={handleCancel}
-              disabled={isSubmitting}
-            >
+              disabled={isSubmitting}>
               Cancel
             </Button>
             <Button
               type="submit"
-              disabled={isSubmitting || !hasChanges || !isDirty}>
+              disabled={isSubmitting || !hasChanges || !isDirty}
+            >
               {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
           </DialogFooter>

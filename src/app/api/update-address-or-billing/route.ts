@@ -29,25 +29,29 @@ export async function PUT(request: NextRequest) {
     const addressType = title?.includes("billing") ? "billing" : "shipping";
     const parsedAddressID = Number(address_ID);
 
-    // check if this address is used in any pending orders
-    const pendingOrder = await prisma.order_purchased.findFirst({
+    // check if this address is used in any active (non-delivered or pending-tracking) orders
+    const activeOrder = await prisma.order_purchased.findFirst({
       where: {
         OR: [
           { delivery_address_ID: parsedAddressID },
           { billing_address_ID: parsedAddressID },
         ],
-        AND: {
-          OR: [
-            { order_purchased_status: "pending" },
-            { order_purchased_tracking_number: "pending" },
-          ],
-        },
+        AND: [
+          {
+            OR: [
+              { order_purchased_status: { not: "delivered" } },
+              { order_purchased_tracking_number: "pending" },
+            ],
+          },
+        ],
       },
     });
 
-    if (pendingOrder) {
+    if (activeOrder) {
       return NextResponse.json(
-        { errorMessage: `You cannot update this address because it is used in a pending order.`},
+        {
+          errorMessage: `You cannot update this address because it is used in an order that is not yet delivered.`,
+        },
         { status: 400 }
       );
     }

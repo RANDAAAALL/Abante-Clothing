@@ -19,6 +19,12 @@ export const getBillingCached = unstable_cache(async (user_ID: number) => {
         region_name: true,
         phone_number: true,
         is_selected: true,
+
+        order_purchased_order_purchased_billing_address_IDToaddress: {
+          select: {
+              billing_address_ID: true,
+          }
+        }
       },
       orderBy: { address_ID: 'desc' },
     });
@@ -36,6 +42,8 @@ export const getBillingCached = unstable_cache(async (user_ID: number) => {
       billingRegionName: address.region_name ?? "",
       billingPhoneNumber: address.phone_number ?? "",
       is_selected: address.is_selected ?? false,
+      hasActiveOrder: address.order_purchased_order_purchased_billing_address_IDToaddress
+        ?.some(order => order.billing_address_ID === address.address_ID),
     }));
 
     return parsedBillingData

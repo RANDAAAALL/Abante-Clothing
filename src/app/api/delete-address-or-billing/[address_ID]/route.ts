@@ -39,25 +39,27 @@ export async function DELETE(
       );
     }
 
-    //  check if the address is used in any pending orders
-    const pendingOrders = await prisma.order_purchased.findMany({
+    // check if this address is used in any active (non-delivered or pending-tracking) orders
+    const activeOrder = await prisma.order_purchased.findMany({
       where: {
         OR: [
           { delivery_address_ID: parsedAddressID },
           { billing_address_ID: parsedAddressID },
         ],
-        AND: {
-          OR: [
-            { order_purchased_status: "pending" },
-            { order_purchased_tracking_number: "pending" },
-          ],
-        },
+        AND: [
+          {
+            OR: [
+              { order_purchased_status: { not: "delivered" } },
+              { order_purchased_tracking_number: "pending" },
+            ],
+          },
+        ],
       },
     });
 
-    if (pendingOrders.length > 0) {
+    if (activeOrder.length > 0) {
       return NextResponse.json(
-        { errorMessage: "You cannot delete this address because it is used in a pending order." },
+        { errorMessage: `You cannot delete this address because it is used in an order that is not yet delivered.`},
         { status: 400 }
       );
     }

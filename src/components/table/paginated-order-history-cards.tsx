@@ -4,7 +4,6 @@ import usePaginationAndFiltered from "../../hooks/usePaginatedAndFiltered";
 import { useOrderHistoryReceiptModal } from "@/lib/store/order-history";
 import { OrderReceiptModalProps } from "@/lib/types/order-history-receipt-types";
 import PaginationSelection from "@/components/ui/pagination/paginated-selection";
-import OrderHistoryReceiptModal from "../ui/modal/order-history/order-history-receipt-modal";
 import OrderHistoryCards from "@/components/table/order-history-cards";
 import {
   DropdownMenu,
@@ -16,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { getNoOrdersMessage } from "@/lib/helper/get-no-orders-message";
 import { getNoOrdersDescription } from "@/lib/helper/get-no-orders-description";
+import OrderHistoryReceiptDialog from "../ui/modal/order-history/order-history-receipt-dialog";
 
 export default function PaginateOrderHistoryCards<T extends Record<string, string | number | string[]>>({
   TheadData,
@@ -142,7 +142,7 @@ export default function PaginateOrderHistoryCards<T extends Record<string, strin
 
       {isOpen && (
         <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full sm:max-w-4xl mx-auto p-4">
-          <OrderHistoryReceiptModal />
+          <OrderHistoryReceiptDialog />
         </div>
       )}
     </>

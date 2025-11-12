@@ -5,9 +5,11 @@ import { EditAccountDetailsSchema } from "@/lib/validations/edit-account-detail-
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
 import { revalidateTag } from "next/cache";
+import { hashPassword } from "@/lib/hash/create-hash-password";
+import { isValidHashedPassword } from "@/lib/hash/compare-hash-password";
 
 export async function PUT(request: NextRequest) {
-  // Check if user is logged in
+  // check if user is logged in
   if (!(await isAuthenticatedUser())) return NextResponse.redirect("/login");
   if (!verifyCsrfToken(request))
     return NextResponse.json(
@@ -27,15 +29,17 @@ export async function PUT(request: NextRequest) {
     
     if (!parsedEditFormData.success) {
       return NextResponse.json(
-        { errorMessage: "Invalid form data",
-          parsedErrors: parsedEditFormData.error.flatten().fieldErrors},
+        { 
+          errorMessage: "Invalid form data",
+          parsedErrors: parsedEditFormData.error.flatten().fieldErrors
+        },
         { status: 400 }
       );
     }
 
-    const { email, username } = parsedEditFormData.data;
+    const { email, username, password } = parsedEditFormData.data;
 
-    // Check if the email already exists and cxclude the current user
+    // check if the email already exists and exclude the current user
     const existingEmail = await prisma.users.findFirst({
       where: { 
         email: email,
@@ -50,7 +54,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // check if the username already exists and cxclude the current user
+    // check if the username already exists and exclude the current user
     const existingUsername = await prisma.users.findFirst({
       where: { 
         username: username,
@@ -65,22 +69,58 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    // prepare update data
+    const updateData: {
+      email: string;
+      username: string;
+      password?: string;
+    } = {
+      email: email,
+      username: username,
+    };
+
+    // only handle password if it is provided and not empty
+    if (password && password.trim() !== "") {
+      const storedPassword = await prisma.users.findUnique({
+        where: { user_ID: user_ID },
+        select: {
+          password: true,
+        }
+      });
+
+      if (!storedPassword?.password) {
+        return NextResponse.json(
+          { errorMessage: "Invalid form data" }, 
+          { status: 500 }
+        );
+      }
+
+      // compare both password if it is new or not
+      if (await isValidHashedPassword(password, storedPassword.password)) {
+        return NextResponse.json(
+          { errorMessage: "New password cannot be the same as your current password." },
+          { status: 400 } 
+        );
+      }
+
+      const newHashedPassword = await hashPassword(password);
+      updateData.password = newHashedPassword;
+    }
+
     // update the users account details
     await prisma.users.update({
       where: { user_ID: user_ID },
-      data: {
-        email: email,
-        username: username,
-      }
+      data: updateData
     });
 
     // revalidate cache
     revalidateTag("account-details");
     revalidateTag("customer-feedbacks");
 
-    return NextResponse.json({ 
-      successMessage: "Account details updated successfully." 
-    });
+    return NextResponse.json(
+      { successMessage: "Account details updated successfully." },
+      { status: 200 }
+    );
 
   } catch (err: unknown) {
     return NextResponse.json(
