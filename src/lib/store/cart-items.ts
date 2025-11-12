@@ -38,7 +38,7 @@ type CartItemsPropsActions = {
   setSelectedColor: (color: string) => void;
   resetSelectedColor?: () => void;
 
-  setIncreaseQuantity: () => void;
+  setIncreaseQuantity: (maxStock: number) => void;
   setDecreaseQuantity: () => void;
   resetQuantity: () => void;
 
@@ -77,14 +77,16 @@ export const useCartItems = create<CartItemsPropsState & CartItemsPropsActions>(
         })),
       resetSelectedColor: () => set({ selectedColor: null }),
 
-      setIncreaseQuantity: () =>
+      setIncreaseQuantity: (maxStock?: number) =>
         set((state) => {
-          const newQty = state.quantity + 1;
-          return {
-            quantity: newQty,
-            selectedSizeQtyAndColor: { ...state.selectedSizeQtyAndColor, qty: newQty },
-          };
-        }),
+          const newQty = maxStock && state.quantity < maxStock
+          ? state.quantity + 1
+          : state.quantity;
+        return {
+          quantity: newQty,
+          selectedSizeQtyAndColor: { ...state.selectedSizeQtyAndColor, qty: newQty },
+        };
+      }),
       setDecreaseQuantity: () =>
         set((state) => {
           const newQty = state.quantity > 1 ? state.quantity - 1 : 1;

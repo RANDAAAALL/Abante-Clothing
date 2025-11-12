@@ -83,13 +83,13 @@ export default function EditUploadProductForm({
   };
 
   const onSubmit = async (uploadFields: uploadProductFieldsType) => {
-    // Debug: Check what we're submitting
-    console.log('📤 Submitting:', {
-      frontImage: uploadFields.product_item_image,
-      backImage: uploadFields.product_item_back_image,
-      hasNewFrontImage,
-      hasNewBackImage
-    });
+    // Debug: check what we re submitting
+    // console.log('submitting:', {
+    //   frontImage: uploadFields.product_item_image,
+    //   backImage: uploadFields.product_item_back_image,
+    //   hasNewFrontImage,
+    //   hasNewBackImage
+    // });
 
     // Check if images are required but missing
     if ((!uploadFields.product_item_image || uploadFields.product_item_image === "") && 

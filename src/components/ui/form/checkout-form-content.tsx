@@ -170,11 +170,11 @@ export default function CheckoutformContent({ defaultAddressAndBilling }: { defa
     const handleClickSubmit = async (formData: CheckoutFormType) => {
         try {
             if(!data || data?.length <= 0){
-                toast.error("Your cart is currently empty.")
+                toast.error("Your cart is currently empty.");
                 return;
             }
             const copy = [...data];
-            setItemsData(copy)
+            setItemsData(copy);
             const res = { paymentMethod: formData.paymentMethod };
             setPayment(res);
             setSubmittedFormCheckoutFormData(formData);

@@ -79,18 +79,23 @@ export default function GcashTemplate(){
             {
               loading: "Payment processing...",
             //success: "Payment successful! Your order is being processed.",
-              success: "Paid successfully.",
-              error: (e) => e?.message || "Payment failed",
+              success: () => {
+                // reset gcash loading state
+                // set successfull pay to true after toast.promise resolves and close the payment template modal
+                // will use this to show ReceiptModal and reset the form
+                setClosePaymentTemplateModal();
+                setResetGcashTemplateLoading();
+                setSuccessfullPay();
+                return "Paid successfully."},
+              error: (e) => {
+                  
+                setResetGcashTemplateLoading();
+                setClosePaymentTemplateModal();
+                return e?.message || "Payment failed"
+              },
             },
             { duration: 8000 }
-          ).finally(() => {
-              // reset gcash loading state
-              // set successfull pay to true after toast.promise resolves and close the payment template modal
-              // will use this to show ReceiptModal and reset the form
-              setClosePaymentTemplateModal();
-              setResetGcashTemplateLoading();
-              setSuccessfullPay();
-            });
+          );
 
     }
 

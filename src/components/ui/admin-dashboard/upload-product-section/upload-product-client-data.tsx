@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../carousel/card";
 import Image from "next/image";
 import {
@@ -14,6 +14,7 @@ import { StatusProductsProps } from "@/lib/types/status-products-types";
 import { getDiscountedPrice } from "@/lib/helper/get-discounted-price";
 import EditUploadProductContent from "./edit-upload-product-content";
 import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
+import { useRouter } from "next/navigation";
 
 export default function UploadProductClientData({
   products,
@@ -21,6 +22,17 @@ export default function UploadProductClientData({
   products: StatusProductsProps[];
 }) {
   const [filter, setFilter] = useState("all");
+  const router = useRouter();
+
+   // Auto-refresh every 30s
+   useEffect(() => {
+    router.refresh();
+    const interval = setInterval(() => {
+      console.log("Products data refreshed");
+      router.refresh();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [router]);
 
   const filtered = useMemo(() => {
     if (filter === "all") return products;
@@ -101,7 +113,7 @@ export default function UploadProductClientData({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filtered.length > 0 ? (
           filtered.map((p) => (
-            <Card key={p.product_item_ID} className="dark:bg-card-black-background py-2 gap-0 overflow-hidden hover:shadow-md transition">
+            <Card key={p.product_item_ID} className="dark:bg-card-black-background py-2 gap-0 overflow-hidden hover:shadow-md dark:hover:shadow-gray-800 transition">
              <div className="flex flex-col space-y-1 md:flex-row px-4">
 
                 <div className="relative h-48 w-full">
@@ -152,7 +164,12 @@ export default function UploadProductClientData({
                 </div>
 
                 <div className="text-sm space-y-1">
-                  <p><span className="font-semibold">Color:</span> {p.product_item_color ?? "N/A"}</p>
+                  <p>
+                  <span className="font-semibold">Color:</span>{" "}
+                  {p.product_item_color
+                  ? p.product_item_color[0].toUpperCase() + p.product_item_color.slice(1)
+                  : "N/A"}
+                  </p>
                   <p><span className="font-semibold">Size:</span> {p.product_item_size ?? "N/A"}</p>
                   <p><span className="font-semibold">Type:</span> {p.product_item_type}</p>
                   <p><span className="font-semibold">Fit:</span> {p.product_item_fit ?? "N/A"}</p>
@@ -172,7 +189,7 @@ export default function UploadProductClientData({
             </Card>
           ))
         ) : (
-          <p className="text-gray-500 col-span-full text-center py-10">No products found.</p>
+          <p className="text-gray-500 col-span-full text-center py-10">{`No products found in ${filter}.`}</p>
         )}
       </div>
     </div>

@@ -20,6 +20,7 @@ export const getSingleProduct = async ( {slug}: SlugProps) => {
           product_item_material: true,
           product_item_construction: true,
           product_item_design_features: true,
+          product_item_stock: true,
         },
       });
   

@@ -16,7 +16,7 @@ export async function POST(request: NextRequest){
 
   try{
     const { title, formData } = await request.json();
-    console.log(title, formData);
+    // console.log(title, formData);
 
     // parsed
     const parsedFormData = AddressAndBillingSchema.safeParse(formData);
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest){
 
     if(isAddressAlreadyExists) {
         return NextResponse.json(
-            { errorMessage: "Address is already exist. Please use different address." },
+            { errorMessage: `${addressType === "shipping" ? "delivery" : addressType} address is already exist. Please use different address.` },
             { status: 400 }
         )
     }else {

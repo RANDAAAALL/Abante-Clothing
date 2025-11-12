@@ -78,18 +78,23 @@ export default function PaymayaTemplate(){
             {
               loading: "Payment processing...",
             //success: "Payment successful! Your order is being processed.",
-              success: "Paid successfully.",
-              error: (e) => e?.message || "Payment failed",
-            },
-            { duration: 8000 }
-            ).finally(() => {
+              success: () => {
                 // reset paymaya loading state
                 // set successfull pay to true after toast.promise resolves and close the payment template modal
                 // will use this to show ReceiptModal and reset the form
                 setResetPaymayaTemplateLoading();
                 setSuccessfullPay();
                 setClosePaymentTemplateModal();
-              });
+                return "Paid successfully."},
+              error: (e) => {
+                
+                setResetPaymayaTemplateLoading();
+                setClosePaymentTemplateModal();
+                return e?.message || "Payment failed"
+              },
+            },
+            { duration: 8000 }
+            );
     }
     return (
         <>
