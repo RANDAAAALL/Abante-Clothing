@@ -4,7 +4,7 @@ export default function OrderHistorySkeleton() {
     <>
       {/* ==== FILTER BAR ==== */}
       <div className="mb-3 flex items-center justify-between gap-4">
-        <div className="h-8 order-history-skeleton rounded w-20"></div>
+        <div className="h-8 order-history-skeleton rounded w-65"></div>
         <div className="h-10 order-history-skeleton rounded w-40"></div>
       </div>
 

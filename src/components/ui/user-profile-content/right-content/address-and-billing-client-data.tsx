@@ -234,7 +234,7 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
             const postalCode = "billingPostalCode" in data ? data.billingPostalCode : (data as AddressProps).postalCode;
             const phoneNumber = "billingPhoneNumber" in data ? data.billingPhoneNumber : (data as AddressProps).phoneNumber;
             const country = data.country ?? "Philippines";
-
+            const hasActiveOrder = data?.hasActiveOrder;
             return (
               <Card
                 key={index}
@@ -282,10 +282,14 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
                       <span>{phoneNumber}</span>
                     </div>
 
-                    <div className="flex flex-col text-sm">
+                    {hasActiveOrder === false && ( 
+                      <div className="flex flex-col text-sm">
                       <button 
                         disabled={isLoading}
-                        onClick={() => handleEditData(title, "Edit", address_ID, clientData)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditData(title, "Edit", address_ID, clientData);
+                        }}
                         className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"} flex space-x-1 hover:bg-gray-300 dark:hover:bg-gray-500 hover:rounded-md p-1`}>
                         <span><UserPen width={17} height={17}/></span>
                         <span>Edit</span>
@@ -293,12 +297,16 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
   
                       <button 
                         disabled={isLoading}
-                        onClick={() => handleDeleteData(title, address_ID)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteData(title, address_ID);
+                        }}
                         className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"} flex space-x-1 hover:bg-gray-300 dark:hover:bg-gray-500 hover:rounded-md p-1`}>
                         <span><Trash width={17} height={17}/></span>
                         <span>Delete</span>
                       </button>
                     </div>
+                    )}
                 </div>
               </Card>
             );

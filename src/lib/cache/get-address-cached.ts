@@ -20,6 +20,12 @@ export const getAddressCached = unstable_cache(async (user_ID: number) => {
                 region_name: true,
                 phone_number: true,
                 is_selected: true,
+
+                order_purchased_order_purchased_delivery_address_IDToaddress: {
+                    select: {
+                        delivery_address_ID: true,
+                    }
+                }
             },
         orderBy: { address_ID: 'desc' }
     });
@@ -37,6 +43,8 @@ export const getAddressCached = unstable_cache(async (user_ID: number) => {
         regionName: address?.region_name ?? "-",
         phoneNumber: address?.phone_number ?? "-",
         is_selected: address?.is_selected ?? false,
+        hasActiveOrder: address.order_purchased_order_purchased_delivery_address_IDToaddress
+        ?.some(order => order.delivery_address_ID === address.address_ID),
     }))
 
     return parsedAddressData
