@@ -47,7 +47,7 @@ export default function AccountDetailClientData({ email, username }: AccountDeta
       
       // Redirect to login
       setIsDeleting(false);
-      window.location.href = "/login"
+      window.location.replace("/login");
       
     } catch (error) {
       setIsDeleting(false);
