@@ -21,7 +21,7 @@ export async function POST(request: NextRequest){
 
   try{
     const { orderData } = await request.json();
-    console.log("Server -> ", orderData)
+    // console.log("Server -> ", orderData)
 
     if( orderData.length <= 0) return NextResponse.json({ errorMessage: "Failed to submit feedback." }, { status: 400 });
 

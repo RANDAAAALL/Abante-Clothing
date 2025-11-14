@@ -31,7 +31,8 @@ export async function middleware(request: NextRequest) {
       "/api/add-feedback",
       "/api/request-return",
       "/api/update-return-status",
-      "/api/update-account-details"
+      "/api/update-account-details",
+      "/api/update-user-account",
     ],
     adminProtectedRoutes: [
       "/admin/dashboard",
@@ -145,5 +146,6 @@ export const config = {
     "/api/request-return",
     "/api/update-return-status",
     "/api/update-account-details",
+    "/api/update-user-account",
   ],
 };
