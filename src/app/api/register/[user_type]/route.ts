@@ -35,8 +35,8 @@ export async function POST(
     };
 
      // check if the users username already exists in the database
-     const userUsernameExists = await prisma.users.findUnique({
-      where: { email: parseData.data.username }
+     const userUsernameExists = await prisma.users.findFirst({
+      where: { username: parseData.data.username }
     });
 
      // if username exists, return a 409 response

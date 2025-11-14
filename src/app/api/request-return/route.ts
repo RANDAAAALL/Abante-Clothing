@@ -21,7 +21,7 @@ export async function POST(request: NextRequest){
 
   try{
       const { returnData } = await request.json() as { returnData: ReturnItemProps[] };
-      console.log("Server -> ", returnData)
+    //   console.log("Server -> ", returnData)
 
       if( returnData?.length <= 0) return NextResponse.json({ errorMessage: "Failed to submit return request." }, { status: 400 });
 
