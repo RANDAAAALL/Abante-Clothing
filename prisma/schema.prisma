@@ -46,17 +46,6 @@ model cart_items {
   @@index([user_ID], map: "user_ID")
 }
 
-model deleted {
-  deleted_ID         Int       @id
-  user_ID            Int?
-  deleted_item_ID    Int?
-  deleted_item_table String?   @db.VarChar(50)
-  deleted_date       DateTime? @db.DateTime(0)
-  users              users?    @relation(fields: [user_ID], references: [user_ID], onDelete: NoAction, onUpdate: NoAction, map: "deleted_ibfk_1")
-
-  @@index([user_ID], map: "user_ID")
-}
-
 model order_details {
   order_detail_ID    Int              @id @default(autoincrement())
   order_purchased_ID Int?
@@ -165,7 +154,6 @@ model users {
   createdAt       DateTime          @default(now()) @db.DateTime(0)
   address         address[]
   cart_items      cart_items[]
-  deleted         deleted[]
   order_purchased order_purchased[]
   payments        payments[]
   product_items   product_items[]
