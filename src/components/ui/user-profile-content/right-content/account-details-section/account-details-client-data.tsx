@@ -8,12 +8,12 @@ import DeleteAccountDialog from "@/components/ui/modal/delete-account-dialog";
 import toast from "react-hot-toast";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { UpdateAccountURL } from "@/lib/config";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 export default function AccountDetailClientData({ email, username }: AccountDetailsClientDataProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleDelete = useCallback(async () => {
     // console.log("Deleting account..");
@@ -52,7 +52,7 @@ export default function AccountDetailClientData({ email, username }: AccountDeta
     } catch (error) {
       setIsDeleting(false);
     }
-  }, [router]);
+  }, []);
 
   return (
     <>
