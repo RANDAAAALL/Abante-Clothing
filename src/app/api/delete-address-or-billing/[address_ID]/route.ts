@@ -4,6 +4,7 @@ import { UserPayload } from "@/lib/security/payloads/get-user-payload";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma/prisma";
 import { revalidateTag } from "next/cache";
+import { Prisma } from "@prisma/client";
 
 export async function DELETE(
   request: NextRequest,
@@ -40,29 +41,29 @@ export async function DELETE(
     }
 
     // check if this address is used in any active (non-delivered or pending-tracking) orders
-    const activeOrder = await prisma.order_purchased.findMany({
-      where: {
-        OR: [
-          { delivery_address_ID: parsedAddressID },
-          { billing_address_ID: parsedAddressID },
-        ],
-        AND: [
-          {
-            OR: [
-              { order_purchased_status: { not: "delivered" } },
-              { order_purchased_tracking_number: "pending" },
-            ],
-          },
-        ],
-      },
-    });
+    // const activeOrder = await prisma.order_purchased.findMany({
+    //   where: {
+    //     OR: [
+    //       { delivery_address_ID: parsedAddressID },
+    //       { billing_address_ID: parsedAddressID },
+    //     ],
+    //     AND: [
+    //       {
+    //         OR: [
+    //           { order_purchased_status: { not: "delivered" } },
+    //           { order_purchased_tracking_number: "pending" },
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // });
 
-    if (activeOrder.length > 0) {
-      return NextResponse.json(
-        { errorMessage: `You cannot delete this address because it is used in an order that is not yet delivered.`},
-        { status: 400 }
-      );
-    }
+    // if (activeOrder.length > 0) {
+    //   return NextResponse.json(
+    //     { errorMessage: `You cannot delete this address because it is used in an order that is not yet delivered.`},
+    //     { status: 400 }
+    //   );
+    // }
 
     // proceed with deletion if no pending orders
     await prisma.address.delete({ where: { address_ID: parsedAddressID } });
@@ -77,9 +78,12 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (err: unknown) {
-    return NextResponse.json({
-      errorMessage:
-        err instanceof Error ? err.message : "Failed to delete.",
-    }, { status: 500 });
+    const errorMessage = err instanceof Prisma.PrismaClientKnownRequestError
+        ? "You cannot delete this address because it is used in an order that is not yet delivered."
+        : err instanceof Error
+        ? err.message
+        : "Failed to delete.";
+
+    return NextResponse.json({ errorMessage }, { status: 400 });
   }
 }
