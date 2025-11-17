@@ -6,7 +6,7 @@ export default function DashboardSalesSkeleton() {
       {/* Period Buttons */}
       <div className="flex flex-col md:flex-row gap-2">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="dashboard-sales-skeleton h-8 w-20 rounded-sm" />
+          <div key={i} className="dashboard-sales-skeleton h-8 w-full md:w-20 rounded-sm" />
         ))}
       </div>
 

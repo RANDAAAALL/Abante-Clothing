@@ -57,28 +57,23 @@ export default function AccountDetailClientData({ email, username }: AccountDeta
   return (
     <>
       <div className="space-y-5 font-medium flex flex-col -mt-4">
-        <div className="flex items-center justify-between flex-col md:flex-row">
+        <div className="flex items-center justify-between flex-col sm:flex-row">
           <span className="text-2xl">Account Details</span>
 
-          <div className=" flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
+          <div className="flex items-center space-x-2">
+            <div
               onClick={() => setIsEditing(true)}
-              className="flex items-center gap-2">
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3 py-2 gap-2 cursor-pointer">
               <Edit2 className="h-4 w-4" />
               Edit
-            </Button>
+            </div>
 
-            <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
-            onClick={() => setIsDeleting(true)}
-            >
-            <Trash2 className="h-4 w-4" />
-            Delete Account
-          </Button>
+            <div
+              onClick={() => setIsDeleting(true)}
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3 py-2 gap-2 cursor-pointer">
+              <Trash2 className="h-4 w-4" />
+              Delete Account
+            </div>
           </div>
         </div>
 

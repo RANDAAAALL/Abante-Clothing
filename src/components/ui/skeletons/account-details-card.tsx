@@ -1,10 +1,13 @@
 export default function AccountDetailsSkeleton() {
     return (
-      <div className="space-y-5 font-medium">
+      <div className="space-y-5 font-medium -mt-4">
         {/* Header + Edit Button */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-center justify-between">
           <span className="username-skeleton h-7 w-45"></span>
+          <div className="flex mt-1 sm:mt-0 items-center space-x-2">
           <span className="username-skeleton h-8 w-16 rounded-md"></span>
+          <span className="username-skeleton h-8 w-37 rounded-md"></span>
+          </div>
         </div>
   
         {/* Email Row */}
