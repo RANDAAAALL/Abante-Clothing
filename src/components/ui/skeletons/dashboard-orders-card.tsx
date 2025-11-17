@@ -6,7 +6,7 @@ export default function DashboardOrdersSkeleton() {
           {[...Array(6)].map((_, i) => (
             <div
               key={i}
-              className="rounded-lg border border-border p-4 bg-muted/30 flex flex-col justify-between h-[150px]"
+              className="rounded-lg border border-border p-6 bg-muted/30 flex flex-col justify-between h-[150px]"
             >
               {/* Simulate CardHeader (title) */}
               <div className="h-4 w-32 dashboard-orders-skeleton mb-3" />

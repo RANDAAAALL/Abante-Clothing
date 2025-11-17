@@ -3,9 +3,9 @@ export default function OrderHistorySkeleton() {
   return (
     <>
       {/* ==== FILTER BAR ==== */}
-      <div className="mb-3 flex items-center justify-between gap-4">
+      <div className="mb-3 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="h-8 order-history-skeleton rounded w-65"></div>
-        <div className="h-10 order-history-skeleton rounded w-40"></div>
+        <div className="h-10 order-history-skeleton rounded w-full md:w-40"></div>
       </div>
 
       {/* ==== ORDERS GRID ==== */}

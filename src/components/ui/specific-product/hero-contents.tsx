@@ -68,7 +68,7 @@ export default function HeroContents({
           <div className="flex flex-col md:flex-row gap-0 sm:gap-5">
            
             {/* photos container */}
-            <div className="flex flex-row justify-center items-center gap-0 sm:gap-5">
+            <div className="flex flex-row justify-center items-center gap-0 sm:gap-5 relative">
 
                 {/* sub-photos */}
                   <div className="flex flex-col space-y-3 justify-center items-center">
@@ -90,30 +90,33 @@ export default function HeroContents({
                   </div>
 
                   {/* main photo image */}
-                  <div className="relative w-[350px] h-[350px]">
+                  <div>
                     <button
-                      onClick={() => {router.push(`/products/${slug}/photo/main?color=${memoizedPhoto.product_item_color}`, { scroll: false });
+                      onClick={() => {router.push(`/products/${slug}/photo/main?color=${memoizedPhoto.product_item_color}`, { scroll: false});
                       openPhotoModal()}}
                       className="cursor-pointer">
                       <Image
                       src={memoizedPhoto.product_item_image!}
                       alt={`${memoizedPhoto.product_item_ID}-main`}
-                      fill
+                      width={350}
+                      height={350}
                       priority
-                      sizes="auto"
-                      style={{ objectFit: "contain" }}/>
+                      className="object-contain"/>
                     </button>
 
                     {/* color picker */}
-                    <div className="absolute bottom-2 right-4 flex space-x-3 z-[10]">
+                    <div className="absolute bottom-6 right-4 flex space-x-3 z-[10]">
                       {props.map((variant, i) => (
                       <button
                       key={i}
                       onClick={() => {
-                      setSelectedIndex(i);
-                      setSelectedColor(variant.product_item_color ?? "");
-                      router.push(`/products/${slug}/?color=${encodeURIComponent(variant.product_item_color!)}`,
-                      { scroll: false })}}
+                        setSelectedIndex(i);
+                        setSelectedColor(variant.product_item_color ?? "");
+                      
+                        // update URL without triggering a server fetch
+                        const url = `/products/${slug}?color=${encodeURIComponent(variant.product_item_color!)}`;
+                        window.history.replaceState(null, "", url);
+                      }}
                       className={`h-3 w-3 rounded-full border-2 transition-all duration-150
                         ${i === selectedIndex
                         ? "ring-2 ring-offset-2 ring-black dark:ring-white ring-offset-white dark:ring-offset-black" 
@@ -125,29 +128,56 @@ export default function HeroContents({
 
                 {/* tshirt title, price and buttons container */}
                 <div className="flex flex-col justify-center w-full gap-3 md:w-md">
-                  {/* t-shirt title and price */}
-                  <div className="flex flex-row justify-between items-center -mb-2 md:items-start md:flex-col md:gap-1 font-bold md:mb-0">
-                    <div className="flex items-center">
-                      <span className="text-2xl md:text-3xl capitalize">{memoizedPhoto.product_item_name}</span>
+                  
+                  <div className="flex justify-between md:items-start flex-col md:gap-1 font-bold md:mb-0">
+                  {/* FIRST ROW */}
+                  <div className="flex justify-between items-center md:flex-col  md:items-start">
+
+                    {/* NAME */}
+                    <span className="text-2xl md:text-3xl capitalize">
+                      {memoizedPhoto.product_item_name}
+                    </span>
+
+                    {/* PRICE GROUP */}
+                    <div className="flex items-center space-x-1 md:flex-row md:items-center md:space-x-2">
+
+                      {/* ORIGINAL PRICE */}
+                      <span
+                        className={`text-xl md:text-3xl ${
+                          memoizedPhoto.product_item_discount! > 0 ? "line-through" : ""
+                        }`}
+                      >
+                       P{memoizedPhoto.product_item_price}
+                      </span>
+
+                      {/* DISCOUNTED PRICE + % */}
+                      {memoizedPhoto.product_item_discount! > 0 && (
+                        <>
+                          <span className="text-lg md:text-3xl">-</span>
+                          <span className="text-xl md:text-3xl">
+                            P{(
+                              memoizedPhoto.product_item_price! *
+                              (1 - memoizedPhoto.product_item_discount! / 100)
+                            ).toFixed(0)}
+                          </span>
+
+                          <span className="text-md md:text-lg">
+                            -{memoizedPhoto.product_item_discount}%
+                          </span>
+                        </>
+                      )}
                     </div>
-                    <div className="flex flex-col items-end md:items-start space-x-2">
-                      <div className="flex items-center space-x-2">
-                        <span className={`text-2xl ${memoizedPhoto.product_item_discount ? "line-through md:text-3xl" : "md:text-5xl"}`}>
-                          P{memoizedPhoto.product_item_price?.toString()}
-                        </span>
-                        {memoizedPhoto.product_item_discount! > 0 && (
-                          <>
-                            <span className="text-2xl">-</span>
-                            <span className="text-2xl md:text-3xl">P{(memoizedPhoto.product_item_price! * ( 1 - memoizedPhoto.product_item_discount! / 100)).toFixed(0)}</span>
-                            <span className="text-md -ml-1">-{memoizedPhoto.product_item_discount}%</span>
-                          </>
-                        )}
-                      </div>
-                        <span className="text-lg">
-                          {memoizedPhoto.product_item_stock === 0
-                          ? "Out of Stock"
-                          : `${memoizedPhoto.product_item_stock}${memoizedPhoto.product_item_stock === 1 ? "pc" : "pcs"}`}</span>
-                    </div>
+                  </div>
+
+                  {/* STOCK */}
+                  <span className="text-lg">
+                    {memoizedPhoto.product_item_stock === 0
+                      ? "Out of Stock"
+                      : `${memoizedPhoto.product_item_stock}${
+                          memoizedPhoto.product_item_stock === 1 ? "pc" : "pcs"
+                        }`}
+                  </span>
+
                   </div>
 
                   {/* t-shirt sizes */}

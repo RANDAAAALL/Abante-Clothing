@@ -9,7 +9,7 @@ export default function UploadProductSkeleton() {
       {/* === Summary Cards Skeleton === */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
         {[0, 1, 2].map((i) => (
-            <Card key={i} className="dark:bg-card-black-background p-2"> 
+            <Card key={i} className="dark:bg-card-black-background py-6"> 
                 <CardHeader className="pb-3"> 
                 <CardTitle className="text-sm font-medium">
                     <div className="h-6 w-32 checkout-form-skeleton rounded" /> 

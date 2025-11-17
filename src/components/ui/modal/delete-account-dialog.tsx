@@ -7,7 +7,7 @@ import React from "react";
 interface DeleteAccountDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void>;
 }
 
 function DeleteAccountDialog({ isOpen, onClose, onConfirm }: DeleteAccountDialogProps) {
@@ -16,7 +16,7 @@ function DeleteAccountDialog({ isOpen, onClose, onConfirm }: DeleteAccountDialog
   const handleConfirm = async () => {
     setIsDeleting(true);
     try {
-      onConfirm();
+      await onConfirm();
     } finally {
       setIsDeleting(false);
     }
