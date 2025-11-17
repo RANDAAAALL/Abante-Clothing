@@ -67,7 +67,6 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
       if (user_type === "user" && selectedItem.length > 0) {
         try {
           // console.log("Merging cart items:", selectedItem.length);
-          toast.error(`Merging cart items: ${selectedItem.length}`);
 
           const results = [];
           for (const item of selectedItem) {
