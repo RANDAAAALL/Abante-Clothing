@@ -17,7 +17,7 @@ import { LoginURL } from "@/lib/config";
 export default function LoginFormContent({ user_type, href_type, footer_href_type, reason }: NavbarButtonActionProps) {
   const resetFormRef = useRef<(() => void) | null>(null);
   const { selectedItem, resetSelectedItem } = useCartItems();
-  const { mutate: addData } = useAddToCart();
+  const { mutateAsync } = useAddToCart();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { setClearAuthUser, setAuthUser } = useAuth();
@@ -42,7 +42,7 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
     toast("Your session has expired. Please log in again.",{ duration: 5000 });
 
   }, [reason, user_type, queryClient, resetSelectedItem, setClearAuthUser, setClearOrderHistoryReceiptData]);
-
+  
   const handleLoginClick = async (formData: loginFormType) => {
     setLoginLoading(true);
     try {
@@ -59,34 +59,57 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
         return;
       }
   
-      // handle both user & admin
-      setAuthUser(data); // save to Zustand/localStorage
+      // set auth user first and wait for it to complete
+      setAuthUser(data);
   
-      // navigate after login
+      // create a small delay to ensure auth state is updated
+      await new Promise(resolve => setTimeout(resolve, 100));
+      if (user_type === "user" && selectedItem.length > 0) {
+        try {
+          // console.log("Merging cart items:", selectedItem.length);
+          toast.error(`Merging cart items: ${selectedItem.length}`);
+
+          const results = [];
+          for (const item of selectedItem) {
+            try {
+              const result = await mutateAsync({
+                product: item.product,
+                selectedSizeQtyAndColor: item.selectedSizeQtyAndColor,
+              });
+              results.push(result);
+              // console.log("Successfully added item:", item.product.product_item_ID);
+              
+              // small delay between mutations to prevent race conditions
+              await new Promise(resolve => setTimeout(resolve, 50));
+            } catch (itemError) {
+              console.error("Failed to add item:", item.product.product_item_ID, itemError);
+            }
+          }
+          
+          // console.log("Cart merge completed:", results.length, "items merged");
+          
+          // clear local cart data
+          resetSelectedItem();
+          sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
+          
+          // refresh cart data
+          await queryClient.invalidateQueries({ queryKey: ["get-cart"] });
+          
+        } catch (cartError) {
+          // console.error("Cart merge failed:", cartError);
+          toast.error("Failed to merge some cart items");
+        }
+      }
+      // navigate after all operations -> whether cart merge happened or not
       router.replace(href_type);
   
-      // only do cart stuff for users
-      if (user_type === "user" && selectedItem.length > 0) {
-        await Promise.all(
-          selectedItem.map(item =>
-            addData({
-              product: item.product,
-              selectedSizeQtyAndColor: item.selectedSizeQtyAndColor,
-            })
-          )
-        );
-        resetSelectedItem();
-        sessionStorage.removeItem(`${process.env.NEXT_PUBLIC_STRG_NAME as string}`);
-        setTimeout(() => {
-          queryClient.invalidateQueries({ queryKey: ["get-cart"] });
-          queryClient.refetchQueries({ queryKey: ["get-cart"] });
-        }, 500);
-      }
-  
+    } catch (error) {
+      // console.error("Login failed:", error);
+      toast.error("Login failed. Please try again.");
     } finally {
       setLoginLoading(false);
     }
-  };  
+  };
 
   return (
     <React.Fragment>
