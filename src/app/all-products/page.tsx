@@ -30,7 +30,7 @@ export default async function ViewAllProducts({
 
         {/* sorting and title section */}
         <section className="mt-7 mb-5">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
             <div className="flex-1 text-center sm:text-left">
               <ViewAllProductsTitle />
             </div>
