@@ -1,8 +1,6 @@
-
-
 type SearchQuerytypes = {
-    query: string;
-}
-
+  query: string;
+  sort?: string;
+};
 
 export type { SearchQuerytypes };
