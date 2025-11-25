@@ -9,7 +9,7 @@ export const filteredProductItems = async ({
   const items = await getAllProductsCached();
 
   if (!items || items.length === 0) {
-    return items;
+    return [];
   }
 
   let filteredItems = [...items];
