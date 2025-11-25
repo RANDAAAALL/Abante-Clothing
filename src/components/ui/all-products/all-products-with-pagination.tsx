@@ -4,8 +4,6 @@ import AllFilteredProducts from "./filtered-products";
 import PaginationSelection from "../pagination/paginated-selection";
 import usePaginationAndFiltered from "@/hooks/usePaginatedAndFiltered";
 // import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function AllProductsWithPagination({
   props,
@@ -14,17 +12,6 @@ export default function AllProductsWithPagination({
 }) {
   const { itemsPerPage, currentPage, setCurrentPage, currentData } =
     usePaginationAndFiltered({ props }, 9);
-  const router = useRouter();
-
-  // Auto-refresh every 30s
-  useEffect(() => {
-    router.refresh();
-    const interval = setInterval(() => {
-      console.log("View All Products data refreshed");
-      router.refresh();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, [router]);
 
   return (
     <>

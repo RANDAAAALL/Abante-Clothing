@@ -11,17 +11,17 @@ import { useRouter } from "next/navigation";
 
 export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback: CustomerFeedbackProps[] }) {
   const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
-  const router = useRouter();
+  // const router = useRouter();
   
-   // Auto-refresh every 30s
-   useEffect(() => {
-    router.refresh();
-    const interval = setInterval(() => {
-      console.log("Customer feedbacks data refreshed");
-      router.refresh();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, [router]);
+  //  // Auto-refresh every 30s
+  //  useEffect(() => {
+  //   router.refresh();
+  //   const interval = setInterval(() => {
+  //     console.log("Customer feedbacks data refreshed");
+  //     router.refresh();
+  //   }, 30000);
+  //   return () => clearInterval(interval);
+  // }, [router]);
 
   return (
     <Carousel

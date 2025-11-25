@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { getAllProductsCached } from "@/lib/cache/get-all-products";
 import { AllProductsContentProps } from "@/lib/types/view-all-products-types";
 import AllProductsClientContent from "@/components/ui/all-products/all-products-with-pagination-content";
+import AllProductsServerData from "@/components/ui/all-products/all-products-server-data";
 
 export default async function ViewAllProducts({
   searchParams,
@@ -14,7 +15,6 @@ export default async function ViewAllProducts({
   const params = await searchParams;
   const query = params.q as string;
   const sort = params.sort as string;
-  const allProducts = await getAllProductsCached();
 
   return (
     <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
@@ -40,11 +40,7 @@ export default async function ViewAllProducts({
 
         <Suspense fallback={<TshirtProductsSkeletonCard />}>
           <section>
-            <AllProductsClientContent
-              initialProducts={allProducts}
-              query={query}
-              sort={sort}
-            />
+            <AllProductsServerData query={query} sort={sort} />
           </section>
         </Suspense>
       </main>

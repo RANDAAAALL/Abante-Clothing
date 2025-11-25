@@ -19,8 +19,7 @@ import useAutoPlayCarousel from "@/hooks/useAutoPlayCarousel";
 import { TshirtType } from "@/lib/types/t-shirt-types";
 import Link from "next/link";
 import { ProductProps } from "@/lib/types/product-types";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 // flag: means to determined which kind of component is being used
 // flag = true -> it used for src/app/components/ui/specific-product/customer-product-preview.tsx
@@ -33,19 +32,6 @@ export default function TshirtsImageDescContent<
   const list: TshirtType | TshirtType[] = Array.isArray(props)
     ? props
     : [props];
-  const router = useRouter();
-
-  // Auto-refresh every 30s if flag is false
-  useEffect(() => {
-    if (flag) return;
-
-    router.refresh();
-    const interval = setInterval(() => {
-      console.log("Weekend offers Products data refreshed");
-      router.refresh();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, [router, flag]);
 
   return (
     <>

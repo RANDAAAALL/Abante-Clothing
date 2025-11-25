@@ -25,6 +25,10 @@ export const getWeekendOffersProductsCached = unstable_cache(
 
     const parsedWeekendOffersProducts = weekendOffersProducts.map((p) => ({
       ...p,
+      product_item_price: 
+      typeof p.product_item_price === "number"
+            ? p.product_item_price
+            : p.product_item_price?.toNumber?.() ?? 0,
       alt: `${p.product_item_ID}-${p.product_item_name} alt`,
     }));
 
