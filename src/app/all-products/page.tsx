@@ -4,9 +4,7 @@ import ViewAllProductsTitle from "@/components/ui/all-products/all-products-titl
 import AllProductsSortingDropdown from "@/components/ui/all-products/all-products-sorting-dropdown";
 import TshirtProductsSkeletonCard from "@/components/ui/skeletons/t-shirt-products-card";
 import { Suspense } from "react";
-import { getAllProductsCached } from "@/lib/cache/get-all-products";
 import { AllProductsContentProps } from "@/lib/types/view-all-products-types";
-import AllProductsClientContent from "@/components/ui/all-products/all-products-with-pagination-content";
 import AllProductsServerData from "@/components/ui/all-products/all-products-server-data";
 
 export default async function ViewAllProducts({
