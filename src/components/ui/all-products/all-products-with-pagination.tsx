@@ -17,7 +17,7 @@ export default function AllProductsWithPagination({
     <>
       {props.length === 0 ? (
         <p className="flex justify-center items-center h-65 sm:h-100  font-medium">
-          Products not found :/
+          Product(s) not found :/
           {/* <div className="flex justify-center items-center py-2">
               <Image src={"/images/png/bowling.png"} height={250} width={250} alt="bowling"/>
           </div> */}
