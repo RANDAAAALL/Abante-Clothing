@@ -8,12 +8,10 @@ import DeleteAccountDialog from "@/components/ui/modal/delete-account-dialog";
 import toast from "react-hot-toast";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { UpdateAccountURL } from "@/lib/config";
-// import { useRouter } from "next/navigation";
 
 export default function AccountDetailClientData({ email, username }: AccountDetailsClientDataProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  // const router = useRouter();
 
   const handleDelete = useCallback(async () => {
     // console.log("Deleting account..");
@@ -61,19 +59,21 @@ export default function AccountDetailClientData({ email, username }: AccountDeta
           <span className="text-2xl">Account Details</span>
 
           <div className="flex items-center space-x-2">
-            <div
+            <Button
               onClick={() => setIsEditing(true)}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3 py-2 gap-2 cursor-pointer">
+              variant="outline"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-9 px-3 py-2 gap-2 cursor-pointer">
               <Edit2 className="h-4 w-4" />
               Edit
-            </div>
+            </Button>
 
-            <div
+            <Button
               onClick={() => setIsDeleting(true)}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3 py-2 gap-2 cursor-pointer">
+              variant="outline"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium h-9 px-3 py-2 gap-2 cursor-pointer">
               <Trash2 className="h-4 w-4" />
               Delete Account
-            </div>
+            </Button>
           </div>
         </div>
 
