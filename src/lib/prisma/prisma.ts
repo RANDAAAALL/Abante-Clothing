@@ -7,13 +7,11 @@ declare global {
 
 // Use existing Prisma instance in dev or create a new one
 export const prisma =
-  global.prisma || new PrismaClient({
+  global.prisma ?? new PrismaClient({
     log: ["query", "info", "warn", "error"], // optional: useful for debugging
   });
 
 // Attach Prisma instance to global object in dev mode
-if (process.env.NODE_ENV === "development") {
-  global.prisma = prisma;
-}
+global.prisma = prisma;
 
 export default prisma;

@@ -8,13 +8,11 @@ export const filteredProductItems = async ({
 }: SearchQuerytypes) => {
   const items = await getAllProductsCached();
 
-  if (!items || items.length === 0) {
-    return [];
-  }
+  if (!items || items.length === 0) return [];
 
   let filteredItems = [...items];
 
-  // check if query exists
+  // Apply search query
   if (query) {
     const fuse = new Fuse(filteredItems, {
       keys: [
@@ -26,29 +24,27 @@ export const filteredProductItems = async ({
     });
 
     const results = fuse.search(query);
-    filteredItems = results.map((result) => result.item);
+    filteredItems = results.map((r) => r.item);
   }
 
   // Apply sorting
-  if (filteredItems.length > 0) {
-    filteredItems = [...filteredItems].sort((a, b) => {
-      switch (sort) {
-        case "name-desc":
-          return (b.product_item_name || "").localeCompare(
-            a.product_item_name || ""
-          );
-        case "price-asc":
-          return (a.product_item_price || 0) - (b.product_item_price || 0);
-        case "price-desc":
-          return (b.product_item_price || 0) - (a.product_item_price || 0);
-        case "name-asc":
-        default:
-          return (a.product_item_name || "").localeCompare(
-            b.product_item_name || ""
-          );
-      }
-    });
-  }
+  filteredItems = filteredItems.sort((a, b) => {
+    switch (sort) {
+      case "name-desc":
+        return (b.product_item_name || "").localeCompare(
+          a.product_item_name || ""
+        );
+      case "price-asc":
+        return (a.product_item_price || 0) - (b.product_item_price || 0);
+      case "price-desc":
+        return (b.product_item_price || 0) - (a.product_item_price || 0);
+      case "name-asc":
+      default:
+        return (a.product_item_name || "").localeCompare(
+          b.product_item_name || ""
+        );
+    }
+  });
 
   return filteredItems;
 };

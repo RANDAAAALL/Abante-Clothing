@@ -30,7 +30,7 @@ export default function AllProductsWithPagination({
     <>
       {props.length === 0 ? (
         <p className="flex justify-center items-center h-65 sm:h-100  font-medium">
-          Search not found :/
+          Products not found :/
         </p>
       ) : (
         // <div className="flex justify-center items-center py-2">
