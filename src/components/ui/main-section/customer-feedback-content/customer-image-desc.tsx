@@ -6,9 +6,22 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../../caro
 import Image from "next/image";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import CustomerFeedbackRating from "../../customer-feedback-rating";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CustomerImageDescContent({ customerFeedback }: { customerFeedback: CustomerFeedbackProps[] }) {
   const { plugin, pluginStop, pluginReset } = useAutoPlayCarousel();
+  const router = useRouter();
+  
+   // Auto-refresh every 30s
+   useEffect(() => {
+    router.refresh();
+    const interval = setInterval(() => {
+      console.log("Customer feedbacks data refreshed");
+      router.refresh();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [router]);
 
   return (
     <Carousel
