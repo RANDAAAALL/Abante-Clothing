@@ -1,4 +1,3 @@
-// lib/cache/get-all-products.ts
 import { unstable_cache } from "next/cache";
 import prisma from "../prisma/prisma";
 import { TshirtType } from "../types/t-shirt-types";
