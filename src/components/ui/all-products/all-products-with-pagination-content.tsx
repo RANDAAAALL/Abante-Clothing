@@ -9,5 +9,5 @@ export default async function AllProductsWithPaginationContent({
   sort?: string;
 }) {
   const data = await filteredProductItems({ query, sort });
-  return <AllProductsWithPagination props={data!} />;
+  return <AllProductsWithPagination props={data || []} />;
 }
