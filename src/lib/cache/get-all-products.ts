@@ -35,4 +35,4 @@ export const getAllProductsCached = unstable_cache(async () => {
         return;
       }
 
-}, ["all-products"], { tags: ["all-products"] });
+}, ["all-products"], { tags: ["all-products"], revalidate: 30 });
