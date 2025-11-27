@@ -38,7 +38,7 @@ export default function PhotoPage({ params }: PhotoParamsProps) {
       </Link>
 
       {/* Image */}
-      <div className="relative h-screen -z-10">
+      <div className={`relative h-screen -z-10 ${photoSlug === "size-chart" ? "mt-25" : ""}`}>
         <Image
           src={getImageSrc()}
           alt={`${slug}-${photoSlug}`}
