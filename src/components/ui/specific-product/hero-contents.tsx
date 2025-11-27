@@ -6,7 +6,7 @@ import AddToCartAndBuyNowButtons from "./atc-and-bn-buttons";
 import { ProductProps } from "@/lib/types/product-types";
 import TshirtSizesButtons from "./sizes-buttons";
 import { usePhotoModal } from "@/lib/store/product-photos";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useCartItems } from "@/lib/store/cart-items";
 
@@ -19,6 +19,7 @@ export default function HeroContents({
     const { openPhotoModal } = usePhotoModal();
     const { setSelectedColor } = useCartItems();
     const router = useRouter();
+    const pathname = usePathname();
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const colorParam = useSearchParams().get("color");
     const currentPhoto = props[selectedIndex];
@@ -27,6 +28,8 @@ export default function HeroContents({
     // on first load
     // it will extract and set the current index and color of value from the props
     useEffect(() => {
+      if (pathname.includes("/photo/")) return;
+      
       const defaultColor = props[0]?.product_item_color ?? "";
       if (!colorParam) {
 
@@ -53,7 +56,7 @@ export default function HeroContents({
         setSelectedIndex(0);
         setSelectedColor(defaultColor);
       }
-    }, [colorParam, props, router, slug, setSelectedColor]);
+    }, [colorParam, props, router, slug, setSelectedColor, pathname]);
     
     const photos = [
       { src: memoizedPhoto.product_item_image, type: "front", alt: `${memoizedPhoto.product_item_ID}-front`},
