@@ -33,11 +33,11 @@ export async function PUT(
 
     // get all other fields
     const rawFields = {
-      product_item_name: formData.get("product_item_name")?.toString() || "",
+      product_item_name: formData.get("product_item_name")?.toString().toLowerCase() || "",
       product_item_price: formData.get("product_item_price")?.toString() || "",
       product_item_discount:
         formData.get("product_item_discount")?.toString() || "",
-      product_item_color: formData.get("product_item_color")?.toString() || "",
+      product_item_color: formData.get("product_item_color")?.toString().toLowerCase() || "",
       product_item_size: formData.get("product_item_size")?.toString() || "",
       product_item_type: formData.get("product_item_type")?.toString() || "",
       product_item_fit: formData.get("product_item_fit")?.toString() || "",
@@ -72,6 +72,7 @@ export async function PUT(
     const hasNewFrontFile = frontFile instanceof File;
     const hasNewBackFile = backFile instanceof File;
 
+    // console.log("Edit Product -> Raw Fields", rawFields);
     // VALIDATION 1: zod schema with all validations including filename patterns
     const parsedResult = uploadProductSchema.safeParse({
       ...rawFields,
@@ -88,6 +89,7 @@ export async function PUT(
     }
 
     const uploadFields = parsedResult.data;
+    // console.log("Edit Product -> Upload Fields", uploadFields);
 
     // VALIDATION 2: check if product combination already exists in ANY product
     const existingProductWithSameDetails = await prisma.product_items.findFirst(
@@ -96,8 +98,6 @@ export async function PUT(
           AND: [
             { product_item_name: uploadFields.product_item_name },
             { product_item_color: uploadFields.product_item_color },
-            { product_item_size: uploadFields.product_item_size },
-            { product_item_type: uploadFields.product_item_type },
             // exclude the current product from the check
             { product_item_ID: { not: Number(product_item_ID) } },
           ],
@@ -109,7 +109,7 @@ export async function PUT(
       return NextResponse.json(
         {
           errorMessage:
-            "Can't update because a product with the same name, color, size, and type already exists",
+            "Can't update because a product with the same name and color already exists",
         },
         { status: 400 }
       );
