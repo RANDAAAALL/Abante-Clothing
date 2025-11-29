@@ -55,13 +55,13 @@ export async function POST(request: NextRequest){
               returned_product_size: item?.returned_product_size,
               returned_product_color: item?.returned_product_color,
               returned_product_price: item?.returned_product_price,
-              returned_product_image: productImages, // Use the properly formatted array
+              returned_product_image: productImages, 
               returned_product_reason: item?.returned_product_reason,
               request_return_date: new Date(),
           };
       });
 
-      // Create all return requests in one database call
+      // create all return requests in one database call
       await prisma.returns.createMany({
           data: returnRecords
       });
