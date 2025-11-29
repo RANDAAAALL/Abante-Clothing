@@ -9,7 +9,10 @@ import { revalidateTag } from "next/cache";
 export async function POST(request: NextRequest) {
   if (!(await isAuthenticatedUser())) return NextResponse.redirect("/login");
   if (!verifyCsrfToken(request))
-    return NextResponse.json({ errorMessage: "Invalid CSRF Token" }, { status: 403 });
+    return NextResponse.json(
+      { errorMessage: "Invalid CSRF Token" },
+      { status: 403 }
+    );
 
   try {
     const formData = await request.formData();
@@ -26,19 +29,28 @@ export async function POST(request: NextRequest) {
 
     // extract fields
     const rawFields = {
-      product_item_name: formData.get("product_item_name")?.toString() || "",
+      product_item_name:
+        formData.get("product_item_name")?.toString().toLowerCase() || "",
       product_item_price: formData.get("product_item_price")?.toString() || "",
-      product_item_discount: formData.get("product_item_discount")?.toString() || "",
-      product_item_color: formData.get("product_item_color")?.toString() || "",
+      product_item_discount:
+        formData.get("product_item_discount")?.toString() || "",
+      product_item_color:
+        formData.get("product_item_color")?.toString().toLowerCase() || "",
       product_item_size: formData.get("product_item_size")?.toString() || "",
       product_item_type: formData.get("product_item_type")?.toString() || "",
       product_item_fit: formData.get("product_item_fit")?.toString() || "",
-      product_item_material: formData.get("product_item_material")?.toString() || "",
-      product_item_construction: formData.get("product_item_construction")?.toString() || "",
-      product_item_design_features: formData.get("product_item_design_features")?.toString() || "",
+      product_item_material:
+        formData.get("product_item_material")?.toString() || "",
+      product_item_construction:
+        formData.get("product_item_construction")?.toString() || "",
+      product_item_design_features:
+        formData.get("product_item_design_features")?.toString() || "",
       product_item_stock: formData.get("product_item_stock")?.toString() || "",
-      product_item_status: formData.get("product_item_status")?.toString() || "",
+      product_item_status:
+        formData.get("product_item_status")?.toString() || "",
     };
+
+    // console.log("Upload Product -> Raw fields", rawFields);
 
     //  VALIDATION 1: Validate with Zod schema (including filename patterns)
     const parsedResult = uploadProductSchema.safeParse({
@@ -56,22 +68,26 @@ export async function POST(request: NextRequest) {
     }
 
     const uploadFields = parsedResult.data;
+    // console.log("Upload Product -> upload fields", uploadFields);
 
     //  VALIDATION 2: Check if product combination already exists in ANY product
-    const existingProductWithSameDetails = await prisma.product_items.findFirst({
-      where: {
-        AND: [
-          { product_item_name: uploadFields.product_item_name },
-          { product_item_color: uploadFields.product_item_color },
-          { product_item_size: uploadFields.product_item_size },
-          { product_item_type: uploadFields.product_item_type },
-        ]
+    const existingProductWithSameDetails = await prisma.product_items.findFirst(
+      {
+        where: {
+          AND: [
+            { product_item_name: uploadFields.product_item_name },
+            { product_item_color: uploadFields.product_item_color },
+          ],
+        },
       }
-    });
+    );
 
     if (existingProductWithSameDetails) {
       return NextResponse.json(
-        { errorMessage: "Can't create product because a product with the same name, color, size, and type already exists" },
+        {
+          errorMessage:
+            "Can't create product because a product with the same name, color, size, and type already exists",
+        },
         { status: 400 }
       );
     }
@@ -120,10 +136,15 @@ export async function POST(request: NextRequest) {
 
     // Revalidate the tag to fetch fresh data and display new uploaded product
     revalidateTag("all-status-products");
-    return NextResponse.json({ successMessage: "Product uploaded successfully" });
+    return NextResponse.json({
+      successMessage: "Product uploaded successfully",
+    });
   } catch (err: unknown) {
     return NextResponse.json(
-      { errorMessage: err instanceof Error ? err.message : "Failed to upload product." },
+      {
+        errorMessage:
+          err instanceof Error ? err.message : "Failed to upload product.",
+      },
       { status: 500 }
     );
   }
