@@ -109,7 +109,7 @@ export async function PUT(
       return NextResponse.json(
         {
           errorMessage:
-            "Can't update because a product with the same name, color, size, and type already exists",
+            "Can't update because a product with the same name and color already exists",
         },
         { status: 400 }
       );

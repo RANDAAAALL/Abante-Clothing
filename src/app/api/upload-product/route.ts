@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           errorMessage:
-            "Can't create product because a product with the same name, color, size, and type already exists",
+            "Can't create product because a product with the same name and color already exists",
         },
         { status: 400 }
       );
