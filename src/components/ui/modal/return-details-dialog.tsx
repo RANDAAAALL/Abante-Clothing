@@ -16,7 +16,7 @@ export function ReturnDetailsDialog({
   isOpen,
   onClose,
   selectedReturn,
-  onAcceptOrReject
+  onAcceptOrReject,
 }: ReturnDetailsDialogProps) {
   if (!selectedReturn?.returns?.[0]) return null;
 
@@ -50,7 +50,7 @@ export function ReturnDetailsDialog({
               {returnItem.returned_product_name}
             </h3>
           </div>
-          
+
           <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
             <div className="flex items-center gap-1">
               <span className="font-medium">Size:</span>
@@ -58,7 +58,9 @@ export function ReturnDetailsDialog({
             </div>
             <div className="flex items-center gap-1">
               <span className="font-medium">Color:</span>
-              <span className="capitalize">{returnItem.returned_product_color}</span>
+              <span className="capitalize">
+                {returnItem.returned_product_color}
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <span className="font-medium">Quantity:</span>
@@ -81,7 +83,7 @@ export function ReturnDetailsDialog({
                 {returnItem.returned_product_reason}
               </p>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
                 Status:
@@ -106,16 +108,25 @@ export function ReturnDetailsDialog({
               <div>
                 <span className="font-medium">Return Requested:</span>
                 <p>
-                  {returnItem.request_return_date 
-                    ? OrderReceiptDateFormatter(returnItem.request_return_date as string)
-                    : 'Date Not available'
-                  }
+                  {returnItem.request_return_date
+                    ? OrderReceiptDateFormatter(
+                        returnItem.request_return_date as string
+                      )
+                    : "Date Not available"}
                 </p>
               </div>
               {returnItem.returned_date && (
                 <div>
-                  <span className="font-medium">Returned:</span>
-                  <p>{OrderReceiptDateFormatter(returnItem.returned_date as string)}</p>
+                  <span className="font-medium">
+                    {returnItem.is_return_accepted === "Rejected"
+                      ? "Rejected:"
+                      : "Returned:"}
+                  </span>
+                  <p>
+                    {OrderReceiptDateFormatter(
+                      returnItem.returned_date as string
+                    )}
+                  </p>
                 </div>
               )}
             </div>
