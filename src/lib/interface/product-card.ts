@@ -10,4 +10,5 @@ export interface ProductCardProps {
     children?: React.ReactNode;
     showCheckbox?: boolean;
     borderColor?: string;
+    isSubmitting?: boolean;
   }

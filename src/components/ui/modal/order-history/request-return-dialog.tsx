@@ -162,7 +162,6 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
     }
 
     setIsSubmitting(true);
-
     const originalProducts = [...localProducts];
 
     //  OPTIMISTIC UPDATE: Update local state immediately
@@ -224,6 +223,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
           loading: "Submitting return request...",
           success: (message) => {
             setLocalProducts(updatedProducts);
+            setIsSubmitting(false);
             return message?.successMessage;
           },
           error: (e) => {
@@ -242,6 +242,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
 
     } catch (error) {
       // console.error("Error requesting order return:", error);
+      setIsSubmitting(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -288,6 +289,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
         {/* Select All Button */}
         {hasProductsWithoutReturn && (
           <SelectAllButton
+            isSubmitting={isSubmitting}
             selectedCount={selectedProducts.length}
             totalCount={availableProductsCount}
             isAllSelected={isAllSelected}
@@ -327,6 +329,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
                 canSelect={canSelect}
                 onToggleSelection={toggleProductSelection}
                 borderColor={borderColor}
+                isSubmitting={isSubmitting}
               >
                 {/* Return Details - Show for selected or pending/accepted returns */}
                 {(isSelected || returnStatus.isReturned) && !isReceived && (
@@ -335,6 +338,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
                       <>
                         {/* Quantity Selector */}
                         <QuantitySelector
+                          isSubmiitting={isSubmitting}
                           quantity={returnQuantities[id] || 1}
                           max={product.qty || 1}
                           onQuantityChange={(quantity) => handleQuantityChange(id, quantity)}
@@ -345,8 +349,9 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
                         <div>
                           <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Reason:</label>
                           <textarea
+                            disabled={isSubmitting}
                             placeholder="Why are you returning this product?"
-                            className="w-full border rounded-lg p-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            className={`${isSubmitting ? "cursor-not-allowed" : null} w-full border rounded-lg p-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400`}
                             rows={2}
                             value={returnReasons[id] || ""}
                             onChange={(e) => handleReasonChange(id, e.target.value)}

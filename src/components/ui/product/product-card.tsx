@@ -11,7 +11,8 @@ export function ProductCard({
   onToggleSelection,
   children,
   showCheckbox = true,
-  borderColor = "border-gray-300 dark:border-gray-400"
+  borderColor = "border-gray-300 dark:border-gray-400",
+  isSubmitting = false
 }: ProductCardProps) {
   const {
     hasReturns,
@@ -83,10 +84,11 @@ export function ProductCard({
         </div>
         {showCheckbox && (
           <input
+            disabled={isSubmitting || isReturned || isReceived}
             type="checkbox"
             checked={isSelected || isReturned || isReceived}
             readOnly
-            className={`accent-blue-600 ${(isReturned || isReceived) ? "opacity-50" : ""}`}
+            className={`${isSubmitting || isReturned || isReceived ? "cursor-not-allowed" : null} accent-blue-600 ${(isReturned || isReceived) ? "opacity-50" : ""}`}
           />
         )}
       </div>

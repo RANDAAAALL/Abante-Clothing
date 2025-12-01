@@ -5,5 +5,6 @@ export interface SelectAllButtonProps {
     onSelectAll: () => void;
     onDeselectAll: () => void;
     className?: string;
+    isSubmitting?: boolean;
   }
   
