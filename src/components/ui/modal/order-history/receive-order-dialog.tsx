@@ -144,8 +144,6 @@ export default function ReceiveOrderDialog({
       return product;
     });
 
-    setLocalProducts(updatedProducts);
-
     try {
       const orderData = selectedProducts.map((order_detail_ID) => ({
         order_detail_ID,
@@ -167,6 +165,7 @@ export default function ReceiveOrderDialog({
         {
           loading: "Confirming order...",
           success: (data) => {
+            setLocalProducts(updatedProducts);
             return data?.successMessage || "Order received successfully!";
           },
           error: (e) => {
@@ -182,7 +181,7 @@ export default function ReceiveOrderDialog({
       onUpdate?.();
 
     } catch (error) {
-      // Error is already handled in toast.promise
+      // console.error("Error confirming order:", error);
     } finally {
       setIsSubmitting(false);
     }

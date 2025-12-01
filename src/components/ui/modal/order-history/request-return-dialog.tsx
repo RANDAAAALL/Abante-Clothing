@@ -190,7 +190,6 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
       return product;
     });
 
-    setLocalProducts(updatedProducts);
 
     try {
       const returnData = selectedProducts.map((order_detail_ID) => {
@@ -224,6 +223,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
         {
           loading: "Submitting return request...",
           success: (message) => {
+            setLocalProducts(updatedProducts);
             return message?.successMessage;
           },
           error: (e) => {
@@ -241,7 +241,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
       onUpdate?.();
 
     } catch (error) {
-      // Error is already handled in toast.promise
+      // console.error("Error requesting order return:", error);
     } finally {
       setIsSubmitting(false);
     }
