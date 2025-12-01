@@ -4,4 +4,5 @@ export interface QuantitySelectorProps {
     max: number;
     onQuantityChange: (quantity: number) => void;
     label?: string;
+    isSubmiitting?: boolean;
   }

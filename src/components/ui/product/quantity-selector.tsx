@@ -7,7 +7,8 @@ export function QuantitySelector({
   min = 1,
   max,
   onQuantityChange,
-  label = "Quantity:"
+  label = "Quantity:",
+  isSubmiitting = false
 }: QuantitySelectorProps) {
   const handleDecrement = () => {
     if (quantity > min) {
@@ -28,8 +29,8 @@ export function QuantitySelector({
         <button
           type="button"
           onClick={handleDecrement}
-          className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-xs hover:bg-gray-100 dark:hover:bg-gray-700"
-          disabled={quantity <= min}
+          className={`${isSubmiitting ? "cursor-not-allowed" : null} w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-xs hover:bg-gray-100 dark:hover:bg-gray-700`}
+          disabled={quantity <= min || isSubmiitting}
         >
           -
         </button>
@@ -37,8 +38,8 @@ export function QuantitySelector({
         <button
           type="button"
           onClick={handleIncrement}
-          className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-xs hover:bg-gray-100 dark:hover:bg-gray-700"
-          disabled={quantity >= max}
+          className={`${isSubmiitting ? "cursor-not-allowed" : null} w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-xs hover:bg-gray-100 dark:hover:bg-gray-700`}
+          disabled={quantity >= max || isSubmiitting}
         >
           +
         </button>

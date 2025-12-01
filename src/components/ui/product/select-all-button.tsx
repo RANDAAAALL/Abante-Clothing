@@ -8,7 +8,8 @@ export function SelectAllButton({
   isAllSelected,
   onSelectAll,
   onDeselectAll,
-  className = ""
+  className = "",
+  isSubmitting = false
 }: SelectAllButtonProps) {
   if (totalCount <= 1) return null;
 
@@ -19,19 +20,21 @@ export function SelectAllButton({
       </span>
       {!isAllSelected ? (
         <Button
+          disabled={isSubmitting}
           variant="outline"
           size="sm"
           onClick={onSelectAll}
-          className="text-xs"
+          className={`${isSubmitting ? "cursor-not-allowed" : null} text-xs`}
         >
           Select All ({totalCount})
         </Button>
       ) : (
         <Button
+          disabled={isSubmitting}
           variant="outline"
           size="sm"
           onClick={onDeselectAll}
-          className="text-xs"
+          className={`${isSubmitting ? "cursor-not-allowed" : null} text-xs`}
         >
           Deselect All
         </Button>

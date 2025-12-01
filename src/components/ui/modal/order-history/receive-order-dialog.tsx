@@ -166,6 +166,7 @@ export default function ReceiveOrderDialog({
           loading: "Confirming order...",
           success: (data) => {
             setLocalProducts(updatedProducts);
+            setIsSubmitting(false);
             return data?.successMessage || "Order received successfully!";
           },
           error: (e) => {
@@ -228,6 +229,7 @@ export default function ReceiveOrderDialog({
         {/* Select All Button */}
         {hasProductsWithoutFeedback && (
           <SelectAllButton
+            isSubmitting={isSubmitting}
             selectedCount={selectedProducts.length}
             totalCount={availableProductsCount}
             isAllSelected={isAllSelected}
@@ -261,6 +263,7 @@ export default function ReceiveOrderDialog({
 
             return (
               <ProductCard
+                isSubmitting={isSubmitting}
                 key={id}
                 product={product}
                 returnStatus={returnStatus}
@@ -277,6 +280,7 @@ export default function ReceiveOrderDialog({
                         {alreadyReceived ? "Your Rating: " : "Rating: "}
                       </label>
                       <CustomerFeedbackRating
+                        isSubmitting={isSubmitting}
                         rating={ratings[id] ?? product.feedback_rating ?? 0}
                         max={5}
                         onChange={(value) => !alreadyReceived && handleRatingChange(id, value)}
@@ -289,8 +293,9 @@ export default function ReceiveOrderDialog({
                           Feedback (optional):
                         </label>
                         <textarea
+                          disabled={isSubmitting}
                           placeholder="Share your experience with this product..."
-                          className="w-full border rounded-lg p-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400"
+                          className={`${isSubmitting ? "cursor-not-allowed" : null} w-full border rounded-lg p-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-400`}
                           rows={2}
                           value={feedbackComments[id] || ""}
                           onChange={(e) => handleCommentChange(id, e.target.value)}

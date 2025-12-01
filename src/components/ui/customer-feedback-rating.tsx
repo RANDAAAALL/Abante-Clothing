@@ -6,6 +6,7 @@ export default function CustomerFeedbackRating({
   rating,
   max = 5,
   onChange,
+  isSubmitting = false
 }: CustomerFeedbackRatingProps) {
   return (
     <div className="-mt-4 sm:-mt-2 flex justify-center sm:justify-start gap-1">
@@ -14,10 +15,11 @@ export default function CustomerFeedbackRating({
 
         return (
           <button
+            disabled={isSubmitting}
             key={i}
             type="button"
             onClick={() => onChange?.(starValue)}
-            className="p-0.5"
+            className={`${isSubmitting ? "cursor-not-allowed" : null} p-0.5`}
           >
             {i < (rating ?? 0) ? <StarColorWithColorSVG /> : <StarColorWithoutColorSVG />}
           </button>
