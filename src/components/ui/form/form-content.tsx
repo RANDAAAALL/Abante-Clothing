@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import EyeOpen from "@/components/icons/svg/eye-open";
 import EyeClosed from "@/components/icons/svg/eye-closed";
+import { getSubmittingText } from "@/lib/helper/get-submitting-text";
 
 // Limit schemas to a Zod object (record of fields)
 type AnyZodObject = z.ZodObject<Record<string, z.ZodTypeAny>>;
@@ -147,7 +148,9 @@ export default function FormsContent<TSchema extends AnyZodObject>({
         {/* submit button */}
         <button className={`${isSubmitting ? "cursor-not-allowed" : "cursor-pointer" } font-bold bg-card-black-background text-white rounded-sm p-2 mt-2 mb-3 w-full`}
         type="submit"
-        disabled={isSubmitting}>{isSubmitting ? `Signing ${buttonText === "Sign up" ? "up" : "in"}....` : buttonText}</button>
+        disabled={isSubmitting}>
+        {isSubmitting ? `${getSubmittingText(buttonText)}...` : buttonText}
+        </button>
 
         {/* terms and condition */}
         {footerHref === "login" && (
@@ -177,4 +180,3 @@ export default function FormsContent<TSchema extends AnyZodObject>({
     </div>
   );
 }
-
