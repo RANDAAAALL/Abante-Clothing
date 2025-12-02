@@ -155,6 +155,7 @@ model users {
   address         address[]
   cart_items      cart_items[]
   order_purchased order_purchased[]
+  password_resets password_resets[]
   payments        payments[]
   product_items   product_items[]
   returns         returns[]
@@ -181,6 +182,7 @@ model password_resets {
   token      String    @db.VarChar(255)
   expires_at DateTime  @db.DateTime(0)
   created_at DateTime? @default(now()) @db.DateTime(0)
+  users      users     @relation(fields: [email], references: [email], onDelete: Cascade, onUpdate: NoAction, map: "fk_password_resets_user_email")
 
   @@index([email], map: "email")
   @@index([token], map: "token")
