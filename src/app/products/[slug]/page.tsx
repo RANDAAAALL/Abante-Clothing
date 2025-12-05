@@ -24,7 +24,6 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-
   const { slug } = await params;
   const resolvedSearch = await searchParams;
 
@@ -49,11 +48,17 @@ export async function generateMetadata(
     ? mainImage
     : `${getBaseUrl()}${mainImage}`;
 
+  const productName = product.product_item_name;
+  const capitalizedTitle = productName
+    ? productName.charAt(0).toUpperCase() + productName.slice(1)
+    : "Product";
+
   return {
-    title: product.product_item_name![0].toUpperCase() + product.product_item_name?.slice(1)  ?? "Product",
-    description: product.product_item_design_features ?? "Check out this product!",
+    title: capitalizedTitle,
+    description:
+      product.product_item_design_features ?? "Check out this product!",
     openGraph: {
-      title: product.product_item_name![0].toUpperCase()  + product.product_item_image?.slice(1) ?? "Product",
+      title: capitalizedTitle,
       description: product.product_item_design_features ?? "",
       url: `https://abante-clothing.vercel.app/products/${slug}${color ? `?color=${color}` : ""}`,
       images: [
@@ -68,7 +73,7 @@ export async function generateMetadata(
       siteName: "Abante Clothing",
     },
     twitter: {
-      title: product.product_item_name![0].toUpperCase() + product.product_item_image?.slice(1) ?? "Product",
+      title: capitalizedTitle,
       card: "summary_large_image",
       description: product.product_item_design_features ?? "",
       images: [absoluteImageUrl],
@@ -76,15 +81,20 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page({ params }: ParamsProps ) {
+export default async function Page({ params }: ParamsProps) {
   const { slug } = await params;
-  
-   const [ ProductVariants, AllRelatedProducts ] = await Promise.all([
+
+  const [ProductVariants, AllRelatedProducts] = await Promise.all([
     getSingleProduct({ slug }),
     getAllRelatedProducts(),
   ]);
 
-  if(!ProductVariants || !AllRelatedProducts) return <div className="flex items-center justify-center h-screen"><h1>Error! something wrong on fetching on db</h1></div>
+  if (!ProductVariants || !AllRelatedProducts)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1>Error! something wrong on fetching on db</h1>
+      </div>
+    );
 
   let CurrentProductFeedbacks: CustomerFeedbackProps[] = [];
   if (ProductVariants[0]?.product_item_ID != null) {
@@ -100,29 +110,38 @@ export default async function Page({ params }: ParamsProps ) {
 
   return (
     <>
-    <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
-      <main className="mt-10 flex flex-col sm:items-start min-h-screen sm:max-w-4xl w-full mx-auto p-4">
-     
-      {/* product path title */}
-      <section className="mx-auto md:mx-0"><ProductPathTitle productPathTitle={ProductVariants[0]?.product_item_name as string} /></section>
+      <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
+        <main className="mt-10 flex flex-col sm:items-start min-h-screen sm:max-w-4xl w-full mx-auto p-4">
+          {/* product path title */}
+          <section className="mx-auto md:mx-0">
+            <ProductPathTitle
+              productPathTitle={ProductVariants[0]?.product_item_name as string}
+            />
+          </section>
 
-      {/* hero contents */}
-      <section className="mt-9 sm:w-full">
-          <Suspense fallback={<div>Loading product...</div>}>
-            <HeroContents slug={slug!} props={ProductVariants} />
-          </Suspense>
-      </section>
+          {/* hero contents */}
+          <section className="mt-9 sm:w-full">
+            <Suspense fallback={<div>Loading product...</div>}>
+              <HeroContents slug={slug!} props={ProductVariants} />
+            </Suspense>
+          </section>
 
-      {/* product specifications */}
-      <section className="mt-9"><ProductSpecifications props={ProductVariants[0]} /></section>
+          {/* product specifications */}
+          <section className="mt-9">
+            <ProductSpecifications props={ProductVariants[0]} />
+          </section>
 
-      {/* related products */}
-      <span className="mt-9 font-bold text-lg">Related Products</span>
-      <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllRelatedProducts}/></section>
+          {/* related products */}
+          <span className="mt-9 font-bold text-lg">Related Products</span>
+          <section className="sm:mx-auto">
+            <TshirtsImageDescContent flag={true} props={AllRelatedProducts} />
+          </section>
 
-      {/* customer product preview */}
-      <section className="mt-9 w-full"><CustomerProductPreview props={CurrentProductFeedbacks}/></section>
-      </main>
+          {/* customer product preview */}
+          <section className="mt-9 w-full">
+            <CustomerProductPreview props={CurrentProductFeedbacks} />
+          </section>
+        </main>
       </div>
     </>
   );
