@@ -17,7 +17,7 @@ The website integrates **SEO best practices**, **Open Graph metadata**, and resp
 
 ---
 
-## Tech Stack as of now
+## Tech Stack
 
 - **Bun**
 - **Next.js**
@@ -30,6 +30,7 @@ The website integrates **SEO best practices**, **Open Graph metadata**, and resp
 - **Cloudinary**
 - **Fuse.js**
 - **Zustand**
+- **Upstash Redis**
 - **REST API**
 - **Aiven**
 - **Vercel**
