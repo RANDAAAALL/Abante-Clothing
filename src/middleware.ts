@@ -4,27 +4,36 @@ import { verifySessionToken } from "./lib/security/jwt/verify-session-token";
 import { UserPayloadProps } from "./lib/interface/user-payload";
 import { routes } from "./lib/helper/list-routes";
 import { getClientIP } from "./lib/helper/get-client-ip";
-import { rateLimiter, loginAndregisterLimiter } from "./lib/redis";
+import { AuthRateLimiter } from "./lib/redis";
 
 export async function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
   const sessionToken = request.cookies.get("session_token")?.value || request.headers.get("authorization")?.replace("Bearer ", "");
 
-  // api rate limiter checker
+  // API rate limiter checker
   if (pathname.startsWith("/api")) {
     const ip = getClientIP(request);
-    
-    const rateLimits = (pathname.startsWith("/api/login") || pathname.startsWith("/api/register"))
-    ? await loginAndregisterLimiter.limit(ip)
-    : await rateLimiter.limit(ip);
 
-    if (!rateLimits.success) {
-      return NextResponse.json(
-        { errorMessage: "Too many attempts, Please try again later." },
-        { status: 429 }
-      );
+    // apply rate limiting to login, register and forgot-password endpoints
+    if (
+      pathname.startsWith("/api/login") ||
+      pathname.startsWith("/api/register") ||
+      pathname.startsWith("/api/forgot-password")
+    ) {
+      const rateLimits = await AuthRateLimiter.limit(ip);
+
+      if (!rateLimits.success) {
+        return NextResponse.json(
+          { errorMessage: "Too many attempts, please try again later." },
+          { status: 429 }
+        );
+      }
     }
-  };
+    else {
+      // no applied rate limiting to other routes
+      return NextResponse.next();
+    }
+  }
 
   // route categories
   const isProtectedPage = routes.userProtectedRoutes.some((r) => pathname.startsWith(r));
