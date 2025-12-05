@@ -8,7 +8,7 @@ export const redis = new Redis({
 });
 
 // it allows 5 requests per 30 seconds only
-export const loginRateLimiter = new Ratelimit({
+export const loginAndregisterLimiter = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(5, "30 s"),
   analytics: true,
@@ -18,7 +18,7 @@ export const loginRateLimiter = new Ratelimit({
 // it allows 15 requests per 30 seconds only
 export const rateLimiter = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(15, "30 s"),
+  limiter: Ratelimit.slidingWindow(30, "30 s"),
   analytics: true,
   prefix: "@upstash/ratelimit",
 });
