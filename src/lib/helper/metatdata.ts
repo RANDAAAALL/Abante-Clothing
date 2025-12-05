@@ -54,7 +54,7 @@ export function buildProductMetadata(
   
   if (colors && colors.length > 0) {
     const colorList = colors.join(', ');
-    pageTitle = `${capitalizedTitle} (${colorList})`;
+    pageTitle = `${capitalizedTitle} ${colorList.charAt(0).toUpperCase() + colorList.slice(1)}`;
     
     // build color query parameter for URL
     if (colors.length === 1) {
