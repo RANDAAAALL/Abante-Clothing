@@ -15,10 +15,27 @@ import { buildProductMetadata } from "@/lib/helper/metatdata";
 
 export const revalidate = 30;
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+// In your page.tsx - Update the color extraction
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ color?: string | string[] }>;
+}): Promise<Metadata> {
   const { slug } = await params;
+  const resolvedSearch = await searchParams;
+
+  // Get ALL selected colors as array
+  const colors = resolvedSearch.color 
+    ? (Array.isArray(resolvedSearch.color) ? resolvedSearch.color : [resolvedSearch.color])
+    : [];
+
   const ProductVariants = await getSingleProduct({ slug });
-  return buildProductMetadata(ProductVariants![0], slug);
+  // console.log("ProductVariants: ", ProductVariants);
+  // console.log("Selected Colors: ", colors);
+
+  return buildProductMetadata(ProductVariants, slug, colors);
 }
 
 export default async function Page({ params }: ParamsProps) {
