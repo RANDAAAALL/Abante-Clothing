@@ -4,7 +4,7 @@ import { verifySessionToken } from "./lib/security/jwt/verify-session-token";
 import { UserPayloadProps } from "./lib/interface/user-payload";
 import { routes } from "./lib/helper/list-routes";
 import { getClientIP } from "./lib/helper/get-client-ip";
-import { ratelimit } from "./lib/redis";
+import { rateLimiter, loginRateLimiter } from "./lib/redis";
 
 export async function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
@@ -13,9 +13,12 @@ export async function middleware(request: NextRequest) {
   // api rate limiter checker
   if (pathname.startsWith("/api")) {
     const ip = getClientIP(request);
-    const rateLimitRes = await ratelimit.limit(ip);
+    
+    const rateLimits = (pathname.startsWith("/api/login") || pathname.startsWith("/api/register"))
+    ? await loginRateLimiter.limit(ip)
+    : await rateLimiter.limit(ip);
 
-    if (!rateLimitRes.success) {
+    if (!rateLimits.success) {
       return NextResponse.json(
         { errorMessage: "Too many attempts, Please try again later." },
         { status: 429 }
