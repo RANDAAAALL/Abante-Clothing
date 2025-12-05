@@ -8,12 +8,17 @@ import { getSingleProduct } from "@/dal/get-single-product";
 import { getAllProductsName } from "@/dal/get-all-products-name";
 import { ParamsProps } from "@/lib/types/params-types";
 import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
-import { Suspense } from "react";
+import { Suspense, cache } from "react";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import type { Metadata } from "next";
 import { buildProductMetadata } from "@/lib/helper/metatdata";
 
 export const revalidate = 30;
+
+const cachedGetSingleProduct = cache(async (slug: string) => {
+  return getSingleProduct({ slug });
+});
+
 
 // In your page.tsx - Update the color extraction
 export async function generateMetadata({
@@ -31,7 +36,7 @@ export async function generateMetadata({
     ? (Array.isArray(resolvedSearch.color) ? resolvedSearch.color : [resolvedSearch.color])
     : [];
 
-  const ProductVariants = await getSingleProduct({ slug });
+  const ProductVariants = await cachedGetSingleProduct( slug );
   // console.log("ProductVariants: ", ProductVariants);
   // console.log("Selected Colors: ", colors);
 
@@ -42,7 +47,8 @@ export default async function Page({ params }: ParamsProps) {
   const { slug } = await params;
 
   const [ProductVariants, AllRelatedProducts] = await Promise.all([
-    getSingleProduct({ slug }),
+    // getSingleProduct({ slug }),
+    cachedGetSingleProduct( slug as string ),
     getAllRelatedProducts(),
   ]);
 
