@@ -8,7 +8,7 @@ export const redis = new Redis({
 });
 
 // it allows 5 requests per 30 seconds only
-export const loginRateLimiter = new Ratelimit({
+export const loginAndregisterLimiter = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(5, "30 s"),
   analytics: true,

@@ -4,7 +4,7 @@ import { verifySessionToken } from "./lib/security/jwt/verify-session-token";
 import { UserPayloadProps } from "./lib/interface/user-payload";
 import { routes } from "./lib/helper/list-routes";
 import { getClientIP } from "./lib/helper/get-client-ip";
-import { rateLimiter, loginRateLimiter } from "./lib/redis";
+import { rateLimiter, loginAndregisterLimiter } from "./lib/redis";
 
 export async function middleware(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     const ip = getClientIP(request);
     
     const rateLimits = (pathname.startsWith("/api/login") || pathname.startsWith("/api/register"))
-    ? await loginRateLimiter.limit(ip)
+    ? await loginAndregisterLimiter.limit(ip)
     : await rateLimiter.limit(ip);
 
     if (!rateLimits.success) {
