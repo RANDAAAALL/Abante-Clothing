@@ -2,61 +2,26 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifySessionToken } from "./lib/security/jwt/verify-session-token"; 
 import { UserPayloadProps } from "./lib/interface/user-payload";
+import { routes } from "./lib/helper/list-routes";
+import { getClientIP } from "./lib/helper/get-client-ip";
+import { ratelimit } from "./lib/redis";
 
 export async function middleware(request: NextRequest) {
-  const routes = {
-    userProtectedRoutes: [
-      "/profile",
-      "/profile/order-history",
-      "/profile/billing",
-      "/profile/address",
-      "/checkout",
-    ],
-    protectedApiRoutes: [
-      "/api/add-to-cart",
-      "/api/get-cart",
-      "/api/delete-cart",
-      "/api/delete-all-cart",
-      "/api/upload-profile-picture",
-      "/api/checkout",
-      "/api/generate-receipt",
-      "/api/csrf",
-      "/api/me",
-      "/api/add-to-address-or-billing",
-      "/api/update-address-or-billing",
-      "/api/delete-address-or-billing",
-      "/api/update-order-status-and-tracking-number",
-      "/api/upload-product",
-      "/api/update-product",
-      "/api/add-feedback",
-      "/api/request-return",
-      "/api/update-return-status",
-      "/api/update-account-details",
-      "/api/update-user-account",
-    ],
-    adminProtectedRoutes: [
-      "/admin/dashboard",
-      "/admin/dashboard/orders",
-      "/admin/dashboard/upload-product",
-    ],
-    passRoutes: [
-      "/login",
-      "/register",
-      "/forgot-password",
-      "/reset-password",
-      "/admin/login",
-    ],
-    publicRoutes: [
-      "/",
-      "/about",
-      "/terms-and-conditions",
-      "/all-products",
-      "/privacy-policy",
-    ]
-  };
-
   const { pathname, origin } = request.nextUrl;
   const sessionToken = request.cookies.get("session_token")?.value || request.headers.get("authorization")?.replace("Bearer ", "");
+
+  // api rate limiter checker
+  if (pathname.startsWith("/api")) {
+    const ip = getClientIP(request);
+    const rateLimitRes = await ratelimit.limit(ip);
+
+    if (!rateLimitRes.success) {
+      return NextResponse.json(
+        { errorMessage: "Too many attempts, Please try again later." },
+        { status: 429 }
+      );
+    }
+  };
 
   // route categories
   const isProtectedPage = routes.userProtectedRoutes.some((r) => pathname.startsWith(r));
@@ -65,7 +30,7 @@ export async function middleware(request: NextRequest) {
   const isPassRoute = routes.passRoutes.some((r) => pathname.startsWith(r));
   const isUserPublicPage = routes.publicRoutes.some((r) => pathname === r);
 
-  //  If there is no token
+  //  check if there is no token
   if (!sessionToken) {
     // allow access to public pages like /login, /register and etc...
     if (isPassRoute) return NextResponse.next();
@@ -147,5 +112,6 @@ export const config = {
     "/api/update-return-status",
     "/api/update-account-details",
     "/api/update-user-account",
+    "/api/:path*"
   ],
 };
