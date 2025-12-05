@@ -1,3 +1,4 @@
+// app/products/[slug]/page.tsx
 import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
 import CustomerProductPreview from "@/components/ui/specific-product/customer-product-preview";
 import HeroContents from "@/components/ui/specific-product/hero-contents";
@@ -6,7 +7,6 @@ import ProductSpecifications from "@/components/ui/specific-product/product-spec
 import { getAllRelatedProducts } from "@/dal/get-all-related-products";
 import { getSingleProduct } from "@/dal/get-single-product";
 import { getAllProductsName } from "@/dal/get-all-products-name";
-import { ParamsProps } from "@/lib/types/params-types";
 import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
 import { Suspense, cache } from "react";
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
@@ -19,8 +19,6 @@ const cachedGetSingleProduct = cache(async (slug: string) => {
   return getSingleProduct({ slug });
 });
 
-
-// In your page.tsx - Update the color extraction
 export async function generateMetadata({
   params,
   searchParams,
@@ -28,29 +26,41 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ color?: string | string[] }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const resolvedSearch = await searchParams;
+  const [slug, resolvedSearch] = await Promise.all([
+    params.then(p => p.slug),
+    searchParams
+  ]);
 
-  // Get ALL selected colors as array
   const colors = resolvedSearch.color 
     ? (Array.isArray(resolvedSearch.color) ? resolvedSearch.color : [resolvedSearch.color])
     : [];
 
-  const ProductVariants = await cachedGetSingleProduct( slug );
-  // console.log("ProductVariants: ", ProductVariants);
-  // console.log("Selected Colors: ", colors);
-
+  const ProductVariants = await cachedGetSingleProduct(slug);
   return buildProductMetadata(ProductVariants, slug, colors);
 }
 
-export default async function Page({ params }: ParamsProps) {
-  const { slug } = await params;
-
-  const [ProductVariants, AllRelatedProducts] = await Promise.all([
-    // getSingleProduct({ slug }),
-    cachedGetSingleProduct( slug as string ),
-    getAllRelatedProducts(),
+export default async function Page({ 
+  params, 
+  searchParams 
+}: { 
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ color?: string | string[] }>;
+}) {
+  const [
+    slug, 
+    resolvedSearch,
+    ProductVariants, 
+    AllRelatedProducts
+  ] = await Promise.all([
+    params.then(p => p.slug),
+    searchParams,
+    cachedGetSingleProduct((await params).slug),
+    getAllRelatedProducts()
   ]);
+
+  const colors = resolvedSearch.color 
+    ? (Array.isArray(resolvedSearch.color) ? resolvedSearch.color : [resolvedSearch.color])
+    : [];
 
   if (!ProductVariants || !AllRelatedProducts)
     return (
@@ -59,17 +69,10 @@ export default async function Page({ params }: ParamsProps) {
       </div>
     );
 
-  let CurrentProductFeedbacks: CustomerFeedbackProps[] = [];
-  if (ProductVariants[0]?.product_item_ID != null) {
-    CurrentProductFeedbacks = await getAllRelatedCustomerProductReview(
-      ProductVariants[0].product_item_name as string
-    );
-  }
-
-  // console.log("Single Product: ", ProductVariants);
-  // console.log("All Products: ",AllProducts);
-  // console.log("All Products: ",AllRelatedProducts);
-  // console.log("RelatedCustomerProductReview: ", RelatedCustomerFeedbacks);
+  // fetch reviews after main content loads 
+  const reviewPromise = ProductVariants[0]?.product_item_name 
+    ? getAllRelatedCustomerProductReview(ProductVariants[0].product_item_name)
+    : Promise.resolve([]);
 
   return (
     <>
@@ -85,7 +88,11 @@ export default async function Page({ params }: ParamsProps) {
           {/* hero contents */}
           <section className="mt-9 sm:w-full">
             <Suspense fallback={<div>Loading product...</div>}>
-              <HeroContents slug={slug!} props={ProductVariants} />
+              <HeroContents 
+                slug={slug} 
+                props={ProductVariants} 
+                selectedColors={colors}  
+              />
             </Suspense>
           </section>
 
@@ -100,9 +107,11 @@ export default async function Page({ params }: ParamsProps) {
             <TshirtsImageDescContent flag={true} props={AllRelatedProducts} />
           </section>
 
-          {/* customer product preview */}
+          {/* customer product preview - load separately */}
           <section className="mt-9 w-full">
-            <CustomerProductPreview props={CurrentProductFeedbacks} />
+            <Suspense fallback={<div>Loading reviews...</div>}>
+              <ReviewContent reviewPromise={reviewPromise} />
+            </Suspense>
           </section>
         </main>
       </div>
@@ -110,11 +119,34 @@ export default async function Page({ params }: ParamsProps) {
   );
 }
 
-export async function generateStaticParams() {
-  const ProductsName = await getAllProductsName();
-  // console.log("All Products Name:", ProductsName);
+// separate component for reviews
+async function ReviewContent({ 
+  reviewPromise 
+}: { 
+  reviewPromise: Promise<CustomerFeedbackProps[]> 
+}) {
+  const reviews = await reviewPromise;
+  return <CustomerProductPreview props={reviews} />;
+}
 
-  return ProductsName?.map((p) => ({
-    slug: p.product_item_name,
-  }));
+// FIX generateStaticParams - Ensure it builds ALL pages
+export async function generateStaticParams() {
+  try {
+    const ProductsName = await getAllProductsName();
+    
+    if (!ProductsName || ProductsName.length === 0) {
+      console.warn('No products found for static generation');
+      return [];
+    }
+    
+    // specific logging
+    // console.log(`Generating ${ProductsName.length} static paths`);
+    
+    return ProductsName.map((p) => ({
+      slug: p.product_item_name?.toLowerCase().replace(/\s+/g, '-'),
+    }));
+  } catch (error) {
+    // console.error('Error in generateStaticParams:', error);
+    return [];
+  }
 }
