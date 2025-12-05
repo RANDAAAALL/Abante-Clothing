@@ -1,8 +1,9 @@
 import prisma from "@/lib/prisma/prisma";
 import { SlugProps } from "../lib/types/slug-types";
 import { TshirtType } from "../lib/types/t-shirt-types";
+import { cache } from "react";
 
-export const getSingleProduct = async ( {slug}: SlugProps) => {
+const getSingleProduct = async ( {slug}: SlugProps) => {
     try{
 
       const products = await prisma.product_items.findMany({
@@ -39,5 +40,9 @@ export const getSingleProduct = async ( {slug}: SlugProps) => {
       return;
     }
 }
+
+export const cachedGetSingleProduct = cache(async (slug: string) => {
+  return getSingleProduct({ slug });
+});
 
   
