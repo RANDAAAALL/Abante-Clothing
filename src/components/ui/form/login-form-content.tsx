@@ -40,7 +40,7 @@ export default function LoginFormContent({ user_type, href_type, footer_href_typ
     setClearAuthUser();
 
     // toast("Your session has expired. Please log in again.",{ duration: 5000 });
-    toast.error("Authentication required. Please log in.",{ duration: 5000 });
+    toast.error("Authentication required. Please Sign in.",{ duration: 5000 });
   }, [reason, user_type, queryClient, resetSelectedItem, setClearAuthUser, setClearOrderHistoryReceiptData]);
   
   const handleLoginClick = async (formData: loginFormType) => {

@@ -1,6 +1,7 @@
 import isCartItem from "./isCartItem";
 import { SelectedItemProps } from "../store/cart-items";
 import { CartItemsProps } from "../types/cart-items-types";
+import { getDiscountedPrice } from "./get-discounted-price";
 
 export const computeItems = (
   cartItems: (CartItemsProps | SelectedItemProps)[],
@@ -12,7 +13,7 @@ export const computeItems = (
   const subTotalPriceResult = cartItems.reduce((acc, item) => {
     const price = isCartItem(item)
       ? item?.cart_item_price ?? 0
-      : item.product?.product_item_price ?? 0;
+      : getDiscountedPrice(item.product?.product_item_price, item?.product.product_item_discount);
     const qty = isCartItem(item)
       ? item?.cart_item_qty ?? 0
       : item?.selectedSizeQtyAndColor?.qty ?? 0;
