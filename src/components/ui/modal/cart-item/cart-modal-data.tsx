@@ -18,7 +18,8 @@ export default function CartModalData() {
   const { mutate: deleteData } = useDeleteCart();
   const res = useMemo(() => {
     const source = data && data.length > 0 ? data : selectedItem;
-    
+    // console.log("SelectedItem: " ,selectedItem)
+    // console.log("Data: ", data);
     if (!source || source.length === 0) {
       return {
         subTotalPriceResult: 0,
