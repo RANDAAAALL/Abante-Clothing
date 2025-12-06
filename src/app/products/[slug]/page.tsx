@@ -1,4 +1,138 @@
-// main part
+// main
+import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
+import HeroContents from "@/components/ui/specific-product/hero-contents";
+import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
+import ProductSpecifications from "@/components/ui/specific-product/product-specifications-content";
+import { getAllRelatedProducts } from "@/dal/get-all-related-products";
+import { cachedGetSingleProduct } from "@/dal/get-single-product";
+import { getAllProductsName } from "@/dal/get-all-products-name";
+import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import CustomerReviewContent from "@/components/ui/specific-product/customer-product-preview-content";
+
+export const revalidate = 30; // 30seconds stale time
+
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }> 
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const ProductVariants = await cachedGetSingleProduct(slug);
+  const product = ProductVariants?.[0];
+  
+  if (!product) {
+    return {
+      title: "Product Not Found",
+      description: "This product is unavailable.",
+    };
+  }
+
+  const productName = product.product_item_name || "Product";
+  const capitalizedTitle = productName.charAt(0).toUpperCase() + productName.slice(1);
+  const description = product.product_item_design_features 
+    ? `${product.product_item_design_features.substring(0, 150)}`
+    : `Buy ${productName} from Abante Clothing`;
+
+  return {
+    title: `${capitalizedTitle} | Abante Clothing`,
+    description,
+    openGraph: {
+      title: capitalizedTitle,
+      description,
+      url: `https://abante-clothing.vercel.app/products/${slug}`,
+      images: [{
+        url: product.product_item_image || '/tshirt_placeholder.png',
+        width: 1200,
+        height: 630,
+        alt: productName,
+      }],
+      type: "website",
+      siteName: "Abante Clothing",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: capitalizedTitle,
+      description,
+      images: [product.product_item_image || ''],
+    },
+  };
+}
+
+export default async function Page({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }> 
+}) {
+  const { slug } = await params;
+  
+  // parallel data fetching
+  const [ProductVariants, AllRelatedProducts] = await Promise.all([
+    cachedGetSingleProduct(slug),
+    getAllRelatedProducts(),
+  ]);
+
+  if (!ProductVariants || ProductVariants.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1 className="text-red-500">Product not found</h1>
+      </div>
+    );
+  }
+
+  const reviewPromise = ProductVariants[0]?.product_item_name 
+    ? getAllRelatedCustomerProductReview(ProductVariants[0].product_item_name)
+    : Promise.resolve([]);
+
+  return (
+    <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen">
+      <main className="mt-10 max-w-4xl mx-auto p-4">
+        {/* Product path */}
+        <ProductPathTitle 
+          productPathTitle={ProductVariants[0].product_item_name as string} 
+        />
+
+        {/* Hero section */}
+        <section className="mt-9">
+          <Suspense fallback={<div>Loading....</div>}>
+            <HeroContents slug={slug} props={ProductVariants} />
+          </Suspense>
+        </section>
+
+        {/* Product specifications */}
+        <section className="mt-9">
+          <ProductSpecifications props={ProductVariants[0]} />
+        </section>
+
+        {/* Related products */}
+        <h2 className="mt-9 font-bold text-lg">Related Products</h2>
+        <section className="mt-4">
+          <TshirtsImageDescContent flag={true} props={AllRelatedProducts!} />
+        </section>
+
+        {/* Customer reviews */}
+        <section className="mt-9">
+          <Suspense fallback={<div className="h-40 animate-pulse bg-gray-200 rounded" />}>
+            <CustomerReviewContent reviewPromise={reviewPromise} />
+          </Suspense>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export async function generateStaticParams() {
+  const ProductsName = await getAllProductsName();
+  
+  if (!ProductsName) return [];
+  
+  return ProductsName.map((p) => ({
+    slug: p.product_item_name,
+  }));
+};
+
+// test part
 // import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
 // import CustomerProductPreview from "@/components/ui/specific-product/customer-product-preview";
 // import HeroContents from "@/components/ui/specific-product/hero-contents";
@@ -82,148 +216,3 @@
 //     slug: p.product_item_name,
 //   }));
 // }
-
-// test part
-import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
-import CustomerProductPreview from "@/components/ui/specific-product/customer-product-preview";
-import HeroContents from "@/components/ui/specific-product/hero-contents";
-import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
-import ProductSpecifications from "@/components/ui/specific-product/product-specifications-content";
-import { getAllRelatedProducts } from "@/dal/get-all-related-products";
-import { cachedGetSingleProduct } from "@/dal/get-single-product";
-import { getAllProductsName } from "@/dal/get-all-products-name";
-import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
-import { Suspense } from "react";
-import type { Metadata } from "next";
-import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
-
-export const revalidate = 30; // 30seconds
-
-// static metadata for performance
-export async function generateMetadata({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const ProductVariants = await cachedGetSingleProduct(slug);
-  const product = ProductVariants?.[0];
-  
-  if (!product) {
-    return {
-      title: "Product Not Found",
-      description: "This product is unavailable.",
-    };
-  }
-
-  const productName = product.product_item_name || "Product";
-  const capitalizedTitle = productName.charAt(0).toUpperCase() + productName.slice(1);
-  const description = product.product_item_design_features 
-    ? `${product.product_item_design_features.substring(0, 150)}...`
-    : `Buy ${productName} from Abante Clothing`;
-
-  return {
-    title: `${capitalizedTitle} | Abante Clothing`,
-    description,
-    openGraph: {
-      title: capitalizedTitle,
-      description,
-      url: `https://abante-clothing.vercel.app/products/${slug}`,
-      images: [{
-        url: product.product_item_image || '/tshirt_placeholder.png',
-        width: 1200,
-        height: 630,
-        alt: productName,
-      }],
-      type: "website",
-      siteName: "Abante Clothing",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: capitalizedTitle,
-      description,
-      images: [product.product_item_image || ''],
-    },
-  };
-}
-
-export default async function Page({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
-}) {
-  const { slug } = await params;
-  
-  // Parallel data fetching
-  const [ProductVariants, AllRelatedProducts] = await Promise.all([
-    cachedGetSingleProduct(slug),
-    getAllRelatedProducts(),
-  ]);
-
-  if (!ProductVariants || ProductVariants.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <h1 className="text-red-500">Product not found</h1>
-      </div>
-    );
-  }
-
-  const reviewPromise = ProductVariants[0]?.product_item_name 
-    ? getAllRelatedCustomerProductReview(ProductVariants[0].product_item_name)
-    : Promise.resolve([]);
-
-  return (
-    <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen">
-      <main className="mt-10 max-w-4xl mx-auto p-4">
-        {/* Product path */}
-        <ProductPathTitle 
-          productPathTitle={ProductVariants[0].product_item_name as string} 
-        />
-
-        {/* Hero section */}
-        <section className="mt-9">
-          <Suspense fallback={<div>Loading....</div>}>
-            <HeroContents slug={slug} props={ProductVariants} />
-          </Suspense>
-        </section>
-
-        {/* Product specifications */}
-        <section className="mt-9">
-          <ProductSpecifications props={ProductVariants[0]} />
-        </section>
-
-        {/* Related products */}
-        <h2 className="mt-9 font-bold text-lg">Related Products</h2>
-        <section className="mt-4">
-          <TshirtsImageDescContent flag={true} props={AllRelatedProducts!} />
-        </section>
-
-        {/* Customer reviews */}
-        <section className="mt-9">
-          <Suspense fallback={<div className="h-40 animate-pulse bg-gray-200 rounded" />}>
-            <ReviewSection reviewPromise={reviewPromise} />
-          </Suspense>
-        </section>
-      </main>
-    </div>
-  );
-}
-
-async function ReviewSection({ 
-  reviewPromise 
-}: { 
-  reviewPromise: Promise<CustomerFeedbackProps[]> 
-}) {
-  const reviews = await reviewPromise;
-  return <CustomerProductPreview props={reviews} />;
-}
-
-export async function generateStaticParams() {
-  const ProductsName = await getAllProductsName();
-  
-  if (!ProductsName) return [];
-  
-  return ProductsName.map((p) => ({
-    slug: p.product_item_name,
-  }));
-}

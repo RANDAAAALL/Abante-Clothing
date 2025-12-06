@@ -104,7 +104,6 @@ export const config = {
     "/api/checkout",
     "/api/generate-receipt",
     "/api/csrf",
-    "/api/me",
     "/login",
     "/register",
     "/forgot-password",

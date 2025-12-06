@@ -4,7 +4,6 @@ import { getBaseUrl } from "@/lib/helper/getBaseUrl";
 export const LoginURL = `${getBaseUrl()}/api/login`;
 export const RegisterURL = `${getBaseUrl()}/api/register`;
 export const LogoutURL = `${getBaseUrl()}/api/logout`;
-export const MeURL = `${getBaseUrl()}/api/me`;
 export const GetCartURL = `${getBaseUrl()}/api/get-cart`;
 export const AddToCartURL = `${getBaseUrl()}/api/add-to-cart`;
 export const DeleteCartURL = `${getBaseUrl()}/api/delete-cart`;
