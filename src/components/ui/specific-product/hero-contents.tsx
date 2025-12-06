@@ -253,7 +253,8 @@ export default function HeroContents({
     
     // Update page title
     const baseTitle = productName.charAt(0).toUpperCase() + productName.slice(1);
-    document.title = `${baseTitle} (${colorName}) | Abante Clothing`;
+    const baseColorName = colorName.charAt(0).toUpperCase() + colorName.slice(1);
+    document.title = `${baseTitle} ${baseColorName} | Abante Clothing`;
     
     // Update Open Graph meta tags (for Facebook, LinkedIn, etc.)
     const updateMetaTag = (property: string, content: string) => {
