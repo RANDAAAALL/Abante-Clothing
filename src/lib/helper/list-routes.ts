@@ -15,7 +15,6 @@ export const routes = {
       "/api/checkout",
       "/api/generate-receipt",
       "/api/csrf",
-      "/api/me",
       "/api/add-to-address-or-billing",
       "/api/update-address-or-billing",
       "/api/delete-address-or-billing",
