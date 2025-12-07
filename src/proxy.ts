@@ -6,7 +6,7 @@ import { routes } from "./lib/helper/list-routes";
 import { getClientIP } from "./lib/helper/get-client-ip";
 import { AuthRateLimiter } from "./lib/redis";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname, origin } = request.nextUrl;
   const sessionToken = request.cookies.get("session_token")?.value || request.headers.get("authorization")?.replace("Bearer ", "");
 

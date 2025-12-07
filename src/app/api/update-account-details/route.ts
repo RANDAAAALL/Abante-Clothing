@@ -114,8 +114,8 @@ export async function PUT(request: NextRequest) {
     });
 
     // revalidate cache
-    revalidateTag("account-details");
-    revalidateTag("customer-feedbacks");
+    revalidateTag("account-details", {});
+    revalidateTag("customer-feedbacks", {});
 
     return NextResponse.json(
       { successMessage: "Account details updated successfully." },

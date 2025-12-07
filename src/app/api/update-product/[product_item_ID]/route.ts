@@ -198,9 +198,9 @@ export async function PUT(
       },
     });
 
-    revalidateTag("all-status-products");
-    revalidateTag("weekend-offers-products");
-    revalidateTag("all-products");
+    revalidateTag("all-status-products", {});
+    revalidateTag("weekend-offers-products", {});
+    revalidateTag("all-products", {});
     return NextResponse.json({
       successMessage: "Product updated successfully",
     });

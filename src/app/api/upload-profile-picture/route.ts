@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     });
 
     // revalidate the tag, to fecth fresh data on account-details
-    revalidateTag("account-details");
+    revalidateTag("account-details", {});
 
     return NextResponse.json({ successMessage: "uploaded sucessfully"}, { status: 200 });
   } catch (err: unknown) {

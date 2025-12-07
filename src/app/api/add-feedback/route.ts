@@ -37,7 +37,7 @@ export async function POST(request: NextRequest){
       }       
 
     // revalidate cache on the customer side
-    revalidateTag("order-history");
+    revalidateTag("order-history", {});
 
     return NextResponse.json({ successMessage: "Feedback added successfully." }, { status: 200 })
   }catch(err: unknown){

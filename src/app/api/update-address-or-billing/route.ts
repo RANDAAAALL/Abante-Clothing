@@ -74,8 +74,8 @@ export async function PUT(request: NextRequest) {
     });
 
     // revalidate cache
-    revalidateTag(addressType);
-    revalidateTag("get-address-and-billing");
+    revalidateTag(addressType, {});
+    revalidateTag("get-address-and-billing", {});
     
     return NextResponse.json(
       { successMessage: "Updated successfully" },
