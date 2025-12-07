@@ -1,4 +1,4 @@
-import { getAllProductsCached } from "@/lib/cache/get-all-products";
+import { getAllProductsCached } from "@/lib/cache/get-all-products-cached";
 import AllProductsClientContent from "./all-products-with-pagination-content";
 
 export default async function AllProductsServerData({ query, sort }: { query: string; sort: string }) {

@@ -8,7 +8,7 @@ import CustomerFeedbackCarouselSkeleton from "@/components/ui/skeletons/customer
 import TshirtCarouselSkeletonCard from "@/components/ui/skeletons/t-shirt-carousel-card";
 import { Suspense } from "react";
 
-export const experimental_ppr = true;
+// export const experimental_ppr = true;
 
 export default function Home() {
   

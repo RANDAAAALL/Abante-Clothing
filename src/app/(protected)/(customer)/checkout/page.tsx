@@ -1,7 +1,7 @@
 import CheckoutContent from "@/components/ui/checkout-section/checkout-content";
 import CheckoutModalContent from "@/components/ui/modal/checkout-item/checkout-modal-content";
 
-export const experimental_ppr = true;
+// export const experimental_ppr = true;
 
 export default function Checkout(){
     return (
