@@ -5,9 +5,8 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 // your base config
 const nextConfig: NextConfig = {
   reactStrictMode: false,
-  experimental: {
-    ppr: "incremental",
-  },
+  cacheComponents: false,
+  
   allowedDevOrigins: [
     process.env.LOCAL_LAN_IP_ADDRESS ?? "http://localhost:3000",
     "https://abante-clothing.vercel.app/",

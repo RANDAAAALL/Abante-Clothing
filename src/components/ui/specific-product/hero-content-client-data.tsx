@@ -11,7 +11,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useCartItems } from "@/lib/store/cart-items";
 
-export default function HeroContents({
+export default function HeroContentClientData({
   props,
   slug
 }: {

@@ -1,17 +1,18 @@
-// main
+// main part
 import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
-import HeroContents from "@/components/ui/specific-product/hero-contents";
-import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
-import ProductSpecifications from "@/components/ui/specific-product/product-specifications-content";
 import { getAllRelatedProducts } from "@/dal/get-all-related-products";
-import { cachedGetSingleProduct } from "@/dal/get-single-product";
+import { getSingleProduct } from "@/dal/get-single-product";
 import { getAllProductsName } from "@/dal/get-all-products-name";
 import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import CustomerReviewContent from "@/components/ui/specific-product/customer-product-preview-content";
+import HeroContentClientData from "@/components/ui/specific-product/hero-content-client-data";
+import ProductSpecificationsContent from "@/components/ui/specific-product/product-specifications-content";
+import CustomerReviewServerData from "@/components/ui/specific-product/customer-product-preview-server-data";
+import ProductPathTitleContentClientData from "@/components/ui/specific-product/product-path-title-content-client-data";
 
 export const revalidate = 30; // 30seconds stale time
+export const dynamicParams = true; // allows new slugs 
 
 export async function generateMetadata({ 
   params 
@@ -19,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }> 
 }): Promise<Metadata> {
   const { slug } = await params;
-  const ProductVariants = await cachedGetSingleProduct(slug);
+  const ProductVariants = await getSingleProduct(slug);
   const product = ProductVariants?.[0];
   
   if (!product) {
@@ -69,7 +70,7 @@ export default async function Page({
   
   // parallel data fetching
   const [ProductVariants, AllRelatedProducts] = await Promise.all([
-    cachedGetSingleProduct(slug),
+    getSingleProduct(slug),
     getAllRelatedProducts(),
   ]);
 
@@ -89,20 +90,20 @@ export default async function Page({
     <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen">
       <main className="mt-10 max-w-4xl mx-auto p-4">
         {/* Product path */}
-        <ProductPathTitle 
+        <ProductPathTitleContentClientData 
           productPathTitle={ProductVariants[0].product_item_name as string} 
         />
 
         {/* Hero section */}
         <section className="mt-9">
           <Suspense fallback={<div>Loading....</div>}>
-            <HeroContents slug={slug} props={ProductVariants} />
+            <HeroContentClientData slug={slug} props={ProductVariants} />
           </Suspense>
         </section>
 
         {/* Product specifications */}
         <section className="mt-9">
-          <ProductSpecifications props={ProductVariants[0]} />
+          <ProductSpecificationsContent props={ProductVariants[0]} />
         </section>
 
         {/* Related products */}
@@ -114,7 +115,7 @@ export default async function Page({
         {/* Customer reviews */}
         <section className="mt-9">
           <Suspense fallback={<div className="h-40 animate-pulse bg-gray-200 rounded" />}>
-            <CustomerReviewContent reviewPromise={reviewPromise} />
+            <CustomerReviewServerData reviewPromise={reviewPromise} />
           </Suspense>
         </section>
       </main>
@@ -132,87 +133,168 @@ export async function generateStaticParams() {
   }));
 };
 
+
 // test part
-// import TshirtsImageDescContent from "@/components/ui/main-section/weekend-offers-content/t-shirts-image-desc-content";
-// import CustomerProductPreview from "@/components/ui/specific-product/customer-product-preview";
-// import HeroContents from "@/components/ui/specific-product/hero-contents";
-// import ProductPathTitle from "@/components/ui/specific-product/product-path-title";
-// import ProductSpecifications from "@/components/ui/specific-product/product-specifications-content";
 // import { getAllRelatedProducts } from "@/dal/get-all-related-products";
 // import { cachedGetSingleProduct } from "@/dal/get-single-product";
 // import { getAllProductsName } from "@/dal/get-all-products-name";
-// import { ParamsProps } from "@/lib/types/params-types";
-// import { getAllRelatedCustomerProductReview } from "@/dal/get-all-related-customer-product-review";
-// import { Suspense } from "react";
-// import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
+// import { Suspense, use } from "react";
 // import type { Metadata } from "next";
-// import { buildProductMetadata } from "@/lib/helper/metatdata";
+// import { TshirtType } from "@/lib/types/t-shirt-types";
+// import ProductPathTitleServerData from "@/components/ui/specific-product/product-path-title-server-data";
+// import HeroContentServerData from "@/components/ui/specific-product/hero-content-server-data";
+// import AllRelatedProductsServerData from "@/components/ui/specific-product/all-related-products-server-data";
+// import CustomerReviewServerDataContent from "@/components/ui/specific-product/customer-product-preview-server-data-content";
 
-// export const revalidate = 30;
+// // 30seconds stale time
+// export const dynamicParams = true;
 
-// export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>;
+// }): Promise<Metadata> {
 //   const { slug } = await params;
-//   const ProductVariants = await cachedGetSingleProduct( slug );
-//   return buildProductMetadata(ProductVariants![0], slug);
-// }
+//   const ProductVariants = await cachedGetSingleProduct(slug);
+//   const product = ProductVariants?.[0];
 
-// export default async function Page({ params }: ParamsProps ) {
-//   const { slug } = await params;
-  
-//    const [ ProductVariants, AllRelatedProducts ] = await Promise.all([
-//     cachedGetSingleProduct( slug as string ),
-//     getAllRelatedProducts(),
-//   ]);
-
-//   if(!ProductVariants || !AllRelatedProducts) return <div className="flex items-center justify-center h-screen"><h1>Error! something wrong on fetching on db</h1></div>
-
-//   let CurrentProductFeedbacks: CustomerFeedbackProps[] = [];
-//   if (ProductVariants[0]?.product_item_ID != null) {
-//     CurrentProductFeedbacks = await getAllRelatedCustomerProductReview(
-//       ProductVariants[0].product_item_name as string
-//     );
+//   if (!product) {
+//     return {
+//       title: "Product Not Found",
+//       description: "This product is unavailable.",
+//     };
 //   }
 
-//   // console.log("Single Product: ", ProductVariants);
-//   // console.log("All Products: ",AllProducts);
-//   // console.log("All Products: ",AllRelatedProducts);
-//   // console.log("RelatedCustomerProductReview: ", RelatedCustomerFeedbacks);
+//   const productName = product.product_item_name || "Product";
+//   const capitalizedTitle =
+//     productName.charAt(0).toUpperCase() + productName.slice(1);
+//   const description = product.product_item_design_features
+//     ? `${product.product_item_design_features.substring(0, 150)}`
+//     : `Buy ${productName} from Abante Clothing`;
+
+//   return {
+//     title: `${capitalizedTitle} | Abante Clothing`,
+//     description,
+//     openGraph: {
+//       title: capitalizedTitle,
+//       description,
+//       url: `https://abante-clothing.vercel.app/products/${slug}`,
+//       images: [
+//         {
+//           url: product.product_item_image || "/tshirt_placeholder.png",
+//           width: 1200,
+//           height: 630,
+//           alt: productName,
+//         },
+//       ],
+//       type: "website",
+//       siteName: "Abante Clothing",
+//     },
+//     twitter: {
+//       card: "summary_large_image",
+//       title: capitalizedTitle,
+//       description,
+//       images: [product.product_item_image || ""],
+//     },
+//   };
+// }
+
+// function ProductPageContent({ params }: { params: Promise<{ slug: string }> }) {
+//   const { slug } = use(params);
+
+//   // all data fetching in parallel way
+//   const productPromise = cachedGetSingleProduct(slug) as Promise<
+//     TshirtType[] | undefined
+//   >;
+//   const relatedProductsPromise = getAllRelatedProducts() as Promise<
+//     TshirtType[] | undefined
+//   >;
 
 //   return (
-//     <>
-//     <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen w-full max-w-[1980] mx-auto">
-//       <main className="mt-10 flex flex-col sm:items-start min-h-screen sm:max-w-4xl w-full mx-auto p-4">
-     
-//       {/* product path title */}
-//       <section className="mx-auto md:mx-0"><ProductPathTitle productPathTitle={ProductVariants[0]?.product_item_name as string} /></section>
+//     <div className="bg-white-card-background dark:bg-black-background dark:text-white text-black min-h-screen">
+//       <main className="mt-10 max-w-4xl mx-auto p-4">
+//         {/* Product path - needs product data */}
+//         <Suspense
+//           fallback={
+//             <div className="h-6 w-49 checkout-form-skeleton rounded"></div>
+//           }
+//         >
+//           <ProductPathTitleServerData productPromise={productPromise} />
+//         </Suspense>
 
-//       {/* hero contents */}
-//       <section className="mt-9 sm:w-full">
-//           <Suspense fallback={<div>Loading product...</div>}>
-//             <HeroContents slug={slug!} props={ProductVariants} />
+//         {/* Hero section */}
+//         <section className="mt-9">
+//           <Suspense
+//             fallback={
+//               <div className="h-150 md:h-92 checkout-form-skeleton rounded"></div>
+//             }
+//           >
+//             <HeroContentServerData
+//               slug={slug}
+//               productPromise={productPromise}
+//             />
 //           </Suspense>
-//       </section>
+//         </section>
 
-//       {/* product specifications */}
-//       <section className="mt-9"><ProductSpecifications props={ProductVariants[0]} /></section>
+//         {/* Product specifications */}
+//         <section className="mt-9">
+//           {/* Title */}
+//           <span className="font-bold text-lg">Product Specifications</span>
+//           <Suspense
+//             fallback={
+//               <div className="mt-4 h-48 md:h-58 checkout-form-skeleton rounded"></div>
+//             }
+//           >
+//             <ProductPathTitleServerData productPromise={productPromise} />
+//           </Suspense>
+//         </section>
 
-//       {/* related products */}
-//       <span className="mt-9 font-bold text-lg">Related Products</span>
-//       <section className="sm:mx-auto"><TshirtsImageDescContent flag={true} props={AllRelatedProducts}/></section>
+//         {/* Related products */}
+//         <h2 className="mt-9 font-bold text-lg">Related Products</h2>
+//         <section className="mt-3">
+//           <Suspense
+//             fallback={
+//               <div className="h-110 checkout-form-skeleton rounded"></div>
+//             }
+//           >
+//             <AllRelatedProductsServerData
+//               relatedProductsPromise={relatedProductsPromise}
+//             />
+//           </Suspense>
+//         </section>
 
-//       {/* customer product preview */}
-//       <section className="mt-9 w-full"><CustomerProductPreview props={CurrentProductFeedbacks}/></section>
+//         {/* Customer reviews */}
+//         <section className="mt-9 w-full">
+//           <div className="mx-auto md:mx-0">
+//             <span className="font-bold text-lg">Product Preview</span>
+//           </div>
+//           <Suspense
+//             fallback={
+//               <div className="mt-3 h-105 checkout-form-skeleton rounded" />
+//             }
+//           >
+//             <CustomerReviewServerDataContent productPromise={productPromise} />
+//           </Suspense>
+//         </section>
 //       </main>
-//       </div>
-//     </>
+//     </div>
 //   );
+// }
+
+// export default function Page({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>;
+// }) {
+//   return <ProductPageContent params={params} />;
 // }
 
 // export async function generateStaticParams() {
 //   const ProductsName = await getAllProductsName();
-//   // console.log("All Products Name:", ProductsName);
 
-//   return ProductsName?.map((p) => ({
+//   if (!ProductsName) return [];
+
+//   return ProductsName.map((p) => ({
 //     slug: p.product_item_name,
 //   }));
-// }
+// 

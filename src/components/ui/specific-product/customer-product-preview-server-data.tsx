@@ -1,7 +1,7 @@
 import { CustomerFeedbackProps } from "@/lib/types/customer-feedback-types";
 import CustomerProductPreview from "./customer-product-preview";
 
-export default async function CustomerReviewContent({ 
+export default async function CustomerReviewServerData({ 
     reviewPromise 
   }: { 
     reviewPromise: Promise<CustomerFeedbackProps[]> 
