@@ -89,8 +89,8 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Revalidate to get fresh data
-    revalidateTag("orders");
-    revalidateTag("order-history");
+    revalidateTag("orders", {});
+    revalidateTag("order-history", {});
 
     // Respond with success
     return NextResponse.json({

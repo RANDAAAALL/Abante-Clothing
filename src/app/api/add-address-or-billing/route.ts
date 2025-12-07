@@ -61,7 +61,7 @@ export async function POST(request: NextRequest){
         })
         
         // revalidate the tag/s, to fecth fresh data on billing address
-        revalidateTag(addressType);
+        revalidateTag(addressType, {});
 
         return NextResponse.json(
             { successMessage: "Added successfully" },

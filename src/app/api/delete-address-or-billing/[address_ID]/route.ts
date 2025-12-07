@@ -69,9 +69,9 @@ export async function DELETE(
     await prisma.address.delete({ where: { address_ID: parsedAddressID } });
 
     // revalidate the relevant cache tags
-    revalidateTag(addressType);
-    revalidateTag("order-history");
-    revalidateTag("get-address-and-billing");
+    revalidateTag(addressType, {});
+    revalidateTag("order-history", {});
+    revalidateTag("get-address-and-billing", {});
     
     return NextResponse.json(
       { successMessage: "Deleted Successfully." },

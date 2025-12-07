@@ -67,10 +67,10 @@ export async function POST(request: NextRequest){
       });
 
       // revalidate cache on the customer side
-      revalidateTag("order-history");
+      revalidateTag("order-history", {});
 
       // revalidate cache on the admin side
-      revalidateTag("orders");
+      revalidateTag("orders", {});
 
       return NextResponse.json({ 
           successMessage: "Return request submitted successfully. Please wait for approval." 

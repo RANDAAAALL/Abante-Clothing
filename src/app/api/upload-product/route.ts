@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Revalidate the tag to fetch fresh data and display new uploaded product
-    revalidateTag("all-status-products");
+    revalidateTag("all-status-products", {});
     return NextResponse.json({
       successMessage: "Product uploaded successfully",
     });

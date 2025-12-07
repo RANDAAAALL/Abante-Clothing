@@ -163,15 +163,15 @@ export async function POST(req: NextRequest) {
           
         
         // revalidate cache on the customer side
-        revalidateTag("order-history");
-        revalidateTag("billing");
-        revalidateTag("shipping");
-        revalidateTag("all-products");
-        revalidateTag("all-status-products");
+        revalidateTag("order-history", {});
+        revalidateTag("billing", {});
+        revalidateTag("shipping", {});
+        revalidateTag("all-products", {});
+        revalidateTag("all-status-products", {});
 
         // revalidate cache on the admin side
-        revalidateTag("sales");
-        revalidateTag("orders");
+        revalidateTag("sales", {});
+        revalidateTag("orders", {});
 
         return NextResponse.json(
         { successMessage: "Successfully inserted an order", actualData: result },

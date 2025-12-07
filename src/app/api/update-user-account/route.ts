@@ -95,10 +95,10 @@ export async function PUT(request: NextRequest) {
     response.cookies.set("csrf_token", "", cookieSettings);
 
     // Clear cache
-    revalidateTag("shipping");
-    revalidateTag("billing");
-    revalidateTag("access-details");
-    revalidateTag("order-history");
+    revalidateTag("shipping", {});
+    revalidateTag("billing", {});
+    revalidateTag("access-details", {});
+    revalidateTag("order-history", {});
 
     return response;
 

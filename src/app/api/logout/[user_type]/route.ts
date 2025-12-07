@@ -29,12 +29,12 @@ export async function POST(
   res.cookies.set({ name: "csrf_token", value: "", ...cookieOptions });
 
   if (userType === "user") {
-    revalidateTag("shipping");
-    revalidateTag("billing");
-    revalidateTag("access-details");
-    revalidateTag("order-history");
+    revalidateTag("shipping", {});
+    revalidateTag("billing", {});
+    revalidateTag("access-details", {});
+    revalidateTag("order-history", {});
   }
-  revalidateTag("sales");
+  revalidateTag("sales", {});
 
   return res;
 }

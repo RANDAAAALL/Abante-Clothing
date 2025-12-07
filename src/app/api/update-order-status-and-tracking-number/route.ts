@@ -26,10 +26,10 @@ export async function PATCH(request: NextRequest){
     });
 
     // revalidate cache on the admin side
-    revalidateTag("orders");
+    revalidateTag("orders", {});
 
     // revalidate cache on the customer side
-    revalidateTag("order-history");
+    revalidateTag("order-history", {});
 
     return NextResponse.json(
         { successMessage: "Updated successfully" },
