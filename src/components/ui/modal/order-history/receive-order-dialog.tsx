@@ -16,6 +16,7 @@ import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { useProductStatus } from "@/hooks/useProductStatus";
 import { SelectAllButton } from "../../product/select-all-button";
 import { ProductCard } from "../../product/product-card";
+import { SubmitFeedbackData, actionSubmitFeedback } from "@/lib/actions/handle-add-feedback";
 
 export default function ReceiveOrderDialog({
   isOpen,
@@ -132,7 +133,7 @@ export default function ReceiveOrderDialog({
     setIsSubmitting(true);
     const originalProducts = [...localProducts];
 
-    // Optimistic update
+    // optimistic update
     const updatedProducts = localProducts.map(product => {
       if (selectedProducts.includes(String(product.order_detail_ID))) {
         return {
@@ -146,21 +147,16 @@ export default function ReceiveOrderDialog({
 
     try {
       const orderData = selectedProducts.map((order_detail_ID) => ({
-        order_detail_ID,
+        order_detail_ID: Number(order_detail_ID),
         rating: ratings[order_detail_ID] || 0,
         feedback: feedbackComments[order_detail_ID] || "",
       }));
 
       await toast.promise(
         (async () => {
-          const res = await fetchWithCsrf(`${AddFeedbackURL}`, {
-            method: "POST",
-            body: JSON.stringify({ orderData }),
-          });
-          
-          const data = await res.json();
-          if (!res.ok) throw new Error(`${data?.errorMessage}`);
-          return data;
+          const res = await actionSubmitFeedback(orderData);
+          if(res.status !== 200) throw new Error(res.errorMessage || "Failed to confirm receipt.");
+          return res;
         })(),
         {
           loading: "Confirming order...",

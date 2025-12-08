@@ -11,10 +11,11 @@ import { Check, Trash, UserPen } from "lucide-react";
 import { mapBillingAndAddressToFormSchema } from "@/lib/helper/map-billing-and-address-form";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
-import { AddSelectedAddressOrBillingURL, DeleteAddressOrBillingURL, RemoveSelectedAddressOrBillingURL } from "@/lib/config";
 import { useState } from "react";
 import { Button } from "../../button";
+import { actionSelectAddress } from "@/lib/actions/handle-select-address";
+import { actiondDeleteAddress } from "@/lib/actions/handle-delete-data";
+import { actionRemoveSelectedAddress } from "@/lib/actions/handle-remove-selected-address-or-billing";
 
 export default function AddressAndBillingClientData<T extends BillingProps | AddressProps>({
   title,
@@ -62,24 +63,28 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
      return toast.promise(
           (async () => {
             setLoading(true);
-            const res = await fetchWithCsrf(`${DeleteAddressOrBillingURL}/${address_ID}`, {
-              method: "DELETE",
-              body: JSON.stringify({ title: actionTitle }),
-            });
-
-            const data = await res.json();
-            if(!res.ok) throw new Error(`${data?.errorMessage}`);
-
-            return data;
+           
+            const res = await actiondDeleteAddress(address_ID, actionTitle);
+            if(res.status !== 200) throw new Error(res.errorMessage);
+            
+            return res;
           })(), {
               loading: "Deleting...",
-              success: (success) => {
+              success: (message) => {
                 setResetTitle();
                 setResetAction();
                 setClearSelectedFormData(); 
                 setClearAddressID();
                 router.refresh();
-                return success?.successMessage;
+                
+
+                // type guard to ensure successMessage exists
+                if ("successMessage" in message  && message.successMessage) {
+                  return message.successMessage;
+                }
+          
+                // fallback
+                return `Deleted successfully`;
               },
               error: (e) => e?.message || "Failed to delete."
           },{ duration: 5000 }
@@ -90,59 +95,67 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
   };
 
   const handleSelectAddress = async (actionTitle: string, address_ID: number) => {
-      if(address_ID === selectedAddress?.address_ID) return;
-      return toast.promise(
-        (async () => {
-          setLoading(true);
-          const res = await fetchWithCsrf(`${AddSelectedAddressOrBillingURL}/${address_ID}`, {
-            method: "PUT",
-            body: JSON.stringify({ title: actionTitle }),
-          });
-          
-          const data = await res.json();
-          if(!res.ok) throw new Error(`${data?.errorMessage}`);
-          
-          return data;
-        })(), {
-          loading: `Selecting as default ${actionTitle}...`,
-          success: (success) => {
-              setResetTitle();
-              setResetAction();
-              setClearSelectedFormData(); 
-              setClearAddressID();
-              router.refresh();
-              return success?.successMessage;
-            },
-            error: (e) => e?.message || `Failed to select ${actionTitle}.`
-        },{ duration: 5000 }
-        ).finally(() => {
-          setLoading(false);
+    if(address_ID === selectedAddress?.address_ID) return;
+    
+    return toast.promise(
+      (async () => {
+        setLoading(true);
+        const res = await actionSelectAddress(address_ID, actionTitle);
+        
+        if(res.status === 500) {
+          throw new Error(res.errorMessage);
         }
-    );
+        
+        return res;
+      })(), {
+        loading: `Selecting as default ${actionTitle}...`,
+        success: (message) => {
+          setResetTitle();
+          setResetAction();
+          setClearSelectedFormData(); 
+          setClearAddressID();
+          router.refresh();
+          
+          // type guard to ensure successMessage exists
+          if ('successMessage' in message && message.successMessage) {
+            return message.successMessage;
+          }
+          
+          // fallback
+          return `Selected successfully`;
+        },
+        error: (e) => e?.message || `Failed to select ${actionTitle}.`
+      }, { duration: 5000 }
+    ).finally(() => {
+      setLoading(false);
+    });
   };
 
   const handleRemoveSelectedAddressOrBilling = async (actionTitle: string, address_ID: number) => {
     return toast.promise(
       (async () => {
         setLoading(true);
-        const res = await fetchWithCsrf(`${RemoveSelectedAddressOrBillingURL}/${address_ID}`, {
-          method: "PUT",
-          body: JSON.stringify({ title: actionTitle }),
-        });
         
-        const data = await res.json();
-        if(!res.ok) throw new Error(`${data?.errorMessage}`);
-        
-        return data;
+        const res = await actionRemoveSelectedAddress(address_ID, actionTitle);
+        if(res.status !== 200) throw new Error(res.errorMessage);
+
+        return res;
       })(), {
         loading: `Removing default ${actionTitle}...`,
-        success: (success) => {
+        success: (message) => {
             setResetTitle();
             setResetAction();
             setClearSelectedFormData(); 
             setClearAddressID();
             router.refresh();
-            return success?.successMessage;
+
+            // type guard to ensure successMessage exists
+            if ('successMessage' in message && message.successMessage) {
+              return message.successMessage;
+            }
+            
+            // fallback
+            return `Removed successfully`;
           },
           error: (e) => e?.message || `Failed to remove.`
       },{ duration: 5000 }

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { UploadProfilePictureURL } from "@/lib/config";
+import { actionUploadProfilePicture } from "@/lib/actions/handle-upload-profile-picture";
 
 export default function SidebarUserImage({
   user_image,
@@ -25,29 +26,28 @@ export default function SidebarUserImage({
       toast.error("No file provided!");
       return;
     }
-    const formData = new FormData();
-    formData.append("file", file);
-    // console.log("FormData: ", formData)
-    // console.log("Uploaded Image: ", URL.createObjectURL(file));
-
+  
     toast
       .promise(
         (async () => {
-          const res = await fetchWithCsrf(`${UploadProfilePictureURL}`, {
-            method: "POST",
-            body: formData,
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data?.errorMessage);
+          const res = await actionUploadProfilePicture(file);
+          if(res.status !== 200) throw new Error(`${res.errorMessage}`);
 
-          return data;
+          return res;
         })(),
         {
           loading: "Uploading.....",
           success: (message) => {
             router.refresh();
             setImage(URL.createObjectURL(file));
-            return message?.successMessage;
+            
+              // type guard to ensure successMessage exists
+            if ('successMessage' in message && message.successMessage) {
+              return message.successMessage;
+            }
+            
+            // fallback
+            return `Selected successfully`;
           },
           error: (e) => e?.message || "Something went wrong during upload",
         }

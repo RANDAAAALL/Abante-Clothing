@@ -11,6 +11,7 @@ import { useProductStatus } from "@/hooks/useProductStatus";
 import { SelectAllButton } from "../../product/select-all-button";
 import { ProductCard } from "../../product/product-card";
 import { QuantitySelector } from "../../product/quantity-selector";
+import { actionSubmitReturnRequest } from "@/lib/actions/handle-request-return";
 
 export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }: ReturnRequestDialogProps) {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
@@ -22,14 +23,14 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
 
   const { getReturnStatus } = useProductStatus();
 
-  // Sync products from props to local state when they change
+  // sync products from props to local state when they change
   useEffect(() => {
     if (order?.products) {
       setLocalProducts(order.products);
     }
   }, [order?.products]);
 
-  // Reset form when dialog closes
+  // reset form when dialog closes
   useEffect(() => {
     if (!isOpen) {
       setSelectedProducts([]);
@@ -48,7 +49,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
     const { isReturned } = getReturnStatus(product);
     const isReceived = !!product.feedback_rating;
     
-    // Dont allow selection if product is already received or has pending/accepted return
+    // dont allow selection if product is already received or has pending/accepted return
     if (isReceived) {
       toast.error("This product has been received and cannot be returned.");
       return;
@@ -77,7 +78,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
         
         return prev.filter((p) => p !== id);
       } else {
-        // If selecting, initialize with default quantity 1
+        // ff selecting, initialize with default quantity 1
         setReturnQuantities(prev => ({ ...prev, [id]: 1 }));
         return [...prev, id];
       }
@@ -98,7 +99,7 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
     setReturnQuantities((prev) => ({ ...prev, [id]: quantity }));
   };
 
-  // Add Select All functionality
+  // add Select All functionality
   const handleSelectAll = () => {
     const availableProducts = localProducts
       .filter(product => {
@@ -210,21 +211,24 @@ export default function ReturnRequestDialog({ isOpen, onClose, order, onUpdate }
 
       await toast.promise(
         (async () => {
-          const res = await fetchWithCsrf(`${RequestReturnURL}`, {
-            method: "POST",
-            body: JSON.stringify({ returnData }),
-          });
-
-          const data = await res.json();
-          if (!res.ok) throw new Error(data?.errorMessage);
-          return data;
+          const res = await actionSubmitReturnRequest(returnData);
+          if (res?.errorMessage) throw new Error(res.errorMessage);
+          
+          return res;
         })(),
         {
           loading: "Submitting return request...",
           success: (message) => {
             setLocalProducts(updatedProducts);
             setIsSubmitting(false);
-            return message?.successMessage;
+            
+            // type guard to ensure successMessage exists
+            if ('successMessage' in message && message.successMessage) {
+              return message.successMessage;
+            }
+            
+            // fallback
+            return "Return request submitted successfully. Please wait for approval." 
           },
           error: (e) => {
             setLocalProducts(originalProducts);

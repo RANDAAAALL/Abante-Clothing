@@ -1,5 +1,6 @@
 "use client"
 import { LogoSVG } from "@/components/icons/svg/abante-clothing-logo";
+import { actionProcessCheckout } from "@/lib/actions/handle-checkout";
 import { CheckoutURL, OrderReceiptEmailURL } from "@/lib/config";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
@@ -29,16 +30,19 @@ export default function GcashTemplate(){
         toast.promise(
             (async () => {
 
-                const paymentResponse = await fetchWithCsrf(`${CheckoutURL}`, {
-                    method: "POST",
-                    body: JSON.stringify({submittedFormCheckoutFormData, itemsData, computeItems}),
-                    });
+                // const paymentResponse = await fetchWithCsrf(`${CheckoutURL}`, {
+                //     method: "POST",
+                //     body: JSON.stringify({submittedFormCheckoutFormData, itemsData, computeItems}),
+                //     });
         
-                    const paymentResponseData = await paymentResponse.json();
-                    if (!paymentResponse.ok) throw new Error(paymentResponseData?.errorMessage || "Something went wrong while processing your payment.");
+                //     const paymentResponseData = await paymentResponse.json();
+                //     if (!paymentResponse.ok) throw new Error(paymentResponseData?.errorMessage || "Something went wrong while processing your payment.");
             
+                const paymentResponseData = await actionProcessCheckout(submittedFormCheckoutFormData, itemsData, computeItems);
+                if(paymentResponseData.status !== 200) throw new Error(paymentResponseData?.errorMessage || "Something went wrong while processing your payment.");
+
                     const receiptData: PDFReceiptDataProps = {
-                        orderNumber: paymentResponseData?.actualData?.order_purchased_number ?? "",
+                        orderNumber: paymentResponseData?.actualData?.orderNumber ?? "",
                         orderDate: paymentResponseData?.actualData?.order_purchased_date ?? "",
                         recipientFirstName: submittedFormCheckoutFormData?.recipientFirstName ?? "",
                         recipientLastName: submittedFormCheckoutFormData?.recipientLastName ?? "",
@@ -69,8 +73,8 @@ export default function GcashTemplate(){
                     
                     // store resolve data
                     setOrderPurchasedNumberAndDate({
-                        orderPurchasedNumber: paymentResponseData?.actualData?.order_purchased_number,
-                        orderPurchasedDate: OrderReceiptDateFormatter(paymentResponseData?.actualData?.order_purchased_date),
+                        orderPurchasedNumber: paymentResponseData?.actualData?.orderNumber ?? "",
+                        orderPurchasedDate: OrderReceiptDateFormatter(paymentResponseData?.actualData?.order_purchased_date as string),
                     });
                     
                     const emailResponseData = await emailResponse.json();

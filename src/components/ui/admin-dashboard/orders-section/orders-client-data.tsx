@@ -22,8 +22,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
-import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
-import { UpdateOrdersStatusAndTrackingNumberURL, UpdateReturnStatusURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { OrderDetailProps, OrdersProps } from "@/lib/types/orders-types";
 import { getStatusBadgeColor } from "@/lib/helper/get-order-status-badge-color";
@@ -34,6 +32,8 @@ import { ReturnDetailsDialog } from "../../modal/return-details-dialog";
 import { Search } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../select";
 import { ProductItem } from "@/lib/interface/order-history-dialog";
+import { actionUpdateReturnStatus } from "@/lib/actions/handle-update-return-status";
+import { actionUpdateOrderStatusAndTrackingNumber } from "@/lib/actions/handle-update-order-status-and-tracking-number";
 
 export default function OrdersClientData({ orders }: OrdersClientDataProps) {
   const [statusFilter, setStatusFilter] = useState("All");
@@ -101,7 +101,7 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
     setIsDialogOpen(true);
   };
 
-  // View Return Details 
+  // view Return Details 
   const handleViewReturnDetails = (orderDetail: OrderDetailProps, returnItem: NonNullable<ProductItem["returns"]>[0]) => {
     setSelectedReturn({
       ...orderDetail,
@@ -110,34 +110,33 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
     setIsReturnDialogOpen(true);
   };
 
-  // Accept/Reject Return
+  // accept/Reject Return
   const handleAcceptOrRejectReturnItem = async (return_ID: number, isReturnAccepted: boolean) => {
-    console.log("Return ID: ", return_ID, isReturnAccepted );
-    return toast.promise(
+    // console.log("Return ID: ", return_ID, isReturnAccepted );
+    toast.promise(
       (async () => {
-        const res = await fetchWithCsrf(`${UpdateReturnStatusURL}`, {
-          method: "PATCH",
-          body: JSON.stringify({
-            return_ID,
-            is_return_accepted: isReturnAccepted ? "Accepted" : "Rejected",
-          }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data?.errorMessage);
-        return data;
+        const data = { return_ID, is_return_accepted: isReturnAccepted ? "Accepted" : "Rejected" };
+        const res = await actionUpdateReturnStatus(data);
+        if (res.status !== 200) throw new Error(`${res.errorMessage}`);
+
+        return res;
       })(),
       {
         loading: isReturnAccepted ? "Accepting return..." : "Rejecting return...",
         success: (message) => {
           router.refresh();
-          return message?.successMessage;
+          if("successMessage" in message && message.successMessage) {
+            return message.successMessage;
+          };
+
+          return isReturnAccepted ? "Return accepted successfully." : "Return rejected successfully.";
         },
         error: (e) => e.message || (isReturnAccepted ? "Failed to accept return." : "Failed to reject return."),
       }
     );
   };
 
-  // Save changes
+  // save changes
   const handleSave = async () => {
     if (!selectedOrder) return;
 
@@ -155,18 +154,14 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
     try {
       await toast.promise(
         (async () => {
-          const res = await fetchWithCsrf(UpdateOrdersStatusAndTrackingNumberURL, {
-            method: "PATCH",
-            body: JSON.stringify({
-              order_purchased_number: selectedOrder.order_purchased_number,
-              order_purchased_status: editStatus,
-              order_purchased_tracking_number: editTracking,
-            }),
-          });
-
-          const data = await res.json();
-          if (!res.ok) throw new Error(`${data?.errorMessage}`);
-          return data;
+          const data = { 
+            order_purchased_number: selectedOrder.order_purchased_number!,
+            order_purchased_status: editStatus,
+            order_purchased_tracking_number: editTracking,
+          }
+          const res = await actionUpdateOrderStatusAndTrackingNumber(data);
+          if (res.status !== 200) throw new Error(`${res.errorMessage}`);
+          return res;
         })(),
         {
           loading: "Saving...",
@@ -184,7 +179,7 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
     }
   };
 
-  // Clear search
+  // clear search
   const handleClearSearch = () => {
     setSearchTerm("");
   };

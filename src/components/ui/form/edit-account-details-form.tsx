@@ -9,10 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDown, ChevronUp, EyeClosed } from "lucide-react";
 import toast from "react-hot-toast";
 import { EditAccountDetailsFormType, EditAccountDetailsSchema } from "@/lib/validations/edit-account-detail-schema";
-import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
-import { UpdateAccountDetailsURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import EyeOpen from "@/components/icons/svg/eye-open";
+import { actionUpdateAccountDetails } from "@/lib/actions/handle-update-account-details";
 
 interface EditAccountDetailsFormProps {
   isOpen: boolean;
@@ -59,20 +58,24 @@ export default function EditAccountDetailsForm({
   const onSubmit = async (editFormData: EditAccountDetailsFormType) => {
     return toast.promise(
       (async () => {
-        const res = await fetchWithCsrf(UpdateAccountDetailsURL, { 
-          method: "PUT",
-          body: JSON.stringify(editFormData)
-        });
-        const data = await res.json();
-        if(!res.ok) throw new Error(data?.errorMessage || data?.parsedErrors);
-        return data;
+        const res = await actionUpdateAccountDetails(editFormData);
+        if (res.status !== 200) throw new Error(`${res.errorMessage}`);
+
+        return res;
       })(),
       {
         loading: "Updating account details...",
         success: (message) => {
           router.refresh();
           onClose();
-          return message?.successMessage;
+          
+          // type guard to ensure successMessage exists
+          if ("successMessage" in message && message.successMessage) {
+            return message.successMessage;
+          }
+          
+          // fallback
+          return `Account details updated successfully.`;
         },
         error: (err) => err?.message || "Failed to update account details."
       }

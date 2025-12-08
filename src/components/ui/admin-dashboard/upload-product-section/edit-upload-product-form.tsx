@@ -10,6 +10,7 @@ import { uploadProductFieldsType, uploadProductSchema } from "@/lib/validations/
 import { StatusProductsProps } from "@/lib/types/status-products-types";
 import { ImageUploadBox } from "./image-upload-box";
 import { useRouter } from "next/navigation";
+import { actionEditUploadedProduct } from "@/lib/actions/handle-edit-uploaded-product";
 
 export default function EditUploadProductForm({
   product,
@@ -83,7 +84,6 @@ export default function EditUploadProductForm({
   };
 
   const onSubmit = async (uploadFields: uploadProductFieldsType) => {
-    // Debug: check what we re submitting
     // console.log('submitting:', {
     //   frontImage: uploadFields.product_item_image,
     //   backImage: uploadFields.product_item_back_image,
@@ -177,15 +177,9 @@ export default function EditUploadProductForm({
 
     return toast.promise(
       (async () => {
-        const res = await fetchWithCsrf(`${UpdateProductURL}/${product.product_item_ID}`, {
-          method: "PUT",
-          body: formData,
-        });
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data?.errorMessage || "Update failed");
-
-        return data;
+        const res = await actionEditUploadedProduct(product.product_item_ID, formData);
+        if (res.status !== 200) throw new Error(res.errorMessage || "Failed to update product");
+        return res;
       })(),
       {
         loading: "Updating product...",

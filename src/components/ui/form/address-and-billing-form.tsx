@@ -4,12 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AddressAndBillingSchema, AddressAndBillingType } from "@/lib/validations/address-and-billing-schema";
 import { useAddressAndBillingModal } from "@/lib/store/address-and-billing";
 import toast from "react-hot-toast";
-import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
-import { AddAddressOrBillingURL, UpdateAddressOrBillingURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import isEqual from "lodash.isequal";
 import omit from "lodash.omit";
+import { actionAddAddressOrBilling } from "@/lib/actions/handle-add-address-or-billing";
+import { actionEditAddressOrBilling } from "@/lib/actions/handle-edit-address-or-billing";
 
 export default function AddressAndBillingFormContent() {
   const { register, handleSubmit, reset, watch ,formState: { errors, isSubmitting } } = useForm<AddressAndBillingType>({
@@ -47,27 +47,30 @@ export default function AddressAndBillingFormContent() {
           }          
             
             if(action === "Add"){
-              const res = await fetchWithCsrf(`${AddAddressOrBillingURL}`, {
-                  method: "POST",
-                  body: JSON.stringify({ title, formData }),
-              });
-  
-              const data = await res.json();
-              if(!res.ok) throw new Error(`${data?.errorMessage}`);
-              return data;
-            } else {
-              const res = await fetchWithCsrf(`${UpdateAddressOrBillingURL}`, {
-                method: "PUT",
-                body: JSON.stringify({ title, address_ID ,formData }),
-              });
+              const res = await actionAddAddressOrBilling(title!, formData);
 
-              const data = await res.json();
-              if(!res.ok) throw new Error(`${data?.errorMessage}`);
-              return data;
+              if(res.status !== 200) throw new Error(`${res.errorMessage}`);
+
+              return res;
+            } else {
+                const res = await actionEditAddressOrBilling(address_ID!, title!, formData);
+                if(res.status !== 200) throw new Error(`${res.errorMessage}`);
+
+                return res;
             }
         })(), {
             loading: `${action === "Add" ? "Adding" : "Updating"}...`,
-            success: (success) => { return success.successMessage },
+            success: (message) => { 
+
+              // type guard to ensure successMessage exists
+              if ('successMessage' in message && message.successMessage) {
+                return message.successMessage;
+              }
+              
+              // Fallback
+              router.refresh();
+              return `Removed successfully`;             
+            },
             error: (e) => e?.message || `Failed to ${action === "Add" ? "Add" : "Update"}.`
         },{ duration: 5000 }
         ).finally(() => {
@@ -77,7 +80,6 @@ export default function AddressAndBillingFormContent() {
           setResetAction();
           setClearSelectedFormData(); 
           setClearAddressID();
-          router.refresh();
         }
     )
   }

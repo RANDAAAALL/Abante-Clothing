@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { UploadProductURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
+import { actionUploadProduct } from "@/lib/actions/handle-upload-product";
 
 export default function UploadProductFormContent() {
   const [frontImagePreview, setFrontImagePreview] = useState<string | null>(null);
@@ -57,15 +58,9 @@ export default function UploadProductFormContent() {
   
     return toast.promise(
       (async () => {
-        const res = await fetchWithCsrf(`${UploadProductURL}`, {
-          method: "POST",
-          body: formData,
-        });
-  
-        const data = await res.json();
-        if (!res.ok) throw new Error(data?.errorMessage || "Upload failed");
-  
-        return data;
+        const res = await actionUploadProduct(formData);
+        if(res.status !== 200) throw new Error(res.errorMessage || "Failed to upload new product");
+        return res;
       })(),
       {
         loading: "Uploading new product...",
@@ -74,7 +69,14 @@ export default function UploadProductFormContent() {
             reset();
             setFrontImagePreview(null);
             setBackImagePreview(null);
-            return message?.successMessage;
+            
+            // type guard to ensure successMessage exists
+            if ('successMessage' in message && message.successMessage) {
+              return message.successMessage;
+            }
+            
+            // fallback
+            return `Product uploaded successfully`;
         },
         error: (e) => e.message || "Failed to upload new product",
       }
