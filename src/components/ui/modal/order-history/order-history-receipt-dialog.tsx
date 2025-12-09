@@ -250,11 +250,12 @@ export default function OrderHistoryReceiptDialog() {
                 </section>
               </div>
 
-              <DialogFooter className="mt-4 w-full flex sm:flex-col space-y-0.5">
+              <DialogFooter className="mt-4 w-full flex sm:flex-col space-y-0.5 flex-col">
               <Button
+                variant="outline"
                 disabled={isDownloading}
                 onClick={handleDownloadReceipt}
-                className="px-6 py-6 rounded-md bg-black text-white hover:bg-gray-900 transition"
+                className="px-6 py-6 rounded-md border-2"
               >
                 {isDownloading ? "Downloading..." : "Download Receipt"}
               </Button>
@@ -263,7 +264,7 @@ export default function OrderHistoryReceiptDialog() {
                 variant="outline"
                 disabled={isDownloading}
                 onClick={handleReset}
-                className="px-6 py-6 rounded-md border"
+                className="px-6 py-6 rounded-md border-2"
                 >
                 Close
               </Button>

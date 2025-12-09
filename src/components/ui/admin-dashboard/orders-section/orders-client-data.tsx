@@ -208,16 +208,16 @@ export default function OrdersClientData({ orders }: OrdersClientDataProps) {
       </div>
 
       {/* ==== FILTERS ==== */}
-      <div className="mt-6 mb-3 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <div className="mt-6 mb-3 flex flex-col w-full sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex items-center gap-4">
           <label className="font-medium text-sm whitespace-nowrap">Order Status:</label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-40 justify-between">
+              <Button variant="outline" className="w-45.5 md:w-40 justify-between">
                 {statusFilter}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="dark:bg-card-black-background">
               <DropdownMenuRadioGroup value={statusFilter} onValueChange={setStatusFilter}>
                 {[
                   "All",

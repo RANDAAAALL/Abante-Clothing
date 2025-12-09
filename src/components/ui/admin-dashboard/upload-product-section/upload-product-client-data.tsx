@@ -82,12 +82,12 @@ export default function UploadProductClientData({
       </div>
 
       {/* === Filter Section === */}
-      <div className="flex flex-col md:flex-row md:items-center gap-2 mt-6 mb-3">
-        <span className="text-sm font-medium">Product Status:</span>
+      <div className="flex items-center gap-2 mt-6 mb-3">
+        <span className="text-sm font-medium text-nowrap">Product Status:</span>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="w-[200px] justify-between">
+            <Button variant="outline" className="w-[218px] justify-between">
               {filter === "to be deploy"
                 ? "To Be Deploy"
                 : filter === "available"
@@ -98,7 +98,7 @@ export default function UploadProductClientData({
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent className="w-48">
+          <DropdownMenuContent className="w-54 dark:bg-card-black-background">
             <DropdownMenuRadioGroup value={filter} onValueChange={setFilter}>
               <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
               <DropdownMenuRadioItem value="to be deploy">To Be Deploy</DropdownMenuRadioItem>

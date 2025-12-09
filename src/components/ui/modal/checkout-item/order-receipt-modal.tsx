@@ -259,9 +259,10 @@ export default function OrderReceiptModal() {
           {/* buttons */}
           <div className="flex flex-col space-y-2">
             <Button
+              variant="outline"
               disabled={isDownloading}
               onClick={handleDownloadReceipt}
-              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 py-6 rounded-md bg-black text-white hover:bg-gray-900 transition`}>
+              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 py-6 rounded-md border-2`}>
               {isDownloading ? "Downloading..." : "Download Receipt"}
             </Button>
 
@@ -269,7 +270,7 @@ export default function OrderReceiptModal() {
               variant="outline"
               disabled={isDownloading}
               onClick={handleReset}
-              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 py-6 rounded-md border`}>
+              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 py-6 rounded-md border-2`}>
               Close
             </Button>
           </div>

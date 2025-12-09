@@ -32,7 +32,7 @@ export function OrderStatusBadges({
         </span>
       )}
 
-      {/* returned (accepted) Badge */}
+      {/* returned accepted Badge */}
       {totalReturnedAccepted > 0 && (
         <span className="inline-block mt-1 px-2 py-1 rounded-full text-xs font-medium bg-red-500 text-red-800">
           ({totalReturnedAccepted}) returned
