@@ -12,11 +12,11 @@ export default function UploadProductSkeleton() {
             <Card key={i} className="dark:bg-card-black-background py-6"> 
                 <CardHeader className="pb-3"> 
                 <CardTitle className="text-sm font-medium">
-                    <div className="h-6 w-32 checkout-form-skeleton rounded" /> 
+                    <div className="h-6 w-32 checkout-form-skeleton rounded-md" /> 
                 </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4 pb-3"> 
-                <div className="h-12 w-16 checkout-form-skeleton rounded" /> 
+                <div className="h-4 w-15 checkout-form-skeleton rounded-full" /> 
                 </CardContent>
              </Card>
         ))}
@@ -25,11 +25,11 @@ export default function UploadProductSkeleton() {
       {/* === Filter Skeleton (Product Status Dropdown) === */}
       <div className="flex flex-col md:flex-row md:items-center gap-2 mt-6 mb-3">
         <span className="text-sm font-medium">
-          <div className="h-4 w-32 checkout-form-skeleton rounded" />
+          <div className="h-4 w-26 checkout-form-skeleton rounded-md" />
         </span>
 
         <div className="mt-2 md:mt-0">
-          <div className="h-8 w-[200px] checkout-form-skeleton rounded" />
+          <div className="h-8 w-[216px] checkout-form-skeleton rounded-md" />
         </div>
       </div>
 

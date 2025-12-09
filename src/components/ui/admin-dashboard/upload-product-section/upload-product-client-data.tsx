@@ -87,7 +87,7 @@ export default function UploadProductClientData({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="w-[218px] justify-between">
+            <Button variant="outline" className="w-44 sm:w-[218px] justify-between">
               {filter === "to be deploy"
                 ? "To Be Deploy"
                 : filter === "available"

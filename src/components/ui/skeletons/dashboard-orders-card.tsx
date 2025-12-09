@@ -7,10 +7,10 @@ export default function DashboardOrdersSkeleton() {
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="rounded-lg border p-6 bg-muted/30 h-[150px] flex flex-col justify-between"
+            className="rounded-lg border p-6 bg-muted/30 h-[155px] flex flex-col justify-between"
           >
             <div className="h-5 w-32 dashboard-orders-skeleton" />
-            <div className="h-8 w-20 dashboard-orders-skeleton" />
+            <div className="h-5 w-20 dashboard-orders-skeleton" />
           </div>
         ))}
       </div>
@@ -23,7 +23,7 @@ export default function DashboardOrdersSkeleton() {
           <div className="h-8 w-40 dashboard-orders-skeleton" />
         </div>
 
-        <div className="h-8 w-full sm:w-52 dashboard-orders-skeleton" />
+        <div className="h-8 w-full sm:w-64 dashboard-orders-skeleton" />
       </div>
 
       {/* ==== TABLE SKELETON ==== */}

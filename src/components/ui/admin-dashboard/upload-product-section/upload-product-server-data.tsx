@@ -2,6 +2,7 @@ import { getAllStatusProducts } from "@/dal/get-all-status-products";
 import UploadProductClientData from "./upload-product-client-data";
 
 export default async function UploadProductServerData(){
+    await new Promise(res => setTimeout(res, 2000));
     const productsData = await getAllStatusProducts();
 
     return <UploadProductClientData products={productsData} />
