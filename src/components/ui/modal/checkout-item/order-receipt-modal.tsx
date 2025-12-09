@@ -1,6 +1,6 @@
 "use client";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
@@ -8,6 +8,7 @@ import { CartItemsProps } from "@/lib/types/cart-items-types";
 import { GenerateReceiptURL } from "@/lib/config";
 import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
+import { Button } from "../../button";
 
 export default function OrderReceiptModal() {
   const {
@@ -25,6 +26,11 @@ export default function OrderReceiptModal() {
   } = useCheckoutModal();
   const [isOrderDetailsOpen, setOrderDetailsOpen] = useState<boolean>(false);
   const [isDownloading, setDownloading] = useState<boolean>(false);
+
+   // to prevent background scroll when dialog is open
+   useEffect(() => { 
+    document.body.style.overflow = isSuccessfullPay ? "hidden" : "auto"; 
+  }, [isSuccessfullPay]);
 
   if (!isSuccessfullPay) return null;
 
@@ -251,19 +257,21 @@ export default function OrderReceiptModal() {
           </div>
 
           {/* buttons */}
-          <div className="flex flex-col justify-center space-y-4 md:flex-row md:space-y-0 md:space-x-4">
-            <button
-              disabled={isDownloading}
-              onClick={handleReset}
-              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 w-full md:w-auto py-2.5 rounded-md border border-gray-400 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all`}>
-              Close
-            </button>
-            <button
+          <div className="flex flex-col space-y-2">
+            <Button
               disabled={isDownloading}
               onClick={handleDownloadReceipt}
-              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 py-2.5 rounded-md bg-card-black-background text-white dark:bg-card-white-background dark:text-black hover:opacity-90 transition-all`}>
+              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 py-6 rounded-md bg-black text-white hover:bg-gray-900 transition`}>
               {isDownloading ? "Downloading..." : "Download Receipt"}
-            </button>
+            </Button>
+
+            <Button
+              variant="outline"
+              disabled={isDownloading}
+              onClick={handleReset}
+              className={`${isDownloading ? "cursor-not-allowed" : "cursor-pointer"} px-6 py-6 rounded-md border`}>
+              Close
+            </Button>
           </div>
         </div>
       </div>

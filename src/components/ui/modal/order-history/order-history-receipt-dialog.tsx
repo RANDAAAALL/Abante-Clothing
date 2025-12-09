@@ -15,6 +15,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
+import { Button } from "../../button";
 
 export default function OrderHistoryReceiptDialog() {
   const {
@@ -102,7 +103,7 @@ export default function OrderHistoryReceiptDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleReset}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto dark:bg-card-black-background">
+      <DialogContent className="sm:max-w-[500px] max-h-[96.5vh] overflow-y-auto dark:bg-card-black-background">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-center">
             Order Receipt
@@ -249,22 +250,25 @@ export default function OrderHistoryReceiptDialog() {
                 </section>
               </div>
 
-              <DialogFooter className="mt-6 flex flex-col sm:flex-row">
-                <button
-                  disabled={isDownloading}
-                  onClick={handleReset}
-                  className="w-full sm:w-auto px-6 py-2.5 rounded-md border border-gray-400 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              <DialogFooter className="mt-4 w-full flex sm:flex-col space-y-0.5">
+              <Button
+                disabled={isDownloading}
+                onClick={handleDownloadReceipt}
+                className="px-6 py-6 rounded-md bg-black text-white hover:bg-gray-900 transition"
+              >
+                {isDownloading ? "Downloading..." : "Download Receipt"}
+              </Button>
+
+              <Button
+                variant="outline"
+                disabled={isDownloading}
+                onClick={handleReset}
+                className="px-6 py-6 rounded-md border"
                 >
-                  Close
-                </button>
-                <button
-                  disabled={isDownloading}
-                  onClick={handleDownloadReceipt}
-                  className="w-full sm:w-auto px-6 py-2.5 rounded-md bg-black text-white hover:opacity-90 transition-all disabled:opacity-70"
-                >
-                  {isDownloading ? "Downloading..." : "Download Receipt"}
-                </button>
-              </DialogFooter>
+                Close
+              </Button>
+                </DialogFooter>
+
             </React.Fragment>
           ))}
       </DialogContent>

@@ -11,7 +11,7 @@ import { Check, Trash, UserPen } from "lucide-react";
 import { mapBillingAndAddressToFormSchema } from "@/lib/helper/map-billing-and-address-form";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../button";
 import { actionSelectAddress } from "@/lib/actions/handle-select-address";
 import { actiondDeleteAddress } from "@/lib/actions/handle-delete-data";
@@ -36,6 +36,11 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
   const router = useRouter();
   const [ isLoading, setLoading ] = useState<boolean>(false);
   const selectedAddress = clientData.find(id => id.is_selected);
+
+  // to prevent background scroll when model is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
+  }, [isOpen]);
 
   const handleAddData = (actionTitle: string, action: string) => {
     setTitle(`Add new ${actionTitle}`);
@@ -95,7 +100,11 @@ export default function AddressAndBillingClientData<T extends BillingProps | Add
   };
 
   const handleSelectAddress = async (actionTitle: string, address_ID: number) => {
-    if(address_ID === selectedAddress?.address_ID) return;
+    // console.log("Address ID:", address_ID);
+    // console.log("Selected Address ID:", selectedAddress?.address_ID);
+    // console.log("Is same address:", address_ID === selectedAddress?.address_ID);
+    // console.log("isLoading: ", isLoading);
+    if(address_ID === selectedAddress?.address_ID || isLoading) return;
     
     return toast.promise(
       (async () => {

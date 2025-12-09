@@ -9,8 +9,8 @@ import {
 } from "@/lib/validations/upload-product-schema";
 import { ImageUploadBox } from "../admin-dashboard/upload-product-section/image-upload-box";
 import toast from "react-hot-toast";
-import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
-import { UploadProductURL } from "@/lib/config";
+// import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
+// import { UploadProductURL } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { actionUploadProduct } from "@/lib/actions/handle-upload-product";
 

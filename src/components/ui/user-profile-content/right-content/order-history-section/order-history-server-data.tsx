@@ -7,7 +7,7 @@ export default async function OrderHistoryServerData(){
     if(!tableData || !orderReceiptModalData  || tableData.length === 0 || !orderReceiptModalData) {
         return <div className="flex items-center justify-center h-full">
             <p>Your order history is currently empty.</p>
-        </div>
+        </div>        
     }
 
     return <PaginateOrderHistoryCards 

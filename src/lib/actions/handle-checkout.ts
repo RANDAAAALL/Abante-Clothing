@@ -9,36 +9,6 @@ import { ComputeItemState } from "@/lib/store/checkout-items";
 import { nanoid } from "nanoid";
 import { redirect } from "next/navigation";
 
-export type CheckoutFormData = {
-  // shipping address
-  recipientFirstName: string;
-  recipientLastName: string;
-  companyName?: string;
-  addressName: string;
-  apartmentName?: string;
-  postalCode: string;
-  cityName: string;
-  regionName: string;
-  phoneNumber: string;
-  country?: string;
-  
-  // billing address (if different)
-  addressType?: 'shipping-address' | 'billing-address';
-  billingFirstName?: string;
-  billingLastName?: string;
-  billingCompanyName?: string;
-  billingAddressName?: string;
-  billingApartmentName?: string;
-  billingPostalCode?: string;
-  billingCityName?: string;
-  billingRegionName?: string;
-  billingPhoneNumber?: string;
-  billingCountry?: string;
-  
-  // payment
-  paymentMethod: string;
-};
-
 export async function actionProcessCheckout(
   checkoutFormData: CheckoutFormType | null,
   itemsData: CartItemsProps[] | null,
@@ -213,8 +183,9 @@ export async function actionProcessCheckout(
     updateTag("shipping");
     updateTag("all-products");
     updateTag("all-status-products");
+    updateTag("single-product");
     
-    // Admin side
+    // admin side
     updateTag("sales");
     updateTag("orders");
     updateTag("admin-dashboard");

@@ -3,8 +3,8 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
-import { UploadProfilePictureURL } from "@/lib/config";
+// import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
+// import { UploadProfilePictureURL } from "@/lib/config";
 import { actionUploadProfilePicture } from "@/lib/actions/handle-upload-profile-picture";
 
 export default function SidebarUserImage({

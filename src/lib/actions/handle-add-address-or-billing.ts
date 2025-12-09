@@ -5,7 +5,7 @@ import { updateTag } from "next/cache";
 import prisma from "@/lib/prisma/prisma";
 import { isAuthenticatedUser } from "@/dal/verify-user";
 import { UserPayload } from "@/lib/security/payloads/get-user-payload";
-import { AddressAndBillingSchema } from "@/lib/validations/address-and-billing-schema";
+import { AddressAndBillingSchema, AddressAndBillingType } from "@/lib/validations/address-and-billing-schema";
 import { redirect } from "next/navigation";
 
 export type AddressFormData = {
@@ -21,7 +21,7 @@ export type AddressFormData = {
   country?: string;
 };
 
-export async function actionAddAddressOrBilling(title: string, formData: AddressFormData) {
+export async function actionAddAddressOrBilling(title: string, formData: AddressAndBillingType) {
   try {
     // check authentication
     if (!(await isAuthenticatedUser())) redirect("/login");
@@ -68,18 +68,17 @@ export async function actionAddAddressOrBilling(title: string, formData: Address
     // create new address
     await prisma.address.create({
       data: {
-        user_ID: user_ID,
-        address_type: addressType,
-        recipient_first_name: parsedFormData.data.recipientFirstName,
-        recipient_last_name: parsedFormData.data.recipientLastName,
-        company_name: parsedFormData.data.companyName || null,
-        address_name: parsedFormData.data.addressName,
-        apartment_name: parsedFormData.data.apartmentName || null,
-        postal_code: parsedFormData.data.postalCode,
-        city_name: parsedFormData.data.cityName,
-        region_name: parsedFormData.data.regionName,
-        phone_number: parsedFormData.data.phoneNumber,
-        is_selected: false 
+          user_ID: Number(payload.user_ID),
+          address_type: addressType,
+          recipient_first_name: parsedFormData.data.recipientFirstName,
+          recipient_last_name: parsedFormData.data.recipientLastName,
+          company_name: parsedFormData.data.companyName,
+          address_name: parsedFormData.data.addressName,
+          apartment_name: parsedFormData.data.apartmentName,
+          postal_code: parsedFormData.data.postalCode,
+          city_name: parsedFormData.data.cityName,
+          region_name: parsedFormData.data.regionName,
+          phone_number: parsedFormData.data.phoneNumber,
       }
     });
 

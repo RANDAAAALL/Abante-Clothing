@@ -1,11 +1,12 @@
 "use client"
 import { actionProcessCheckout } from "@/lib/actions/handle-checkout";
-import { CheckoutURL, OrderReceiptEmailURL } from "@/lib/config";
+import { OrderReceiptEmailURL } from "@/lib/config";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
 import Image from "next/image";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function PaymayaTemplate(){
@@ -21,6 +22,12 @@ export default function PaymayaTemplate(){
             Payment,
             computeItems } = useCheckoutModal();
     const serviceFee = 20;
+
+    // to prevent background scroll when modal is open
+    useEffect(() => { 
+        document.body.style.overflow = isOpenPaymentTemplateModal || Payment.paymentMethod === "gcash" ? "hidden" : "auto"; 
+    }, [isOpenPaymentTemplateModal, Payment.paymentMethod === "paymaya" ]);
+
 
     if(!isOpenPaymentTemplateModal || Payment.paymentMethod !== "paymaya") return null;
 

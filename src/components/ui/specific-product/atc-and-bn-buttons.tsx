@@ -6,7 +6,6 @@ import { ProductProps } from "@/lib/types/product-types";
 import { TshirtType } from "@/lib/types/t-shirt-types";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { getDiscountedPrice } from "@/lib/helper/get-discounted-price";
 
 function AddToCartAndBuyNowButtonsComponent({
   product_item_stock,
@@ -44,7 +43,7 @@ function AddToCartAndBuyNowButtonsComponent({
       return;
     }
 
-    console.log("HANDLE BUY NOW -> Props: ", props);
+    // console.log("HANDLE BUY NOW -> Props: ", props);
     if (isAuthenticated?.successMessage?.match(/!/)) addToCart({ product: props, selectedSizeQtyAndColor });
     else setSelectedItems(props);
 

@@ -69,7 +69,7 @@ export default function AddressAndBillingFormContent() {
               
               // Fallback
               router.refresh();
-              return `Removed successfully`;             
+              return `${action === "Add" ? "Added" : "Updated"} successfully`;             
             },
             error: (e) => e?.message || `Failed to ${action === "Add" ? "Add" : "Update"}.`
         },{ duration: 5000 }

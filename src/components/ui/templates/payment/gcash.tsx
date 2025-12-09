@@ -1,13 +1,14 @@
 "use client"
 import { LogoSVG } from "@/components/icons/svg/abante-clothing-logo";
 import { actionProcessCheckout } from "@/lib/actions/handle-checkout";
-import { CheckoutURL, OrderReceiptEmailURL } from "@/lib/config";
+import { OrderReceiptEmailURL } from "@/lib/config";
 import { fetchWithCsrf } from "@/lib/helper/custom-fetch";
 import { OrderReceiptDateFormatter } from "@/lib/helper/order-receipt-date-formatter";
 import { useCheckoutModal } from "@/lib/store/checkout-items";
 import { PDFReceiptDataProps } from "@/lib/types/pdf-order-receipt-types";
 import { CircleCheck } from "lucide-react";
 import Image from "next/image";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function GcashTemplate(){
@@ -22,6 +23,11 @@ export default function GcashTemplate(){
             itemsData,
             Payment,
             computeItems} = useCheckoutModal();
+
+    // to prevent background scroll when modal is open
+    useEffect(() => { 
+        document.body.style.overflow = isOpenPaymentTemplateModal || Payment.paymentMethod === "gcash" ? "hidden" : "auto"; 
+    }, [isOpenPaymentTemplateModal, Payment.paymentMethod === "gcash" ]);
 
     if(!isOpenPaymentTemplateModal || Payment.paymentMethod !== "gcash") return null;
 
@@ -134,7 +140,7 @@ export default function GcashTemplate(){
                                 <span className="text-sm font-regular">GCash</span>
 
                                 <div className="flex flex-col relative">
-                                    <span className="text-right text-sm font-regular">php5,000</span>
+                                    <span className="text-right text-sm font-regular">php100,000</span>
                                     <span className="mr-5 text-[11px] font-thin">Available Balance</span>
                                     <CircleCheck color="blue" className="absolute right-0 bottom-0.5" width={15} height={15}/>
                                 </div>

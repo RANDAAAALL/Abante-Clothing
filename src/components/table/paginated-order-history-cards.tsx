@@ -76,7 +76,10 @@ export default function PaginateOrderHistoryCards<T extends Record<string, strin
   useEffect(() => {    
     if (!OrderReceiptModalData) return;
     setOrderHistoryReceiptData(OrderReceiptModalData);
-  }, [OrderReceiptModalData, setOrderHistoryReceiptData]);
+
+    // to prevent background scroll when modal is open
+    document.body.style.overflow = isOpen ? "hidden" : "auto"; 
+  }, [OrderReceiptModalData, setOrderHistoryReceiptData, isOpen]);
 
   return (
     <>

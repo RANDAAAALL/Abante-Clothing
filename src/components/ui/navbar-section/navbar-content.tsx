@@ -101,7 +101,7 @@ function NavbarContentComponent() {
               : 
               [{path: "/", name: "Home"},
               {path: "/about", name: "About"},
-              {path: "/all-products", name: "Products"}]} style="flex flex-col items-center" />}
+              {path: "/all-products", name: "Products"}]} style="flex flex-col items-center space-y-1.5" />}
               {isAuthenticated ? (
                 <LogoutButton 
                 user_type={isAuthenticated?.successMessage?.match(/!!/) ? "admin" : "user"}

@@ -1,5 +1,6 @@
 "use client"
 import { useCheckoutModal } from "@/lib/store/checkout-items";
+import { useEffect } from "react";
 
 export default function ConfirmationModal(){
     const { 
@@ -10,6 +11,12 @@ export default function ConfirmationModal(){
         setResetCompleteOrderTriggerLoading,
         setOpenPaymentTemplateModal,
         setClearItemsData } = useCheckoutModal();
+
+
+  // to prevent background scroll when modal is open
+  useEffect(() => { 
+    document.body.style.overflow = isOpenConfirmationModal ? "hidden" : "auto"; 
+  }, [isOpenConfirmationModal]);
 
   // Only render when its open
   if (!isOpenConfirmationModal) return null;
