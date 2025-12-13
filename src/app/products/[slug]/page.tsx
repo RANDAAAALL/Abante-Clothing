@@ -107,7 +107,7 @@ export default async function Page({
         </section>
 
         {/* Related products */}
-        <h2 className="mt-9 font-bold text-lg">Related Products</h2>
+        <h2 className="mt-9 font-bold text-xl">Related Products</h2>
         <section className="mt-4">
           <TshirtsImageDescContent flag={true} props={AllRelatedProducts!} />
         </section>

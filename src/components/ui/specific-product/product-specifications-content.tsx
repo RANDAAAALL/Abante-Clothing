@@ -4,9 +4,9 @@ import { TshirtType } from "@/lib/types/t-shirt-types";
 export default function ProductSpecificationsContent({ props }: { props: ProductProps<Partial<TshirtType>> }) {
   return (
     <div className="w-full md:max-w-none mx-auto">
-
+      <h2 className="font-bold text-xl">Product Specifications</h2>
       {/* Grid layout for specifications */}
-      <div className="mt-3 grid grid-cols-[140px_1fr] gap-y-5 md:gap-7 gap-x-3 text-sm md:text-base">
+      <div className="mt-4 grid grid-cols-[140px_1fr] gap-y-5 md:gap-7 gap-x-3 text-sm md:text-base">
         {/* Product Type */}
         <span className="font-medium">Product Type:</span>
         <span className="capitalize">{props.product_item_type} T-Shirt</span>

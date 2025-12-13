@@ -12,7 +12,8 @@ export default function CustomerProductPreview( { props }: { props: CustomerFeed
     const { itemsPerPage, currentPage, setCurrentPage, currentData } = usePaginationAndFiltered({props}, 3);
 
     return (
-        <>
+        <>  
+            <h2 className="mt-9 font-bold text-xl">Product Review</h2>
             {currentData.map(( customer, i ) => (
                 <Card key={i} className={`dark:bg-card-black-background mt-3 md:gap-3 flex items-center flex-col sm:flex-row px-6 min-h-32`}>
                 
