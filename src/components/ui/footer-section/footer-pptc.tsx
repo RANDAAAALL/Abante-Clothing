@@ -11,7 +11,7 @@ export default function FooterPPC({className}: {className?: string}){
             <Link key={i} href={link.path}>{link.name}</Link>
             ))}
             </div>
-            <p>@ 2025 Abante Clothing. All rights reserved</p>
+            <p>{`@ ${new Date().getFullYear()} Abante Clothing. All rights reserved`}</p>
         </div>
     );
 }
