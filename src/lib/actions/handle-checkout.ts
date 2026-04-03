@@ -194,7 +194,7 @@ export async function actionProcessCheckout(
       successMessage: "Order placed successfully!",
       status: 200,
       actualData: {
-        order_purchased_date: result.orderPurchased.order_purchased_date?.toDateString(),
+        order_purchased_date: result.orderPurchased.order_purchased_date?.toISOString(),
         orderNumber: result.orderPurchased.order_purchased_number,
         total: overallPrice.overallPriceResult
       }

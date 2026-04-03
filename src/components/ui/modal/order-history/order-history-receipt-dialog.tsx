@@ -51,7 +51,7 @@ export default function OrderHistoryReceiptDialog() {
         const order = orderItems[0];
         const receiptData: PDFReceiptDataProps = {
           orderNumber: order.orderNumber,
-          orderDate: new Date(order.orderPurchasedDate).toLocaleString(),
+          orderDate: OrderReceiptDateFormatter(order.orderPurchasedDate.toString()),
           recipientFirstName: order.recipientFirstName ?? "",
           recipientLastName: order.recipientLastName ?? "",
           companyName: order.companyName,
