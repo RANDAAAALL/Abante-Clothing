@@ -132,7 +132,7 @@ export const getOrderHistoryCached = unstable_cache(async(user_ID: number) => {
         ? firstLetterUpcase(order.payments.payment_method)
         : "-",
       "Date": order.order_purchased_date
-        ? new Date(order.order_purchased_date).toLocaleDateString()
+        ? new Date(order.order_purchased_date).toLocaleDateString("en-PH", { timeZone: "Asia/Manila" })
         : "-",
       "Actions": ["View Receipt", "Receive Order", "Request Return"]
     }));
